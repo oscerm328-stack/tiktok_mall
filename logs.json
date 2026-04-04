@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1775313175663,
+    "type": "admin_login",
+    "email": "oscar",
+    "details": "Admin logged in",
+    "time": "4/4/2026, 9:32:55 PM"
+  },
+  {
+    "id": 1775314549900,
+    "type": "login",
+    "email": "ninaad@gmail.com",
+    "details": "User logged in",
+    "time": "4/4/2026, 9:55:49 PM"
+  },
+  {
+    "id": 1775314693562,
+    "type": "register",
+    "email": "mostafa@gmail.com",
+    "details": "New user registered",
+    "time": "4/4/2026, 9:58:13 PM"
+  },
+  {
+    "id": 1775314698030,
+    "type": "login",
+    "email": "mostafa@gmail.com",
+    "details": "User logged in",
+    "time": "4/4/2026, 9:58:18 PM"
+  }
+]
