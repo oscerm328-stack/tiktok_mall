@@ -152,10 +152,22 @@ cursor:pointer;
 
 <div class="menu">
 <div onclick="showPage('dashboard')">📊 Dashboard</div>
-<div onclick="showPage('users')">👥 Users</div>
-<div onclick="showPage('stores')">🏪 Stores</div>
-<div onclick="showPage('wallet')">💰 Wallet</div>
-<div onclick="showPage('orders')">📦 Orders</div>
+<div onclick="showPage('users')" style="display:flex;justify-content:space-between;align-items:center;">
+  <span>👥 Users</span>
+  <span id="badgeUsers" style="display:none;background:#ff3b30;color:white;font-size:11px;font-weight:bold;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;"></span>
+</div>
+<div onclick="showPage('stores')" style="display:flex;justify-content:space-between;align-items:center;">
+  <span>🏪 Stores</span>
+  <span id="badgeStores" style="display:none;background:#ff3b30;color:white;font-size:11px;font-weight:bold;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;"></span>
+</div>
+<div onclick="showPage('wallet')" style="display:flex;justify-content:space-between;align-items:center;">
+  <span>💰 Wallet</span>
+  <span id="badgeWallet" style="display:none;background:#ff3b30;color:white;font-size:11px;font-weight:bold;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;"></span>
+</div>
+<div onclick="showPage('orders')" style="display:flex;justify-content:space-between;align-items:center;">
+  <span>📦 Orders</span>
+  <span id="badgeOrders" style="display:none;background:#ff3b30;color:white;font-size:11px;font-weight:bold;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;"></span>
+</div>
 <div onclick="showPage('support')" style="display:flex;justify-content:space-between;align-items:center;">
   <span>🎧 Support</span>
   <span id="adminSupportBadge" style="display:none;background:#ff3b30;color:white;font-size:11px;font-weight:bold;min-width:18px;height:18px;border-radius:9px;align-items:center;justify-content:center;padding:0 4px;"></span>
@@ -254,29 +266,159 @@ async function checkAutoLogin(){
 }
 checkAutoLogin();
 
-// ======= BADGE: رسائل الدعم للأدمن =======
-let _adminLastSeenSupport = parseInt(localStorage.getItem("adminLastSeenSupport") || "0");
+// ================= NOTIFICATION SYSTEM =================
+// نحفظ آخر عدد رأيناه - نبدأ بـ -1 حتى نعرف أنه أول مرة
+var _prevDeposits  = -1;
+var _prevWithdraws = -1;
+var _prevStores    = -1;
+var _prevOrders    = -1;
+var _prevUsers     = -1;
+var _prevMessages  = -1;
+var _adminLastSeenSupport = parseInt(localStorage.getItem("adminLastSeenSupport") || "0");
 
-async function updateAdminSupportBadge(){
-    try {
-        let res = await adminFetch("/admin-support-unread?lastSeen=" + _adminLastSeenSupport);
-        let data = await res.json();
-        let badge = document.getElementById("adminSupportBadge");
-        if(!badge) return;
-        if(data.count > 0){
-            badge.style.display = "flex";
-            badge.innerText = data.count > 99 ? "99+" : data.count;
-        } else {
-            badge.style.display = "none";
-        }
-    } catch(e){}
+// ===== أصوات بصوت بشري =====
+var _speechReady = false;
+var _speechQueue = [];
+var _isSpeaking = false;
+
+var _speechTexts = {
+    deposit:  "You have a new deposit request, please review it",
+    withdraw: "You have a new withdrawal request, please review it",
+    message:  "You have a new message from a customer",
+    store:    "You have a new store application waiting for approval",
+    order:    "You have a new order",
+    user:     "A new user has registered"
+};
+
+function _speakNext(){
+    if(_isSpeaking || _speechQueue.length === 0) return;
+    var text = _speechQueue.shift();
+    _isSpeaking = true;
+    var msg = new SpeechSynthesisUtterance(text);
+    msg.lang   = "en-US";
+    msg.rate   = 0.85;
+    msg.pitch  = 1.3;
+    msg.volume = 1.0;
+    var voices = window.speechSynthesis.getVoices();
+    var femaleVoice = voices.find(function(v){
+        return v.name === "Samantha" ||
+               v.name === "Victoria" ||
+               v.name === "Karen"    ||
+               v.name === "Zira"     ||
+               v.name.toLowerCase().includes("female");
+    }) || voices.find(function(v){
+        return v.lang === "en-US" || v.lang === "en_US";
+    });
+    if(femaleVoice) msg.voice = femaleVoice;
+    msg.onend = function(){
+        _isSpeaking = false;
+        setTimeout(_speakNext, 300);
+    };
+    msg.onerror = function(){
+        _isSpeaking = false;
+        setTimeout(_speakNext, 300);
+    };
+    window.speechSynthesis.speak(msg);
 }
 
-// تشغيل كل 5 ثوانٍ
-setTimeout(() => {
-    updateAdminSupportBadge();
-    setInterval(updateAdminSupportBadge, 5000);
-}, 2000);
+function playSound(type){
+    if(!_speechReady) return;
+    if(!window.speechSynthesis) return;
+    var text = _speechTexts[type] || type;
+    _speechQueue.push(text);
+    _speakNext();
+}
+
+// فتح الصوت عند أول نقرة
+document.addEventListener("click", function(){
+    if(_speechReady) return;
+    if(!window.speechSynthesis) return;
+    // نرسل رسالة فارغة لفتح الصوت
+    var unlock = new SpeechSynthesisUtterance(" ");
+    unlock.volume = 0.01;
+    unlock.onend = function(){ _speechReady = true; };
+    window.speechSynthesis.speak(unlock);
+}, false);
+
+// تحميل الأصوات
+if(window.speechSynthesis){
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = function(){
+        window.speechSynthesis.getVoices();
+    };
+}
+
+// ===== Badge helper =====
+function setBadge(id, count){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(count > 0){
+        el.style.display = "flex";
+        el.innerText = count > 99 ? "99+" : String(count);
+    } else {
+        el.style.display = "none";
+        el.innerText = "";
+    }
+}
+
+// ===== فحص كل 5 ثوان =====
+async function checkAllNotifications(){
+    try {
+        // --- 1. الإيداعات والسحوبات ---
+        var reqRes = await adminFetch("/all-requests");
+        var reqs   = await reqRes.json();
+        var deposits  = reqs.filter(function(r){ return r.type==="recharge" && r.status==="pending"; }).length;
+        var withdraws = reqs.filter(function(r){ return r.type==="withdraw" && r.status==="pending"; }).length;
+
+        if(_prevDeposits !== -1 && deposits > _prevDeposits)   playSound("deposit");
+        if(_prevWithdraws !== -1 && withdraws > _prevWithdraws) playSound("withdraw");
+
+        setBadge("badgeWallet", deposits + withdraws);
+        _prevDeposits  = deposits;
+        _prevWithdraws = withdraws;
+
+        // --- 2. المتاجر ---
+        var storeRes = await adminFetch("/all-store-applications");
+        var stores   = await storeRes.json();
+        var pending  = stores.filter(function(s){ return s.status==="pending"; }).length;
+
+        if(_prevStores !== -1 && pending > _prevStores) playSound("store");
+        setBadge("badgeStores", pending);
+        _prevStores = pending;
+
+        // --- 3. الأوردرات ---
+        var orderRes = await adminFetch("/all-orders");
+        var orders   = await orderRes.json();
+        var orderCount = orders.length;
+
+        if(_prevOrders !== -1 && orderCount > _prevOrders) playSound("order");
+        var newOrders = _prevOrders === -1 ? 0 : orderCount - _prevOrders;
+        setBadge("badgeOrders", newOrders > 0 ? newOrders : 0);
+        _prevOrders = orderCount;
+
+        // --- 4. المستخدمون ---
+        var userRes = await adminFetch("/admin/users");
+        var usrs    = await userRes.json();
+        var userCount = usrs.length;
+
+        if(_prevUsers !== -1 && userCount > _prevUsers) setBadge("badgeUsers", userCount - _prevUsers);
+        _prevUsers = userCount;
+
+        // --- 5. الرسائل ---
+        var msgRes  = await adminFetch("/admin-support-unread?lastSeen=" + _adminLastSeenSupport);
+        var msgData = await msgRes.json();
+        if(_prevMessages !== -1 && msgData.count > _prevMessages) playSound("message");
+        _prevMessages = msgData.count;
+        setBadge("adminSupportBadge", msgData.count);
+
+    } catch(e){ console.log("notification error:", e); }
+}
+
+setTimeout(function(){
+    checkAllNotifications();
+    setInterval(checkAllNotifications, 5000);
+}, 3000);
+
 
 async function deleteUser(email){
     if(!confirm('Delete user ' + email + '? This cannot be undone.')) return;
@@ -334,6 +476,12 @@ function logout(){
 }
 
 function showPage(page){
+
+// مسح الـ badge عند فتح الصفحة
+if(page === "wallet")  setBadge("badgeWallet", 0);
+if(page === "stores")  setBadge("badgeStores", 0);
+if(page === "orders")  setBadge("badgeOrders", 0);
+if(page === "users")   setBadge("badgeUsers",  0);
 
 // USERS
 if(page === 'dashboard'){
