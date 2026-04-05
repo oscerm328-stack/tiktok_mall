@@ -2228,8 +2228,8 @@ Hi, <span id="username"></span>
 
   <!-- النص -->
   <div style="flex:1;">
-    <div style="font-size:26px;font-weight:900;color:#010101;letter-spacing:-0.5px;line-height:1;">
-      TikTok <span style="color:#ff0050;">Mall</span>
+    <div style="font-size:26px;font-weight:900;letter-spacing:1px;line-height:1;position:relative;display:inline-block;">
+      <span style="position:relative;color:white;text-shadow:-2px -2px 0 #00f2ea, 2px 2px 0 #ff0050;-webkit-text-stroke:1px #010101;">TikTok </span><span style="color:white;text-shadow:-2px -2px 0 #00f2ea, 2px 2px 0 #ff0050;-webkit-text-stroke:1px #010101;">Mall</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
       <span style="font-size:13px;color:#00f2ea;font-weight:700;">🛍️ Selected Good Products</span>
