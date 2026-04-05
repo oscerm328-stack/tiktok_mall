@@ -6549,9 +6549,11 @@ async function loadStoreInfo(){
         }
     }
 
-    // شعار المتجر
-    let logo = localStorage.getItem("merchant_storeLogo_" + (user ? user.email : ""));
-    if(logo) document.getElementById("storeLogo").src = logo;
+    // شعار المتجر - نجلبه من التسجيل أو من التعديل المحلي
+    let logo = localStorage.getItem("merchant_storeLogo_" + (user ? user.email : ""))
+               || localStorage.getItem("storeLogo")
+               || (data.found ? data.storeLogo : "");
+    if(logo && logo.length > 10) document.getElementById("storeLogo").src = logo;
 
     // VIP دائماً 0 للمتاجر الجديدة
     document.getElementById("vipBadge").innerText = "VIP 0";
