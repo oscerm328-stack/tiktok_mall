@@ -7781,17 +7781,22 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
 /* BANNER CARD */
 .banner{
   background:#1976d2;
-  padding:18px 16px;
+  padding:16px 16px 14px;
   color:white;
   display:flex;
-  align-items:center;
-  gap:14px;
+  flex-direction:column;
+  gap:0;
   margin:12px 12px 0;
   border-radius:18px;
   box-shadow:0 4px 18px rgba(25,118,210,0.28);
 }
+.banner-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 .banner-logo{
-  width:70px;height:70px;
+  width:65px;height:65px;
   border-radius:50%;
   object-fit:cover;
   border:3px solid rgba(255,255,255,0.7);
@@ -7799,20 +7804,20 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
   flex-shrink:0;
 }
 .banner-info{flex:1;min-width:0;}
-.banner-info h2{margin:0 0 10px 0;font-size:16px;font-weight:bold;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.banner-info h2{margin:0 0 8px 0;font-size:16px;font-weight:bold;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .badges{
   display:flex;
   flex-direction:row;
-  gap:8px;
+  gap:7px;
   align-items:center;
   flex-wrap:nowrap;
 }
 .vip-badge{
   background:linear-gradient(90deg,#c8960c,#f5c842);
   color:#222;
-  padding:6px 14px;
+  padding:5px 12px;
   border-radius:25px;
-  font-size:13px;
+  font-size:12px;
   font-weight:bold;
   display:inline-flex;
   align-items:center;
@@ -7822,13 +7827,50 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
 }
 .badge{
   background:rgba(0,0,0,0.25);
-  padding:6px 14px;
+  padding:5px 12px;
   border-radius:25px;
-  font-size:13px;
+  font-size:12px;
   color:white;
   white-space:nowrap;
   flex-shrink:0;
 }
+/* DESCRIPTION ROW */
+.banner-desc-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:12px;
+  background:rgba(255,255,255,0.15);
+  border-radius:12px;
+  padding:10px 12px;
+  min-height:42px;
+}
+.desc-text{
+  flex:1;
+  font-size:13px;
+  color:white;
+  line-height:1.5;
+  word-break:break-word;
+  white-space:pre-wrap;
+  outline:none;
+  min-height:20px;
+  cursor:text;
+}
+.desc-text:empty:before{
+  content:attr(data-placeholder);
+  color:rgba(255,255,255,0.55);
+  pointer-events:none;
+}
+.edit-icon{
+  font-size:16px;
+  cursor:pointer;
+  color:rgba(255,255,255,0.8);
+  flex-shrink:0;
+  margin-top:1px;
+  user-select:none;
+  transition:color 0.2s;
+}
+.edit-icon:hover{color:white;}
 
 /* TABS */
 .tabs{
@@ -7896,16 +7938,23 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
 
 <!-- BANNER CARD -->
 <div class="banner">
-  <img id="storeLogo" class="banner-logo"
-       src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-       onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
-  <div class="banner-info">
-    <h2 id="bannerStoreName"></h2>
-    <div class="badges">
-      <span class="vip-badge">&#10003; VIP <span id="vipLevel">0</span></span>
-      <span class="badge">Products <span id="productCount">0</span></span>
-      <span class="badge">Followers <span id="followerCount">0</span></span>
+  <div class="banner-top">
+    <img id="storeLogo" class="banner-logo"
+         src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+         onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
+    <div class="banner-info">
+      <h2 id="bannerStoreName"></h2>
+      <div class="badges">
+        <span class="vip-badge">&#10003; VIP <span id="vipLevel">0</span></span>
+        <span class="badge">Products <span id="productCount">0</span></span>
+        <span class="badge">Followers <span id="followerCount">0</span></span>
+      </div>
     </div>
+  </div>
+  <div class="banner-desc-row">
+    <div class="desc-text" id="storeDesc" contenteditable="false"
+         data-placeholder="Add a store description..."></div>
+    <span class="edit-icon" id="editDescBtn" onclick="toggleDescEdit()" title="Edit description">&#9998;</span>
   </div>
 </div>
 
@@ -7985,6 +8034,40 @@ function updateHeartUI(){
 }
 updateHeartUI();
 renderFollowers();
+
+// ======= Store Description Edit =======
+var descKey = "storeDesc_" + sEmail;
+var descEl   = document.getElementById("storeDesc");
+var editBtn  = document.getElementById("editDescBtn");
+var isEditing = false;
+
+// تحميل التعريف المحفوظ
+var savedDesc = localStorage.getItem(descKey) || "";
+descEl.innerText = savedDesc;
+
+function toggleDescEdit(){
+  isEditing = !isEditing;
+  if(isEditing){
+    descEl.contentEditable = "true";
+    descEl.focus();
+    // ضع المؤشر في نهاية النص
+    var range = document.createRange();
+    var sel   = window.getSelection();
+    range.selectNodeContents(descEl);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    editBtn.innerHTML = "&#10003;"; // علامة حفظ
+    editBtn.title = "Save";
+  } else {
+    descEl.contentEditable = "false";
+    var newText = descEl.innerText.trim();
+    descEl.innerText = newText;
+    localStorage.setItem(descKey, newText);
+    editBtn.innerHTML = "&#9998;"; // قلم
+    editBtn.title = "Edit description";
+  }
+}
 
 function renderFollowers(){
   var count = isLiked ? baseFollowers + 1 : baseFollowers;
