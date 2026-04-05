@@ -3703,6 +3703,7 @@ border-radius:20px;
 background:linear-gradient(45deg,#1e88e5,#1565c0);
 color:white;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
+min-height:120px;
 }
 
 .card h3{
