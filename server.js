@@ -406,15 +406,9 @@ function loadUserChats() {
 function saveUserChats() {
     try { require('fs').writeFileSync("userChats.json", JSON.stringify(userChats, null, 2)); } catch(e) {}
     if(db) {
-        // نحفظ آخر رسالة فقط في MongoDB (بدون الصور الكبيرة)
         const lastMsg = userChats[userChats.length - 1];
         if(lastMsg) {
-            const msgToSave = { ...lastMsg };
-            // لا نحفظ الصور الكبيرة في MongoDB
-            if(msgToSave.img && msgToSave.img.length > 500000) {
-                msgToSave.img = "[image]";
-            }
-            db.collection("userChats").insertOne(msgToSave)
+            db.collection("userChats").insertOne({...lastMsg})
                 .catch(err => console.error("MongoDB saveUserChats error:", err.message));
         }
     }
