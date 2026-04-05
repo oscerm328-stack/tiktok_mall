@@ -6951,7 +6951,7 @@ margin-bottom:5px;
 <div class="grid">
 <div>
 <p>Products for sale</p>
-<div class="value">0</div>
+<div class="value" id="productsForSaleCount">0</div>
 </div>
 
 <div>
@@ -7201,9 +7201,21 @@ async function loadMerchantBalance(){
   } catch(e){ console.error(e); }
 }
 
+// تحميل عدد المنتجات وتحديثه تلقائياً
+function loadProductsCount(){
+    fetch("https://fakestoreapi.com/products?limit=20")
+    .then(function(r){ return r.json(); })
+    .then(function(products){
+        var el = document.getElementById("productsForSaleCount");
+        if(el) el.innerText = products.length;
+    })
+    .catch(function(){});
+}
+
 loadStoreInfo();
 loadMerchantBalance();
 loadVisitorCounter();
+loadProductsCount();
 setInterval(loadMerchantBalance, 5000);
 </script>
 </html>`);
