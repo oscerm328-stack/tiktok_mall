@@ -629,15 +629,40 @@ document.getElementById("content").innerHTML = `
   <label style="font-weight:bold;display:block;margin-bottom:8px;">New Code:</label>
   <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
     <input id="inviteCode" placeholder="Enter new code" style="padding:12px;border:2px solid #ddd;border-radius:10px;font-size:16px;width:220px;outline:none;">
-    <button onclick="saveCode()" style="padding:12px 24px;background:linear-gradient(45deg,#00f2ea,#ff0050);color:white;border:none;border-radius:10px;cursor:pointer;font-size:15px;font-weight:bold;">💾 حفظ</button>
+    <button onclick="saveCode()" style="padding:12px 24px;background:linear-gradient(45deg,#00f2ea,#ff0050);color:white;border:none;border-radius:10px;cursor:pointer;font-size:15px;font-weight:bold;">💾 Save</button>
   </div>
 </div>
 <div id="codeMsg" style="margin-top:10px;font-size:14px;"></div>
+</div>
+
+<div class="card" style="margin-top:20px;">
+<h2>🔐 Backup Verification Code</h2>
+<p style="color:#666;font-size:14px;">This code can be given to users manually if the email verification fails.</p>
+<div style="margin:20px 0;">
+  <label style="font-weight:bold;display:block;margin-bottom:8px;">Current Backup Code:</label>
+  <div id="currentBackupDisplay" style="font-size:22px;font-weight:bold;color:#e53935;background:#ffebee;padding:12px 20px;border-radius:10px;display:inline-block;letter-spacing:3px;">Loading...</div>
+</div>
+<div style="margin:20px 0;">
+  <label style="font-weight:bold;display:block;margin-bottom:8px;">New Backup Code:</label>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+    <input id="backupCodeInput" placeholder="Enter new backup code" style="padding:12px;border:2px solid #ddd;border-radius:10px;font-size:16px;width:220px;outline:none;">
+    <button onclick="saveBackupCode()" style="padding:12px 24px;background:linear-gradient(45deg,#e53935,#ff6f00);color:white;border:none;border-radius:10px;cursor:pointer;font-size:15px;font-weight:bold;">💾 Save</button>
+  </div>
+</div>
+<div id="backupCodeMsg" style="margin-top:10px;font-size:14px;"></div>
 </div>
 `;
 adminFetch("/get-invite-code").then(r=>r.json()).then(d=>{
   var el = document.getElementById("currentCodeDisplay");
   if(el) el.innerText = d.code;
+});
+// جلب كود التحقق الاحتياطي
+adminFetch("/get-backup-code").then(r=>r.json()).then(d=>{
+  var el = document.getElementById("currentBackupDisplay");
+  if(el) el.innerText = d.code || "TM2026";
+}).catch(function(){ 
+  var el = document.getElementById("currentBackupDisplay");
+  if(el) el.innerText = "TM2026";
 });
 }
 
@@ -832,7 +857,33 @@ function saveCode(){
             document.getElementById("inviteCode").value = "";
             if(msg) msg.innerHTML = "<span style='color:green;'>✅ Invite code updated to: <b>" + data.code + "</b></span>";
         } else {
-            if(msg) msg.innerHTML = "<span style='color:red;'>❌ " + (data.message||"خطأ") + "</span>";
+            if(msg) msg.innerHTML = "<span style='color:red;'>❌ " + (data.message||"Error") + "</span>";
+        }
+    })
+    .catch(() => { if(msg) msg.innerHTML = "<span style='color:red;'>❌ Failed to connect to server</span>"; });
+}
+
+function saveBackupCode(){
+    var code = document.getElementById("backupCodeInput").value.trim();
+    var msg  = document.getElementById("backupCodeMsg");
+    if(!code || code.length < 3){
+        if(msg) msg.innerHTML = "<span style='color:red;'>❌ Code must be at least 3 characters</span>";
+        return;
+    }
+    adminFetch("/set-backup-code", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ code: code })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success){
+            var display = document.getElementById("currentBackupDisplay");
+            if(display) display.innerText = data.code;
+            document.getElementById("backupCodeInput").value = "";
+            if(msg) msg.innerHTML = "<span style='color:green;'>✅ Backup code updated to: <b>" + data.code + "</b></span>";
+        } else {
+            if(msg) msg.innerHTML = "<span style='color:red;'>❌ Failed to update</span>";
         }
     })
     .catch(() => { if(msg) msg.innerHTML = "<span style='color:red;'>❌ Failed to connect to server</span>"; });
