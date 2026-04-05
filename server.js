@@ -39,7 +39,7 @@ async function syncFromDB() {
         const usersData = await db.collection("users").find({}).toArray();
         if(usersData.length > 0) users = usersData.map(u => { delete u._id; return u; });
 
-        const chatsData = await db.collection("userChats").find({}).toArray();
+        const chatsData = await db.collection("userChats").find({}).sort({ id: 1 }).toArray();
         if(chatsData.length > 0) userChats = chatsData.map(u => { delete u._id; return u; });
 
         const storeData = await db.collection("storeApplications").find({}).toArray();
@@ -406,9 +406,17 @@ function loadUserChats() {
 function saveUserChats() {
     try { require('fs').writeFileSync("userChats.json", JSON.stringify(userChats, null, 2)); } catch(e) {}
     if(db) {
-        db.collection("userChats").deleteMany({})
-            .then(() => userChats.length > 0 ? db.collection("userChats").insertMany(userChats.map(u => ({...u}))) : null)
-            .catch(err => console.error("MongoDB saveUserChats error:", err.message));
+        // نحفظ آخر رسالة فقط في MongoDB (بدون الصور الكبيرة)
+        const lastMsg = userChats[userChats.length - 1];
+        if(lastMsg) {
+            const msgToSave = { ...lastMsg };
+            // لا نحفظ الصور الكبيرة في MongoDB
+            if(msgToSave.img && msgToSave.img.length > 500000) {
+                msgToSave.img = "[image]";
+            }
+            db.collection("userChats").insertOne(msgToSave)
+                .catch(err => console.error("MongoDB saveUserChats error:", err.message));
+        }
     }
 }
 loadUserChats();
@@ -3718,6 +3726,7 @@ margin:0;
 font-family:Arial;
 background:#f0f0f0;
 padding-top:55px;
+min-height:100vh;
 }
 
 /* HEADER */
