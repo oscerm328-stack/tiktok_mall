@@ -1495,7 +1495,7 @@ text-decoration:none;
 <button onclick="register()">Register</button>
 <br><br>
 <div style="text-align:center;font-size:12px;color:#aaa;margin-bottom:8px;white-space:nowrap;">
-  Agree <a href="#" style="color:#fff;font-weight:bold;">Terms and Conditions</a> And <a href="#" style="color:#fff;font-weight:bold;">《Privacy Agreement》</a>
+  Agree <a href="/terms" style="color:#fff;font-weight:bold;">Terms and Conditions</a> And <a href="#" style="color:#fff;font-weight:bold;">《Privacy Agreement》</a>
 </div>
 <a href="/login-page">Go to Login</a>
 </div>
@@ -8112,6 +8112,84 @@ function buyNow(){ window.location.href="/wallet"; }
 </body>
 </html>`);
 });
+app.get("/terms", (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Terms and Conditions</title>
+<style>
+body{background:#fff;font-family:Arial,sans-serif;font-size:14px;color:#222;padding:20px;max-width:900px;margin:0 auto;line-height:1.7;}
+h2{text-align:center;margin-bottom:20px;}
+p{margin:10px 0;}
+.back-btn{display:block;margin-bottom:20px;color:#1976d2;cursor:pointer;font-size:14px;text-decoration:none;}
+</style></head>
+<body>
+<a class="back-btn" onclick="history.back()">&#8592; Back</a>
+<h2>Terms and Conditions</h2>
+<p>Chapter 1 Overview</p>
+<p>Article 1 [Purpose of Rules]<br>In order to allow users to enjoy a better, safer and more reliable business environment and transaction experience, promote the coordinated governance of online and offline integration, and optimize the TikTok Mall platform ecosystem, these general rules are hereby formulated.</p>
+<p>Article 2 [Basis of Rules]<br>(I) [Legal Basis] The "International E-Commerce Law", "International Cybersecurity Law", "International Consumer Rights Protection Law", "International Network Transaction Supervision and Administration Measures" and other global laws and regulations and related normative documents (hereinafter referred to as "legal provisions") stipulate the legal rights and obligations of all parties in the TikTok Mall platform ecosystem, and are the legal basis for the formulation and revision of TikTok Mall platform rules.<br>
+(II) [Normative Basis] The relevant agreements of the TikTok Mall platform are legal documents that clarify the rights and obligations of TikTok Mall and its members, and are the normative basis of TikTok Mall platform rules.<br>
+(III) [Conceptual Basis] All parties in the TikTok Mall platform ecosystem practice business ethics and social responsibilities, coexist and win together, co-govern and co-build on the TikTok Mall platform, and develop in a self-disciplined and standardized manner. For those that are not clearly stipulated by the law, the platform continuously maximizes the interests of all parties through beneficial exploration, which is the conceptual basis of TikTok Mall platform rules.</p>
+<p>Article 3 [Rules and Principles]<br>All parties in the TikTok Mall platform ecosystem respect and abide by the following principles: equality, voluntariness, fairness, and integrity. The behavior of all parties in the TikTok Mall platform ecosystem on the TikTok Mall platform shall not violate the law and public order and good morals.</p>
+<p>Article 4 [Applicable Objects]<br>The TikTok Mall platform rules apply to all parties in the TikTok Mall platform ecosystem, including users, members, buyers, sellers, and other relevant parties.</p>
+<p>Article 5 [Rule System and Effectiveness]<br>The TikTok Mall platform rule system and effectiveness level are as follows:<br>
+(I) [Rule System] The TikTok Mall platform rules are a general term for the following rules:<br>
+1. "TikTok Mall Platform Rules General Principles"<br>
+2. Specific rules and regulations formulated for the management and violation handling of the TikTok Mall platform member market, industry market management, marketing activities and other necessary matters, including the corresponding implementation details for further refinement of specific rules and regulations (hereinafter referred to as "rules and regulations");<br>
+3. Temporary announcements issued in accordance with the temporary management needs of the TikTok Mall platform.</p>
+<p>(II) [Effectiveness Level] Where there are provisions in the "General Principles", they shall prevail; where there are special provisions in the rules and regulations or temporary announcements, the special provisions shall prevail. If there is no provision in the TikTok Mall platform rules, TikTok Mall will handle it according to the law or relevant agreements.</p>
+<p>Article 6 [Rule Procedure]<br>TikTok Mall shall formulate or modify the TikTok Mall platform rules in a timely and prudent manner in accordance with the requirements of legal provisions and the needs of the development of the ecosystem, and shall publicize them on the TikTok Mall platform rules page. The rules shall take effect from the date of expiration of the publicity period.<br>
+The formulated or modified transaction rules shall be subject to the special public consultation procedure in accordance with the law, and shall be reported to the relevant functional departments.</p>
+<p>Article 7 [Retroactive Effect of Rules]<br>The rules at that time shall apply to the behavior that occurred before the rules came into effect; the new rules shall apply to the behavior that occurred after the rules came into effect.</p>
+<p>Chapter II General Provisions for Members</p>
+<p>Article 8 [General Principles]<br>All behaviors of members on the TikTok Mall platform must comply with legal provisions, TikTok Mall platform rules, and follow the instructions on the corresponding pages of the TikTok Mall platform.</p>
+<p>Article 9 [Registration]<br>Members shall complete registration in accordance with the procedures and requirements of the TikTok Mall platform.<br>
+If the member account is an inactive account, TikTok Mall may recycle it.<br>
+Article 10 [Authentication] Members shall provide true and valid information about themselves (including natural persons, legal persons and their principals, non-legal persons and their principals, etc hereinafter the same) in accordance with the authentication requirements of the TikTok Mall platform.<br>
+(I) The information that members shall provide includes but is not limited to: personal identity information, personal information, effective contact information, real address, business address, market entity registration information and other relevant information, and other authentication information required by laws and regulations to prove the authenticity, validity and consistency of identity. If the personal information provided by members is incomplete, invalid or may be inaccurate, TikTok Mall may not pass the authentication.<br>
+(II) In order to ensure the continued authenticity and validity of member authentication information, TikTok Mall may review the information of members that have passed authentication.</p>
+<p>Article 11 [Information Release]<br>Members shall not release the following information:<br>
+(1) Opposing the basic principles established by the Constitution;<br>
+(2) Endangering national security, leaking state secrets, subverting the state power, and undermining national unity;<br>
+(3) Damaging the honor and interests of the state;<br>
+(4) Distorting, vilifying, blaspheming, denying the deeds and spirit of heroes and martyrs, and insulting, slandering or otherwise infringing on the names, portraits, reputations, and honors of heroes and martyrs;<br>
+(5) Propagating terrorism, extremism, or inciting terrorist activities or extremist activities;<br>
+(6) Inciting ethnic hatred, ethnic Discrimination, undermining national unity;<br>
+(VII) Undermining the state's religious policies, promoting cults and feudal superstitions;<br>
+(VIII) Spreading rumors, disrupting economic and social order, and undermining social stability;<br>
+(IX) Spreading obscenity, pornography, gambling, violence, murder, terror, or abetting crimes;<br>
+(X) Insulting or slandering others, infringing on the legitimate rights and interests of others;<br>
+(XI) Fraudulent, false, inaccurate or misleading;<br>
+(XII) Other violations of laws, social morality, or according to the relevant agreements of the TikTok Mall platform, which are not suitable for posting on the TikTok Mall platform.</p>
+<p>Article 12 [Transactions]<br>Members shall comply with the various requirements of the TikTok Mall platform transaction process to conduct real transactions. If a member has a dispute over a transaction on the TikTok Mall platform, he or she may initiate a dispute mediation service request to the TikTok Mall customer service department. TikTok Mall may require the buyer and seller to provide relevant supporting materials as appropriate and handle it in accordance with the "TikTok Mall Rules".</p>
+<p>Article 13 [Information and Quality]<br>The product or service information published by sellers and suppliers must comply with the "TikTok Mall Product Release Specifications" and other relevant regulations. Sellers and suppliers should ensure that the goods or services they sell can be used normally within a reasonable period, have the performance they should have, meet the standards indicated on the packaging instructions, etc., and do not pose a risk to personal and property safety, and bear corresponding responsibilities for the quality of the goods or services they sell.<br>
+The material descriptions of the goods released by sellers and suppliers must comply with the provisions of the "TikTok Mall Material Standard Definition Table". TikTok Mall may conduct random inspections of the goods or services sold by its sellers and suppliers in accordance with the "TikTok Mall Product Quality Random Inspection Specifications".</p>
+<p>Article 14 [Transaction Performance and Service Guarantee]<br>Members can choose the transaction method according to TikTok Mall's requirements and actual needs.<br>
+Sellers and suppliers must fulfill their commitments on transactions or services, including timely delivery within the prescribed and promised period (except for special circumstances) in accordance with the rules such as the "TikTok Mall Shipping Management Specifications" and their own commitments.<br>
+Sellers and suppliers should protect the legitimate rights and interests of buyers, provide consumer protection services, and comply with relevant regulations such as the "TikTok Mall Seven-Day Unconditional Return Specifications".</p>
+<p>Article 15 [Marketing]<br>Sellers and suppliers participating in TikTok Mall marketing activities must comply with the "TikTok Mall Marketing Activity Specifications" or corresponding marketing activity rules and other relevant regulations.</p>
+<p>Article 16 [Industry and Featured Markets]<br>TikTok Mall sellers in specific industries or featured markets must comply with the "TikTok Mall Industry Management Specifications" and "TikTok Mall Featured Market Management Specifications".</p>
+<p>Article 17 [Service Market Users]<br>Service market users should comply with the "Service Market Management Specifications" and other relevant regulations.</p>
+<p>Article 18 [TikTok Mall Live Platform Users]<br>TikTok Mall Live Platform users should comply with the "Content Creator Management Rules", "TikTok Mall Live Management Rules", "TikTok Mall Live Organization Management Specifications", "TikTok Mall Engine Platform Management Rules", "TikTok Mall Engine Platform Dispute Handling Rules" and other relevant regulations.</p>
+<p>Article 19 [Other Users]<br>In order to try to meet user needs and continuously improve user experience, the TikTok Mall platform may launch new markets and services from time to time. Users of the corresponding markets and services should comply with the corresponding agreements and the relevant rules and other regulations that are announced and effective on the TikTok Mall platform rules page.</p>
+<p>Chapter V Market Management and Violation Handling<br>
+Article 20 Risky behaviors and violations of TikTok Mall members shall be handled in accordance with the "TikTok Mall Market Management and Violation Handling Specifications".</p>
+<p>Chapter VI Supplementary Provisions<br>
+Article 21 These rules shall first take effect on October 10, 2024 and shall be revised on April 3, 2025.</p>
+<p>Article 22 The term "above" in the TikTok Mall platform rules includes this number; the term "below" in the TikTok Mall platform rules does not include this number.</p>
+<p>Article 23 The term "day" in the TikTok Mall platform rules shall be calculated as 24 hours.</p>
+<p>Appendix Definitions</p>
+<p>1. User refers to the user of various services on the TikTok Mall platform. Users can browse relevant information on the TikTok Mall platform without registration.</p>
+<p>2. Member refers to a user who has signed a service agreement with TikTok Mall and completed the registration process, including natural persons, legal persons and unincorporated organizations of equal civil subjects.</p>
+<p>3. Buyer refers to a member who purchases goods or services on the TikTok Mall platform.</p>
+<p>4. Seller refers to a member who has successfully created a store on the TikTok Mall platform and is engaged in the business of selling goods or providing services.</p>
+<p>5. Supplier refers to manufacturers, middlemen and individual business operators who provide sales of all related products on the TikTok Mall platform.</p>
+<p>6. Other related parties refer to individuals or organizations that have a certain relationship with TikTok Mall platform users, such as intellectual property rights holders, supply and marketing platform users, service market users, content creators and institutions, etc.</p>
+<p>7. TikTok Mall, the single or collective name of the TikTok Mall platform operator refers to Meta Network Technology Co., Ltd., the operator of the TikTok Mall network.</p>
+<p>8. Intellectual property rights holders refer to natural persons, legal persons or other organizations that legally own intellectual property rights such as trademark rights, copyrights, and patent rights.</p>
+</body></html>`);
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
