@@ -1381,6 +1381,23 @@ setInterval(() => {
     }
 }, 60 * 1000);
 
+// ================= STORE DESCRIPTION =================
+// جلب التعريف - يمكن لأي زائر
+app.get("/store-desc/:email", (req, res) => {
+    const appl = storeApplications.find(a => a.email === req.params.email && a.status === "approved");
+    res.json({ desc: appl ? (appl.storeDesc || "") : "" });
+});
+
+// تحديث التعريف - فقط صاحب المتجر
+app.post("/update-store-desc", authMiddleware, (req, res) => {
+    const { desc } = req.body;
+    const appl = storeApplications.find(a => a.email === req.userEmail && a.status === "approved");
+    if (!appl) return res.status(403).json({ error: "Not your store or not approved" });
+    appl.storeDesc = (desc || "").substring(0, 500); // حد أقصى 500 حرف
+    saveStoreApplications();
+    res.json({ success: true });
+});
+
 // جلب كل الطلبات (للأدمن)
 app.get("/all-store-applications", (req, res) => {
     res.json(storeApplications);
@@ -8044,36 +8061,54 @@ updateHeartUI();
 renderFollowers();
 
 // ======= Store Description Edit =======
-var descKey = "storeDesc_" + sEmail;
-var descEl   = document.getElementById("storeDesc");
-var editBtn  = document.getElementById("editDescBtn");
+var descEl  = document.getElementById("storeDesc");
+var editBtn = document.getElementById("editDescBtn");
 var isEditing = false;
 
-// تحميل التعريف المحفوظ
-var savedDesc = localStorage.getItem(descKey) || "";
-descEl.innerText = savedDesc;
+// تحقق هل المستخدم الحالي هو صاحب هذا المتجر
+var me = JSON.parse(localStorage.getItem("user") || "{}");
+var isOwner = (me.email && me.email === sEmail);
+
+// إخفاء زر التعديل إذا لم يكن صاحب المتجر
+if(!isOwner) editBtn.style.display = "none";
+
+// جلب التعريف من السيرفر
+fetch("/store-desc/" + encodeURIComponent(sEmail))
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    if(d.desc) descEl.innerText = d.desc;
+  }).catch(function(){});
 
 function toggleDescEdit(){
+  if(!isOwner) return; // حماية إضافية
   isEditing = !isEditing;
   if(isEditing){
     descEl.contentEditable = "true";
     descEl.focus();
-    // ضع المؤشر في نهاية النص
     var range = document.createRange();
     var sel   = window.getSelection();
     range.selectNodeContents(descEl);
     range.collapse(false);
     sel.removeAllRanges();
     sel.addRange(range);
-    editBtn.innerHTML = "&#10003;"; // علامة حفظ
+    editBtn.innerHTML = "&#10003;";
     editBtn.title = "Save";
   } else {
     descEl.contentEditable = "false";
     var newText = descEl.innerText.trim();
     descEl.innerText = newText;
-    localStorage.setItem(descKey, newText);
-    editBtn.innerHTML = "&#9998;"; // قلم
+    editBtn.innerHTML = "&#9998;";
     editBtn.title = "Edit description";
+    // حفظ على السيرفر فقط لصاحب المتجر
+    var token = localStorage.getItem("token") || "";
+    fetch("/update-store-desc", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ desc: newText })
+    }).catch(function(){});
   }
 }
 
