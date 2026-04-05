@@ -2105,24 +2105,8 @@ Hi, <span id="username"></span>
 <div style="text-align:center;padding:18px 0 8px;">
   <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;">
     <!-- شعار TikTok -->
-    <div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;position:relative;">
-      <!-- watercolor splash background -->
-      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="30" cy="35" rx="28" ry="22" fill="#f472b6" opacity="0.6"/>
-        <ellipse cx="42" cy="30" rx="22" ry="26" fill="#a855f7" opacity="0.55"/>
-        <ellipse cx="38" cy="42" rx="24" ry="18" fill="#60a5fa" opacity="0.5"/>
-        <ellipse cx="22" cy="28" rx="18" ry="20" fill="#f9a8d4" opacity="0.45"/>
-      </svg>
-      <svg style="position:relative;z-index:1;" width="44" height="52" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- ظل أحمر -->
-        <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
-        <!-- ظل أزرق -->
-        <path d="M31 9C31.8 12.2 34.2 14.6 37 15.4V20.2C34.6 20.2 32.4 19.4 30.6 18.2V29C30.6 34.6 26.2 39 20.6 39C15 39 10.6 34.6 10.6 29C10.6 23.4 15 19 20.6 19C21.2 19 21.8 19.1 22.4 19.2V24.2C21.8 24 21.2 23.9 20.6 23.9C17.6 23.9 15.2 26.2 15.2 29.2C15.2 32.2 17.6 34.5 20.6 34.5C23.6 34.5 26 32.2 26 29.2V9H31Z" fill="#69C9D0" opacity="0.9"/>
-        <!-- الشعار الأبيض الرئيسي -->
-        <path d="M32 8C32.8 11.2 35.2 13.6 38 14.4V19.2C35.6 19.2 33.4 18.4 31.6 17.2V28C31.6 33.6 27.2 38 21.6 38C16 38 11.6 33.6 11.6 28C11.6 22.4 16 18 21.6 18C22.2 18 22.8 18.1 23.4 18.2V23.2C22.8 23 22.2 22.9 21.6 22.9C18.6 22.9 16.2 25.2 16.2 28.2C16.2 31.2 18.6 33.5 21.6 33.5C24.6 33.5 27 31.2 27 28.2V8H32Z" fill="white"/>
-        <!-- نص TikTok Mall -->
-        <text x="24" y="50" text-anchor="middle" font-size="7" font-weight="bold" font-family="Arial" fill="#010101">TikTok <tspan fill="#ff0050">Mall</tspan></text>
-      </svg>
+    <div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;">
+      <img src="https://logo.svgcdn.com/logos/tiktok.svg" style="width:50px;height:50px;" alt="TikTok">
     </div>
     <!-- الاسم -->
     <div class="logo" style="margin:0;">TikTok Mall</div>
@@ -2230,24 +2214,8 @@ Hi, <span id="username"></span>
 <div style="background:white;padding:20px 15px;display:flex;align-items:center;gap:15px;margin:10px 0;">
 
   <!-- شعار TikTok SVG -->
-  <div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
-    <!-- watercolor splash background -->
-    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="35" cy="40" rx="32" ry="26" fill="#f472b6" opacity="0.6"/>
-      <ellipse cx="50" cy="34" rx="26" ry="30" fill="#a855f7" opacity="0.55"/>
-      <ellipse cx="44" cy="50" rx="28" ry="22" fill="#60a5fa" opacity="0.5"/>
-      <ellipse cx="25" cy="32" rx="22" ry="24" fill="#f9a8d4" opacity="0.45"/>
-    </svg>
-    <svg style="position:relative;z-index:1;" width="55" height="65" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- ظل أحمر -->
-      <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
-      <!-- ظل أزرق -->
-      <path d="M31 9C31.8 12.2 34.2 14.6 37 15.4V20.2C34.6 20.2 32.4 19.4 30.6 18.2V29C30.6 34.6 26.2 39 20.6 39C15 39 10.6 34.6 10.6 29C10.6 23.4 15 19 20.6 19C21.2 19 21.8 19.1 22.4 19.2V24.2C21.8 24 21.2 23.9 20.6 23.9C17.6 23.9 15.2 26.2 15.2 29.2C15.2 32.2 17.6 34.5 20.6 34.5C23.6 34.5 26 32.2 26 29.2V9H31Z" fill="#69C9D0" opacity="0.9"/>
-      <!-- الشعار الأبيض الرئيسي -->
-      <path d="M32 8C32.8 11.2 35.2 13.6 38 14.4V19.2C35.6 19.2 33.4 18.4 31.6 17.2V28C31.6 33.6 27.2 38 21.6 38C16 38 11.6 33.6 11.6 28C11.6 22.4 16 18 21.6 18C22.2 18 22.8 18.1 23.4 18.2V23.2C22.8 23 22.2 22.9 21.6 22.9C18.6 22.9 16.2 25.2 16.2 28.2C16.2 31.2 18.6 33.5 21.6 33.5C24.6 33.5 27 31.2 27 28.2V8H32Z" fill="white"/>
-      <!-- نص TikTok Mall -->
-      <text x="24" y="50" text-anchor="middle" font-size="7" font-weight="bold" font-family="Arial" fill="#010101">TikTok <tspan fill="#ff0050">Mall</tspan></text>
-    </svg>
+  <div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+    <img src="https://logo.svgcdn.com/logos/tiktok.svg" style="width:60px;height:60px;" alt="TikTok">
   </div>
 
   <!-- النص -->
