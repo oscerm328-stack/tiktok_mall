@@ -4707,8 +4707,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -4773,8 +4774,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -5001,8 +5003,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -5355,8 +5358,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -5531,8 +5535,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -5700,8 +5705,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -5903,9 +5909,10 @@ res.send(`
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 text-align:center;
 padding-top:60px;
+min-height:100vh;
 }
 
 .header{
@@ -6039,8 +6046,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER LINE */
@@ -6686,8 +6694,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -6750,8 +6759,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -6852,8 +6862,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 /* HEADER */
@@ -6965,8 +6976,9 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:white;
 padding-top:54px;
+min-height:100vh;
 }
 
 .header{
