@@ -7761,18 +7761,22 @@ app.get("/store-page", (req, res) => {
 *{box-sizing:border-box;}
 body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-height:100vh;}
 
+/* STICKY WRAPPER */
+.sticky-top{
+  position:sticky;
+  top:0;
+  z-index:200;
+  background:#f5f5f5;
+}
+
 /* HEADER */
 .header{
   background:white;
   padding:14px 15px;
-  position:fixed;top:0;left:0;right:0;z-index:200;
   display:flex;
   align-items:center;
   justify-content:space-between;
   border-bottom:1px solid #eee;
-  position:sticky;
-  top:0;
-  z-index:100;
 }
 .store-name-title{font-weight:bold;font-size:15px;flex:1;text-align:center;color:#222;}
 .back-btn{display:inline-flex;align-items:center;cursor:pointer;padding:4px;}
@@ -7786,7 +7790,7 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
   display:flex;
   flex-direction:column;
   gap:0;
-  margin:12px 12px 0;
+  margin:12px 12px 10px;
   border-radius:18px;
   box-shadow:0 4px 18px rgba(25,118,210,0.28);
 }
@@ -7924,6 +7928,9 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
 </head>
 <body>
 
+<!-- STICKY TOP: HEADER + BANNER -->
+<div class="sticky-top">
+
 <!-- HEADER -->
 <div class="header">
   <span class="back-btn" onclick="history.back()">
@@ -7957,6 +7964,7 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
     <span class="edit-icon" id="editDescBtn" onclick="toggleDescEdit()" title="Edit description">&#9998;</span>
   </div>
 </div>
+</div><!-- /sticky-top -->
 
 <!-- TABS -->
 <div class="tabs">
