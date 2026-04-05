@@ -2255,13 +2255,31 @@ Hi, <span id="username"></span>
 </div>
 <div id="searchMenu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#eee;z-index:9999;overflow:auto;">
 
-<div style="padding:15px;display:flex;align-items:center;gap:10px;background:white;border-bottom:1px solid #ddd;">
-<span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-<div style="flex:1;display:flex;align-items:center;background:#f0f0f0;border-radius:30px;padding:10px 15px;">
-<span style="margin-right:8px;color:#555;font-size:13px;">Store ▼</span>
-<input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;width:100%;background:transparent;" onkeypress="if(event.key==='Enter') doSearch()">
-</div>
-<span onclick="doSearch()" style="background:#1976d2;color:white;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:13px;">Search</span>
+<!-- BLUE HEADER -->
+<div style="background:#1976d2;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
+  <!-- زر الرجوع + بار البحث -->
+  <div style="display:flex;align-items:center;gap:8px;flex:1;">
+    <span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;flex-shrink:0;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <div style="flex:1;display:flex;align-items:center;background:white;border-radius:30px;padding:7px 14px;">
+      <span style="margin-right:8px;color:#555;font-size:13px;cursor:pointer;" onclick="toggleSearchType()">Store ▼</span>
+      <input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;width:100%;background:transparent;font-size:14px;" onkeypress="if(event.key==='Enter') doSearch()">
+    </div>
+    <span onclick="doSearch()" style="background:white;color:#1976d2;padding:7px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:bold;flex-shrink:0;">Search</span>
+  </div>
+  <!-- أيقونات اليمين -->
+  <div style="display:flex;align-items:center;gap:12px;margin-left:10px;flex-shrink:0;">
+    <span onclick="toggleMessages()" style="cursor:pointer;display:inline-flex;align-items:center;position:relative;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </span>
+    <span onclick="toggleAccount()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </span>
+    <span onclick="toggleLang()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </span>
+  </div>
 </div>
 
 <!-- نتائج البحث -->
@@ -2269,7 +2287,12 @@ Hi, <span id="username"></span>
 
 <!-- السجل -->
 <div id="historySection" style="padding:15px;">
-<h3 style="margin:0 0 10px 0;">Search History</h3>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+  <h3 style="margin:0;">Search History</h3>
+  <span onclick="clearHistory()" style="cursor:pointer;display:inline-flex;align-items:center;" title="Clear history">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+  </span>
+</div>
 <div id="historyList" style="color:#555;"></div>
 <div id="noHistory" style="text-align:center;margin-top:80px;color:#aaa;">
 <p style="font-size:40px;">📄</p>
@@ -2834,6 +2857,13 @@ let history = JSON.parse(localStorage.getItem("history") || "[]");
 history.unshift(value);
 localStorage.setItem("history", JSON.stringify(history));
 showHistory();
+}
+
+function clearHistory(){
+if(confirm("Clear all search history?")){
+    localStorage.removeItem("history");
+    showHistory();
+}
 }
 
 function showHistory(){
