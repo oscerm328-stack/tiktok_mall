@@ -1243,6 +1243,59 @@ app.get("/store-status/:email", (req, res) => {
     }
 });
 
+// ================= FOLLOWERS SYSTEM =================
+// جلب عدد المتابعين
+app.get("/followers/:email", (req, res) => {
+    const appl = storeApplications.find(a => a.email === req.params.email);
+    const followers = appl ? (appl.followers || 0) : 0;
+    res.json({ followers });
+});
+
+// متابعة متجر
+app.post("/follow-store", (req, res) => {
+    const { storeEmail, userEmail, action } = req.body; // action: "follow" or "unfollow"
+    if (!storeEmail || !userEmail) return res.json({ success: false });
+
+    const appl = storeApplications.find(a => a.email === storeEmail);
+    if (!appl) return res.json({ success: false });
+
+    if (!appl.followersList) appl.followersList = [];
+    if (!appl.followers) appl.followers = 0;
+
+    const alreadyFollowing = appl.followersList.includes(userEmail);
+
+    if (action === "follow" && !alreadyFollowing) {
+        appl.followersList.push(userEmail);
+        appl.followers = appl.followersList.length;
+    } else if (action === "unfollow" && alreadyFollowing) {
+        appl.followersList = appl.followersList.filter(e => e !== userEmail);
+        appl.followers = appl.followersList.length;
+    }
+
+    saveStoreApplications();
+    res.json({ success: true, followers: appl.followers });
+});
+
+// زيادة المتابعين تلقائياً كل يوم - يتضاعف
+setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0) {
+        storeApplications.forEach(a => {
+            if (a.status === "approved") {
+                const current = a.followers || 0;
+                // أول يوم 20، ثاني يوم 40، ثالث 80...
+                if (current === 0) {
+                    a.followers = 20;
+                } else {
+                    a.followers = current * 2;
+                }
+            }
+        });
+        saveStoreApplications();
+        console.log("✅ Followers updated (doubled)");
+    }
+}, 60 * 1000);
+
 // جلب كل الطلبات (للأدمن)
 app.get("/all-store-applications", (req, res) => {
     res.json(storeApplications);
@@ -7525,10 +7578,18 @@ fetch("/all-store-applications")
 })
 .catch(function(){});
 
-// ======= القلب =======
+// ======= القلب والمتابعة =======
 var likedKey = "likedStores_" + sEmail;
 var isLiked  = localStorage.getItem(likedKey) === "1";
-var baseFollowers = parseInt(localStorage.getItem("followers_" + sEmail) || "4");
+var baseFollowers = 0;
+
+// جلب عدد المتابعين من السيرفر
+fetch("/followers/" + encodeURIComponent(sEmail))
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    baseFollowers = d.followers || 0;
+    renderFollowers();
+  }).catch(function(){});
 
 function updateHeartUI(){
   var btn = document.getElementById("heartTopBtn");
@@ -7547,6 +7608,7 @@ function renderFollowers(){
 }
 
 function toggleHeart(){
+  var me = JSON.parse(localStorage.getItem("user") || "{}");
   isLiked = !isLiked;
   var btn = document.getElementById("heartTopBtn");
   btn.style.transform = "scale(1.5)";
@@ -7554,6 +7616,23 @@ function toggleHeart(){
   localStorage.setItem(likedKey, isLiked ? "1" : "0");
   updateHeartUI();
   renderFollowers();
+
+  // نرسل للسيرفر
+  fetch("/follow-store", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      storeEmail: sEmail,
+      userEmail: me.email || "guest",
+      action: isLiked ? "follow" : "unfollow"
+    })
+  }).then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.success){
+        baseFollowers = isLiked ? d.followers - 1 : d.followers;
+        renderFollowers();
+      }
+    }).catch(function(){});
 }
 
 // ======= Tabs =======
