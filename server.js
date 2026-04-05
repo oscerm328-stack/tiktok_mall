@@ -7778,12 +7778,9 @@ app.get("/store-page", (req, res) => {
 *{box-sizing:border-box;}
 body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-height:100vh;}
 
-/* STICKY WRAPPER */
+/* NO STICKY - يتمرر مع الصفحة */
 .sticky-top{
-  position:sticky;
-  top:0;
-  z-index:200;
-  background:#f5f5f5;
+  position:static;
 }
 
 /* HEADER */
