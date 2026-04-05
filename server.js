@@ -2105,8 +2105,15 @@ Hi, <span id="username"></span>
 <div style="text-align:center;padding:18px 0 8px;">
   <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;">
     <!-- شعار TikTok -->
-    <div style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle, #f9a8d4 0%, #c084fc 40%, #93c5fd 80%, white 100%);">
-      <svg width="52" height="60" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;position:relative;">
+      <!-- watercolor splash background -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="30" cy="35" rx="28" ry="22" fill="#f472b6" opacity="0.6"/>
+        <ellipse cx="42" cy="30" rx="22" ry="26" fill="#a855f7" opacity="0.55"/>
+        <ellipse cx="38" cy="42" rx="24" ry="18" fill="#60a5fa" opacity="0.5"/>
+        <ellipse cx="22" cy="28" rx="18" ry="20" fill="#f9a8d4" opacity="0.45"/>
+      </svg>
+      <svg style="position:relative;z-index:1;" width="44" height="52" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- ظل أحمر -->
         <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
         <!-- ظل أزرق -->
@@ -2223,8 +2230,15 @@ Hi, <span id="username"></span>
 <div style="background:white;padding:20px 15px;display:flex;align-items:center;gap:15px;margin:10px 0;">
 
   <!-- شعار TikTok SVG -->
-  <div style="width:75px;height:75px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:radial-gradient(circle, #f9a8d4 0%, #c084fc 40%, #93c5fd 80%, white 100%);">
-    <svg width="65" height="75" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div style="width:80px;height:80px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+    <!-- watercolor splash background -->
+    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="35" cy="40" rx="32" ry="26" fill="#f472b6" opacity="0.6"/>
+      <ellipse cx="50" cy="34" rx="26" ry="30" fill="#a855f7" opacity="0.55"/>
+      <ellipse cx="44" cy="50" rx="28" ry="22" fill="#60a5fa" opacity="0.5"/>
+      <ellipse cx="25" cy="32" rx="22" ry="24" fill="#f9a8d4" opacity="0.45"/>
+    </svg>
+    <svg style="position:relative;z-index:1;" width="55" height="65" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
       <!-- ظل أحمر -->
       <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
       <!-- ظل أزرق -->
