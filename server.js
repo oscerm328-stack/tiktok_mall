@@ -2253,26 +2253,24 @@ Hi, <span id="username"></span>
 </div>
 
 </div>
-<div id="searchMenu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#eee;z-index:9999;overflow:auto;">
+<div id="searchMenu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;overflow:auto;">
 
-<!-- BLUE HEADER -->
-<div style="background:#1976d2;color:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
-  <!-- زر الرجوع + بار البحث -->
-  <div style="display:flex;align-items:center;gap:8px;flex:1;">
-    <span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;flex-shrink:0;">
+<!-- BLUE HEADER: رجوع + بيت | بحث + رسائل + حساب + لغة -->
+<div style="background:#1976d2;color:white;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
+  <!-- يسار: رجوع + بيت -->
+  <div style="display:flex;align-items:center;gap:15px;">
+    <span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;flex-shrink:0;">
+    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </span>
-    <div style="flex:1;display:flex;align-items:center;background:white;border-radius:30px;padding:7px 14px;">
-      <span style="margin-right:8px;color:#555;font-size:13px;cursor:pointer;" onclick="toggleSearchType()">Store ▼</span>
-      <input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;width:100%;background:transparent;font-size:14px;" onkeypress="if(event.key==='Enter') doSearch()">
-    </div>
-    <span onclick="doSearch()" style="background:white;color:#1976d2;padding:7px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:bold;flex-shrink:0;">Search</span>
   </div>
-  <!-- أيقونات اليمين -->
-  <div style="display:flex;align-items:center;gap:12px;margin-left:10px;flex-shrink:0;">
+  <!-- يمين: بحث + رسائل + حساب + لغة -->
+  <div style="display:flex;align-items:center;gap:15px;">
+    <span onclick="focusSearch()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
     <span onclick="toggleMessages()" style="cursor:pointer;display:inline-flex;align-items:center;position:relative;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </span>
@@ -2282,6 +2280,14 @@ Hi, <span id="username"></span>
     <span onclick="toggleLang()" style="cursor:pointer;display:inline-flex;align-items:center;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
     </span>
+  </div>
+</div>
+
+<!-- شريط البحث منفصل تحت الهيدر -->
+<div style="background:white;padding:12px 15px;border-bottom:1px solid #eee;">
+  <div style="display:flex;align-items:center;border:1px solid #ddd;border-radius:25px;padding:8px 15px;background:white;">
+    <span style="margin-right:8px;color:#333;font-size:13px;font-weight:500;cursor:pointer;" onclick="toggleSearchType()">Store ▼</span>
+    <input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;flex:1;background:transparent;font-size:14px;color:#333;" onkeypress="if(event.key==='Enter') doSearch()">
   </div>
 </div>
 
@@ -2792,6 +2798,10 @@ function openProduct(id){
 function openLocalProduct(id){
     localStorage.setItem("productId", id);
     window.location.href = "/product";
+}
+
+function focusSearch(){
+  document.getElementById("searchInput").focus();
 }
 
 function toggleSearch(){
