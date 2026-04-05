@@ -2253,42 +2253,15 @@ Hi, <span id="username"></span>
 </div>
 
 </div>
-<div id="searchMenu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;overflow:auto;">
+<div id="searchMenu" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#eee;z-index:9999;overflow:auto;">
 
-<!-- BLUE HEADER: رجوع + بيت | بحث + رسائل + حساب + لغة -->
-<div style="background:#1976d2;color:white;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
-  <!-- يسار: رجوع + بيت -->
-  <div style="display:flex;align-items:center;gap:15px;">
-    <span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </span>
-  </div>
-  <!-- يمين: بحث + رسائل + حساب + لغة -->
-  <div style="display:flex;align-items:center;gap:15px;">
-    <span onclick="focusSearch()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </span>
-    <span onclick="toggleMessages()" style="cursor:pointer;display:inline-flex;align-items:center;position:relative;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-    </span>
-    <span onclick="toggleAccount()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </span>
-    <span onclick="toggleLang()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </span>
-  </div>
+<div style="padding:15px;display:flex;align-items:center;gap:10px;background:white;border-bottom:1px solid #ddd;">
+<span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+<div style="flex:1;display:flex;align-items:center;background:#f0f0f0;border-radius:30px;padding:10px 15px;">
+<span style="margin-right:8px;color:#555;font-size:13px;">Store ▼</span>
+<input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;width:100%;background:transparent;" onkeypress="if(event.key==='Enter') doSearch()">
 </div>
-
-<!-- شريط البحث منفصل تحت الهيدر -->
-<div style="background:white;padding:12px 15px;border-bottom:1px solid #eee;">
-  <div style="display:flex;align-items:center;border:1px solid #ddd;border-radius:25px;padding:8px 15px;background:white;">
-    <span style="margin-right:8px;color:#333;font-size:13px;font-weight:500;cursor:pointer;" onclick="toggleSearchType()">Store ▼</span>
-    <input id="searchInput" placeholder="Search for Product, Store" style="border:none;outline:none;flex:1;background:transparent;font-size:14px;color:#333;" onkeypress="if(event.key==='Enter') doSearch()">
-  </div>
+<span onclick="doSearch()" style="background:#1976d2;color:white;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:13px;">Search</span>
 </div>
 
 <!-- نتائج البحث -->
@@ -2296,31 +2269,11 @@ Hi, <span id="username"></span>
 
 <!-- السجل -->
 <div id="historySection" style="padding:15px;">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-  <h3 style="margin:0;">Search History</h3>
-  <span onclick="clearHistory()" style="cursor:pointer;display:inline-flex;align-items:center;" title="Clear history">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-  </span>
-</div>
+<h3 style="margin:0 0 10px 0;">Search History</h3>
 <div id="historyList" style="color:#555;"></div>
 <div id="noHistory" style="text-align:center;margin-top:80px;color:#aaa;">
-<div style="display:inline-flex;align-items:center;justify-content:center;">
-  <svg width="80" height="90" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="8" y="4" width="52" height="68" rx="4" fill="#e8e4f0"/>
-    <rect x="8" y="4" width="52" height="68" rx="4" fill="url(#grad1)"/>
-    <path d="M44 4 L60 20 L44 20 Z" fill="#c9c0e0"/>
-    <rect x="16" y="30" width="32" height="4" rx="2" fill="#b0a8c8"/>
-    <rect x="16" y="40" width="28" height="4" rx="2" fill="#b0a8c8"/>
-    <rect x="16" y="50" width="20" height="4" rx="2" fill="#b0a8c8"/>
-    <defs>
-      <linearGradient id="grad1" x1="8" y1="4" x2="60" y2="72" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#ede9f8"/>
-        <stop offset="100%" stop-color="#d5cff0"/>
-      </linearGradient>
-    </defs>
-  </svg>
-</div>
-<p style="margin-top:12px;font-size:15px;color:#aaa;">No Search History</p>
+<p style="font-size:40px;">📄</p>
+<p>No Search History</p>
 </div>
 </div>
 
@@ -2800,10 +2753,6 @@ function openLocalProduct(id){
     window.location.href = "/product";
 }
 
-function focusSearch(){
-  document.getElementById("searchInput").focus();
-}
-
 function toggleSearch(){
 let menu = document.getElementById("searchMenu");
 menu.style.display = menu.style.display === "none" ? "block" : "none";
@@ -2887,13 +2836,6 @@ localStorage.setItem("history", JSON.stringify(history));
 showHistory();
 }
 
-function clearHistory(){
-if(confirm("Clear all search history?")){
-    localStorage.removeItem("history");
-    showHistory();
-}
-}
-
 function showHistory(){
 let history = JSON.parse(localStorage.getItem("history") || "[]");
 let list = document.getElementById("historyList");
@@ -2907,16 +2849,15 @@ if(history.length === 0){
 }
 if(noHistory) noHistory.style.display = "none";
 
-list.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;padding:4px 0;";
 history.forEach(item=>{
-let chip = document.createElement("span");
-chip.style.cssText = "display:inline-block;padding:6px 14px;background:white;border:1px solid #ddd;border-radius:20px;font-size:13px;color:#333;cursor:pointer;";
-chip.innerText = item;
-chip.onclick = () => {
+let p = document.createElement("p");
+p.style.cssText = "padding:8px 12px;background:white;border-radius:8px;margin:5px 0;cursor:pointer;";
+p.innerText = "🔍 " + item;
+p.onclick = () => {
     document.getElementById("searchInput").value = item;
     doSearch();
 };
-list.appendChild(chip);
+list.appendChild(p);
 });
 }
 
