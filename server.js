@@ -51,6 +51,9 @@ async function syncFromDB() {
         const inviteData = await db.collection("settings").findOne({ key: "inviteCode" });
         if(inviteData) inviteCode = inviteData.value;
 
+        const requestsData = await db.collection("requests").find({}).toArray();
+        if(requestsData.length > 0) requests = requestsData.map(r => { delete r._id; return r; });
+
         console.log("✅ Data synced from MongoDB");
     } catch(err) {
         console.error("❌ Sync error:", err.message);
@@ -281,11 +284,16 @@ function loadUsers() {
 function saveUsers() {
     // حفظ محلي
     try { fs.writeFileSync("users.json", JSON.stringify(users, null, 2)); } catch(e) {}
-    // حفظ في MongoDB
+    // حفظ في MongoDB - نحدّث كل مستخدم بشكل منفصل
     if(db) {
-        db.collection("users").deleteMany({})
-            .then(() => db.collection("users").insertMany(users.map(u => ({...u}))))
-            .catch(err => console.error("MongoDB saveUsers error:", err.message));
+        users.forEach(user => {
+            const { _id, ...userData } = user;
+            db.collection("users").updateOne(
+                { email: user.email },
+                { $set: userData },
+                { upsert: true }
+            ).catch(err => console.error("MongoDB saveUsers error:", err.message));
+        });
     }
 }
 
@@ -334,6 +342,25 @@ app.post("/set-invite-code", adminMiddleware, (req, res) => {
 });
 
 let requests = []; // 👈 لا تغيره
+
+function saveRequests() {
+    try { fs.writeFileSync("requests.json", JSON.stringify(requests, null, 2)); } catch(e) {}
+    if(db) {
+        requests.forEach(req => {
+            const { _id, ...reqData } = req;
+            db.collection("requests").updateOne(
+                { id: req.id },
+                { $set: reqData },
+                { upsert: true }
+            ).catch(err => console.error("MongoDB saveRequests error:", err.message));
+        });
+    }
+}
+
+function loadRequests() {
+    try { requests = JSON.parse(fs.readFileSync("requests.json")); } catch { requests = []; }
+}
+loadRequests();
 
 // ================= LOGS SYSTEM =================
 const LOGS_FILE = "logs.json";
@@ -673,7 +700,7 @@ app.get("/admin/users", adminMiddleware, (req, res) => {
     res.json(users);
 });
 
-app.post("/update-balance", adminMiddleware, csrfMiddleware, (req, res) => {
+app.post("/update-balance", adminMiddleware, (req, res) => {
     const { email, balance } = req.body;
 
     console.log("UPDATE REQUEST:", email, balance); // 👈 هنا أضف
@@ -767,7 +794,7 @@ app.post("/logout", (req, res) => {
 });
 
 // ================= EDIT USER =================
-app.post("/edit-user", adminMiddleware, csrfMiddleware, (req, res) => {
+app.post("/edit-user", adminMiddleware, (req, res) => {
     const { oldEmail, newEmail, newPassword } = req.body;
 
     let user = users.find(u => u.email === oldEmail);
@@ -791,7 +818,7 @@ app.post("/edit-user", adminMiddleware, csrfMiddleware, (req, res) => {
 });
 
 // ================= DELETE USER =================
-app.post("/delete-user", adminMiddleware, csrfMiddleware, (req, res) => {
+app.post("/delete-user", adminMiddleware, (req, res) => {
     const { email } = req.body;
     const index = users.findIndex(u => u.email === email);
     if (index !== -1) {
@@ -886,6 +913,7 @@ app.post("/request", rateLimit(10, 60*1000), (req, res) => {
           status: "pending"
           });
 
+    saveRequests();
     console.log("ALL REQUESTS:", requests);
 
     res.send("Request saved");
@@ -1060,7 +1088,8 @@ app.get("/approve/:id", adminMiddleware, (req, res) => {
     }
 
     // ✅ حفظ البيانات
-    fs.writeFileSync("users.json", JSON.stringify(users, null, 2));
+    saveUsers();
+    saveRequests();
 
     addLog(r.type === "recharge" ? "deposit_approved" : "withdraw_approved",
         r.type + " of $" + amount + " approved", r.email);
@@ -1072,6 +1101,7 @@ app.get("/reject/:id", adminMiddleware, (req, res) => {
     let r = requests.find(x => x.id == req.params.id);
     if(r){
         r.status = "rejected";
+        saveRequests();
         addLog("request_rejected", r.type + " of $" + r.amount + " rejected", r.email);
     }
     res.send("Rejected");
@@ -1100,9 +1130,14 @@ function loadStoreApplications() {
 function saveStoreApplications() {
     try { fs.writeFileSync("storeApplications.json", JSON.stringify(storeApplications, null, 2)); } catch(e) {}
     if(db) {
-        db.collection("storeApplications").deleteMany({})
-            .then(() => storeApplications.length > 0 ? db.collection("storeApplications").insertMany(storeApplications.map(u => ({...u}))) : null)
-            .catch(err => console.error("MongoDB saveStoreApplications error:", err.message));
+        storeApplications.forEach(app => {
+            const { _id, ...appData } = app;
+            db.collection("storeApplications").updateOne(
+                { email: app.email },
+                { $set: appData },
+                { upsert: true }
+            ).catch(err => console.error("MongoDB saveStoreApplications error:", err.message));
+        });
     }
 }
 
@@ -1123,9 +1158,14 @@ function loadOrders() {
 function saveOrders() {
     try { fs.writeFileSync("orders.json", JSON.stringify(ordersDB, null, 2)); } catch(e) {}
     if(db) {
-        db.collection("orders").deleteMany({})
-            .then(() => ordersDB.length > 0 ? db.collection("orders").insertMany(ordersDB.map(u => ({...u}))) : null)
-            .catch(err => console.error("MongoDB saveOrders error:", err.message));
+        ordersDB.forEach(order => {
+            const { _id, ...orderData } = order;
+            db.collection("orders").updateOne(
+                { id: order.id },
+                { $set: orderData },
+                { upsert: true }
+            ).catch(err => console.error("MongoDB saveOrders error:", err.message));
+        });
     }
 }
 
@@ -1184,7 +1224,7 @@ app.post("/update-order-status", adminMiddleware, (req, res) => {
 });
 
 // حذف أوردر (من الأدمن)
-app.post("/delete-order", adminMiddleware, csrfMiddleware, (req, res) => {
+app.post("/delete-order", adminMiddleware, (req, res) => {
     const { id } = req.body;
     ordersDB = ordersDB.filter(o => o.id != id);
     saveOrders();
@@ -1328,7 +1368,7 @@ app.post("/reject-store", adminMiddleware, (req, res) => {
 });
 
 // حذف طلب متجر
-app.post("/delete-store-application", adminMiddleware, csrfMiddleware, (req, res) => {
+app.post("/delete-store-application", adminMiddleware, (req, res) => {
     const { email } = req.body;
     const index = storeApplications.findIndex(a => a.email === email);
     if (index !== -1) {
