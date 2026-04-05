@@ -2105,11 +2105,14 @@ Hi, <span id="username"></span>
 <div style="text-align:center;padding:18px 0 8px;">
   <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;">
     <!-- شعار TikTok -->
-    <div style="width:60px;height:60px;border-radius:50%;background:black;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,0.2);">
-      <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+      <svg width="52" height="52" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- ظل أحمر -->
+        <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
+        <!-- ظل أزرق -->
+        <path d="M31 9C31.8 12.2 34.2 14.6 37 15.4V20.2C34.6 20.2 32.4 19.4 30.6 18.2V29C30.6 34.6 26.2 39 20.6 39C15 39 10.6 34.6 10.6 29C10.6 23.4 15 19 20.6 19C21.2 19 21.8 19.1 22.4 19.2V24.2C21.8 24 21.2 23.9 20.6 23.9C17.6 23.9 15.2 26.2 15.2 29.2C15.2 32.2 17.6 34.5 20.6 34.5C23.6 34.5 26 32.2 26 29.2V9H31Z" fill="#69C9D0" opacity="0.9"/>
+        <!-- الشعار الأبيض الرئيسي -->
         <path d="M32 8C32.8 11.2 35.2 13.6 38 14.4V19.2C35.6 19.2 33.4 18.4 31.6 17.2V28C31.6 33.6 27.2 38 21.6 38C16 38 11.6 33.6 11.6 28C11.6 22.4 16 18 21.6 18C22.2 18 22.8 18.1 23.4 18.2V23.2C22.8 23 22.2 22.9 21.6 22.9C18.6 22.9 16.2 25.2 16.2 28.2C16.2 31.2 18.6 33.5 21.6 33.5C24.6 33.5 27 31.2 27 28.2V8H32Z" fill="white"/>
-        <path d="M32 8C33.2 12.4 36.4 15.6 40.8 16.8" stroke="#69C9D0" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <path d="M11.6 28C11.6 22.4 16 18 21.6 18" stroke="#EE1D52" stroke-width="3" stroke-linecap="round" fill="none"/>
       </svg>
     </div>
     <!-- الاسم -->
@@ -2218,11 +2221,14 @@ Hi, <span id="username"></span>
 <div style="background:white;padding:20px 15px;display:flex;align-items:center;gap:15px;margin:10px 0;">
 
   <!-- شعار TikTok SVG -->
-  <div style="width:75px;height:75px;border-radius:50%;background:black;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 15px rgba(0,0,0,0.2);">
-    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div style="width:75px;height:75px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+    <svg width="65" height="65" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- ظل أحمر -->
+      <path d="M33 7C33.8 10.2 36.2 12.6 39 13.4V18.2C36.6 18.2 34.4 17.4 32.6 16.2V27C32.6 32.6 28.2 37 22.6 37C17 37 12.6 32.6 12.6 27C12.6 21.4 17 17 22.6 17C23.2 17 23.8 17.1 24.4 17.2V22.2C23.8 22 23.2 21.9 22.6 21.9C19.6 21.9 17.2 24.2 17.2 27.2C17.2 30.2 19.6 32.5 22.6 32.5C25.6 32.5 28 30.2 28 27.2V7H33Z" fill="#EE1D52" opacity="0.9"/>
+      <!-- ظل أزرق -->
+      <path d="M31 9C31.8 12.2 34.2 14.6 37 15.4V20.2C34.6 20.2 32.4 19.4 30.6 18.2V29C30.6 34.6 26.2 39 20.6 39C15 39 10.6 34.6 10.6 29C10.6 23.4 15 19 20.6 19C21.2 19 21.8 19.1 22.4 19.2V24.2C21.8 24 21.2 23.9 20.6 23.9C17.6 23.9 15.2 26.2 15.2 29.2C15.2 32.2 17.6 34.5 20.6 34.5C23.6 34.5 26 32.2 26 29.2V9H31Z" fill="#69C9D0" opacity="0.9"/>
+      <!-- الشعار الأبيض الرئيسي -->
       <path d="M32 8C32.8 11.2 35.2 13.6 38 14.4V19.2C35.6 19.2 33.4 18.4 31.6 17.2V28C31.6 33.6 27.2 38 21.6 38C16 38 11.6 33.6 11.6 28C11.6 22.4 16 18 21.6 18C22.2 18 22.8 18.1 23.4 18.2V23.2C22.8 23 22.2 22.9 21.6 22.9C18.6 22.9 16.2 25.2 16.2 28.2C16.2 31.2 18.6 33.5 21.6 33.5C24.6 33.5 27 31.2 27 28.2V8H32Z" fill="white"/>
-      <path d="M32 8C33.2 12.4 36.4 15.6 40.8 16.8" stroke="#69C9D0" stroke-width="3" stroke-linecap="round" fill="none"/>
-      <path d="M11.6 28C11.6 22.4 16 18 21.6 18" stroke="#EE1D52" stroke-width="3" stroke-linecap="round" fill="none"/>
     </svg>
   </div>
 
