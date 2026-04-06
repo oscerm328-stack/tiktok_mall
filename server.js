@@ -238,6 +238,44 @@ html { background:#f0f0f0 !important; }
     applyScale();
   });
 })();
+<\/script>
+<script>
+// ======= MSG BADGE - يعمل في كل الصفحات =======
+(function(){
+  function initMsgBadge(){
+    var spans = document.querySelectorAll("span[onclick*='dashboard?messages']");
+    if(!spans.length) return;
+    var me = JSON.parse(localStorage.getItem("user")||"{}");
+    if(!me.email) return;
+    // أضف badge لكل أيقونة رسائل إن لم يكن موجوداً
+    spans.forEach(function(span){
+      if(span.querySelector(".globalMsgBadge")) return;
+      span.style.position = "relative";
+      var b = document.createElement("span");
+      b.className = "globalMsgBadge";
+      b.style.cssText = "display:none;position:absolute;top:-5px;right:-5px;background:#ff3b30;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid #1976d2;";
+      span.appendChild(b);
+    });
+    var lastSeen = parseInt(localStorage.getItem("lastSeenMsgId")||"0");
+    function update(){
+      fetch("/unread-count/"+encodeURIComponent(me.email)+"?lastSeen="+lastSeen)
+      .then(function(r){return r.json();})
+      .then(function(d){
+        document.querySelectorAll(".globalMsgBadge").forEach(function(b){
+          if(d.count>0){b.style.display="flex";b.innerText=d.count>99?"99+":d.count;}
+          else{b.style.display="none";}
+        });
+      }).catch(function(){});
+    }
+    update();
+    setInterval(update, 3000);
+  }
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded", initMsgBadge);
+  } else {
+    initMsgBadge();
+  }
+})();
 <\/script>`;
 
 app.use((req, res, next) => {
