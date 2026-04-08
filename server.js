@@ -2203,10 +2203,7 @@ Get up to 30% off!
 <span>Home and Kitchen</span>
 <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f" width="70">
 </div>
-<div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Smartphones')">
-<span>Smartphones</span>
-<img src="https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg" width="70">
-</div>
+
 
 <div style="background:black;color:white;text-align:center;font-size:40px;padding:20px;margin-top:10px;">
 TOPSHOP
@@ -2496,10 +2493,6 @@ Hi, <span id="username"></span>
     <div class="cat-label">Health and Household</div>
   </div>
 
-  <div class="cat-item" onclick="openCategory('Smartphones')">
-    <img src="https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=200" onerror="this.style.display='none'">
-    <div class="cat-label">Smartphones</div>
-  </div>
   <div class="cat-item" onclick="openCategory('Home and Kitchen')">
     <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f">
     <div class="cat-label">Home and Kitchen</div>
@@ -2607,7 +2600,7 @@ Hi, <span id="username"></span>
   <div onclick="openCategory('Mens Fashion')" style="padding:14px 20px;border-bottom:1px solid #eee;cursor:pointer;font-family:Georgia,serif;font-size:15px;">Men's Fashion</div>
   <div onclick="openCategory('Health and Household')" style="padding:14px 20px;border-bottom:1px solid #eee;cursor:pointer;font-family:Georgia,serif;font-size:15px;">Health and Household</div>
   <div onclick="openCategory('Home and Kitchen')" style="padding:14px 20px;border-bottom:1px solid #eee;cursor:pointer;font-family:Georgia,serif;font-size:15px;">Home and Kitchen</div>
-  <div onclick="openCategory('Smartphones')" style="padding:14px 20px;border-bottom:1px solid #eee;cursor:pointer;font-family:Georgia,serif;font-size:15px;">📱 Smartphones</div>
+
 
 </div>
 
@@ -3590,42 +3583,6 @@ const CAT_DATA = {
     brands:["Vitamix","Theragun","Fitbit","Dyson","Instant Pot","NordicTrack","Garden of Life","Philips","Listerine","Clorox","Tide","Nordic Naturals","Aveeno","Bounty","Braun","Oral-B","Gillette","Dove","Colgate","OxiClean"],
     types:["Supplement","Fitness Tracker","Kitchen Appliance","Vacuum","Massage Gun","Toothbrush","Shaver","Household Cleaner","Laundry Detergent","Paper Goods","Body Care","Hair Remover","Scale","Blood Pressure Monitor","Blender"]
   },
-
-  "Smartphones": {
-    base:[
-      {t:"Apple iPhone 16 Pro Max 256GB Black Titanium A18 Pro Chip Camera Control",p:1199.00,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Apple iPhone 16 Pro Max 512GB Desert Titanium A18 Pro 48MP Camera",p:1399.00,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Apple iPhone 16 Pro Max 1TB White Titanium ProRes Video 4K120fps",p:1599.00,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Apple iPhone 16 Pro 256GB Black Titanium A18 Pro Dynamic Island",p:999.00,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]},
-      {t:"Apple iPhone 15 Pro Max 256GB Natural Titanium A17 Pro USB-C",p:1059.00,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Apple iPhone 15 Pro Max 512GB Black Titanium Action Button 5G",p:1199.00,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Apple iPhone 15 Pro 256GB White Titanium Always-On Display Dynamic Island",p:959.00,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Apple iPhone 14 Pro Max 256GB Space Black A16 Bionic Emergency SOS",p:849.00,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]},
-      {t:"Apple iPhone 13 Pro Max 256GB Sierra Blue A15 Bionic ProMotion 120Hz",p:699.00,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Apple iPhone 13 Pro Max 512GB Alpine Green A15 Macro Photography",p:799.00,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Apple iPhone 13 Pro 256GB Graphite 6.1-inch ProMotion A15",p:649.00,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]},
-      {t:"Apple iPhone 17 Pro Max 256GB Titanium Black A19 Pro Periscope 2025",p:1299.00,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Apple iPhone 17 Pro 256GB Silver Titanium Slim Design A19 Chip",p:1099.00,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Samsung Galaxy S24 Ultra 256GB Titanium Black Snapdragon 8 Gen 3 S Pen",p:1299.99,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Samsung Galaxy S24 Ultra 512GB Titanium Gray 200MP Camera 5000mAh",p:1399.99,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]},
-      {t:"Samsung Galaxy S24 Ultra 1TB Titanium Violet S Pen Pro Exynos",p:1599.99,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Samsung Galaxy S23 Ultra 256GB Phantom Black Snapdragon 8 Gen 2",p:999.99,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Samsung Galaxy S23 Ultra 512GB Cream 200MP S Pen 6.8-inch AMOLED",p:1099.99,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Samsung Galaxy S22 Ultra 256GB Burgundy 108MP S Pen Exynos 2200",p:799.99,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Samsung Galaxy S25 Ultra 256GB Titanium Silverblue Galaxy AI 2025",p:1349.99,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Samsung Galaxy S25 Ultra 512GB Titanium Black Galaxy AI Snapdragon",p:1449.99,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"Samsung Galaxy S24+ 256GB Cobalt Violet Dynamic AMOLED 6.7-inch",p:999.99,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]},
-      {t:"Google Pixel 9 Pro XL 256GB Obsidian Tensor G4 Gemini AI Camera",p:1099.00,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400"]},
-      {t:"Google Pixel 8 Pro 256GB Bay Tensor G3 Temperature Sensor 5G",p:849.00,i:["https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400"]},
-      {t:"OnePlus 12 256GB Flowy Emerald Snapdragon 8 Gen 3 Hasselblad Camera",p:799.00,i:["https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Xiaomi 14 Ultra 512GB Black Leica Optical Zoom 5000mAh 90W Charge",p:999.00,i:["https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400"]},
-      {t:"Huawei Pura 70 Ultra 512GB Black Satellite Connectivity Variable Aperture",p:1199.00,i:["https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?w=400","https://images.pexels.com/photos/341523/pexels-photo-341523.jpeg?w=400","https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?w=400","https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?w=400"]}
-    ],
-    colors:["Black","White","Blue","Gold","Silver","Purple","Green","Red","Pink","Titanium","Natural","Desert Titanium","Cosmic Black","Phantom Black","Cream","Burgundy","Cobalt Violet","Obsidian","Emerald"],
-    brands:["Apple iPhone 17 Pro Max","Apple iPhone 16 Pro Max","Apple iPhone 15 Pro Max","Apple iPhone 14 Pro Max","Apple iPhone 13 Pro Max","Samsung Galaxy S25 Ultra","Samsung Galaxy S24 Ultra","Samsung Galaxy S23 Ultra","Samsung Galaxy S22 Ultra","Google Pixel 9 Pro","Google Pixel 8 Pro","OnePlus 12","Xiaomi 14 Ultra","Huawei Pura 70"],
-    types:["256GB","512GB","1TB","128GB"]
-  },
-
   "Home and Kitchen": {
     base:[
       {t:"KitchenAid Artisan Series 5-Quart Tilt-Head Stand Mixer Empire Red 10-Speed",p:449.99,i:["https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
@@ -4756,9 +4713,9 @@ btn.classList.add("active");
 
 // مستقبلاً نغير العنوان من السيرفر
 if(net === "TRC20"){
-document.getElementById("address").innerText = "TBC76ppdDG8aiX4ECAhEmn7TASPm2iAWS";
+document.getElementById("address").innerText = "tt";
 }else{
-document.getElementById("address").innerText = "ERC20-ADDRESS-EXAMPLE";
+document.getElementById("address").innerText = "tt";
 }
 }
 
@@ -8424,7 +8381,6 @@ var CAT_COLORS = {
   "Beauty and Personal Care":[{n:"Nude",h:"#d4a574"},{n:"Pink",h:"#f48fb1"},{n:"Red",h:"#c62828"},{n:"Rose",h:"#e91e63"},{n:"Berry",h:"#880e4f"},{n:"Coral",h:"#ff7043"},{n:"Peach",h:"#ffccbc"},{n:"Bronze",h:"#a0522d"},{n:"Clear",h:"#f5f5f5"},{n:"Gold",h:"#c9a84c"}],
   "Medical Bags and Sunglasses":[{n:"Black",h:"#1a1a1a"},{n:"Brown",h:"#5d4037"},{n:"Tortoise",h:"#6d4c41"},{n:"Gold",h:"#c9a84c"},{n:"Silver",h:"#bdbdbd"},{n:"Navy",h:"#1a237e"},{n:"Tan",h:"#c8a882"},{n:"Crystal",h:"#e3f2fd"},{n:"Rose Gold",h:"#b76e79"}],
   "Mens Fashion": [{n:"Navy",h:"#1a2a4a"},{n:"Black",h:"#1a1a1a"},{n:"Gray",h:"#757575"},{n:"White",h:"#f5f5f5"},{n:"Khaki",h:"#b5a642"},{n:"Olive",h:"#6d7c43"},{n:"Charcoal",h:"#424242"},{n:"Blue",h:"#1565c0"},{n:"Brown",h:"#5d4037"},{n:"Burgundy",h:"#6d1a2a"}],
-  "Smartphones":  [{n:"Black",h:"#1a1a1a"},{n:"White",h:"#f5f5f5"},{n:"Blue",h:"#1565c0"},{n:"Gold",h:"#c9a84c"},{n:"Silver",h:"#bdbdbd"},{n:"Purple",h:"#6a1b9a"},{n:"Green",h:"#1b5e20"},{n:"Red",h:"#b71c1c"},{n:"Pink",h:"#f48fb1"},{n:"Titanium",h:"#8d8d8d"},{n:"Natural",h:"#d7ccc8"},{n:"Desert",h:"#c8a882"}],
   "default":      [{n:"Black",h:"#1a1a1a"},{n:"White",h:"#f5f5f5"},{n:"Navy",h:"#1a2a4a"},{n:"Beige",h:"#c8a882"},{n:"Blush",h:"#e8a0b0"},{n:"Emerald",h:"#2d6a4f"},{n:"Burgundy",h:"#6d1a2a"},{n:"Camel",h:"#c19a6b"},{n:"Lavender",h:"#b0a0d0"},{n:"Coral",h:"#e87060"},{n:"Mint",h:"#7ec8a0"},{n:"Cobalt",h:"#1a4aaa"}]
 };
 
