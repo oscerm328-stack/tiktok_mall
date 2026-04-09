@@ -2520,22 +2520,22 @@ Hi, <span id="username"></span>
   </div>
 
   <div class="cat-item" onclick="openCategory('Beauty and Personal Care')">
-    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80">
     <div class="cat-label">Beauty and Personal Care</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Mens Fashion')">
-    <img src="https://images.unsplash.com/photo-1516826957135-700dedea698c">
+    <img src="https://images.unsplash.com/photo-1516826957135-700dedea698c?w=400&q=80">
     <div class="cat-label">Men's Fashion</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Health and Household')">
-    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
+    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=80">
     <div class="cat-label">Health and Household</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Home and Kitchen')">
-    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f">
+    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=400&q=80">
     <div class="cat-label">Home and Kitchen</div>
   </div>
 
