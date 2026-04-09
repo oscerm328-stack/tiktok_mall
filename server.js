@@ -7998,7 +7998,7 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 .h-icons{display:flex;align-items:center;gap:14px;}
 /* PAGE BODY */
 .page-body{margin-top:50px;}
-.slider-wrap{padding-top:20px;background:white;}
+.slider-wrap{background:white;}
 /* SLIDER */
 .slider-wrap{background:white;position:relative;overflow:hidden;}
 .slider-imgs{display:flex;transition:transform 0.35s ease;will-change:transform;}
