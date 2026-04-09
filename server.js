@@ -3326,561 +3326,284 @@ function openCategory(name){
 // ================= CATEGORY PAGE =================
 app.get("/category", (req, res) => {
 const cat = req.query.name || "All";
+const catId = req.query.id || "";
 
-// =============== قواعد بيانات المنتجات لكل قسم ===============
-
-const CAT_DATA = {
-
-  "Clothing & Accessories": {
-    base:[
-      {t:"Nike Women Sportswear Phoenix Fleece High-Waisted Wide-Leg Sweatpants",p:65.00,i:["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400"]},
-      {t:"Adidas Women Essentials 3-Stripes Full-Zip Hoodie Track Suit",p:75.00,i:["https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400","https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg?w=400"]},
-      {t:"Levi's Women 501 Original Fit Jeans High Rise Classic Blue Denim",p:59.50,i:["https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?w=400","https://images.pexels.com/photos/1187720/pexels-photo-1187720.jpeg?w=400","https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400","https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?w=400"]},
-      {t:"Zara Women Floral Print Midi Dress Wrap V-Neck Ruffle Hem Boho Style",p:59.99,i:["https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?w=400","https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?w=400","https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400","https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400"]},
-      {t:"H&M Women Ribbed Turtleneck Sweater Slim Fit Premium Cotton Long Sleeve",p:24.99,i:["https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400"]},
-      {t:"Calvin Klein Women Slim Fit Ponte Dress Knee Length Short Sleeve Sheath",p:89.50,i:["https://images.pexels.com/photos/1485031/pexels-photo-1485031.jpeg?w=400","https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400","https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?w=400","https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?w=400"]},
-      {t:"Ralph Lauren Women Striped Polo Shirt Classic Fit Short Sleeve Cotton",p:45.00,i:["https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400","https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400"]},
-      {t:"Burberry Women Check-Print Cashmere Scarf Classic Plaid Authentic",p:420.00,i:["https://images.pexels.com/photos/1485031/pexels-photo-1485031.jpeg?w=400","https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400","https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?w=400"]},
-      {t:"Uniqlo Women Heattech Turtleneck Long-Sleeve T-Shirt Extra Warm Inner",p:19.90,i:["https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400","https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400"]},
-      {t:"Strapless Satin Ball Gown Wedding Dress for Bride Split Prom Long",p:95.00,i:["https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?w=400","https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?w=400","https://images.pexels.com/photos/1485031/pexels-photo-1485031.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400"]},
-      {t:"EXLURA Women Swiss Dot Flowy Mini Dress V Neck Long Puff Sleeve",p:36.00,i:["https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400","https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?w=400","https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?w=400","https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400"]},
-      {t:"Free People Women Carter Pullover Sweater Oversized Cozy Knit",p:48.00,i:["https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400"]},
-      {t:"Mango Women Linen Blend Blazer Suit Jacket Tailored Fit Office Style",p:89.99,i:["https://images.pexels.com/photos/1485031/pexels-photo-1485031.jpeg?w=400","https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400","https://images.pexels.com/photos/2235071/pexels-photo-2235071.jpeg?w=400"]},
-      {t:"Gap Women Softspun Open-Front Long Cardigan Relaxed Cozy Weekend",p:54.95,i:["https://images.pexels.com/photos/1021693/pexels-photo-1021693.jpeg?w=400","https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400"]},
-      {t:"Banana Republic Women Sloan Slim-Fit Pant Work Trousers Tailored",p:89.50,i:["https://images.pexels.com/photos/291759/pexels-photo-291759.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?w=400","https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg?w=400"]}
-    ],
-    colors:["Black","White","Navy","Beige","Ivory","Blush","Emerald","Burgundy","Camel","Lavender","Coral","Mint","Rose","Cobalt","Mauve","Taupe","Forest","Terracotta","Champagne","Slate","Olive","Dusty Pink","Midnight","Stone","Cream"],
-    brands:["Zara","H&M","Nike","Adidas","Levi's","Calvin Klein","Ralph Lauren","Burberry","Uniqlo","Mango","Gap","Banana Republic","Tommy Hilfiger","Free People","ASOS","Shein","Forever 21","J.Crew","Ann Taylor","Anthropologie"],
-    types:["Dress","Blouse","Top","Skirt","Coat","Jacket","Sweater","Cardigan","Pants","Jeans","Jumpsuit","Romper","Gown","Blazer","Shirt","Vest","Tunic","Cape","Kimono","Wrap"]
-  },
-
-  "Medical Bags and Sunglasses": {
-    base:[
-      {t:"Ray-Ban Aviator Classic Sunglasses UV Protection Polarized Gold Frame",p:154.00,i:["https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400","https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400","https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400","https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400"]},
-      {t:"Gucci GG Canvas Tote Bag Women Large Shoulder Handbag Beige Brown Classic",p:1250.00,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Oakley Holbrook Polarized Sunglasses Lightweight UV400 Sport Style",p:196.00,i:["https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400","https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400","https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400","https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400"]},
-      {t:"Prada Women Re-Edition Re-Nylon Mini Bag Shoulder Strap Luxury",p:1450.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400"]},
-      {t:"Persol PO3152S Square Sunglasses Acetate Frame Polarized Classic Italian",p:275.00,i:["https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400","https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400","https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400","https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400"]},
-      {t:"Michael Kors Jet Set Saffiano Leather Top-Zip Tote Bag Black Gold",p:228.00,i:["https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Tom Ford Ava Cat-Eye Sunglasses 55mm Acetate Frame Luxury Fashion",p:450.00,i:["https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400","https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400","https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400","https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400"]},
-      {t:"Louis Vuitton Neverfull MM Monogram Canvas Tote Shoulder Bag Classic",p:1880.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Kate Spade Morgan Embossed Saffiano Leather Top-handle Bag Women",p:199.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Warby Parker Haskell Sunglasses Crystal Clear Frames Polarized Lens",p:95.00,i:["https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400","https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400","https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400","https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400"]},
-      {t:"Coach Women Tabby 26 Pebble Leather Shoulder Bag Signature Lining",p:350.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Longchamp Le Pliage Original Travel Bag Foldable Nylon Tote Women",p:175.00,i:["https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Maui Jim Peahi Polarized Wrap Sunglasses Sport Premium Lens Blue",p:329.00,i:["https://images.pexels.com/photos/1362558/pexels-photo-1362558.jpeg?w=400","https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg?w=400","https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?w=400","https://images.pexels.com/photos/975250/pexels-photo-975250.jpeg?w=400"]},
-      {t:"Baggallini Essential Hobo Crossbody Bag for Women Lightweight Travel",p:51.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"LAORENTOU Cow Leather Purses Small Handbag Women Satchel Tote Bag",p:86.12,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]}
-    ],
-    colors:["Black","Brown","Tan","Tortoise","Gold","Silver","Crystal","Navy","Rose Gold","Gunmetal","Havana","Gray","Blue","Green","Red","White"],
-    brands:["Ray-Ban","Gucci","Oakley","Prada","Michael Kors","Tom Ford","Louis Vuitton","Kate Spade","Warby Parker","Coach","Longchamp","Persol","Maui Jim","Bottega Veneta","Celine","Fendi"],
-    types:["Tote Bag","Shoulder Bag","Crossbody Bag","Clutch","Backpack","Satchel","Hobo Bag","Waist Bag","Sunglasses","Aviators","Cat-Eye","Round Frame","Square Frame","Wraparound"]
-  },
-
-  "Shoes": {
-    base:[
-      {t:"Nike Air Max 270 React ENG Men Running Shoes Triple Black Lightweight",p:150.00,i:["https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400"]},
-      {t:"Adidas Ultraboost 22 Running Shoes Boost Cushioning Primeknit Women",p:180.00,i:["https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400"]},
-      {t:"Converse Chuck Taylor All Star Classic High Top Canvas Sneaker Unisex",p:55.00,i:["https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400"]},
-      {t:"Vans Old Skool Classic Skate Shoe Canvas Suede Low Top Unisex",p:70.00,i:["https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400"]},
-      {t:"New Balance 990v5 Made in USA Running Shoe Men Premium Cushion",p:185.00,i:["https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400"]},
-      {t:"Timberland Men 6-Inch Premium Waterproof Boot Wheat Nubuck Leather",p:198.00,i:["https://images.pexels.com/photos/1638247/pexels-photo-1638247.jpeg?w=400","https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400"]},
-      {t:"Dr. Martens 1460 Pascal 8-Eye Boot Virginia Leather Women Classic",p:150.00,i:["https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?w=400","https://images.pexels.com/photos/1638247/pexels-photo-1638247.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400"]},
-      {t:"Puma RS-X Reinvention Sneaker Men Retro OG Runner Chunky Sole",p:110.00,i:["https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400"]},
-      {t:"Steve Madden Women Irenee Platform Sandal Block Heel Ankle Strap",p:90.00,i:["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?w=400","https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg?w=400","https://images.pexels.com/photos/1638247/pexels-photo-1638247.jpeg?w=400","https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?w=400"]},
-      {t:"Sam Edelman Women Hazel Pointed Toe Stiletto Heels Party Dress Pump",p:120.00,i:["https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg?w=400","https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400"]},
-      {t:"Birkenstock Arizona Soft Footbed Sandal Suede Men Women Unisex",p:135.00,i:["https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?w=400","https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg?w=400","https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?w=400","https://images.pexels.com/photos/1638247/pexels-photo-1638247.jpeg?w=400"]},
-      {t:"UGG Classic Short II Boot Women Twinface Sheepskin Suede Warm Winter",p:170.00,i:["https://images.pexels.com/photos/1638247/pexels-photo-1638247.jpeg?w=400","https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?w=400","https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?w=400","https://images.pexels.com/photos/2562992/pexels-photo-2562992.jpeg?w=400"]},
-      {t:"Jordan 1 Retro High OG Men Basketball Sneaker Leather Iconic",p:170.00,i:["https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400"]},
-      {t:"ASICS Gel-Nimbus 25 Running Shoe Men Cushioning Stability",p:160.00,i:["https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400"]},
-      {t:"Brooks Ghost 15 Women Neutral Running Shoe DNA Loft Cushion",p:140.00,i:["https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?w=400","https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?w=400","https://images.pexels.com/photos/1280064/pexels-photo-1280064.jpeg?w=400","https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?w=400"]}
-    ],
-    colors:["Black","White","Red","Navy","Gray","Beige","Brown","Wheat","Triple White","Triple Black","Volt","Blue","Pink","Green","Orange","Tan"],
-    brands:["Nike","Adidas","Converse","Vans","New Balance","Timberland","Dr. Martens","Puma","Steve Madden","Sam Edelman","Birkenstock","UGG","Jordan","ASICS","Brooks","Skechers","Reebok","Salomon"],
-    types:["Sneaker","Running Shoe","Boot","High Top","Low Top","Sandal","Pump","Loafer","Platform","Slip-On","Athletic Shoe","Ankle Boot","Chelsea Boot","Oxford","Derby","Mule"]
-  },
-
-  "Watches": {
-    base:[
-      {t:"Rolex Submariner Date 41mm Oystersteel Black Dial Ceramic Bezel",p:10550.00,i:["https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400"]},
-      {t:"Omega Seamaster Planet Ocean 600M Co-Axial Master Chronometer 43.5mm",p:6900.00,i:["https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Seiko Prospex Solar Diver SNE573 Stainless Steel Tuna Case 200m",p:525.00,i:["https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400"]},
-      {t:"TAG Heuer Carrera Calibre 16 Chronograph Automatic 41mm Men Watch",p:2650.00,i:["https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400"]},
-      {t:"Casio G-Shock GA-2100 CasiOak Carbon Core Guard Black Tough Solar",p:99.00,i:["https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Apple Watch Series 9 GPS 45mm Starlight Aluminum Sport Band",p:429.00,i:["https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Tissot PRX Powermatic 80 35mm Stainless Steel Auto Women Bracelet",p:725.00,i:["https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Longines Master Collection Moon Phase 40mm L2.909.4 Automatic",p:2250.00,i:["https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400"]},
-      {t:"Fossil Men Neutra Chronograph Quartz Stainless Steel Brown Leather",p:119.00,i:["https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Citizen Eco-Drive Chandler Quartz Men Watch BM7460-11X Solar",p:175.00,i:["https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400"]},
-      {t:"Breitling Navitimer B01 Chronograph 43 Steel Black Dial AB0121211B1A1",p:8900.00,i:["https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400"]},
-      {t:"Hamilton Khaki Field Mechanical Men Watch 38mm Black Dial H69439733",p:495.00,i:["https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400"]},
-      {t:"Garmin Fenix 7 Pro Solar Multisport GPS Smartwatch Sapphire Solar",p:749.99,i:["https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400"]},
-      {t:"Orient Bambino Version 3 Classic Dress Watch Open Heart Men",p:152.00,i:["https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400","https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400"]},
-      {t:"Tudor Black Bay 41mm Steel Bracelet Hawthorn Bezel M79540-0001",p:3550.00,i:["https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg?w=400","https://images.pexels.com/photos/125779/pexels-photo-125779.jpeg?w=400","https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?w=400","https://images.pexels.com/photos/1697214/pexels-photo-1697214.jpeg?w=400"]}
-    ],
-    colors:["Black","Silver","Gold","Rose Gold","Blue","Green","White","Gray","Two-Tone","Champagne","Brown","Navy","Titanium","Bronze","Slate"],
-    brands:["Rolex","Omega","Seiko","TAG Heuer","Casio","Apple","Tissot","Longines","Fossil","Citizen","Breitling","Hamilton","Garmin","Orient","Tudor","IWC","Patek Philippe","Audemars Piguet","Rado","Bulova"],
-    types:["Automatic","Quartz","Chronograph","Diver","Dress Watch","Smartwatch","Solar","Pilot Watch","Field Watch","Sport Watch","GMT","Tourbillon","Skeleton","Moon Phase"]
-  },
-
-  "Jewelry": {
-    base:[
-      {t:"Pandora Rose Gold Sterling Silver Charm Bracelet Love Clasp Women",p:85.00,i:["https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400"]},
-      {t:"Swarovski Crystal Drop Earrings 18K Rose Gold Plated Statement Jewelry",p:129.00,i:["https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400"]},
-      {t:"Tiffany 18K Gold Diamond Pendant Necklace Classic Solitaire Women",p:1850.00,i:["https://images.pexels.com/photos/1302307/pexels-photo-1302307.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400"]},
-      {t:"Cartier Love Bracelet 18K White Gold 4 Diamonds Classic Luxury Women",p:7200.00,i:["https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400","https://images.pexels.com/photos/2697513/pexels-photo-2697513.jpeg?w=400"]},
-      {t:"Missoma Lena Statement Baroque Pearl Necklace 18ct Gold Plated Women",p:195.00,i:["https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400","https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400"]},
-      {t:"Kendra Scott Elle Gold Ring Set Adjustable Stacking Band with Stones",p:58.00,i:["https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400","https://images.pexels.com/photos/2697513/pexels-photo-2697513.jpeg?w=400"]},
-      {t:"Mejuri Bold Chain Necklace 14K Gold Vermeil Minimalist Fine Jewelry",p:168.00,i:["https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/1302307/pexels-photo-1302307.jpeg?w=400","https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400"]},
-      {t:"Alex and Ani Path of Life Expandable Wire Bangle Bracelet Silver",p:38.00,i:["https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400"]},
-      {t:"Gorjana Power Gemstone Beaded Bracelet Healing Crystal Stack",p:48.00,i:["https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400","https://images.pexels.com/photos/2697513/pexels-photo-2697513.jpeg?w=400","https://images.pexels.com/photos/177332/pexlas-photo-177332.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400"]},
-      {t:"BaubleBar Pisa Drop Earrings Classic Gold Plated Statement Fashion",p:42.00,i:["https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400"]},
-      {t:"David Yurman Cable Classics Bracelet Sterling Silver Gold Dome",p:595.00,i:["https://images.pexels.com/photos/248077/pexels-photo-248077.jpeg?w=400","https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400"]},
-      {t:"Madewell Essential Open Triangle Stud Earrings 14k Gold-Filled",p:22.00,i:["https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400","https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400"]},
-      {t:"Bulgari B.zero1 Ring 18K Rose Gold Two-Band Iconic Luxury Signature",p:2200.00,i:["https://images.pexels.com/photos/177332/pexels-photo-177332.jpeg?w=400","https://images.pexels.com/photos/2697513/pexels-photo-2697513.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400"]},
-      {t:"Van Cleef & Arpels Alhambra Pendant Yellow Gold Malachite Iconic",p:3950.00,i:["https://images.pexels.com/photos/1302307/pexels-photo-1302307.jpeg?w=400","https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400","https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/265906/pexels-photo-265906.jpeg?w=400"]},
-      {t:"Mikimoto Pearl Stud Earrings 18K White Gold Classic Akoya Cultured",p:850.00,i:["https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?w=400","https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?w=400","https://images.pexels.com/photos/691046/pexels-photo-691046.jpeg?w=400","https://images.pexels.com/photos/1458867/pexels-photo-1458867.jpeg?w=400"]}
-    ],
-    colors:["Gold","Rose Gold","Silver","Yellow Gold","White Gold","Platinum","Two-Tone","Black Gold","Copper","Bronze","Crystal","Pearl","Diamond","Ruby","Emerald","Sapphire"],
-    brands:["Pandora","Swarovski","Tiffany","Cartier","Missoma","Kendra Scott","Mejuri","Alex and Ani","BaubleBar","David Yurman","Madewell","Bulgari","Van Cleef","Mikimoto","Gorjana","Monica Vinader"],
-    types:["Necklace","Bracelet","Earrings","Ring","Pendant","Anklet","Bangle","Charm","Stud Earrings","Drop Earrings","Tennis Bracelet","Cuff","Statement Necklace","Choker","Hoop Earrings"]
-  },
-
-  "Electronics": {
-    base:[
-      {t:"Apple MacBook Pro 14-inch M3 Pro Chip 18GB RAM 512GB SSD Space Black",p:1999.00,i:["https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400"]},
-      {t:"Samsung Galaxy S24 Ultra 5G 512GB Titanium Black Snapdragon 8 Gen 3",p:1299.00,i:["https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400"]},
-      {t:"Sony WH-1000XM5 Wireless Noise Canceling Over-Ear Headphones Platinum",p:348.00,i:["https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?w=400","https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?w=400","https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?w=400","https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?w=400"]},
-      {t:"iPad Pro 13-inch M4 Wi-Fi 256GB Ultra Retina XDR OLED Tandem Space Black",p:1299.00,i:["https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400"]},
-      {t:"Dell XPS 15 9530 Intel Core i9-13900H 32GB RAM 1TB SSD RTX 4060",p:2199.00,i:["https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400"]},
-      {t:"Bose QuietComfort 45 Wireless Bluetooth Noise Cancelling Headphones White",p:279.00,i:["https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?w=400","https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?w=400","https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?w=400","https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?w=400"]},
-      {t:"LG C3 55-Inch OLED evo Smart TV 4K HDR Dolby Vision ThinQ AI",p:1299.00,i:["https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?w=400","https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?w=400","https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?w=400","https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?w=400"]},
-      {t:"GoPro HERO12 Black 5.3K60 HDR Action Camera Waterproof HyperSmooth",p:399.00,i:["https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400"]},
-      {t:"NVIDIA GeForce RTX 4080 Super Founders Edition 16GB GDDR6X Graphics Card",p:999.00,i:["https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400"]},
-      {t:"Amazon Echo Dot 5th Gen Smart Speaker with Alexa Deep Sea Blue",p:49.99,i:["https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?w=400","https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?w=400","https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?w=400","https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?w=400"]},
-      {t:"Logitech MX Master 3S Wireless Performance Mouse 8K DPI Quiet Click",p:99.99,i:["https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400"]},
-      {t:"Canon EOS R6 Mark II Full-Frame Mirrorless Camera Body 24.2MP",p:2499.00,i:["https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400"]},
-      {t:"SanDisk 2TB Extreme Portable SSD 1050MB/s USB-C IP65 Rugged",p:139.99,i:["https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400"]},
-      {t:"Anker 737 Power Bank 24000mAh 140W USB-C Portable Charger Black",p:89.99,i:["https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?w=400","https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?w=400","https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?w=400","https://images.pexels.com/photos/1038916/pexels-photo-1038916.jpeg?w=400"]},
-      {t:"Samsung 990 Pro 2TB NVMe PCIe Gen 4 M.2 Internal SSD 7450MB/s",p:149.99,i:["https://images.pexels.com/photos/18105/pexels-photo.jpg?w=400","https://images.pexels.com/photos/238118/pexels-photo-238118.jpeg?w=400","https://images.pexels.com/photos/1229861/pexels-photo-1229861.jpeg?w=400","https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?w=400"]}
-    ],
-    colors:["Black","Silver","White","Space Gray","Midnight","Starlight","Graphite","Navy","Blue","Green","Gold","Titanium","Jet Black","Deep Purple"],
-    brands:["Apple","Samsung","Sony","Dell","Bose","LG","GoPro","NVIDIA","Amazon","Logitech","Canon","SanDisk","Anker","Lenovo","Asus","HP","Microsoft","Intel","AMD","Razer"],
-    types:["Laptop","Smartphone","Tablet","Headphones","Smart TV","Camera","GPU","Speaker","Mouse","Keyboard","SSD","Power Bank","Monitor","Printer","Router","Smartwatch"]
-  },
-
-  "Smart Home": {
-    base:[
-      {t:"Amazon Echo Show 10 3rd Gen Smart Display with Motion 10.1-inch HD Screen",p:249.99,i:["https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]},
-      {t:"Philips Hue Smart Bulb A19 75W Equivalent E26 Color Starter Kit",p:179.99,i:["https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400"]},
-      {t:"Ring Video Doorbell 4 1080p HD Video Motion Detection Two-Way Talk",p:99.99,i:["https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400"]},
-      {t:"Nest Learning Thermostat 4th Gen Smart Programmable Works Google Home",p:279.99,i:["https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]},
-      {t:"Roomba j7+ Self-Emptying Robot Vacuum Combo Avoids Obstacles Auto Dirt Disposal",p:799.99,i:["https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400"]},
-      {t:"Google Nest Hub 2nd Gen 7-inch Smart Home Display with Sleep Sensing",p:99.99,i:["https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]},
-      {t:"Samsung SmartThings Hub v3 Control Zigbee Z-Wave IoT Home Hub",p:129.99,i:["https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400"]},
-      {t:"Arlo Pro 4 Wireless Security Camera 2K HDR Color Night Vision Spotlight",p:199.99,i:["https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400"]},
-      {t:"August Smart Lock Pro 3rd Gen Connect Adapter Z-Wave Plus Keyless Entry",p:229.99,i:["https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400"]},
-      {t:"TP-Link Kasa Smart Plug Mini 15A Works Alexa Google Wifi Timer Schedule",p:19.99,i:["https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]},
-      {t:"Lutron Caseta Wireless Smart Lighting Dimmer Switch Starter Kit",p:79.99,i:["https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400"]},
-      {t:"Ecobee SmartThermostat Premium with Smart Sensor Voice Control Alexa",p:249.99,i:["https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400"]},
-      {t:"LIFX A19 1100 Lumens Smart Multicolor LED Bulb Wi-Fi No Hub Required",p:49.99,i:["https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]},
-      {t:"Wyze Cam v3 1080p HD Indoor Outdoor IP65 Night Vision Color Motion",p:35.98,i:["https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400"]},
-      {t:"Amazon Alexa Smart Plug 15A Compact WiFi Outlet Schedule Timer Control",p:24.99,i:["https://images.pexels.com/photos/3964704/pexels-photo-3964704.jpeg?w=400","https://images.pexels.com/photos/4790268/pexels-photo-4790268.jpeg?w=400","https://images.pexels.com/photos/1034812/pexels-photo-1034812.jpeg?w=400","https://images.pexels.com/photos/1571458/pexels-photo-1571458.jpeg?w=400"]}
-    ],
-    colors:["White","Black","Charcoal","Silver","Platinum","Nickel","Bronze","Blue","Sand","Linen"],
-    brands:["Amazon","Philips Hue","Ring","Google Nest","iRobot","Samsung","Arlo","August","TP-Link","Lutron","Ecobee","LIFX","Wyze","Eufy","Wemo","Govee","Meross","Yale","Schlage","Eve"],
-    types:["Smart Speaker","Smart Bulb","Video Doorbell","Thermostat","Robot Vacuum","Smart Display","Security Camera","Smart Lock","Smart Plug","Dimmer Switch","Hub","Smoke Detector","Motion Sensor","Smart Strip","Air Purifier"]
-  },
-
-  "Luxury Brands": {
-    base:[
-      {t:"Louis Vuitton Monogram Canvas Keepall 55 Bandoulière Travel Bag",p:2150.00,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Chanel Classic Flap Bag Medium Lambskin Gold Hardware Quilted CC",p:9800.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400"]},
-      {t:"Hermès Birkin 30 Togo Leather Gold Hardware Palladium Luxury Iconic",p:18500.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Gucci Dionysus GG Supreme Canvas Shoulder Bag Tiger Head Clasp",p:2350.00,i:["https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400"]},
-      {t:"Prada Galleria Saffiano Leather Bag Medium Double Zip Luxury",p:3200.00,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Dior Lady Dior Medium Bag Cannage Lambskin Patent Leather Pink",p:5500.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Bottega Veneta Intrecciato Leather Crossbody Bag Woven Classic",p:2800.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400"]},
-      {t:"Saint Laurent Loulou Medium Chain Bag Matelasse Chevron Leather",p:2650.00,i:["https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Fendi Baguette Mini Bag FF Motif Jacquard Fabric Iconic Runway",p:1490.00,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400"]},
-      {t:"Valentino Garavani Rockstud Spike Medium Bag Quilted Calfskin",p:3450.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400"]},
-      {t:"Burberry Knight Medium Bag Equestrian Knight Design Leather Archive",p:1950.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400"]},
-      {t:"Givenchy Antigona Soft Medium Bag Grained Calfskin Luxury Chain",p:2490.00,i:["https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Celine Classic Box Bag Smooth Calfskin Small Palladium Iconic",p:3900.00,i:["https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400"]},
-      {t:"Balenciaga City Bag Aged Calfskin Oversized Studs Motorcycle Classic",p:2050.00,i:["https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400"]},
-      {t:"Off-White Jitney 1.4 Quote Bag Arrow Logo Straps Industrial Chain",p:1295.00,i:["https://images.pexels.com/photos/1839782/pexels-photo-1839782.jpeg?w=400","https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?w=400","https://images.pexels.com/photos/904350/pexels-photo-904350.jpeg?w=400","https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?w=400"]}
-    ],
-    colors:["Black","Tan","Camel","Beige","White","Red","Pink","Navy","Brown","Burgundy","Nude","Grey","Gold","Silver"],
-    brands:["Louis Vuitton","Chanel","Hermès","Gucci","Prada","Dior","Bottega Veneta","Saint Laurent","Fendi","Valentino","Burberry","Givenchy","Celine","Balenciaga","Off-White","Loewe","Jacquemus","Marni","Toteme","The Row"],
-    types:["Tote Bag","Shoulder Bag","Crossbody","Clutch","Backpack","Belt Bag","Top Handle","Satchel","Bucket Bag","Mini Bag","Baguette","Flap Bag","Chain Bag","Drawstring"]
-  },
-
-  "Beauty and Personal Care": {
-    base:[
-      {t:"Charlotte Tilbury Airbrush Flawless Foundation 30ml Full Coverage Liquid",p:49.00,i:["https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400"]},
-      {t:"Fenty Beauty Pro Filt'r Soft Matte Longwear Foundation Shade 220",p:40.00,i:["https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400"]},
-      {t:"NARS Orgasm Blush 4.8g Peachy Pink Golden Shimmer Classic Bestseller",p:34.00,i:["https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400"]},
-      {t:"Drunk Elephant Protini Polypeptide Cream Moisturizer Skincare 50ml",p:68.00,i:["https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400"]},
-      {t:"La Mer The Moisturizing Cream 60ml Seaweed Miracle Broth Luxury",p:355.00,i:["https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400"]},
-      {t:"Olaplex No.3 Hair Perfector Bond-Building Repair Treatment 100ml",p:28.00,i:["https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400"]},
-      {t:"Dyson Airwrap Multi-Styler Complete Long Nickel Copper Hair Tool",p:599.99,i:["https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400"]},
-      {t:"Urban Decay Naked3 Eyeshadow Palette 12 Rose-Hued Shades Warm",p:54.00,i:["https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400"]},
-      {t:"CeraVe Moisturizing Cream 19 oz Body Face Ceramides Hyaluronic Acid",p:16.08,i:["https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400"]},
-      {t:"The Ordinary Hyaluronic Acid 2% + B5 Hydration Support Formula 30ml",p:9.90,i:["https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400"]},
-      {t:"Pat McGrath Labs MatteTrance Lipstick Flesh 4 Luxe Formula Full Wear",p:40.00,i:["https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400"]},
-      {t:"Tatcha The Water Cream Oil-Free Pore Minimizing Moisturizer 50ml",p:72.00,i:["https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400"]},
-      {t:"Lancôme Advanced Génifique Serum 30ml Youth Activating Concentrate",p:115.00,i:["https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400"]},
-      {t:"MAC Cosmetics Studio Fix Fluid Foundation SPF15 NC25 Long Wear",p:38.00,i:["https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400"]},
-      {t:"Benefit Cosmetics Hoola Matte Bronzer 8g Sun-Kissed Glow Classic",p:36.00,i:["https://images.pexels.com/photos/1029896/pexels-photo-1029896.jpeg?w=400","https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?w=400","https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?w=400","https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?w=400"]}
-    ],
-    colors:["Nude","Pink","Red","Coral","Berry","Mauve","Brown","Peach","Rose","Plum","Bronze","Gold","Clear","Natural","Ivory"],
-    brands:["Charlotte Tilbury","Fenty Beauty","NARS","Drunk Elephant","La Mer","Olaplex","Dyson","Urban Decay","CeraVe","The Ordinary","Pat McGrath","Tatcha","Lancôme","MAC","Benefit","Too Faced","Tarte","Rare Beauty","Summer Fridays","Kiehl's"],
-    types:["Foundation","Moisturizer","Serum","Lipstick","Eyeshadow Palette","Blush","Bronzer","Concealer","Setting Spray","Toner","Hair Mask","Hair Tool","Sunscreen","Eye Cream","Body Lotion"]
-  },
-
-  "Mens Fashion": {
-    base:[
-      {t:"Levi's Men 511 Slim Fit Jeans Mid Rise Flex Denim Classic Blue",p:59.50,i:["https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400"]},
-      {t:"Nike Men Sportswear Club Fleece Pullover Hoodie Standard Fit Gray",p:55.00,i:["https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400"]},
-      {t:"Tommy Hilfiger Men Pima Cotton Crewneck Sweater Classic Fit Preppy",p:79.99,i:["https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400"]},
-      {t:"Ralph Lauren Men Polo Classic Fit Mesh Polo Short Sleeve Cotton",p:98.50,i:["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400"]},
-      {t:"Calvin Klein Men Regular Fit Long Sleeve Oxford Button Down Dress Shirt",p:69.50,i:["https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400"]},
-      {t:"Hugo Boss Men Regular Fit Stretch Chino Trousers Casual Office",p:129.00,i:["https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400"]},
-      {t:"Zara Men Slim Fit Technical Jacket Lightweight Windbreaker Outdoor",p:89.99,i:["https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400"]},
-      {t:"Patagonia Men Better Sweater Fleece Jacket Full Zip Classic",p:149.00,i:["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400"]},
-      {t:"Banana Republic Men Aiden Skinny-Fit Non-Iron Dress Pant Office",p:89.50,i:["https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400"]},
-      {t:"Uniqlo Men Flannel Long-Sleeve Check Shirt Soft Touch Plaid",p:29.90,i:["https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400"]},
-      {t:"J.Crew Men Ludlow Slim-Fit Suit Jacket Italian Wool Blend Stretch",p:298.00,i:["https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400"]},
-      {t:"Adidas Men Tiro 23 League Training Pants Moisture Wicking Sport",p:45.00,i:["https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400"]},
-      {t:"Columbia Men Steens Mountain Full Zip Fleece Soft Plush Outdoor",p:65.00,i:["https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400"]},
-      {t:"Dickies Men Original 874 Work Pant Straight Leg Relaxed Fit Classic",p:34.99,i:["https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400","https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400"]},
-      {t:"Under Armour Men Tech 2.0 Short Sleeve T-Shirt Anti-Odor HeatGear",p:25.00,i:["https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?w=400","https://images.pexels.com/photos/2220315/pexels-photo-2220315.jpeg?w=400","https://images.pexels.com/photos/1598507/pexels-photo-1598507.jpeg?w=400","https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?w=400"]}
-    ],
-    colors:["Navy","Black","Gray","White","Khaki","Olive","Charcoal","Blue","Brown","Tan","Burgundy","Forest Green","Slate","Stone","Indigo"],
-    brands:["Levi's","Nike","Tommy Hilfiger","Ralph Lauren","Calvin Klein","Hugo Boss","Zara","Patagonia","Banana Republic","Uniqlo","J.Crew","Adidas","Columbia","Dickies","Under Armour","Carhartt","Allen Edmonds","Brooks Brothers","Bonobos","Ted Baker"],
-    types:["Jeans","T-Shirt","Hoodie","Polo","Dress Shirt","Chinos","Jacket","Suit","Sweater","Sweatpants","Shorts","Blazer","Vest","Overcoat","Flannel Shirt"]
-  },
-
-  "Health and Household": {
-    base:[
-      {t:"Vitamix 5200 Blender Professional-Grade Container 64oz Self-Cleaning",p:449.95,i:["https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400"]},
-      {t:"Theragun Pro Generation 5 Deep Tissue Massage Gun Percussive Therapy",p:599.00,i:["https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400"]},
-      {t:"Fitbit Charge 6 Health Fitness Tracker GPS Heart Rate Sleep Tracking",p:159.95,i:["https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400"]},
-      {t:"Dyson V15 Detect Absolute Cordless Vacuum Laser Dust Detection HEPA",p:749.99,i:["https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400"]},
-      {t:"Instant Pot Duo 7-in-1 Electric Pressure Cooker 8 Quart Slow Cook",p:99.99,i:["https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400"]},
-      {t:"NordicTrack Commercial 1750 Treadmill iFIT Enabled 10% Incline 12 MPH",p:1799.00,i:["https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400"]},
-      {t:"Garden of Life Vitamin Code Raw Zinc 30mg Immune Support Whole Food",p:19.99,i:["https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400"]},
-      {t:"Philips Sonicare ProtectiveClean 6100 Rechargeable Electric Toothbrush",p:119.99,i:["https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400"]},
-      {t:"Listerine Cool Mint Antiseptic Mouthwash Oral Care 1.5L Family Value",p:12.97,i:["https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400"]},
-      {t:"Clorox Disinfecting Wipes Value Pack Bleach Free Fresh Scent 225 Wipes",p:14.48,i:["https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400"]},
-      {t:"Tide Plus Febreze Freshness Liquid Laundry Detergent 92 Oz 64 Loads",p:19.97,i:["https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400"]},
-      {t:"Nordic Naturals Omega-3 1280mg DHA EPA Fish Oil Soft Gels 180 Count",p:39.95,i:["https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400"]},
-      {t:"Aveeno Daily Moisturizing Body Lotion Oat Extract Dry Skin 18 oz",p:11.97,i:["https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400"]},
-      {t:"Bounty Select-A-Size Paper Towels 12 Double Plus Rolls 2-Ply White",p:31.99,i:["https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400","https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400"]},
-      {t:"Braun Series 9 Pro 9477cc Electric Shaver Wet Dry Flex Head Recharge",p:299.94,i:["https://images.pexels.com/photos/4397920/pexels-photo-4397920.jpeg?w=400","https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?w=400","https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?w=400","https://images.pexels.com/photos/3737582/pexels-photo-3737582.jpeg?w=400"]}
-    ],
-    colors:["White","Black","Gray","Blue","Green","Red","Silver","Stainless","Natural","Clear"],
-    brands:["Vitamix","Theragun","Fitbit","Dyson","Instant Pot","NordicTrack","Garden of Life","Philips","Listerine","Clorox","Tide","Nordic Naturals","Aveeno","Bounty","Braun","Oral-B","Gillette","Dove","Colgate","OxiClean"],
-    types:["Supplement","Fitness Tracker","Kitchen Appliance","Vacuum","Massage Gun","Toothbrush","Shaver","Household Cleaner","Laundry Detergent","Paper Goods","Body Care","Hair Remover","Scale","Blood Pressure Monitor","Blender"]
-  },
-  "Home and Kitchen": {
-    base:[
-      {t:"KitchenAid Artisan Series 5-Quart Tilt-Head Stand Mixer Empire Red 10-Speed",p:449.99,i:["https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
-      {t:"Le Creuset Signature Enameled Cast Iron Round Dutch Oven 5.5Qt Flame",p:419.95,i:["https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400"]},
-      {t:"Nespresso Vertuo Next Coffee Espresso Machine Bundle with Frother",p:199.00,i:["https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
-      {t:"Cuisinart 14-Cup Food Processor Vegetable Chopper Stainless Bowl",p:199.95,i:["https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400"]},
-      {t:"All-Clad D3 Stainless Steel Tri-Ply 12-inch Fry Pan Skillet",p:129.95,i:["https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400"]},
-      {t:"Breville Barista Express Espresso Machine BES870BSS Stainless Steel",p:749.95,i:["https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
-      {t:"Ninja Foodi 11-in-1 6.5-Qt Pro Pressure Cooker Air Fryer Tender Crisp",p:229.99,i:["https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400"]},
-      {t:"Staub Cast Iron 4-Qt Cocotte Round French Oven Matte Black Enameled",p:329.95,i:["https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400"]},
-      {t:"Calphalon Premier Hard-Anodized Nonstick 10-Piece Cookware Set",p:299.99,i:["https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400"]},
-      {t:"Vitamix A3300 Ascent Series Smart Blender Stainless 64oz Wireless",p:549.95,i:["https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400"]},
-      {t:"OXO Good Grips 15-Piece Everyday Cookware PlatinumForce Nonstick Set",p:349.99,i:["https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
-      {t:"Instant Pot Pro 10-in-1 Pressure Cooker Slow Cook Sous Vide 8Qt",p:149.99,i:["https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400"]},
-      {t:"Hamilton Beach Professional 1800W Juicer Centrifugal Large 3-inch Feed",p:79.99,i:["https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400"]},
-      {t:"T-fal Ultimate Hard Anodized 17-Piece Nonstick Cookware Set Dishwasher",p:199.99,i:["https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400"]},
-      {t:"Cuisinart SS-10 Premium Single-Serve Coffeemaker 72oz Reservoir",p:99.99,i:["https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?w=400","https://images.pexels.com/photos/1599791/pexels-photo-1599791.jpeg?w=400","https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?w=400","https://images.pexels.com/photos/3214120/pexels-photo-3214120.jpeg?w=400"]}
-    ],
-    colors:["Stainless Steel","Black","White","Red","Empire Red","Cobalt Blue","Matte Black","Gray","Copper","Navy"],
-    brands:["KitchenAid","Le Creuset","Nespresso","Cuisinart","All-Clad","Breville","Ninja","Staub","Calphalon","Vitamix","OXO","Instant Pot","Hamilton Beach","T-fal","Lodge","Zwilling","Wusthof","Nordic Ware","Oxo","GreenPan"],
-    types:["Stand Mixer","Dutch Oven","Coffee Maker","Food Processor","Cookware Set","Air Fryer","Blender","Skillet","Bakeware","Knife Set","Pressure Cooker","Toaster Oven","Rice Cooker","Waffle Maker","Juicer"]
-  }
+// خريطة القسم -> category_id
+const CAT_ID_MAP = {
+  "Clothing & Accessories": 17,
+  "Medical Bags and Sunglasses": 19,
+  "Shoes": 20,
+  "Watches": 21,
+  "Jewelry": 22,
+  "Electronics": 27,
+  "Smart Home": 28,
+  "Luxury Brands": 31,
+  "Beauty and Personal Care": 32,
+  "Men's Fashion": 34,
+  "Health and Household": 35,
+  "Home and Kitchen": 36,
 };
 
-// اختيار البيانات الصحيحة للقسم
-const catKey = Object.keys(CAT_DATA).find(k => k.toLowerCase() === cat.toLowerCase()) || "Clothing & Accessories";
-const CAT = CAT_DATA[catKey];
-const BASE = CAT.base;
-const COLORS = CAT.colors;
-const BRANDS_EXTRA = CAT.brands;
-const TYPES = CAT.types;
-const DESCS = ["Premium","Classic","Luxury","Signature","Essential","Ultimate","Pro","Elite","Authentic","Original","Limited","Special Edition","Exclusive","Heritage","Modern"];
+// خريطة category_id -> مجلد
+const CAT_FOLDER_MAP = {
+  17: "17_Clothing_and_Accessories",
+  19: "19_Medical_Bags_and_Sunglasses",
+  20: "20_Shoes",
+  21: "21_Watches",
+  22: "22_Jewelry",
+  27: "27_Electronics",
+  28: "28_Smart_Home",
+  31: "31_Luxury_Brands",
+  32: "32_Beauty_and_Personal_Care",
+  34: "34_Mens_Fashion",
+  35: "35_Health_and_Household",
+  36: "36_Home_and_Kitchen",
+};
 
-// PRNG ثابت
-function h(n){n=((n^61)^(n>>>16))>>>0;n=(n+(n<<3))>>>0;n=(n^(n>>>4))>>>0;n=Math.imul(n,0x27d4eb2d)>>>0;return(n^(n>>>15))>>>0;}
-function rng(seed){return h(seed)/4294967296;}
-
-// توليد منتج فريد لكل قسم
-function makeProduct(idx){
-  var bi  = idx % BASE.length;
-  var b   = BASE[bi];
-  var r1=rng(idx*7+1),r2=rng(idx*13+2),r3=rng(idx*17+3);
-  var r4=rng(idx*19+4),r5=rng(idx*23+5),r6=rng(idx*29+6);
-  var col = COLORS[Math.floor(r1*COLORS.length)];
-  var des = DESCS[Math.floor(r2*DESCS.length)];
-  var namePool = [
-    b.t + " - " + col,
-    des + " " + b.t,
-    BRANDS_EXTRA[Math.floor(r3*BRANDS_EXTRA.length)] + " " + TYPES[Math.floor(r4*TYPES.length)] + " " + col + " | " + des,
-    b.t + " | " + des + " " + col,
-    des + " " + TYPES[Math.floor(r5*TYPES.length)] + " " + col + " #" + (1000+idx),
-    BRANDS_EXTRA[Math.floor(r6*BRANDS_EXTRA.length)] + " " + des + " " + b.t
-  ];
-  var title = namePool[idx % namePool.length];
-  var price = parseFloat((b.p * (0.75 + r1*0.55)).toFixed(2));
-  var io = Math.floor(r2*b.i.length);
-  var imgs = [b.i[(io)%b.i.length],b.i[(io+1)%b.i.length],b.i[(io+2)%b.i.length],b.i[(io+3)%b.i.length]];
-  var rating = parseFloat((3.6 + r3*1.4).toFixed(1));
-  var sales  = Math.floor(r4*9800);
-  return {id:"cl_"+idx,t:title,p:price,img:imgs[0],imgs:imgs,rating:rating,sales:sales};
-}
-
-// توليد 5000 منتج
-const TOTAL = 5000;
-var allProducts = [];
-for(var i=0;i<TOTAL;i++){
-  var pr = makeProduct(i);
-  allProducts.push({id:pr.id,t:pr.t,p:pr.p,img:pr.img,imgs:pr.imgs,rating:pr.rating,sales:pr.sales});
-}
-const productsJSON = JSON.stringify(allProducts);
+const CLOUD_NAME = "doabtbdsh";
+const thisCatId = CAT_ID_MAP[cat] || parseInt(catId) || 17;
+const folderName = CAT_FOLDER_MAP[thisCatId] || "17_Clothing_and_Accessories";
 
 const pageHTML = `<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${cat}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#f5f5f5;padding-top:50px;min-height:100vh;}
+body{font-family:Arial,sans-serif;background:#f5f5f5;padding-top:50px;padding-bottom:20px;min-height:100vh;}
 .header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:200;}
 .h-left{display:flex;align-items:center;gap:10px;}
 .h-right{display:flex;align-items:center;gap:14px;font-size:20px;}
 .toolbar{display:flex;align-items:center;background:white;padding:12px 20px;border-bottom:1px solid #eee;}
-.sort-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;}
+.sort-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
 .sep{width:1px;height:20px;background:#ddd;margin:0 10px;}
-.filter-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;}
+.filter-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
 .count-bar{background:white;text-align:center;padding:8px;font-size:14px;color:#555;border-bottom:1px solid #f0f0f0;}
-/* ===== FILTER PANEL ===== */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e0e0;margin-top:1px;}
+.card{background:white;cursor:pointer;padding-bottom:10px;}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#f9f9f9;}
+.card-info{padding:8px 8px 0;}
+.card-title{font-size:13px;color:#222;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-price{color:#1976d2;font-size:15px;font-weight:bold;margin-top:5px;}
+.loading{text-align:center;padding:40px;color:#999;font-size:15px;}
+/* Sort panel */
+.sort-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:500;background:rgba(0,0,0,0.3);}
+.sort-panel{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:16px 16px 0 0;padding:10px 0;}
+.sort-option{padding:16px 20px;font-size:15px;color:#333;border-bottom:1px solid #f5f5f5;cursor:pointer;}
+.sort-option:hover{background:#f9f9f9;}
+.sort-option.active{color:#1976d2;font-weight:bold;}
+/* Filter panel */
 .filter-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:500;}
 .filter-left{position:absolute;top:0;left:0;width:36%;height:100%;background:rgba(0,0,0,0.45);}
-.filter-panel{position:fixed;top:0;right:0;width:64%;height:auto;background:white;padding:24px 16px 16px;}
+.filter-panel{position:fixed;top:0;right:0;width:64%;height:100%;background:white;padding:24px 16px 16px;display:flex;flex-direction:column;}
 .filter-price-label{font-size:16px;font-weight:400;color:#333;margin-bottom:18px;}
-.price-inputs{display:flex;align-items:center;gap:10px;margin-bottom:0;}
-.price-input{flex:1;border:1.5px solid #e0e0e0;border-radius:10px;padding:13px 12px;font-size:14px;color:#888;outline:none;background:#fff;min-width:0;}
-.price-input:focus{border-color:#bbb;color:#333;}
-.price-arrow{color:#bbb;font-size:18px;flex-shrink:0;}
-.filter-footer{display:flex;gap:10px;padding:16px 0 0;border-top:none;}
-.filter-clear-btn{flex:1;padding:15px;border:none;border-radius:14px;background:#f0f0f0;font-size:16px;color:#333;cursor:pointer;text-align:center;font-weight:400;}
-.filter-confirm-btn{flex:1;padding:15px;border:none;border-radius:14px;background:#111;color:white;font-size:16px;cursor:pointer;text-align:center;font-weight:600;}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e0e0e0;}
-.pcard{background:white;cursor:pointer;}
-.pcard img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;}
-.pcard .name{font-size:12px;color:#222;padding:5px 6px 3px;line-height:1.4;height:36px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
-.pcard .price{color:#1976d2;font-weight:bold;font-size:13px;padding:2px 6px 8px;}
-.spinner{display:none;text-align:center;padding:20px;color:#999;font-size:13px;}
+.price-inputs{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.price-input{flex:1;border:1.5px solid #e0e0e0;border-radius:10px;padding:13px 12px;font-size:14px;color:#888;outline:none;background:#fff;}
+.filter-footer{display:flex;gap:10px;margin-top:auto;}
+.btn-clear{flex:1;padding:14px;border:1.5px solid #333;border-radius:8px;background:white;font-size:15px;cursor:pointer;}
+.btn-confirm{flex:1;padding:14px;border:none;border-radius:8px;background:#1a1a1a;color:white;font-size:15px;cursor:pointer;}
+.load-more{text-align:center;padding:20px;color:#1976d2;cursor:pointer;font-size:14px;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="h-left">
     <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
   </div>
   <div class="h-right">
-    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-  </div>
-</div>
-<!-- FILTER OVERLAY -->
-<div class="filter-overlay" id="filterOverlay">
-  <div class="filter-left" onclick="closeFilterClick()"></div>
-  <div class="filter-panel" id="filterPanel">
-    <div class="filter-price-label">Price range</div>
-    <div class="price-inputs">
-      <input class="price-input" id="filterMinPrice" type="number" placeholder="Lowest price" min="0">
-      <span class="price-arrow">&#8212;</span>
-      <input class="price-input" id="filterMaxPrice" type="number" placeholder="Highest price" min="0">
-    </div>
-    <div class="filter-footer">
-      <div class="filter-clear-btn" onclick="clearFilter()">Clear</div>
-      <div class="filter-confirm-btn" onclick="confirmFilter()">Confirm</div>
-    </div>
+    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
   </div>
 </div>
 
 <div class="toolbar">
-  <div class="sort-btn" onclick="cycleSort()">Sort &#9660;</div>
+  <div class="sort-btn" onclick="openSort()">Sort <span style="font-size:12px;">&#9660;</span></div>
   <div class="sep"></div>
   <div class="filter-btn" onclick="openFilter()">Filter</div>
 </div>
-<div class="count-bar" id="countBar">5,000 Items</div>
-<div class="grid" id="grid"></div>
-<div class="spinner" id="spinner">Loading...</div>
+
+<div class="count-bar" id="countBar">Loading...</div>
+<div class="grid" id="grid"><div class="loading" style="grid-column:1/-1;">Loading products...</div></div>
+<div class="load-more" id="loadMore" style="display:none;" onclick="loadMore()">Load more products</div>
+
+<!-- Sort Panel -->
+<div class="sort-overlay" id="sortOverlay" onclick="closeSort()">
+  <div class="sort-panel" onclick="event.stopPropagation()">
+    <div class="sort-option active" id="sort_rec" onclick="setSort('rec')">Recommendation</div>
+    <div class="sort-option" id="sort_sales" onclick="setSort('sales')">Sales</div>
+    <div class="sort-option" id="sort_price" onclick="setSort('price')">Price &#9650;&#9660;</div>
+  </div>
+</div>
+
+<!-- Filter Panel -->
+<div class="filter-overlay" id="filterOverlay">
+  <div class="filter-left" onclick="closeFilter()"></div>
+  <div class="filter-panel">
+    <div class="filter-price-label">Price range</div>
+    <div class="price-inputs">
+      <input class="price-input" id="minPrice" type="number" placeholder="Lowest price">
+      <span style="color:#999;">—</span>
+      <input class="price-input" id="maxPrice" type="number" placeholder="Highest price">
+    </div>
+    <div class="filter-footer">
+      <button class="btn-clear" onclick="clearFilter()">Clear</button>
+      <button class="btn-confirm" onclick="applyFilter()">Confirm</button>
+    </div>
+  </div>
+</div>
 
 <script>
-var ALL    = ${productsJSON};
-var PAGE   = 60;
-var page   = 0;
-var sortMode = "default";
-var loading  = false;
-var filterMin = null;
-var filterMax = null;
-var FILTERED = null; // null = no filter active
+var CLOUD = "${CLOUD_NAME}";
+var FOLDER = "${folderName}";
+var CAT_NAME = "${cat}";
+var allProducts = [];
+var filteredProducts = [];
+var currentSort = "rec";
+var page = 0;
+var PAGE_SIZE = 20;
+var minP = null, maxP = null;
 
-var SORT_CYCLE  = ["default","asc","desc","rating"];
-var SORT_LABELS = {default:"Sort \u25bc",asc:"Price \u2191",desc:"Price \u2193",rating:"\u2b50 Top"};
-
-// ===== FILTER PANEL FUNCTIONS =====
-function openFilter(){
-  document.getElementById("filterOverlay").style.display = "block";
-  // Sync sort buttons
-  ["default","asc","desc","rating"].forEach(function(m){
-    var el = document.getElementById("fs-"+m);
-    if(el) el.className = "filter-sort-item" + (m===sortMode?" active":"");
+// جلب المنتجات من API
+fetch("/api/products/${thisCatId}")
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    allProducts = data;
+    filteredProducts = data;
+    document.getElementById("countBar").innerText = data.length + " Items";
+    renderPage(true);
+  })
+  .catch(function(e){
+    document.getElementById("grid").innerHTML = '<div class="loading" style="grid-column:1/-1;">Error loading products</div>';
   });
-  if(filterMin !== null) document.getElementById("filterMinPrice").value = filterMin;
-  if(filterMax !== null) document.getElementById("filterMaxPrice").value = filterMax;
+
+function getImgUrl(product){
+  if(!product.folder || !product.images || !product.images.length) return "";
+  var img = product.images[0];
+  var imgName = img.replace(/\.[^.]+$/, "");
+  return "https://res.cloudinary.com/" + CLOUD + "/image/upload/products/" + FOLDER + "/" + encodeURIComponent(product.folder) + "/" + imgName;
 }
 
-function closeFilterClick(){
-  document.getElementById("filterOverlay").style.display = "none";
+function renderPage(reset){
+  if(reset){ page = 0; document.getElementById("grid").innerHTML = ""; }
+  var start = page * PAGE_SIZE;
+  var end = Math.min(start + PAGE_SIZE, filteredProducts.length);
+  var grid = document.getElementById("grid");
+  for(var i = start; i < end; i++){
+    var p = filteredProducts[i];
+    var imgUrl = getImgUrl(p);
+    var card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = '<img src="' + imgUrl + '" loading="lazy" onerror="this.style.background=\'#eee\'">' +
+      '<div class="card-info">' +
+      '<div class="card-title">' + (p.title||"") + '</div>' +
+      '<div class="card-price">US$' + parseFloat(p.price||0).toFixed(2) + '</div>' +
+      '</div>';
+    (function(prod){ card.onclick = function(){ openProduct(prod); }; })(p);
+    grid.appendChild(card);
+  }
+  page++;
+  document.getElementById("loadMore").style.display = end < filteredProducts.length ? "block" : "none";
 }
 
-function setFilterSort(mode){
-  sortMode = mode;
-  ["default","asc","desc","rating"].forEach(function(m){
-    var el = document.getElementById("fs-"+m);
-    if(el) el.className = "filter-sort-item" + (m===mode?" active":"");
+function loadMore(){ renderPage(false); }
+
+function openProduct(p){
+  localStorage.setItem("catProduct", JSON.stringify({
+    id: p.id,
+    t: p.title,
+    p: parseFloat(p.price||0),
+    cat: CAT_NAME,
+    folder: p.folder,
+    images: p.images,
+    rating: p.rating || 5.0,
+    sales: p.sales || 0,
+    description: p.description || "",
+    catFolder: FOLDER
+  }));
+  window.location.href = "/cat-product-detail";
+}
+
+function setSort(type){
+  currentSort = type;
+  document.querySelectorAll(".sort-option").forEach(function(el){ el.classList.remove("active"); });
+  document.getElementById("sort_"+type).classList.add("active");
+  if(type === "sales") filteredProducts.sort(function(a,b){ return (b.sales||0)-(a.sales||0); });
+  else if(type === "price") filteredProducts.sort(function(a,b){ return parseFloat(a.price||0)-parseFloat(b.price||0); });
+  else filteredProducts.sort(function(){ return 0; });
+  renderPage(true);
+  closeSort();
+}
+
+function applyFilter(){
+  minP = parseFloat(document.getElementById("minPrice").value) || null;
+  maxP = parseFloat(document.getElementById("maxPrice").value) || null;
+  filteredProducts = allProducts.filter(function(p){
+    var pr = parseFloat(p.price||0);
+    if(minP !== null && pr < minP) return false;
+    if(maxP !== null && pr > maxP) return false;
+    return true;
   });
-  document.querySelector(".sort-btn").innerText = SORT_LABELS[sortMode];
+  document.getElementById("countBar").innerText = filteredProducts.length + " Items";
+  renderPage(true);
+  closeFilter();
 }
 
 function clearFilter(){
-  filterMin = null; filterMax = null;
-  sortMode = "default";
-  FILTERED = null;
-  document.getElementById("filterMinPrice").value = "";
-  document.getElementById("filterMaxPrice").value = "";
-  ["default","asc","desc","rating"].forEach(function(m){
-    var el = document.getElementById("fs-"+m);
-    if(el) el.className = "filter-sort-item" + (m==="default"?" active":"");
-  });
-  document.querySelector(".sort-btn").innerText = SORT_LABELS["default"];
-  document.getElementById("filterOverlay").style.display = "none";
-  page = 0;
-  document.getElementById("grid").innerHTML = "";
-  document.getElementById("countBar").innerText = "5,000 Items";
-  appendPage();
+  document.getElementById("minPrice").value = "";
+  document.getElementById("maxPrice").value = "";
+  minP = null; maxP = null;
+  filteredProducts = allProducts;
+  document.getElementById("countBar").innerText = allProducts.length + " Items";
+  renderPage(true);
+  closeFilter();
 }
 
-function confirmFilter(){
-  var minVal = document.getElementById("filterMinPrice").value.trim();
-  var maxVal = document.getElementById("filterMaxPrice").value.trim();
-  filterMin = minVal !== "" ? parseFloat(minVal) : null;
-  filterMax = maxVal !== "" ? parseFloat(maxVal) : null;
-
-  // Apply price filter
-  FILTERED = ALL.filter(function(p){
-    if(filterMin !== null && p.p < filterMin) return false;
-    if(filterMax !== null && p.p > filterMax) return false;
-    return true;
-  });
-
-  document.getElementById("filterOverlay").style.display = "none";
-  page = 0;
-  document.getElementById("grid").innerHTML = "";
-  var count = FILTERED.length.toLocaleString();
-  document.getElementById("countBar").innerText = count + " Items";
-  appendPage();
-}
-// ===== END FILTER =====
-
-function applySort(arr){
-  var s = arr.slice();
-  if(sortMode==="asc")    s.sort(function(a,b){return a.p-b.p;});
-  if(sortMode==="desc")   s.sort(function(a,b){return b.p-a.p;});
-  if(sortMode==="rating") s.sort(function(a,b){return b.rating-a.rating;});
-  return s;
-}
-
-function cycleSort(){
-  var i = SORT_CYCLE.indexOf(sortMode);
-  sortMode = SORT_CYCLE[(i+1)%SORT_CYCLE.length];
-  document.querySelector(".sort-btn").innerText = SORT_LABELS[sortMode];
-  page = 0;
-  document.getElementById("grid").innerHTML = "";
-  appendPage();
-}
-
-function appendPage(){
-  if(loading) return;
-  var source = FILTERED !== null ? FILTERED : ALL;
-  var sorted = applySort(source);
-  var start  = page * PAGE;
-  var chunk  = sorted.slice(start, start + PAGE);
-  if(!chunk.length) return;
-  loading = true;
-  document.getElementById("spinner").style.display = "block";
-
-  setTimeout(function(){
-    var g = document.getElementById("grid");
-    chunk.forEach(function(p){
-      var d  = document.createElement("div");
-      d.className = "pcard";
-      var im = document.createElement("img");
-      im.loading = "lazy";
-      im.src = p.img;
-      im.onerror = function(){
-        var fb = (p.imgs||[]).filter(function(u){return u!==this.src;},this);
-        if(fb.length) this.src = fb[0];
-        else this.src = "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?w=400";
-      };
-      var nm = document.createElement("div"); nm.className="name"; nm.innerText=p.t;
-      var pr = document.createElement("div"); pr.className="price"; pr.innerText="US$"+p.p.toFixed(2);
-      d.appendChild(im); d.appendChild(nm); d.appendChild(pr);
-      (function(prod){ d.onclick=function(){
-        var catName = decodeURIComponent(window.location.search.replace(/.*name=/,'').split('&')[0]||'');
-        prod.cat = catName;
-        localStorage.setItem("catProduct",JSON.stringify(prod));
-        localStorage.setItem("productId",prod.id);
-        window.location.href="/cat-product-detail";
-      };})(p);
-      g.appendChild(d);
-    });
-    document.getElementById("spinner").style.display = "none";
-    loading = false;
-    page++;
-  }, 100);
-}
-
-// Infinite scroll - يحمل تلقائياً عند الوصول للأسفل
-window.addEventListener("scroll", function(){
-  var source = FILTERED !== null ? FILTERED : ALL;
-  if((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300){
-    if(page * PAGE < source.length) appendPage();
-  }
-});
-
-// أول تحميل
-appendPage();
-<\/script>
+function openSort(){ document.getElementById("sortOverlay").style.display="block"; }
+function closeSort(){ document.getElementById("sortOverlay").style.display="none"; }
+function openFilter(){ document.getElementById("filterOverlay").style.display="block"; }
+function closeFilter(){ document.getElementById("filterOverlay").style.display="none"; }
+</script>
 </body>
 </html>`;
 
 res.send(pageHTML);
 });
+
+// ================= API PRODUCTS =================
+app.get("/api/products/:categoryId", (req, res) => {
+  const categoryId = parseInt(req.params.categoryId);
+  const CAT_FOLDER_MAP = {
+    17: "17_Clothing_and_Accessories",
+    19: "19_Medical_Bags_and_Sunglasses",
+    20: "20_Shoes",
+    21: "21_Watches",
+    22: "22_Jewelry",
+    27: "27_Electronics",
+    28: "28_Smart_Home",
+    31: "31_Luxury_Brands",
+    32: "32_Beauty_and_Personal_Care",
+    34: "34_Mens_Fashion",
+    35: "35_Health_and_Household",
+    36: "36_Home_and_Kitchen",
+  };
+  const folderName = CAT_FOLDER_MAP[categoryId];
+  if(!folderName) return res.json([]);
+  
+  const jsonPath = path.join(__dirname, folderName, "products.json");
+  try {
+    const data = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+    res.json(data);
+  } catch(e) {
+    res.json([]);
+  }
+});
+
 // ================= PRODUCT DETAIL PAGE =================
 app.get("/product-detail", (req, res) => {
 res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;padding-top:50px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:200;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;fetch("https://fakestoreapi.com/products/" + productId).then(function(r){return r.json();}).then(function(p){document.getElementById("mainImg").src = p.image;var thumbs = document.getElementById("thumbs");for(var i=0;i<5;i++){var img = document.createElement("img");img.src = p.image;if(i===0) img.classList.add("active");img.onclick = function(){document.getElementById("mainImg").src = this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);}document.getElementById("productTitle").innerText = p.title;document.getElementById("productPrice").innerText = "$" + p.price;var desc = document.getElementById("descList");var points = p.description ? p.description.split(".").filter(function(s){return s.trim();}) : [p.description];points.forEach(function(point){if(point && point.trim()){var li = document.createElement("li");li.innerText = point.trim();desc.appendChild(li);}});});function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var cart=JSON.parse(localStorage.getItem("cart")||"[]");cart.push(productId);localStorage.setItem("cart",JSON.stringify(cart));alert("Added to cart");}function buyNow(){window.location.href="/wallet";}<\/script></body></html>');
@@ -4256,6 +3979,152 @@ function buyNow(){
 });
 
 // ================= WALLET PAGE =================
+// ================= BUY NOW PAGE =================
+app.get("/buy-now", (req, res) => {
+res.send(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy Now</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;}
+.page-body{margin-top:50px;}
+.product-summary{background:white;padding:15px;display:flex;gap:12px;align-items:flex-start;}
+.product-summary img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;}
+.product-summary-info{flex:1;}
+.product-price{color:#e8791d;font-size:20px;font-weight:bold;}
+.product-stock{color:#888;font-size:13px;margin-top:4px;}
+.section{background:white;margin-top:8px;padding:15px;}
+.section-title{font-size:15px;color:#333;margin-bottom:12px;}
+.colors-row{display:flex;flex-wrap:wrap;gap:10px;}
+.color-btn{padding:8px 18px;border-radius:20px;border:1.5px solid #ddd;font-size:13px;cursor:pointer;background:white;color:#333;}
+.color-btn.active{border-color:#1976d2;color:#1976d2;background:#e3f2fd;}
+.qty-row{display:flex;justify-content:space-between;align-items:center;}
+.qty-label{font-size:15px;color:#333;}
+.qty-ctrl{display:flex;align-items:center;gap:15px;}
+.qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid #ddd;background:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;}
+.qty-num{font-size:16px;font-weight:bold;min-width:20px;text-align:center;}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;padding:10px 15px;gap:10px;border-top:1px solid #eee;z-index:200;}
+.cart-btn{flex:1;padding:14px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;font-weight:bold;cursor:pointer;text-align:center;}
+.buy-btn{flex:1;padding:14px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;font-weight:bold;cursor:pointer;text-align:center;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+  </div>
+  <div style="display:flex;gap:14px;">
+    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="product-summary">
+    <img id="prodImg" src="">
+    <div class="product-summary-info">
+      <div class="product-price" id="prodPrice"></div>
+      <div class="product-stock" id="prodStock"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Set</div>
+    <div class="colors-row" id="colorsRow"></div>
+  </div>
+
+  <div class="section">
+    <div class="qty-row">
+      <div class="qty-label">Quantity</div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+        <div class="qty-num" id="qtyNum">1</div>
+        <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
+  <div class="buy-btn" onclick="confirmBuy()">Buy now</div>
+</div>
+
+<script>
+var p = {};
+try{ p = JSON.parse(localStorage.getItem("catProduct")||"{}"); }catch(e){}
+var qty = 1;
+var selectedColor = "";
+var CLOUD = "doabtbdsh";
+
+function getImgUrl(folder, catFolder, imgFile){
+  var name = (imgFile||"1").replace(/\.[^.]+$/,"");
+  return "https://res.cloudinary.com/"+CLOUD+"/image/upload/products/"+catFolder+"/"+encodeURIComponent(folder)+"/"+name;
+}
+
+if(p && p.t){
+  var imgSrc = p.images && p.images.length ? getImgUrl(p.folder, p.catFolder, p.images[0]) : "";
+  document.getElementById("prodImg").src = imgSrc;
+  document.getElementById("prodPrice").innerText = "US$" + parseFloat(p.p||0).toFixed(2);
+  document.getElementById("prodStock").innerText = "In Stock: " + (p.stock || Math.floor(Math.random()*9000+1000));
+
+  // ألوان حسب القسم
+  var CAT_COLORS = {
+    "Shoes":["Black","White","Red","Gray","Navy","Beige","Brown","Blue","Green","Orange"],
+    "Watches":["Black","Silver","Gold","Rose Gold","Blue","Green","Gray","Brown"],
+    "Jewelry":["Gold","Rose Gold","Silver","Yellow Gold","White Gold","Ruby","Emerald","Sapphire","Pearl"],
+    "Electronics":["Black","Silver","Space Gray","White","Blue","Gold","Green","Midnight"],
+    "Smart Home":["White","Black","Charcoal","Silver","Sand","Blue"],
+    "Luxury Brands":["Black","Tan","Camel","Beige","White","Red","Navy","Brown","Burgundy","Gold"],
+    "Beauty and Personal Care":["Nude","Pink","Red","Rose","Berry","Coral","Peach","Bronze","Clear","Gold"],
+    "Medical Bags and Sunglasses":["Black","Brown","Tortoise","Gold","Silver","Navy","Tan","Crystal","Rose Gold"],
+    "Mens Fashion":["Navy","Black","Gray","White","Khaki","Olive","Charcoal","Blue","Brown","Burgundy"],
+    "default":["Black","White","Navy","Beige","Blush","Emerald","Burgundy","Camel","Lavender","Coral","Mint"]
+  };
+  var colors = CAT_COLORS[p.cat] || CAT_COLORS["default"];
+  var colorsRow = document.getElementById("colorsRow");
+  colors.forEach(function(c, i){
+    var btn = document.createElement("div");
+    btn.className = "color-btn" + (i===0?" active":"");
+    btn.innerText = c;
+    if(i===0) selectedColor = c;
+    btn.onclick = function(){
+      document.querySelectorAll(".color-btn").forEach(function(b){b.classList.remove("active");});
+      this.classList.add("active");
+      selectedColor = c;
+    };
+    colorsRow.appendChild(btn);
+  });
+}
+
+function changeQty(n){
+  qty = Math.max(1, qty + n);
+  document.getElementById("qtyNum").innerText = qty;
+}
+
+function addToCart(){
+  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+  cart.push({id:p.id, title:p.t, price:p.p, qty:qty, color:selectedColor});
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Added to cart ✅");
+}
+
+function confirmBuy(){
+  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+  cart.push({id:p.id, title:p.t, price:p.p, qty:qty, color:selectedColor});
+  localStorage.setItem("cart", JSON.stringify(cart));
+  window.location.href = "/wallet";
+}
+<\/script>
+</body>
+</html>`);
+});
+
 app.get("/wallet", (req, res) => {
 res.send(`<!DOCTYPE html>
 <html>
@@ -8244,28 +8113,25 @@ app.get("/cat-product-detail", (req, res) => {
 res.send(`<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product Detail</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 .header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;}
-.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}
 .page-body{margin-top:50px;}
 .slider-wrap{background:white;position:relative;overflow:hidden;}
 .slider-imgs{display:flex;transition:transform 0.4s ease;}
 .slider-imgs img{min-width:100%;height:360px;object-fit:contain;background:#f9f9f9;}
 .slider-dots{display:flex;justify-content:center;gap:6px;padding:10px 0;background:white;}
-.dot{width:7px;height:7px;border-radius:50%;background:#ccc;cursor:pointer;transition:background 0.3s;}
+.dot{width:7px;height:7px;border-radius:50%;background:#ccc;cursor:pointer;}
 .dot.active{background:#1976d2;}
 .heart-btn{position:absolute;top:12px;left:12px;font-size:24px;cursor:pointer;z-index:10;}
+.share-btn{position:absolute;top:12px;right:12px;font-size:22px;cursor:pointer;z-index:10;}
 .thumbs{display:flex;gap:8px;padding:10px 12px;background:white;overflow-x:auto;}
 .thumbs img{width:58px;height:58px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}
 .thumbs img.active{border-color:#1976d2;}
-.colors-wrap{background:white;padding:10px 15px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-top:1px solid #f0f0f0;}
-.color-label{font-size:13px;color:#555;margin-right:5px;}
-.color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid #eee;transition:border-color 0.2s;}
-.color-dot.active{border-color:#1976d2;transform:scale(1.15);}
 .info{background:white;margin-top:8px;padding:15px;}
 .price-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .price{color:#1976d2;font-size:26px;font-weight:bold;}
@@ -8273,7 +8139,7 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 .prod-title{font-size:15px;color:#222;line-height:1.5;}
 .specs{background:white;margin-top:8px;}
 .spec-row{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}
-.spec-row span:last-child{color:#999;}
+.spec-arrow{color:#999;}
 .store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:12px;cursor:pointer;}
 .store img{width:52px;height:52px;border-radius:10px;object-fit:cover;}
 .store-name{font-weight:bold;font-size:15px;}
@@ -8283,9 +8149,10 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 .review{background:white;margin-top:8px;padding:15px;}
 .review-top{display:flex;justify-content:space-between;font-size:14px;color:#333;}
 .stars{color:#f5a623;font-size:18px;margin-top:5px;}
-.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}
-.desc ul{padding-left:18px;margin:0;}
-.desc li{margin-bottom:8px;}
+.about{background:white;margin-top:8px;padding:15px;}
+.about-title{font-size:15px;font-weight:bold;color:#222;margin-bottom:10px;}
+.about ul{padding-left:18px;}
+.about li{font-size:13px;color:#444;line-height:1.8;margin-bottom:6px;}
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;z-index:200;}
 .icon-btn{font-size:22px;cursor:pointer;}
 .cart-btn{flex:1;padding:13px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;font-weight:bold;}
@@ -8293,66 +8160,59 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div>
     <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
     <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
   </div>
-  <div class="icons">
-    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+  <div style="display:flex;gap:14px;">
+    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
   </div>
 </div>
 
 <div class="page-body">
-<div class="slider-wrap">
-  <span class="heart-btn" id="heartBtn" onclick="toggleHeart()">&#129293;</span>
-  <div class="slider-imgs" id="sliderImgs"></div>
-  <div class="slider-dots" id="sliderDots"></div>
-</div>
-
-<div class="thumbs" id="thumbs"></div>
-
-<div class="colors-wrap" id="colorsWrap">
-  <span class="color-label">Color:</span>
-</div>
-
-<div class="info">
-  <div class="price-row">
-    <div class="price" id="pPrice"></div>
-    <div class="rating" id="pRating">&#11088; <b>5.0</b> <span style="color:#999;">(0 Sales)</span></div>
+  <div class="slider-wrap">
+    <span class="heart-btn" id="heartBtn" onclick="toggleHeart()">&#129293;</span>
+    <span class="share-btn">&#128279;</span>
+    <div class="slider-imgs" id="sliderImgs"></div>
+    <div class="slider-dots" id="sliderDots"></div>
   </div>
-  <div class="prod-title" id="pTitle"></div>
-</div>
-
-<div class="specs">
-  <div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div>
-  <div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div>
-  <div class="spec-row"><span>Guarantee</span><span>Free return</span></div>
-</div>
-
-<div class="store">
-  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-  <div style="flex:1;">
-    <div class="store-name">TikTok Mall Store</div>
-    <div class="vip-badge">&#10004; VIP 3</div>
-    <div class="store-tags"><span>Products 150</span><span>Followers 79</span></div>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="info">
+    <div class="price-row">
+      <div class="price" id="pPrice"></div>
+      <div class="rating" id="pRating">&#11088; <b>5.0</b> <span style="color:#999;">(0 Sales)</span></div>
+    </div>
+    <div class="prod-title" id="pTitle"></div>
   </div>
-  <span style="color:#999;">&#8250;</span>
-</div>
-
-<div class="review">
-  <div class="review-top">
-    <span>Consumer review</span>
-    <span style="color:#1976d2;">0 Unit Global Rating &#8250;</span>
+  <div class="specs">
+    <div class="spec-row" onclick="window.location.href='/wallet'"><span>Select</span><span class="spec-arrow">Brand, specification &#8250;</span></div>
+    <div class="spec-row"><span>Shipping fees</span><span class="spec-arrow">Free shipping</span></div>
+    <div class="spec-row"><span>Guarantee</span><span class="spec-arrow">Free return</span></div>
   </div>
-  <div class="stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div>
-</div>
-
-<div class="desc">
-  <ul id="descList"></ul>
-</div>
-
+  <div class="store">
+    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+    <div style="flex:1;">
+      <div class="store-name">S&R Store</div>
+      <div class="vip-badge">&#10004; VIP 0</div>
+      <div class="store-tags"><span>Products 20</span><span>Followers 0</span></div>
+    </div>
+    <span style="color:#999;">&#8250;</span>
+  </div>
+  <div class="review">
+    <div class="review-top">
+      <span>Consumer review</span>
+      <span style="color:#1976d2;">0 Unit Global Rating &#8250;</span>
+    </div>
+    <div class="stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div>
+  </div>
+  <div class="about">
+    <div class="about-title">About this item</div>
+    <ul id="descList"></ul>
+  </div>
 </div>
 
 <div class="bottom-bar">
@@ -8364,131 +8224,87 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 
 <script>
 var p = {};
-try { p = JSON.parse(localStorage.getItem("catProduct") || "{}"); } catch(e){}
+try{ p = JSON.parse(localStorage.getItem("catProduct")||"{}"); }catch(e){}
 var isFav = false;
 var currentSlide = 0;
 var images = [];
-var autoSlideTimer = null;
+var CLOUD = "doabtbdsh";
+var timer = null;
 
-// ===== خريطة ألوان كل قسم =====
-var CAT_COLORS = {
-  "Shoes":        [{n:"Black",h:"#1a1a1a"},{n:"White",h:"#f5f5f5"},{n:"Red",h:"#cc2200"},{n:"Gray",h:"#888"},{n:"Navy",h:"#1a2a4a"},{n:"Beige",h:"#c8a882"},{n:"Brown",h:"#7a4a2a"},{n:"Blue",h:"#1565c0"},{n:"Green",h:"#2e7d32"},{n:"Orange",h:"#e65100"}],
-  "Watches":      [{n:"Black",h:"#1a1a1a"},{n:"Silver",h:"#bdbdbd"},{n:"Gold",h:"#c9a84c"},{n:"Rose Gold",h:"#b76e79"},{n:"Blue",h:"#1565c0"},{n:"Green",h:"#1b5e20"},{n:"Gray",h:"#616161"},{n:"Brown",h:"#5d4037"}],
-  "Jewelry":      [{n:"Gold",h:"#c9a84c"},{n:"Rose Gold",h:"#b76e79"},{n:"Silver",h:"#bdbdbd"},{n:"Yellow Gold",h:"#f9a825"},{n:"White Gold",h:"#e0e0e0"},{n:"Diamond",h:"#e3f2fd"},{n:"Ruby",h:"#b71c1c"},{n:"Emerald",h:"#1b5e20"},{n:"Sapphire",h:"#0d47a1"},{n:"Pearl",h:"#fafafa"}],
-  "Electronics":  [{n:"Black",h:"#1a1a1a"},{n:"Silver",h:"#bdbdbd"},{n:"Space Gray",h:"#4a4a4a"},{n:"White",h:"#f5f5f5"},{n:"Blue",h:"#1565c0"},{n:"Gold",h:"#c9a84c"},{n:"Green",h:"#1b5e20"},{n:"Midnight",h:"#1a1a2e"},{n:"Titanium",h:"#8d8d8d"}],
-  "Smart Home":   [{n:"White",h:"#f5f5f5"},{n:"Black",h:"#1a1a1a"},{n:"Charcoal",h:"#424242"},{n:"Silver",h:"#bdbdbd"},{n:"Sand",h:"#d7ccc8"},{n:"Blue",h:"#1565c0"}],
-  "Luxury Brands":[{n:"Black",h:"#1a1a1a"},{n:"Tan",h:"#c8a882"},{n:"Camel",h:"#c19a6b"},{n:"Beige",h:"#e8d5b0"},{n:"White",h:"#f5f5f5"},{n:"Red",h:"#b71c1c"},{n:"Navy",h:"#1a2a4a"},{n:"Brown",h:"#5d4037"},{n:"Burgundy",h:"#6d1a2a"},{n:"Gold",h:"#c9a84c"}],
-  "Beauty and Personal Care":[{n:"Nude",h:"#d4a574"},{n:"Pink",h:"#f48fb1"},{n:"Red",h:"#c62828"},{n:"Rose",h:"#e91e63"},{n:"Berry",h:"#880e4f"},{n:"Coral",h:"#ff7043"},{n:"Peach",h:"#ffccbc"},{n:"Bronze",h:"#a0522d"},{n:"Clear",h:"#f5f5f5"},{n:"Gold",h:"#c9a84c"}],
-  "Medical Bags and Sunglasses":[{n:"Black",h:"#1a1a1a"},{n:"Brown",h:"#5d4037"},{n:"Tortoise",h:"#6d4c41"},{n:"Gold",h:"#c9a84c"},{n:"Silver",h:"#bdbdbd"},{n:"Navy",h:"#1a237e"},{n:"Tan",h:"#c8a882"},{n:"Crystal",h:"#e3f2fd"},{n:"Rose Gold",h:"#b76e79"}],
-  "Mens Fashion": [{n:"Navy",h:"#1a2a4a"},{n:"Black",h:"#1a1a1a"},{n:"Gray",h:"#757575"},{n:"White",h:"#f5f5f5"},{n:"Khaki",h:"#b5a642"},{n:"Olive",h:"#6d7c43"},{n:"Charcoal",h:"#424242"},{n:"Blue",h:"#1565c0"},{n:"Brown",h:"#5d4037"},{n:"Burgundy",h:"#6d1a2a"}],
-  "default":      [{n:"Black",h:"#1a1a1a"},{n:"White",h:"#f5f5f5"},{n:"Navy",h:"#1a2a4a"},{n:"Beige",h:"#c8a882"},{n:"Blush",h:"#e8a0b0"},{n:"Emerald",h:"#2d6a4f"},{n:"Burgundy",h:"#6d1a2a"},{n:"Camel",h:"#c19a6b"},{n:"Lavender",h:"#b0a0d0"},{n:"Coral",h:"#e87060"},{n:"Mint",h:"#7ec8a0"},{n:"Cobalt",h:"#1a4aaa"}]
-};
+function getImgUrl(folder, catFolder, imgName){
+  var name = imgName.replace(/\.[^.]+$/, "");
+  return "https://res.cloudinary.com/" + CLOUD + "/image/upload/products/" + catFolder + "/" + encodeURIComponent(folder) + "/" + name;
+}
 
-// اختيار ألوان القسم الصحيح
-var catName = (p && p.cat) ? p.cat : "default";
-var COLORS = CAT_COLORS[catName] || CAT_COLORS["default"];
+if(p && p.t){
+  document.getElementById("pTitle").innerText = p.t || "";
+  document.getElementById("pPrice").innerText = "US$" + parseFloat(p.p||0).toFixed(2);
+  if(p.rating) document.getElementById("pRating").innerHTML = "&#11088; <b>"+p.rating+"</b> <span style='color:#999;'>("+((p.sales||0).toLocaleString())+" Sales)</span>";
 
-// ===== تحديد الصور بناءً على المنتج =====
-if(p && p.img){
-  document.getElementById("pTitle").innerText  = p.t  || p.title || "";
-  document.getElementById("pPrice").innerText  = "US\$" + ((p.p || p.price || 0).toFixed(2));
-  if(p.rating) document.getElementById("pRating").innerHTML = "\u2b50 <b>"+p.rating+"</b> <span style='color:#999;'>("+((p.sales||0).toLocaleString())+" Sales)</span>";
-
-  // استخدام الصور الأربعة المخصصة للمنتج
-  images = (p.imgs && p.imgs.length >= 4) ? p.imgs : [p.img, p.img, p.img, p.img];
-
-  // بناء الـ slider
-  var wrap     = document.getElementById("sliderImgs");
-  var dotsEl   = document.getElementById("sliderDots");
-  var thumbsEl = document.getElementById("thumbs");
-
-  images.forEach(function(src, i){
+  // بناء الصور من Cloudinary
+  var imgs = p.images || [];
+  imgs.forEach(function(imgFile, i){
+    var src = getImgUrl(p.folder, p.catFolder, imgFile);
+    images.push(src);
+    // slider
     var img = document.createElement("img");
     img.src = src;
-    img.onerror = function(){
-      this.src = images[(i+1)%images.length] || "https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?w=400";
-    };
-    wrap.appendChild(img);
-
+    img.onerror = function(){ this.src=""; this.style.background="#eee"; };
+    document.getElementById("sliderImgs").appendChild(img);
+    // dot
     var dot = document.createElement("div");
-    dot.className = "dot" + (i===0?" active":"");
-    dot.onclick = (function(idx){ return function(){ goSlide(idx); restartAutoSlide(); }; })(i);
-    dotsEl.appendChild(dot);
-
+    dot.className = "dot"+(i===0?" active":"");
+    dot.onclick=(function(idx){return function(){goSlide(idx);restartTimer();};})(i);
+    document.getElementById("sliderDots").appendChild(dot);
+    // thumb
     var th = document.createElement("img");
     th.src = src;
-    th.className = (i===0?"active":"");
-    th.onerror = function(){ this.src=images[(i+1)%images.length]||""; };
-    th.onclick = (function(idx){ return function(){ goSlide(idx); restartAutoSlide(); }; })(i);
-    thumbsEl.appendChild(th);
+    th.className = i===0?"active":"";
+    th.onerror = function(){ this.style.background="#eee"; };
+    th.onclick=(function(idx){return function(){goSlide(idx);restartTimer();};})(i);
+    document.getElementById("thumbs").appendChild(th);
   });
 
-  // ===== Auto-slide كل 3 ثوانٍ =====
-  function startAutoSlide(){
-    autoSlideTimer = setInterval(function(){
-      var next = (currentSlide + 1) % images.length;
-      goSlide(next);
-    }, 3000);
-  }
-  function restartAutoSlide(){
-    clearInterval(autoSlideTimer);
-    startAutoSlide();
-  }
-  startAutoSlide();
+  // auto slide
+  function startTimer(){ timer=setInterval(function(){goSlide((currentSlide+1)%images.length);},3000); }
+  function restartTimer(){ clearInterval(timer); startTimer(); }
+  startTimer();
 
-  // بناء ألوان المنتج (حسب القسم)
-  var colorsWrap = document.getElementById("colorsWrap");
-  COLORS.forEach(function(c, ci){
-    var dot = document.createElement("div");
-    dot.className = "color-dot" + (ci===0?" active":"");
-    dot.style.background = c.h;
-    dot.title = c.n;
-    dot.onclick = (function(idx){
-      return function(){
-        document.querySelectorAll(".color-dot").forEach(function(d){ d.classList.remove("active"); });
-        this.classList.add("active");
-        goSlide(idx % images.length);
-        restartAutoSlide();
-      };
-    })(ci);
-    colorsWrap.appendChild(dot);
-  });
-
-  // وصف المنتج (مخصص حسب اسم المنتج)
+  // وصف المنتج
   var desc = document.getElementById("descList");
-  var titleWords = (p.t||"").split(" ").slice(0,4).join(" ");
-  var points = [
-    titleWords + " — authentic product with full warranty.",
-    "Available in " + COLORS.length + " colors. All sizes in stock.",
-    "Free worldwide shipping. 30-day hassle-free returns.",
-    "Rating: " + (p.rating||5.0) + "/5 from " + ((p.sales||0).toLocaleString()) + " verified buyers.",
-    "Secure checkout. Original packaging included."
-  ];
-  points.forEach(function(point){
-    var li = document.createElement("li");
-    li.innerText = point;
-    desc.appendChild(li);
+  var descText = p.description || "";
+  var points = descText ? descText.split(".").filter(function(s){return s.trim().length>5;}) : [];
+  if(points.length === 0){
+    points = [
+      (p.t||"").substring(0,60) + " — authentic product.",
+      "Free worldwide shipping. 30-day returns.",
+      "Rating: "+(p.rating||5.0)+"/5 from "+((p.sales||0).toLocaleString())+" buyers.",
+      "Secure checkout. Original packaging included."
+    ];
+  }
+  points.slice(0,8).forEach(function(pt){
+    if(pt.trim()){
+      var li = document.createElement("li");
+      li.innerText = pt.trim();
+      desc.appendChild(li);
+    }
   });
 }
 
 function goSlide(idx){
-  currentSlide = idx;
-  document.getElementById("sliderImgs").style.transform = "translateX(-"+(idx*100)+"%)";
-  document.querySelectorAll(".dot").forEach(function(d,i){ d.className="dot"+(i===idx?" active":""); });
-  document.querySelectorAll(".thumbs img").forEach(function(t,i){ t.className=(i===idx?"active":""); });
+  currentSlide=idx;
+  document.getElementById("sliderImgs").style.transform="translateX(-"+(idx*100)+"%)";
+  document.querySelectorAll(".dot").forEach(function(d,i){d.className="dot"+(i===idx?" active":"");});
+  document.querySelectorAll(".thumbs img").forEach(function(t,i){t.className=i===idx?"active":"";});
 }
-
-function toggleHeart(){
-  isFav = !isFav;
-  document.getElementById("heartBtn").innerHTML = isFav ? "&#10084;&#65039;" : "&#129293;";
-}
+function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}
 function addToCart(){
-  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  cart.push(p.id||p.title);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert("Added to cart \u2705");
+  var cart=JSON.parse(localStorage.getItem("cart")||"[]");
+  cart.push({id:p.id,title:p.t,price:p.p});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  alert("Added to cart ✅");
 }
-function buyNow(){ window.location.href="/wallet"; }
+function buyNow(){ window.location.href="/buy-now"; }
 <\/script>
 </body>
 </html>`);
