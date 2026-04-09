@@ -3504,7 +3504,7 @@ function renderPage(reset){
     var imgUrl = getImgUrl(p);
     var card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = '<img src="' + imgUrl + '" loading="lazy" onerror="this.style.background=\'#eee\'">' +
+    card.innerHTML = '<img src="' + imgUrl + '" loading="lazy" onerror="this.onerror=null">' +
       '<div class="card-info">' +
       '<div class="card-title">' + (p.title||"") + '</div>' +
       '<div class="card-price">US$' + parseFloat(p.price||0).toFixed(2) + '</div>' +
