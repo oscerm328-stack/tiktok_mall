@@ -1989,6 +1989,68 @@ app.post("/reset-password", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     }
 });
 
+// ================= RANDOM PRODUCTS API =================
+app.get("/api/random-products", (req, res) => {
+    const count = parseInt(req.query.count) || 12;
+    const CLOUD_NAME = "doabtbdsh";
+    const CAT_LIST = [
+        { file: "products_17_clothing.json",   folder: "17_Clothing_and_Accessories",    cat: "Clothing & Accessories" },
+        { file: "products_19_medical.json",    folder: "19_Medical_Bags_and_Sunglasses", cat: "Medical Bags and Sunglasses" },
+        { file: "products_20_shoes.json",      folder: "20_Shoes",                       cat: "Shoes" },
+        { file: "products_21_watches.json",    folder: "21_Watches",                     cat: "Watches" },
+        { file: "products_22_jewelry.json",    folder: "22_Jewelry",                     cat: "Jewelry" },
+        { file: "products_27_electronics.json",folder: "27_Electronics",                 cat: "Electronics" },
+        { file: "products_28_smarthome.json",  folder: "28_Smart_Home",                  cat: "Smart Home" },
+        { file: "products_31_luxury.json",     folder: "31_Luxury_Brands",               cat: "Luxury Brands" },
+        { file: "products_32_beauty.json",     folder: "32_Beauty_and_Personal_Care",    cat: "Beauty and Personal Care" },
+        { file: "products_34_mens.json",       folder: "34_Mens_Fashion",                cat: "Mens Fashion" },
+        { file: "products_35_health.json",     folder: "35_Health_and_Household",        cat: "Health and Household" },
+        { file: "products_36_home.json",       folder: "36_Home_and_Kitchen",            cat: "Home and Kitchen" }
+    ];
+
+    let allProducts = [];
+    CAT_LIST.forEach(function(catInfo) {
+        try {
+            const filePath = path.join(__dirname, catInfo.file);
+            const raw = fs.readFileSync(filePath, "utf8");
+            const items = JSON.parse(raw);
+            const CLOUD_BASE = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/products/${catInfo.folder}`;
+            items.forEach(function(p) {
+                const folder = p.folder || "";
+                if (!folder) return;
+                const firstImg = CLOUD_BASE + "/" + folder + "/1.jpg";
+                const imgCount = p.images_count || 6;
+                const imgs = [];
+                for (let i = 1; i <= Math.min(imgCount, 8); i++) {
+                    imgs.push(CLOUD_BASE + "/" + folder + "/" + i + ".jpg");
+                }
+                allProducts.push({
+                    id: p.id || p.product_id || "",
+                    t: p.title || p.name || "",
+                    p: parseFloat(p.price) || 0,
+                    img: firstImg,
+                    imgs: imgs,
+                    rating: parseFloat(p.rating) || 5.0,
+                    sales: parseInt(p.sales) || 0,
+                    description: p.description || "",
+                    colors: p.colors || [],
+                    sizes: p.sizes || [],
+                    folder: folder,
+                    cat: catInfo.cat
+                });
+            });
+        } catch(e) {}
+    });
+
+    // خلط عشوائي
+    for (let i = allProducts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allProducts[i], allProducts[j]] = [allProducts[j], allProducts[i]];
+    }
+
+    res.json(allProducts.slice(0, count));
+});
+
 // ================= DASHBOARD (WITH ACCOUNT + LANGUAGE) =================
 app.get("/dashboard", (req, res) => {
 res.send(`<!DOCTYPE html>
@@ -2528,62 +2590,10 @@ Hi, <span id="username"></span>
 </div>
 
 <div class="section-title">New Product</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- iPhone 17 Pro Max -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
-    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- MacBook -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
-    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Gaming Laptop ROG -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Camera -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
-    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-</div>
+<div id="newProductGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
 
 <div class="section-title">Hot Selling</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- Samsung Galaxy -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
-    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- iPad -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
-    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Smart Watch -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
-    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Headphones -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
-    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Drone -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
-    <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- iPhone 17 Pro Max -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
-    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- TV Screen -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Luxury Bag -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
-    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-</div>
+<div id="hotSellingGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
 
 <!-- ================= FOOTER CATEGORIES + INFO ================= -->
 <div style="background:white;margin-top:15px;padding:10px 0;">
@@ -2825,10 +2835,49 @@ function openProduct(id){
     window.location.href = "/product";
 }
 
-function openLocalProduct(id){
-    localStorage.setItem("productId", id);
-    window.location.href = "/product";
+function openLocalProduct(prod){
+    localStorage.setItem("catProduct", JSON.stringify(prod));
+    window.location.href = "/cat-product-detail";
 }
+
+// ================= تحميل المنتجات الحقيقية من المخزون =================
+fetch("/api/random-products?count=12")
+.then(function(r){ return r.json(); })
+.then(function(products){
+    if(!products || products.length === 0) return;
+
+    var newGrid = document.getElementById("newProductGrid");
+    var hotGrid = document.getElementById("hotSellingGrid");
+
+    // أول 4 منتجات -> New Product
+    products.slice(0, 4).forEach(function(prod){
+        var d = document.createElement("div");
+        d.className = "card";
+        d.style.cssText = "border-radius:0;cursor:pointer;";
+        var img = document.createElement("img");
+        img.src = prod.img;
+        img.style.cssText = "width:100%;height:180px;object-fit:cover;";
+        img.onerror = function(){ this.style.display="none"; };
+        d.appendChild(img);
+        d.onclick = (function(p){ return function(){ openLocalProduct(p); }; })(prod);
+        newGrid.appendChild(d);
+    });
+
+    // باقي 8 منتجات -> Hot Selling
+    products.slice(4, 12).forEach(function(prod){
+        var d = document.createElement("div");
+        d.className = "card";
+        d.style.cssText = "border-radius:0;cursor:pointer;";
+        var img = document.createElement("img");
+        img.src = prod.img;
+        img.style.cssText = "width:100%;height:180px;object-fit:cover;";
+        img.onerror = function(){ this.style.display="none"; };
+        d.appendChild(img);
+        d.onclick = (function(p){ return function(){ openLocalProduct(p); }; })(prod);
+        hotGrid.appendChild(d);
+    });
+})
+.catch(function(){ console.log("Could not load products"); });
 
 function toggleSearch(){
 let menu = document.getElementById("searchMenu");
@@ -8057,7 +8106,14 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 .sheet-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
 .sheet-opt{padding:7px 16px;border:1.5px solid #ddd;border-radius:20px;font-size:13px;color:#333;cursor:pointer;background:white;}
 .sheet-opt.active{border-color:#1976d2;color:#1976d2;background:#e8f0fe;}
-
+.sheet-qty-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.sheet-qty-label{font-size:14px;color:#333;font-weight:500;}
+.qty-ctrl{display:flex;align-items:center;}
+.qty-btn{width:34px;height:34px;border:1.5px solid #ddd;background:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333;line-height:1;}
+.qty-btn:first-child{border-radius:8px 0 0 8px;}
+.qty-btn:last-child{border-radius:0 8px 8px 0;}
+.qty-num{width:40px;height:34px;border-top:1.5px solid #ddd;border-bottom:1.5px solid #ddd;border-left:none;border-right:none;text-align:center;font-size:15px;display:flex;align-items:center;justify-content:center;}
+.sheet-action-btn{width:100%;padding:15px;border:none;border-radius:28px;background:#1976d2;color:white;font-size:16px;cursor:pointer;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -8137,11 +8193,32 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
   <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
-  <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
-  <div class="buy-btn" onclick="buyNow()">Buy now</div>
+  <div class="cart-btn" onclick="openSheet('cart')">Add to Cart</div>
+  <div class="buy-btn" onclick="openSheet('buy')">Buy now</div>
 </div>
 
-
+<!-- BOTTOM SHEET -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-top">
+    <img class="sheet-thumb" id="sheetThumb" src="">
+    <div class="sheet-info">
+      <div class="sheet-price" id="sheetPrice"></div>
+      <div class="sheet-stock" id="sheetStock"></div>
+    </div>
+  </div>
+  <div class="sheet-label" id="sheetOptLabel"></div>
+  <div class="sheet-options" id="sheetOptions"></div>
+  <div class="sheet-qty-row">
+    <div class="sheet-qty-label">Quantity</div>
+    <div class="qty-ctrl">
+      <button class="qty-btn" onclick="changeQty(-1)">&#8722;</button>
+      <div class="qty-num" id="qtyNum">1</div>
+      <button class="qty-btn" onclick="changeQty(1)">&#43;</button>
+    </div>
+  </div>
+  <button class="sheet-action-btn" id="sheetActionBtn" onclick="sheetAction()">Add to Cart</button>
+</div>
 
 
 <!-- TOAST -->
@@ -8288,15 +8365,60 @@ document.getElementById("storeProducts").innerText   = "Products " + sProducts;
 document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers.toLocaleString();
 // ===== نهاية بيانات المتجر =====
 
-function addToCart(){
-  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  cart.push({ id: p.id, title: p.t, price: p.p, qty: 1, img: p.img });
-  localStorage.setItem("cart", JSON.stringify(cart));
-  showToast("&#10003; Added to cart");
+var sheetMode2 = "cart";
+var qty = 1;
+
+function openSheet(mode){
+  sheetMode2 = mode;
+  qty = 1;
+  document.getElementById("qtyNum").innerText = "1";
+  document.getElementById("sheetThumb").src   = p.img || "";
+  document.getElementById("sheetPrice").innerText = "US\\$" + ((p.p||0).toFixed(2));
+  document.getElementById("sheetStock").innerText = "In Stock: " + (p.stock || 1020);
+  document.getElementById("sheetActionBtn").innerText = mode === "cart" ? "Add to Cart" : "Buy now";
+
+  // خيارات حسب القسم
+  document.getElementById("sheetOptLabel").innerText = catOpts.label;
+  var optsEl = document.getElementById("sheetOptions");
+  optsEl.innerHTML = "";
+  catOpts.opts.forEach(function(opt, i){
+    var btn = document.createElement("div");
+    btn.className = "sheet-opt" + (i===0?" active":"");
+    btn.innerText = opt;
+    btn.onclick = function(){
+      document.querySelectorAll(".sheet-opt").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+    };
+    optsEl.appendChild(btn);
+  });
+
+  document.getElementById("sheetOverlay").style.display = "block";
+  setTimeout(function(){ document.getElementById("sheet").classList.add("open"); }, 10);
 }
 
-function buyNow(){
-  window.location.href = "/wallet";
+function closeSheet(){
+  document.getElementById("sheet").classList.remove("open");
+  setTimeout(function(){ document.getElementById("sheetOverlay").style.display = "none"; }, 300);
+}
+
+function changeQty(delta){
+  qty = Math.max(1, qty + delta);
+  document.getElementById("qtyNum").innerText = qty;
+}
+
+function sheetAction(){
+  var selected = document.querySelector(".sheet-opt.active");
+  var opt = selected ? selected.innerText : "";
+  if(sheetMode2 === "cart"){
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    cart.push({ id: p.id, title: p.t, price: p.p, qty: qty, option: opt, img: p.img });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    closeSheet();
+    showToast("&#10003; Added to cart");
+  } else {
+    closeSheet();
+    window.location.href = "/wallet";
+  }
 }
 <\/script>
 </body>
