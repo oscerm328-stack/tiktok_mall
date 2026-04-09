@@ -8094,11 +8094,11 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 
 <!-- STORE -->
 <div class="store">
-  <img class="store-logo" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+  <img class="store-logo" id="storeLogo" src="">
   <div style="flex:1;">
-    <div class="store-name">S&amp;R Store</div>
-    <div class="vip-badge">&#10004; VIP 0</div>
-    <div class="store-tags"><span>Products 20</span><span>Followers 0</span></div>
+    <div class="store-name" id="storeName"></div>
+    <div class="vip-badge" id="storeVip"></div>
+    <div class="store-tags"><span id="storeProducts"></span><span id="storeFollowers"></span></div>
   </div>
   <span style="color:#999;">&#8250;</span>
 </div>
@@ -8233,6 +8233,34 @@ function showToast(msg){
   t.style.display = "block";
   setTimeout(function(){ t.style.display = "none"; }, 1800);
 }
+
+// ===== بيانات المتجر العشوائية =====
+var storeNames = ["TrendHub Store","StyleNest","LuxePoint","FashionVault","UrbanEdge Store","PrimePick","GlowShop","EliteWear","SmartDeal Store","TopChoice","ModaWorld","StarSeller","FreshFind","BestBuy Shop","ClassicLook","NovaTrend","DreamStyle","PeakFashion","VogueZone","IconStore"];
+var storeAvatars = [
+  "https://cdn-icons-png.flaticon.com/512/4140/4140037.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140061.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140051.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140077.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140047.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140060.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140035.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140055.png",
+  "https://cdn-icons-png.flaticon.com/512/4140/4140049.png"
+];
+function hashId(str){ var h=0; for(var i=0;i<str.length;i++) h=(Math.imul(31,h)+str.charCodeAt(i))|0; return Math.abs(h); }
+var sid          = hashId(p.id || p.t || "store");
+var sName        = storeNames[sid % storeNames.length];
+var sAvatar      = storeAvatars[sid % storeAvatars.length];
+var sVip         = sid % 5;
+var sProducts    = 20 + (sid % 480);
+var sFollowers   = sid % 9800;
+document.getElementById("storeName").innerText     = sName;
+document.getElementById("storeLogo").src           = sAvatar;
+document.getElementById("storeVip").innerHTML      = "&#10004; VIP " + sVip;
+document.getElementById("storeProducts").innerText   = "Products " + sProducts;
+document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers.toLocaleString();
+// ===== نهاية بيانات المتجر =====
 
 function addToCart(){
   var cart = JSON.parse(localStorage.getItem("cart")||"[]");
