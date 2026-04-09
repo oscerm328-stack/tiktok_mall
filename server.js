@@ -1455,12 +1455,6 @@ app.get("/all-store-applications", adminMiddleware, (req, res) => {
     res.json(storeApplications);
 });
 
-// route عام للبحث - يرجع المتاجر المعتمدة فقط
-app.get("/public-stores", (req, res) => {
-    const approved = storeApplications.filter(a => a.status === "approved");
-    res.json(approved);
-});
-
 // موافقة على المتجر
 app.post("/approve-store", adminMiddleware, (req, res) => {
     const { email } = req.body;
@@ -1995,41 +1989,6 @@ app.post("/reset-password", rateLimit(5, 15 * 60 * 1000), async (req, res) => {
     }
 });
 
-// ================= API: RANDOM PRODUCTS =================
-app.get("/api/random-products", (req, res) => {
-    const count = parseInt(req.query.count) || 12;
-    const CLOUD_NAME = "doabtbdsh";
-    const CAT_LIST = [
-        { file: "products_17_clothing.json",    folder: "17_Clothing_and_Accessories",    cat: "Clothing & Accessories" },
-        { file: "products_19_medical.json",     folder: "19_Medical_Bags_and_Sunglasses", cat: "Medical Bags and Sunglasses" },
-        { file: "products_20_shoes.json",       folder: "20_Shoes",                       cat: "Shoes" },
-        { file: "products_21_watches.json",     folder: "21_Watches",                     cat: "Watches" },
-        { file: "products_22_jewelry.json",     folder: "22_Jewelry",                     cat: "Jewelry" },
-        { file: "products_27_electronics.json", folder: "27_Electronics",                 cat: "Electronics" },
-        { file: "products_28_smarthome.json",   folder: "28_Smart_Home",                  cat: "Smart Home" },
-        { file: "products_31_luxury.json",      folder: "31_Luxury_Brands",               cat: "Luxury Brands" },
-        { file: "products_32_beauty.json",      folder: "32_Beauty_and_Personal_Care",    cat: "Beauty and Personal Care" },
-        { file: "products_34_mens.json",        folder: "34_Mens_Fashion",                cat: "Mens Fashion" },
-        { file: "products_35_health.json",      folder: "35_Health_and_Household",        cat: "Health and Household" },
-        { file: "products_36_home.json",        folder: "36_Home_and_Kitchen",            cat: "Home and Kitchen" }
-    ];
-    let all = [];
-    CAT_LIST.forEach(function(c) {
-        try {
-            const items = JSON.parse(fs.readFileSync(path.join(__dirname, c.file), "utf8"));
-            const base = "https://res.cloudinary.com/" + CLOUD_NAME + "/image/upload/products/" + c.folder;
-            items.forEach(function(p) {
-                if (!p.folder) return;
-                const imgs = [];
-                for (let i = 1; i <= Math.min(p.images_count || 6, 8); i++) imgs.push(base + "/" + p.folder + "/" + i + ".jpg");
-                all.push({ id: p.id||"", t: p.title||p.name||"", p: parseFloat(p.price)||0, img: base+"/"+p.folder+"/1.jpg", imgs: imgs, rating: parseFloat(p.rating)||5.0, sales: parseInt(p.sales)||0, description: p.description||"", colors: p.colors||[], sizes: p.sizes||[], folder: p.folder, cat: c.cat });
-            });
-        } catch(e) {}
-    });
-    for (let i = all.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [all[i],all[j]]=[all[j],all[i]]; }
-    res.json(all.slice(0, count));
-});
-
 // ================= DASHBOARD (WITH ACCOUNT + LANGUAGE) =================
 app.get("/dashboard", (req, res) => {
 res.send(`<!DOCTYPE html>
@@ -2520,22 +2479,22 @@ Hi, <span id="username"></span>
   </div>
 
   <div class="cat-item" onclick="openCategory('Beauty and Personal Care')">
-    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80">
+    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
     <div class="cat-label">Beauty and Personal Care</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Mens Fashion')">
-    <img src="https://images.unsplash.com/photo-1516826957135-700dedea698c?w=400&q=80">
+    <img src="https://images.unsplash.com/photo-1516826957135-700dedea698c">
     <div class="cat-label">Men's Fashion</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Health and Household')">
-    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=80">
+    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
     <div class="cat-label">Health and Household</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Home and Kitchen')">
-    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=400&q=80">
+    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f">
     <div class="cat-label">Home and Kitchen</div>
   </div>
 
@@ -2569,10 +2528,62 @@ Hi, <span id="username"></span>
 </div>
 
 <div class="section-title">New Product</div>
-<div id="newGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
+  <!-- iPhone 17 Pro Max -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
+    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- MacBook -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
+    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Gaming Laptop ROG -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
+    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Camera -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+</div>
 
 <div class="section-title">Hot Selling</div>
-<div id="hotGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
+  <!-- Samsung Galaxy -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
+    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- iPad -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
+    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Smart Watch -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
+    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Headphones -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
+    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Drone -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
+    <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- iPhone 17 Pro Max -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
+    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- TV Screen -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
+    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Luxury Bag -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
+    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+</div>
 
 <!-- ================= FOOTER CATEGORIES + INFO ================= -->
 <div style="background:white;margin-top:15px;padding:10px 0;">
@@ -2814,43 +2825,10 @@ function openProduct(id){
     window.location.href = "/product";
 }
 
-function openLocalProduct(prod){
-    localStorage.setItem("catProduct", JSON.stringify(prod));
-    window.location.href = "/cat-product-detail";
+function openLocalProduct(id){
+    localStorage.setItem("productId", id);
+    window.location.href = "/product";
 }
-
-fetch("/api/random-products?count=12")
-.then(function(r){ return r.json(); })
-.then(function(prods){
-    if(!prods||!prods.length) return;
-    var ng = document.getElementById("newGrid");
-    var hg = document.getElementById("hotGrid");
-    prods.slice(0,4).forEach(function(prod){
-        var d = document.createElement("div");
-        d.className = "card";
-        d.style.cssText = "border-radius:0;cursor:pointer;";
-        var img = document.createElement("img");
-        img.src = prod.img;
-        img.style.cssText = "width:100%;height:180px;object-fit:cover;";
-        img.onerror = function(){ this.style.display="none"; };
-        d.appendChild(img);
-        d.onclick = (function(p){ return function(){ openLocalProduct(p); }; })(prod);
-        ng.appendChild(d);
-    });
-    prods.slice(4,12).forEach(function(prod){
-        var d = document.createElement("div");
-        d.className = "card";
-        d.style.cssText = "border-radius:0;cursor:pointer;";
-        var img = document.createElement("img");
-        img.src = prod.img;
-        img.style.cssText = "width:100%;height:180px;object-fit:cover;";
-        img.onerror = function(){ this.style.display="none"; };
-        d.appendChild(img);
-        d.onclick = (function(p){ return function(){ openLocalProduct(p); }; })(prod);
-        hg.appendChild(d);
-    });
-})
-.catch(function(){});
 
 function toggleSearch(){
 let menu = document.getElementById("searchMenu");
@@ -2878,7 +2856,7 @@ resultsDiv.style.display = "block";
 resultsDiv.innerHTML = "<p style='color:#999;text-align:center;padding:20px;'>Searching...</p>";
 
 try {
-    let res = await fetch("/public-stores");
+    let res = await fetch("/all-store-applications");
     let apps = await res.json();
 
     // فلترة المتاجر المعتمدة مع دعم الاسم المحدّث (merchant_storeName_email)
@@ -5095,14 +5073,13 @@ min-height:100vh;
 /* HEADER */
 .header{
 position:fixed;top:0;left:0;right:0;z-index:200;
-background:#1976d2;
-color:white;
-padding:12px 15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+background:white;
+padding:15px;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+border-bottom:1px solid #ddd;
 }
-.h-icons{display:flex;align-items:center;gap:14px;}
 
 /* TABS */
 .tabs{
@@ -5194,17 +5171,9 @@ text-align:center;
 
 <body>
 
-<div class="header">
-  <div style="display:flex;align-items:center;gap:10px;">
-    <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-  </div>
-  <div class="h-icons">
-    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-  </div>
+<div class="header" style="position:relative;">
+<a href="/dashboard" style="position:absolute;left:15px;text-decoration:none;color:white;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></a>
+Saved items
 </div>
 
 <div class="tabs">
@@ -5222,7 +5191,65 @@ text-align:center;
 
 <h3 style="padding:10px;">Recommended</h3>
 
-<div class="grid" id="recGrid"></div>
+<div class="grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04">
+<div class="heart" onclick="toggleFav(1)">🤍</div>
+<p>Meta Portal Go - Portable Smart Video Calling 10" Touch Screen with Battery</p>
+<div class="price">US$129.99</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1521334884684-d80222895322">
+<div class="heart" onclick="toggleFav(2)">🤍</div>
+<p>Tutu Dreams Lace Pom poms Tutu Dress for Girls Flower Girl Tulle Dresses</p>
+<div class="price">US$24.99</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1511385348-a52b4a160dc2">
+<div class="heart" onclick="toggleFav(3)">🤍</div>
+<p>Anne Klein Women's Leather Strap Watch</p>
+<div class="price">US$35.00</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e">
+<div class="heart" onclick="toggleFav(4)">🤍</div>
+<p>YL Celtic Knot Ring 925 Sterling Silver Twisted Knot Ring</p>
+<div class="price">US$49.99</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3">
+<div class="heart" onclick="toggleFav(5)">🤍</div>
+<p>RADLEY London Lyme Terrace Women's Leather Shoulder Bag</p>
+<div class="price">US$199.99</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad">
+<div class="heart" onclick="toggleFav(6)">🤍</div>
+<p>BOSTANTEN Sling Bag Crossbody Bag Trendy Leather</p>
+<div class="price">US$29.99</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1520975916090-3105956dac38">
+<div class="heart" onclick="toggleFav(7)">🤍</div>
+<p>WYPFD Lace Evening Dresses Sexy Deep V-neck Mermaid</p>
+<div class="price">US$899.00</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789">
+<div class="heart" onclick="toggleFav(8)">🤍</div>
+<p>AcPower 2 Pairs Drone Propellers for DJI Mavic Pro</p>
+<div class="price">US$18.99</div>
+</div>
+
+</div>
 
 <div class="more">See more</div>
 
@@ -5230,50 +5257,26 @@ text-align:center;
 // تحميل المفضلة
 let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
-// تحميل منتجات Recommended من المخزون
-fetch("/api/random-products?count=8")
-.then(function(r){ return r.json(); })
-.then(function(prods){
-    if(!prods || !prods.length) return;
-    var grid = document.getElementById("recGrid");
-    prods.forEach(function(prod){
-        var isFav = favorites.includes(prod.id);
-        var card = document.createElement("div");
-        card.className = "card";
-        card.style.cursor = "pointer";
-        var img = document.createElement("img");
-        img.src = prod.img;
-        img.style.cssText = "width:100%;height:140px;object-fit:cover;";
-        var heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = isFav ? "❤️" : "🤍";
-        heart.onclick = function(e){ toggleFav(prod.id, e); };
-        var title = document.createElement("p");
-        title.innerText = prod.t || "";
-        var price = document.createElement("div");
-        price.className = "price";
-        price.innerText = "US$" + (prod.p || 0).toFixed(2);
-        card.appendChild(img);
-        card.appendChild(heart);
-        card.appendChild(title);
-        card.appendChild(price);
-        card.onclick = function(){
-            localStorage.setItem("catProduct", JSON.stringify(prod));
-            window.location.href = "/cat-product-detail";
-        };
-        grid.appendChild(card);
-    });
-})
-.catch(function(e){ console.log("Error loading products:", e); });
+// تحديث القلوب
+document.querySelectorAll(".heart").forEach((el, index)=>{
+let id = index + 1;
+if(favorites.includes(id)){
+el.innerHTML = "❤️";
+}
+});
 
-// عند الضغط على القلب
-function toggleFav(id, e){
-    e.stopPropagation();
-    var favs = JSON.parse(localStorage.getItem("favorites") || "[]");
-    var idx = favs.indexOf(id);
-    if(idx > -1){ favs.splice(idx, 1); } else { favs.push(id); }
-    localStorage.setItem("favorites", JSON.stringify(favs));
-    location.reload();
+// عند الضغط
+function toggleFav(id){
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+if(favorites.includes(id)){
+favorites = favorites.filter(f=>f!==id);
+}else{
+favorites.push(id);
+}
+
+localStorage.setItem("favorites", JSON.stringify(favorites));
+location.reload();
 }
 </script>
 
@@ -7780,7 +7783,7 @@ document.getElementById("headerStoreName").innerText = sName;
 document.getElementById("bannerStoreName").innerText = sName;
 
 // ======= تحميل بيانات المتجر (شعار + اسم محدّث) =======
-fetch("/public-stores")
+fetch("/all-store-applications")
 .then(function(r){ return r.json(); })
 .then(function(apps){
   var store = null;
