@@ -8237,24 +8237,35 @@ function showToast(msg){
 // ===== بيانات المتجر العشوائية =====
 var storeNames = ["TrendHub Store","StyleNest","LuxePoint","FashionVault","UrbanEdge Store","PrimePick","GlowShop","EliteWear","SmartDeal Store","TopChoice","ModaWorld","StarSeller","FreshFind","BestBuy Shop","ClassicLook","NovaTrend","DreamStyle","PeakFashion","VogueZone","IconStore"];
 var storeAvatars = [
-  "https://cdn-icons-png.flaticon.com/512/4140/4140037.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140061.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140051.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140077.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140047.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140060.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140035.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140055.png",
-  "https://cdn-icons-png.flaticon.com/512/4140/4140049.png"
+  "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1576238793577-dbed1c12f648?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1514996937319-344454492b37?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1530099486328-e021101a494a?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1488716820095-cbe80883c496?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&h=80&fit=crop",
+  "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=80&h=80&fit=crop"
 ];
 function hashId(str){ var h=0; for(var i=0;i<str.length;i++) h=(Math.imul(31,h)+str.charCodeAt(i))|0; return Math.abs(h); }
-var sid          = hashId(p.id || p.t || "store");
+var seedStr      = (p.t || "") + (p.id || "") + (p.p || "");
+var sid          = hashId(seedStr);
 var sName        = storeNames[sid % storeNames.length];
 var sAvatar      = storeAvatars[sid % storeAvatars.length];
 var sVip         = sid % 5;
 var sProducts    = 20 + (sid % 480);
-var sFollowers   = sid % 9800;
+var sFollowers   = (sid * 7) % 9800;
 document.getElementById("storeName").innerText     = sName;
 document.getElementById("storeLogo").src           = sAvatar;
 document.getElementById("storeVip").innerHTML      = "&#10004; VIP " + sVip;
