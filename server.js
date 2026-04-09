@@ -2654,12 +2654,12 @@ Hi, <span id="username"></span>
 
 <div class="section-title">New Product</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-\${newProductsHTML}
+${newProductsHTML}
 </div>
 
 <div class="section-title">Hot Selling</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-\${hotProductsHTML}
+${hotProductsHTML}
 </div>
 
 <!-- ================= FOOTER CATEGORIES + INFO ================= -->
