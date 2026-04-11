@@ -1451,8 +1451,21 @@ app.post("/update-store-desc", authMiddleware, (req, res) => {
 });
 
 // جلب كل الطلبات (للأدمن)
-app.get("/all-store-applications", adminMiddleware, (req, res) => {
-    res.json(storeApplications);
+app.get("/all-store-applications", (req, res) => {
+    // إرجاع المتاجر المعتمدة فقط للمستخدمين العاديين
+    const token = req.cookies?.adminToken;
+    let isAdmin = false;
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.role === "admin") isAdmin = true;
+    } catch {}
+
+    if (isAdmin) {
+        res.json(storeApplications);
+    } else {
+        // المستخدم العادي يرى المتاجر المعتمدة فقط
+        res.json(storeApplications.filter(s => s.status === "approved"));
+    }
 });
 
 // موافقة على المتجر
