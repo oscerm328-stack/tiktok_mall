@@ -2146,62 +2146,62 @@ Get up to 30% off!
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Clothing & Accessories')">
 <span>Clothing & Accessories</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/clothing.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Medical Bags and Sunglasses')">
 <span>Medical Bags and Sunglasses</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/medical.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Shoes')">
 <span>Shoes</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/shoes.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Watches')">
 <span>Watches</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/watches.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Jewelry')">
 <span>Jewelry</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/jewelry.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Electronics')">
 <span>Electronics</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/electronics.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1518770660439-4636190af475" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Smart Home')">
 <span>Smart Home</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/smarthome.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1558002038-1055907df827" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Luxury Brands')">
 <span>Luxury Brands</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/luxury.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Beauty and Personal Care')">
 <span>Beauty and Personal Care</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/beauty.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Mens Fashion')">
 <span>Men's Fashion</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/mensfashion.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1516826957135-700dedea698c" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Health and Household')">
 <span>Health and Household</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/health.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952" width="70">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Home and Kitchen')">
 <span>Home and Kitchen</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/kitchen.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f" width="70">
 </div>
 
 
@@ -2424,62 +2424,62 @@ Hi, <span id="username"></span>
 <div class="cat-grid">
 
   <div class="cat-item" onclick="openCategory('Clothing & Accessories')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/clothing.png">
+    <img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg">
     <div class="cat-label">Clothing &amp; Accessories</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Medical Bags and Sunglasses')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/medical.png">
+    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa">
     <div class="cat-label">Medical Bags and Sunglasses</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Shoes')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/shoes.png">
+    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
     <div class="cat-label">Shoes</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Watches')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/watches.png">
+    <img src="https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg">
     <div class="cat-label">Watches</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Jewelry')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/jewelry.png">
+    <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338">
     <div class="cat-label">Jewelry</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Electronics')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/electronics.png">
+    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475">
     <div class="cat-label">Electronics</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Smart Home')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/smarthome.png">
+    <img src="https://images.unsplash.com/photo-1558002038-1055907df827">
     <div class="cat-label">Smart Home</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Luxury Brands')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/luxury.png">
+    <img src="https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg">
     <div class="cat-label">Luxury Brands</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Beauty and Personal Care')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/beauty.png">
+    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
     <div class="cat-label">Beauty and Personal Care</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Mens Fashion')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/mensfashion.png">
+    <img src="https://images.unsplash.com/photo-1516826957135-700dedea698c">
     <div class="cat-label">Men's Fashion</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Health and Household')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/health.png">
+    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952">
     <div class="cat-label">Health and Household</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Home and Kitchen')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/kitchen.png">
+    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f">
     <div class="cat-label">Home and Kitchen</div>
   </div>
 
@@ -2491,62 +2491,95 @@ Hi, <span id="username"></span>
 </div>
 
 <div class="section-title">New Product</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- iPhone 17 Pro Max -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
-    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- MacBook -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
-    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Gaming Laptop ROG -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Camera -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
-    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-</div>
+<div id="newProductGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
 
 <div class="section-title">Hot Selling</div>
+<div id="hotSellingGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;"></div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- Samsung Galaxy -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
-    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- iPad -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
-    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Smart Watch -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
-    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Headphones -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
-    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Drone -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
-    <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- iPhone 17 Pro Max -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
-    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- TV Screen -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Luxury Bag -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
-    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-</div>
+<script>
+(function() {
+  var CLOUD = "https://res.cloudinary.com/doabtbdsh/image/upload/products";
+  var CATS = [
+    { name: "Clothing & Accessories", folder: "17_Clothing_and_Accessories", file: "products_17_clothing.json" },
+    { name: "Medical Bags and Sunglasses", folder: "19_Medical_Bags_and_Sunglasses", file: "products_19_medical.json" },
+    { name: "Shoes", folder: "20_Shoes", file: "products_20_shoes.json" },
+    { name: "Watches", folder: "21_Watches", file: "products_21_watches.json" },
+    { name: "Jewelry", folder: "22_Jewelry", file: "products_22_jewelry.json" },
+    { name: "Electronics", folder: "27_Electronics", file: "products_27_electronics.json" },
+    { name: "Smart Home", folder: "28_Smart_Home", file: "products_28_smarthome.json" },
+    { name: "Luxury Brands", folder: "31_Luxury_Brands", file: "products_31_luxury.json" },
+    { name: "Beauty and Personal Care", folder: "32_Beauty_and_Personal_Care", file: "products_32_beauty.json" },
+    { name: "Mens Fashion", folder: "34_Mens_Fashion", file: "products_34_mens.json" },
+    { name: "Health and Household", folder: "35_Health_and_Household", file: "products_35_health.json" },
+    { name: "Home and Kitchen", folder: "36_Home_and_Kitchen", file: "products_36_home.json" }
+  ];
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function buildCard(product, cat) {
+    var img = CLOUD + "/" + cat.folder + "/" + (product.folder || "") + "/1.jpg";
+    var title = product.title || product.name || "";
+    var price = parseFloat(product.price) || 0;
+    var card = document.createElement("div");
+    card.className = "card";
+    card.style.cssText = "border-radius:0;cursor:pointer;";
+    card.onclick = function() { openCategory(cat.name); };
+    card.innerHTML = '<img src="' + img + '" style="width:100%;height:180px;object-fit:cover;" onerror="this.style.display='none'">'
+      + '<div style="padding:6px 8px;font-size:12px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + title + '</div>'
+      + '<div style="padding:0 8px 6px;font-size:13px;font-weight:bold;color:#e53935;">US$' + price.toFixed(2) + '</div>';
+    return card;
+  }
+
+  function loadRandomProducts() {
+    var shuffledCats = shuffle(CATS.slice());
+    var allProducts = [];
+    var loaded = 0;
+
+    shuffledCats.forEach(function(cat) {
+      fetch("/category-products?name=" + encodeURIComponent(cat.name) + "&limit=4")
+        .then(function(r) { return r.json(); })
+        .then(function(products) {
+          shuffle(products).slice(0, 4).forEach(function(p) {
+            allProducts.push({ product: p, cat: cat });
+          });
+          loaded++;
+          if (loaded === shuffledCats.length) renderGrids(allProducts);
+        })
+        .catch(function() {
+          loaded++;
+          if (loaded === shuffledCats.length) renderGrids(allProducts);
+        });
+    });
+  }
+
+  function renderGrids(items) {
+    shuffle(items);
+    var newGrid = document.getElementById("newProductGrid");
+    var hotGrid = document.getElementById("hotSellingGrid");
+    if (!newGrid || !hotGrid) return;
+    newGrid.innerHTML = "";
+    hotGrid.innerHTML = "";
+    items.slice(0, 4).forEach(function(item) {
+      newGrid.appendChild(buildCard(item.product, item.cat));
+    });
+    items.slice(4, 12).forEach(function(item) {
+      hotGrid.appendChild(buildCard(item.product, item.cat));
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadRandomProducts);
+  } else {
+    loadRandomProducts();
+  }
+})();
+</script>
 
 <!-- ================= FOOTER CATEGORIES + INFO ================= -->
 <div style="background:white;margin-top:15px;padding:10px 0;">
@@ -3284,6 +3317,43 @@ function openCategory(name){
 
 </body>
 </html>`);
+});
+
+// ================= CATEGORY PRODUCTS API (for home page random products) =================
+app.get("/category-products", (req, res) => {
+  const cat = req.query.name || "Clothing & Accessories";
+  const limit = parseInt(req.query.limit) || 8;
+
+  const CAT_MAP = {
+    "Clothing & Accessories":       { file: "products_17_clothing.json",   folder: "17_Clothing_and_Accessories" },
+    "Medical Bags and Sunglasses":  { file: "products_19_medical.json",    folder: "19_Medical_Bags_and_Sunglasses" },
+    "Shoes":                        { file: "products_20_shoes.json",       folder: "20_Shoes" },
+    "Watches":                      { file: "products_21_watches.json",     folder: "21_Watches" },
+    "Jewelry":                      { file: "products_22_jewelry.json",     folder: "22_Jewelry" },
+    "Electronics":                  { file: "products_27_electronics.json", folder: "27_Electronics" },
+    "Smart Home":                   { file: "products_28_smarthome.json",   folder: "28_Smart_Home" },
+    "Luxury Brands":                { file: "products_31_luxury.json",      folder: "31_Luxury_Brands" },
+    "Beauty and Personal Care":     { file: "products_32_beauty.json",      folder: "32_Beauty_and_Personal_Care" },
+    "Mens Fashion":                 { file: "products_34_mens.json",        folder: "34_Mens_Fashion" },
+    "Health and Household":         { file: "products_35_health.json",      folder: "35_Health_and_Household" },
+    "Home and Kitchen":             { file: "products_36_home.json",        folder: "36_Home_and_Kitchen" }
+  };
+
+  const catKey = Object.keys(CAT_MAP).find(k => k.toLowerCase() === cat.toLowerCase()) || "Clothing & Accessories";
+  const catInfo = CAT_MAP[catKey];
+
+  let products = [];
+  try {
+    const filePath = path.join(__dirname, catInfo.file);
+    const raw = fs.readFileSync(filePath, "utf8");
+    products = JSON.parse(raw);
+  } catch(e) {
+    products = [];
+  }
+
+  // Shuffle and limit
+  const shuffled = products.sort(() => Math.random() - 0.5).slice(0, limit);
+  res.json(shuffled);
 });
 
 // ================= CATEGORY PAGE =================
