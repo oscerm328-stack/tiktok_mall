@@ -8559,12 +8559,32 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
   <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
-  <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
-  <div class="buy-btn" onclick="buyNow()">Buy now</div>
+  <div class="cart-btn" onclick="openSheet('cart')">Add to Cart</div>
+  <div class="buy-btn" onclick="openSheet('buy')">Buy now</div>
 </div>
 
+<!-- SHEET OVERLAY -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
 
-
+<!-- BOTTOM SHEET -->
+<div class="sheet" id="bottomSheet">
+  <div style="width:40px;height:4px;background:#ddd;border-radius:2px;margin:0 auto 15px;"></div>
+  <div class="sheet-top">
+    <img class="sheet-thumb" id="sheetImg" src="">
+    <div class="sheet-info">
+      <div class="sheet-price" id="sheetPrice"></div>
+      <div class="sheet-stock" id="sheetStock"></div>
+    </div>
+  </div>
+  <div id="sheetVariants"></div>
+  <div class="sheet-label" style="margin-top:10px;">Quantity</div>
+  <div style="display:flex;align-items:center;gap:15px;margin-top:5px;">
+    <button onclick="changeQty(-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;">&#8722;</button>
+    <span id="sheetQty" style="font-size:16px;font-weight:bold;min-width:20px;text-align:center;">1</span>
+    <button onclick="changeQty(1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;">&#43;</button>
+  </div>
+  <button id="sheetConfirmBtn" onclick="confirmSheet()" style="width:100%;padding:14px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:16px;font-weight:bold;cursor:pointer;margin-top:18px;">Buy now</button>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -8719,6 +8739,66 @@ function addToCart(){
 
 function buyNow(){
   window.location.href = "/wallet";
+}
+
+var sheetQtyVal = 1;
+
+function openSheet(mode){
+  sheetMode = mode;
+  sheetQtyVal = 1;
+  document.getElementById("sheetQty").innerText = 1;
+  document.getElementById("sheetConfirmBtn").innerText = mode === "buy" ? "Buy now" : "Add to Cart";
+  document.getElementById("sheetImg").src = p.img || "";
+  document.getElementById("sheetPrice").innerText = "US$" + ((p.p || p.price || 0).toFixed(2));
+  document.getElementById("sheetStock").innerText = "In Stock: " + (p.stock || 999);
+
+  var variantsEl = document.getElementById("sheetVariants");
+  variantsEl.innerHTML = "";
+
+  if(catOpts && catOpts.opts && catOpts.opts.length > 0){
+    var lbl = document.createElement("div");
+    lbl.className = "sheet-label";
+    lbl.innerText = catOpts.label || "Options";
+    variantsEl.appendChild(lbl);
+    var opts = document.createElement("div");
+    opts.className = "sheet-options";
+    catOpts.opts.forEach(function(o, i){
+      var btn = document.createElement("div");
+      btn.className = "sheet-opt" + (i===0?" active":"");
+      btn.innerText = o;
+      btn.onclick = function(){
+        opts.querySelectorAll(".sheet-opt").forEach(function(b){ b.classList.remove("active"); });
+        this.classList.add("active");
+      };
+      opts.appendChild(btn);
+    });
+    variantsEl.appendChild(opts);
+  }
+
+  document.getElementById("sheetOverlay").style.display = "block";
+  document.getElementById("bottomSheet").classList.add("open");
+}
+
+function closeSheet(){
+  document.getElementById("sheetOverlay").style.display = "none";
+  document.getElementById("bottomSheet").classList.remove("open");
+}
+
+function changeQty(delta){
+  sheetQtyVal = Math.max(1, sheetQtyVal + delta);
+  document.getElementById("sheetQty").innerText = sheetQtyVal;
+}
+
+function confirmSheet(){
+  closeSheet();
+  if(sheetMode === "buy"){
+    window.location.href = "/wallet";
+  } else {
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    cart.push({ id: p.id, title: p.t, price: p.p, qty: sheetQtyVal, img: p.img });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showToast("&#10003; Added to cart");
+  }
 }
 <\/script>
 </body>
