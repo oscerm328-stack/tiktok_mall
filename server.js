@@ -4709,7 +4709,7 @@ res.send(`<!DOCTYPE html>
 body{
 margin:0;
 font-family:Arial;
-background:#f2f2f2;
+background:#ffffff;
 padding-top:60px;
 }
 
