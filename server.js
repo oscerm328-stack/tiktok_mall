@@ -7279,39 +7279,44 @@ body{
   padding-bottom:30px;
 }
 
+/* STICKY TOP = HEADER + BANNER ثابتان معاً */
+.sticky-top{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+}
+
 /* HEADER */
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:200;
   background:linear-gradient(135deg,#1565c0,#1976d2);
   color:white;
   padding:14px 16px;
   display:flex;align-items:center;gap:12px;
-  box-shadow:0 2px 12px rgba(21,101,192,0.3);
 }
 .header h2{margin:0;font-size:17px;font-weight:600;}
 
-/* BALANCE BANNER */
+/* BALANCE BANNER — ملتصق بالهيدر */
 .balance-banner{
-  margin:70px 14px 0;
   background:linear-gradient(135deg,#1565c0,#0d47a1);
-  border-radius:16px;
-  padding:18px 20px;
+  padding:14px 18px 16px;
   color:white;
   display:flex;justify-content:space-between;align-items:center;
-  box-shadow:0 4px 20px rgba(21,101,192,0.25);
 }
-.balance-banner .label{font-size:13px;opacity:0.85;margin-bottom:4px;}
+.balance-banner .label{font-size:12px;opacity:0.85;margin-bottom:3px;}
 .balance-banner .amount{font-size:26px;font-weight:700;}
 .balance-banner .vip-tag{
   background:rgba(255,255,255,0.2);
-  border-radius:20px;padding:6px 14px;
+  border-radius:20px;padding:6px 16px;
   font-size:13px;font-weight:600;
-  border:1px solid rgba(255,255,255,0.3);
+  border:1px solid rgba(255,255,255,0.35);
+}
+
+/* CONTENT — يبدأ بعد الـ sticky */
+.content{
+  padding-top: 110px; /* ارتفاع header+banner تقريباً */
 }
 
 /* SECTION TITLE */
 .section-title{
-  margin:20px 14px 10px;
+  margin:16px 14px 10px;
   font-size:15px;font-weight:600;color:#333;
 }
 
@@ -7320,129 +7325,115 @@ body{
   background:white;
   margin:0 14px 14px;
   border-radius:16px;
-  padding:18px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.07);
-  border:2px solid transparent;
-  transition:all 0.2s;
-  position:relative;
   overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.07);
+  border:2px solid transparent;
 }
-.vip-card.current{
-  border-color:#e8f0fe;
-  background:linear-gradient(135deg,#f8fafe,white);
-}
-.vip-card.locked{
-  opacity:0.7;
-}
-.vip-card.vip5{
-  border-color:#ffd700;
-  background:linear-gradient(135deg,#fffbf0,white);
-}
+.vip-card.current{ border-color:#1976d2; }
+.vip-card.vip5{ border-color:#ffd700; background:linear-gradient(135deg,#fffdf0,white); }
 
-/* VIP CARD HEADER */
-.vip-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:14px;
-}
-.vip-name{
+/* CARD TOP HALF — VIP badge */
+.card-top{
+  padding:14px 18px 10px;
   display:flex;align-items:center;gap:8px;
 }
 .vip-badge{
   background:linear-gradient(135deg,#f5a623,#e8791d);
   color:white;
-  padding:5px 14px;
+  padding:5px 16px;
   border-radius:20px;
-  font-size:14px;
+  font-size:15px;
   font-weight:700;
+  display:inline-block;
 }
-.vip-badge.vip5-badge{
+.vip-badge.vip5-b{
   background:linear-gradient(135deg,#ffd700,#ffb300);
   color:#5d3a00;
 }
-.capital-tag{
-  font-size:13px;
-  color:#1976d2;
-  font-weight:600;
-  background:#e3f0ff;
-  padding:4px 12px;
-  border-radius:20px;
-}
-.capital-tag.free{
-  color:#2e7d32;
-  background:#e8f5e9;
-}
-
-/* FEATURES GRID */
-.features{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:16px;
-}
-.feature-item{
-  background:#f8f9ff;
-  border-radius:10px;
-  padding:10px 12px;
-  display:flex;align-items:center;gap:8px;
-}
-.feature-item .icon{font-size:18px;}
-.feature-item .info{}
-.feature-item .info .val{font-size:15px;font-weight:700;color:#1a1a2e;}
-.feature-item .info .key{font-size:11px;color:#888;margin-top:1px;}
-
-/* BEST VALUE BADGE */
-.best-value{
+.best-badge{
   background:linear-gradient(135deg,#ff6b00,#ff9800);
   color:white;
   font-size:11px;font-weight:700;
   padding:3px 10px;border-radius:20px;
-  display:inline-block;margin-left:8px;
-  vertical-align:middle;
+  display:inline-block;
 }
 
-/* UPGRADE BUTTON */
+/* CARD INFO — قائمة البنود */
+.card-info{
+  padding:0 18px 14px;
+  border-bottom:1px solid #f0f0f0;
+}
+.info-row{
+  display:flex;align-items:center;
+  padding:7px 0;
+  font-size:14px;
+  color:#444;
+  border-bottom:1px solid #f7f7f7;
+}
+.info-row:last-child{ border-bottom:none; }
+.info-row .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#1976d2;margin-right:10px;flex-shrink:0;
+}
+.info-row .ikey{ color:#888;min-width:180px; }
+.info-row .ival{ font-weight:700;color:#1a1a2e;margin-left:auto; }
+.info-row .ival.comm{ color:#1976d2; }
+
+/* CARD BOTTOM — زر */
+.card-btn{
+  padding:12px 18px;
+  display:flex;justify-content:center;
+}
 .upgrade-btn{
-  width:100%;
-  padding:13px;
+  width:60%;
+  padding:12px;
   border:none;
-  border-radius:12px;
+  border-radius:24px;
   background:linear-gradient(135deg,#1976d2,#1565c0);
   color:white;
   font-size:15px;
   font-weight:600;
   cursor:pointer;
   transition:all 0.2s;
-  letter-spacing:0.3px;
+  text-align:center;
 }
-.upgrade-btn:hover{
-  background:linear-gradient(135deg,#1565c0,#0d47a1);
-  transform:translateY(-1px);
-  box-shadow:0 4px 16px rgba(21,101,192,0.4);
-}
-.upgrade-btn:active{transform:translateY(0);}
-
+.upgrade-btn:active{ transform:scale(0.97); }
 .current-btn{
-  width:100%;
-  padding:13px;
+  width:60%;
+  padding:12px;
   border:2px solid #ccc;
-  border-radius:12px;
-  background:#f5f5f5;
-  color:#999;
+  border-radius:24px;
+  background:#f0f0f0;
+  color:#aaa;
   font-size:15px;
   font-weight:600;
   cursor:default;
+  text-align:center;
 }
-
-/* COMMISSION BADGE */
-.commission-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 12px;
-  background:#f0f7ff;
-  border-radius:10px;
-  margin-bottom:12px;
+.upgraded-btn{
+  width:60%;
+  padding:12px;
+  border:2px solid #a5d6a7;
+  border-radius:24px;
+  background:#e8f5e9;
+  color:#2e7d32;
+  font-size:15px;
+  font-weight:600;
+  cursor:default;
+  text-align:center;
 }
-.commission-row .label{font-size:13px;color:#555;}
-.commission-row .val{font-size:16px;font-weight:700;color:#1976d2;}
+.locked-btn{
+  width:60%;
+  padding:12px;
+  border:2px solid #e0e0e0;
+  border-radius:24px;
+  background:#f5f5f5;
+  color:#bbb;
+  font-size:15px;
+  font-weight:600;
+  cursor:default;
+  text-align:center;
+}
 
 /* TOAST */
 .toast{
@@ -7452,44 +7443,37 @@ body{
   padding:12px 24px;border-radius:30px;
   font-size:14px;z-index:999;
   transition:transform 0.3s;
-  white-space:nowrap;
-  max-width:90%;
-  text-align:center;
+  white-space:nowrap;max-width:90%;text-align:center;
 }
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.success{background:#2e7d32;}
 .toast.error{background:#c62828;}
-
-/* VIP5 CROWN */
-.crown{font-size:20px;margin-right:4px;}
-
-/* DIVIDER */
-.divider{height:1px;background:#f0f0f0;margin:0 14px 14px;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-  </span>
-  <h2>Store Operating Fund</h2>
-</div>
-
-<!-- BALANCE BANNER -->
-<div class="balance-banner">
-  <div>
-    <div class="label">Available Balance</div>
-    <div class="amount">$<span id="bannerBalance">0.00</span></div>
+<!-- STICKY: HEADER + BALANCE BANNER -->
+<div class="sticky-top">
+  <div class="header">
+    <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <h2>Store Operating Fund</h2>
   </div>
-  <div class="vip-tag" id="currentVipTag">VIP 0</div>
+  <div class="balance-banner">
+    <div>
+      <div class="label">Available Balance</div>
+      <div class="amount">$<span id="bannerBalance">0.00</span></div>
+    </div>
+    <div class="vip-tag" id="currentVipTag">VIP 0</div>
+  </div>
 </div>
 
-<div class="section-title">Select your plan</div>
-
-<!-- VIP CARDS CONTAINER -->
-<div id="vipCards"></div>
+<!-- SCROLLABLE CONTENT -->
+<div class="content">
+  <div class="section-title">Select your plan</div>
+  <div id="vipCards"></div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -7517,85 +7501,79 @@ function showToast(msg, type=""){
   setTimeout(()=>{ t.classList.remove("show"); }, 3500);
 }
 
+function adjustContentPadding(){
+  let sticky = document.querySelector(".sticky-top");
+  if(sticky){
+    document.querySelector(".content").style.paddingTop = (sticky.offsetHeight + 8) + "px";
+  }
+}
+
 function renderCards(){
   let container = document.getElementById("vipCards");
   container.innerHTML = "";
 
   PLANS.forEach(function(plan){
-    let isCurrent = plan.level === currentVip;
+    let isCurrent  = plan.level === currentVip;
     let isUpgraded = plan.level < currentVip;
     let canUpgrade = plan.level === currentVip + 1;
-    let isLocked = plan.level > currentVip + 1;
 
     let card = document.createElement("div");
-    let extraClass = isCurrent ? "current" : (isLocked ? "locked" : "");
-    if(plan.level === 5) extraClass += " vip5";
-    card.className = "vip-card " + extraClass;
+    let cls = "vip-card";
+    if(isCurrent) cls += " current";
+    if(plan.level === 5) cls += " vip5";
+    card.className = cls;
 
-    let badgeClass = plan.level === 5 ? "vip-badge vip5-badge" : "vip-badge";
-    let capitalClass = plan.capital === 0 ? "capital-tag free" : "capital-tag";
-    let capitalText = plan.capital === 0 ? "Free" : "$" + fmt(plan.capital);
-    let crownHtml = plan.level === 5 ? '<span class="crown">👑</span>' : '';
-    let bestValueHtml = plan.best ? '<span class="best-value">⭐ Best Value</span>' : '';
+    let badgeCls = plan.level === 5 ? "vip-badge vip5-b" : "vip-badge";
+    let capitalTxt = plan.capital === 0 ? "Free" : "$" + fmt(plan.capital);
+    let crownHtml  = plan.level === 5 ? "👑 " : "";
+    let bestHtml   = plan.best ? ' <span class="best-badge">⭐ Best Value</span>' : "";
 
     let btnHtml = "";
     if(isCurrent){
-      btnHtml = '<button class="current-btn">🔘 Current Plan</button>';
+      btnHtml = '<div class="current-btn">🔘 Current Plan</div>';
     } else if(isUpgraded){
-      btnHtml = '<button class="current-btn" style="background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;">✅ Upgraded</button>';
+      btnHtml = '<div class="upgraded-btn">✅ Upgraded</div>';
     } else if(canUpgrade){
-      btnHtml = '<button class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">🔘 Upgrade to VIP ' + plan.level + '</button>';
+      btnHtml = '<div class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">🔘 Upgrade</div>';
     } else {
-      btnHtml = '<button class="current-btn" style="background:#f5f5f5;color:#bbb;">🔒 Locked</button>';
+      btnHtml = '<div class="locked-btn">🔒 Locked</div>';
     }
 
     card.innerHTML =
-      '<div class="vip-header">' +
-        '<div class="vip-name">' +
-          crownHtml +
-          '<span class="' + badgeClass + '">' + plan.label + '</span>' +
-          bestValueHtml +
-        '</div>' +
-        '<span class="' + capitalClass + '">' + capitalText + '</span>' +
+      '<div class="card-top">' +
+        '<span class="' + badgeCls + '">' + crownHtml + plan.label + '</span>' +
+        bestHtml +
       '</div>' +
-      '<div class="commission-row">' +
-        '<span class="label">💰 Sales Commission</span>' +
-        '<span class="val">' + plan.commission + '%</span>' +
+      '<div class="card-info">' +
+        '<div class="info-row"><span class="dot"></span><span class="ikey">Capital</span><span class="ival">' + capitalTxt + '</span></div>' +
+        '<div class="info-row"><span class="dot"></span><span class="ikey">Daily Traffic Provided</span><span class="ival">' + fmt(plan.visitors) + ' Visitors</span></div>' +
+        '<div class="info-row"><span class="dot"></span><span class="ikey">Product Limit</span><span class="ival">' + fmt(plan.products) + ' Products</span></div>' +
+        '<div class="info-row"><span class="dot"></span><span class="ikey">Sales Commission</span><span class="ival comm">' + plan.commission + '%</span></div>' +
       '</div>' +
-      '<div class="features">' +
-        '<div class="feature-item"><span class="icon">👥</span><div class="info"><div class="val">' + fmt(plan.visitors) + '</div><div class="key">Daily Visitors</div></div></div>' +
-        '<div class="feature-item"><span class="icon">📦</span><div class="info"><div class="val">' + fmt(plan.products) + '</div><div class="key">Product Limit</div></div></div>' +
-      '</div>' +
-      btnHtml;
+      '<div class="card-btn">' + btnHtml + '</div>';
 
     container.appendChild(card);
-
-    // divider between cards
-    let div = document.createElement("div");
-    div.className = "divider";
-    container.appendChild(div);
   });
+
+  adjustContentPadding();
 }
 
 async function loadInfo(){
   try {
     let token = localStorage.getItem("token") || "";
-    let res = await fetch("/my-vip-info", {
-      headers:{ "Authorization": "Bearer " + token }
-    });
+    let res = await fetch("/my-vip-info", { headers:{ "Authorization":"Bearer " + token } });
     let data = await res.json();
     if(data.success){
-      currentVip = data.vipLevel || 0;
+      currentVip     = data.vipLevel || 0;
       currentBalance = parseFloat(data.balance || 0);
       document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
       document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
       renderCards();
     }
   } catch(e){
-    // fallback: use localStorage balance
     let user = JSON.parse(localStorage.getItem("user") || "{}");
     currentBalance = parseFloat(user.balance || 0);
-    currentVip = user.vipLevel || 0;
+    currentVip     = user.vipLevel || 0;
     document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
     document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
     renderCards();
@@ -7624,14 +7602,13 @@ async function doUpgrade(level){
     });
     let data = await res.json();
     if(data.success){
-      currentVip = data.vipLevel;
+      currentVip     = data.vipLevel;
       currentBalance = parseFloat(data.newBalance);
       document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
       document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
-      // تحديث localStorage
       let user = JSON.parse(localStorage.getItem("user") || "{}");
       user.vipLevel = currentVip;
-      user.balance = data.newBalance;
+      user.balance  = data.newBalance;
       localStorage.setItem("user", JSON.stringify(user));
       renderCards();
       showToast("🎉 Successfully upgraded to VIP " + currentVip + "!", "success");
@@ -7643,6 +7620,7 @@ async function doUpgrade(level){
   }
 }
 
+window.addEventListener("resize", adjustContentPadding);
 loadInfo();
 </script>
 
