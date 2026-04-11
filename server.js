@@ -2503,7 +2503,7 @@ Hi, <span id="username"></span>
   </div>
   <!-- Tricex Diamond Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Wedding Ball Gown -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
@@ -2540,7 +2540,7 @@ Hi, <span id="username"></span>
   </div>
   <!-- Lucky Harvey Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Evening Dress -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
@@ -3783,10 +3783,10 @@ var localProducts = {
     title: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch",
     price: 1260.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/4.jpg"
     ],
     description: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch."
   },
@@ -3871,10 +3871,10 @@ var localProducts = {
     title: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial",
     price: 1699.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/4.jpg"
     ],
     description: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial."
   },
