@@ -7825,7 +7825,6 @@ res.send(`<!DOCTYPE html>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f5f5f5;padding-top:50px;padding-bottom:20px;}
 .header{position:fixed;top:0;left:0;right:0;z-index:300;background:#1976d2;color:white;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;}
-.header h2{font-size:16px;font-weight:600;margin:0;}
 .header-icons{display:flex;gap:14px;align-items:center;}
 .top-bar{display:flex;border-bottom:1px solid #eee;background:white;}
 .top-bar div{flex:1;text-align:center;padding:11px;font-size:14px;color:#555;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
@@ -7834,29 +7833,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#eee;}
 .card{background:white;cursor:pointer;position:relative;}
 .card img{width:100%;height:180px;object-fit:cover;display:block;}
-.card-body{padding:8px 9px 10px;}
+.card-body{padding:8px 9px 42px;}
 .card-title{font-size:12px;color:#333;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;}
 .card-price{color:#1976d2;font-weight:700;font-size:14px;}
 .card-buy{position:absolute;bottom:10px;right:8px;background:#1976d2;color:white;border:none;padding:5px 10px;border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;}
-/* SORT DRAWER */
-.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:400;}
-.drawer-overlay.show{display:block;}
-.drawer{position:fixed;top:0;left:-100%;width:75%;max-width:320px;height:100%;background:white;z-index:500;transition:left 0.3s;overflow-y:auto;}
-.drawer.open{left:0;}
-.drawer-title{padding:16px 18px;font-size:16px;font-weight:700;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;}
-.drawer-section{padding:14px 18px 0;}
-.drawer-section h4{font-size:13px;color:#888;margin-bottom:10px;font-weight:600;text-transform:uppercase;}
-.sort-item{padding:13px 0;font-size:15px;color:#333;border-bottom:1px solid #f5f5f5;cursor:pointer;display:flex;align-items:center;gap:8px;}
-.sort-item.active{color:#1976d2;font-weight:600;}
-.sort-item.active::before{content:"✓";}
-.price-range{display:flex;align-items:center;gap:10px;margin:10px 0 16px;}
-.price-range input{flex:1;padding:10px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;color:#333;}
-.price-range span{color:#aaa;font-size:16px;}
-.drawer-btns{display:flex;gap:10px;padding:16px 18px;border-top:1px solid #eee;position:sticky;bottom:0;background:white;}
+/* SORT OVERLAY فوق الصفحة */
+.sort-overlay{display:none;position:fixed;top:50px;left:0;right:0;z-index:400;background:white;border-bottom:2px solid #eee;box-shadow:0 6px 20px rgba(0,0,0,0.12);}
+.sort-overlay.show{display:block;}
+.sort-opt{padding:15px 18px;font-size:15px;color:#333;border-bottom:1px solid #f5f5f5;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.sort-opt:last-child{border-bottom:none;}
+.sort-opt.active{color:#1976d2;font-weight:600;}
+/* FILTER DRAWER من اليمين */
+.filter-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:400;}
+.filter-overlay.show{display:block;}
+.filter-drawer{position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100%;background:white;z-index:500;transition:right 0.3s;display:flex;flex-direction:column;}
+.filter-drawer.open{right:0;}
+.filter-content{flex:1;overflow-y:auto;padding-bottom:80px;}
+.f-section{padding:16px 18px 0;}
+.f-section h4{font-size:12px;color:#888;margin-bottom:12px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;}
+.price-range{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.price-range input{flex:1;padding:10px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:14px;color:#333;background:white;}
+.price-range span{color:#999;font-size:18px;}
+.cat-item{padding:14px 18px;font-size:14px;color:#333;border-bottom:1px solid #f5f5f5;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.cat-item.active{color:#1976d2;font-weight:600;background:#f0f7ff;}
+.cat-check{color:#1976d2;font-weight:700;font-size:15px;}
+.filter-btns{position:fixed;bottom:0;right:0;width:78%;max-width:340px;display:flex;gap:10px;padding:14px 18px;border-top:1px solid #eee;background:white;z-index:600;}
 .btn-clear{flex:1;padding:12px;border:1.5px solid #ddd;border-radius:24px;background:white;font-size:14px;color:#555;cursor:pointer;}
-.btn-confirm{flex:1;padding:12px;border:none;border-radius:24px;background:#1976d2;font-size:14px;color:white;font-weight:600;cursor:pointer;}
+.btn-confirm{flex:1;padding:12px;border:none;border-radius:24px;background:#111;font-size:14px;color:white;font-weight:700;cursor:pointer;}
 /* POPUP */
-.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:600;align-items:flex-end;justify-content:center;}
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;}
 .popup-overlay.show{display:flex;}
 .popup{background:white;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:20px 20px 30px;animation:slideUp 0.3s ease;}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -7868,9 +7873,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .popup-row .val.profit{color:#2e7d32;}
 .popup-row .val.cost{color:#1976d2;}
 .popup-btn{width:100%;margin-top:16px;padding:14px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:15px;font-weight:600;cursor:pointer;}
-.popup-btn:active{background:#1565c0;}
 .popup-cancel{width:100%;margin-top:8px;padding:12px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#666;font-size:14px;cursor:pointer;}
-/* TOAST */
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:white;padding:11px 22px;border-radius:30px;font-size:13px;z-index:999;transition:transform 0.3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.success{background:#2e7d32;}
@@ -7879,7 +7882,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div style="display:flex;align-items:center;gap:12px;">
     <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
@@ -7905,30 +7907,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
   </div>
 </div>
 
-<!-- TOP BAR -->
 <div class="top-bar">
   <div onclick="openSort()">Sort ▼</div>
   <div onclick="openFilter()">Filter</div>
 </div>
 
-<!-- ITEM COUNT -->
 <div class="item-count" id="itemCount">Loading...</div>
-
-<!-- PRODUCT GRID -->
 <div class="grid" id="productGrid"></div>
 
+<!-- SORT OVERLAY -->
+<div id="sortOverlay" class="sort-overlay">
+  <div class="sort-opt" id="sopt0" onclick="selectSort('')">Recommendation</div>
+  <div class="sort-opt" id="sopt1" onclick="selectSort('sales')">Sales</div>
+  <div class="sort-opt" id="sopt2" onclick="selectSortPrice()">Price <span id="priceArrow">▲▼</span></div>
+</div>
 
-<!-- SORT/FILTER DRAWER -->
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-title">
-    <span id="drawerTitle">Sort</span>
-    <span onclick="closeDrawer()" style="cursor:pointer;font-size:20px;color:#aaa;">✕</span>
+<!-- FILTER DRAWER -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
+<div class="filter-drawer" id="filterDrawer">
+  <div class="filter-content">
+    <div class="f-section">
+      <h4>Price range</h4>
+      <div class="price-range">
+        <input type="number" id="filterMin" placeholder="Lowest">
+        <span>—</span>
+        <input type="number" id="filterMax" placeholder="Highest">
+      </div>
+    </div>
+    <div class="f-section"><h4>Category</h4></div>
+    <div id="catList"></div>
   </div>
-  <div id="drawerContent"></div>
-  <div class="drawer-btns">
-    <button class="btn-clear" onclick="clearDrawer()">Clear</button>
-    <button class="btn-confirm" onclick="applyDrawer()">Confirm</button>
+  <div class="filter-btns">
+    <button class="btn-clear" onclick="clearFilter()">Clear</button>
+    <button class="btn-confirm" onclick="applyFilter()">Confirm</button>
   </div>
 </div>
 
@@ -7945,197 +7956,217 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-var token = localStorage.getItem("token") || "";
-var user  = JSON.parse(localStorage.getItem("user") || "{}");
+var token    = localStorage.getItem("token") || "";
+var user     = JSON.parse(localStorage.getItem("user") || "{}");
 var vipLevel = user.vipLevel || 0;
-var VIP_COMM = [15, 17, 20, 22, 25, 40];
+var VIP_COMM = [15,17,20,22,25,40];
 var commRate = VIP_COMM[vipLevel] || 15;
 
-var currentPage  = 1;
-var totalItems   = 0;
-var isLoading    = false;
-var allLoaded    = false;
-var currentSort  = "";
-var currentMin   = "";
-var currentMax   = "";
-var drawerMode   = "sort"; // "sort" or "filter"
-var tempSort     = currentSort;
-var tempMin      = currentMin;
-var tempMax      = currentMax;
+var currentPage = 1;
+var totalItems  = 0;
+var isLoading   = false;
+var allLoaded   = false;
+var currentSort = "";
+var currentMin  = "";
+var currentMax  = "";
+var currentCat  = "";
+var priceSortDir = "asc";
+var sortOpen    = false;
+var tempCat     = "";
 var selectedProductId = null;
+
+var CATS = [
+  "Clothing and Accessories",
+  "Medical Bags and Sunglasses",
+  "Shoes","Watches","Jewelry","Electronics","Smart Home",
+  "Luxury Brands","Beauty and Personal Care",
+  "Mens Fashion","Health and Household","Home and Kitchen"
+];
+
+// بناء قائمة الأقسام
+(function(){
+  var html = "";
+  CATS.forEach(function(c,i){
+    html += '<div class="cat-item" id="cat_'+i+'" onclick="selectCat(this,\''+c.replace(/'/g,"\\'")+'\')">' + c + '</div>';
+  });
+  document.getElementById("catList").innerHTML = html;
+})();
 
 function showToast(msg, type){
   var t = document.getElementById("toast");
-  t.className = "toast " + (type||"");
+  t.className = "toast "+(type||"");
   t.innerText = msg;
   t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); }, 3000);
-}
-
-function buildImgUrl(p){
-  return p.img || "https://via.placeholder.com/300x300?text=No+Image";
+  setTimeout(function(){ t.classList.remove("show"); },3000);
 }
 
 async function loadProducts(reset){
-  if(reset){ currentPage = 1; document.getElementById("productGrid").innerHTML = ""; }
-  var params = "page=" + currentPage + "&limit=20";
-  if(currentSort) params += "&sort=" + currentSort;
-  if(currentMin)  params += "&minPrice=" + currentMin;
-  if(currentMax)  params += "&maxPrice=" + currentMax;
+  if(isLoading) return;
+  if(reset){ currentPage=1; allLoaded=false; document.getElementById("productGrid").innerHTML=""; }
+  if(allLoaded) return;
+  isLoading = true;
+
+  var params = "page="+currentPage+"&limit=20";
+  if(currentSort) params += "&sort="+currentSort;
+  if(currentMin)  params += "&minPrice="+currentMin;
+  if(currentMax)  params += "&maxPrice="+currentMax;
+  if(currentCat)  params += "&category="+encodeURIComponent(currentCat);
 
   try {
-    var res  = await fetch("/api/listings?" + params, { headers:{ "Authorization":"Bearer " + token }});
+    var res  = await fetch("/api/listings?"+params, {headers:{"Authorization":"Bearer "+token}});
     var data = await res.json();
     totalItems = data.total;
-    document.getElementById("itemCount").innerText = totalItems.toLocaleString() + " Items";
+    document.getElementById("itemCount").innerText = totalItems.toLocaleString()+" Items";
 
     var grid = document.getElementById("productGrid");
     data.items.forEach(function(p){
       var card = document.createElement("div");
       card.className = "card";
-      var price = "US$" + p.price.toFixed(2);
+      var safeTitle = p.title.replace(/'/g,"\\'").replace(/"/g,"&quot;").substring(0,40);
       card.innerHTML =
-        '<img src="' + p.img + '" onerror="this.src=\\'https://via.placeholder.com/300x300?text=No+Image\\'" onclick="openProduct(' + p.id + ')">' +
-        '<div class="card-body" onclick="openProduct(' + p.id + ')">' +
-          '<div class="card-title">' + p.title + '</div>' +
-          '<div class="card-price">' + price + '</div>' +
+        '<img src="'+p.img+'" onerror="this.src=\'https://via.placeholder.com/300x300?text=No+Image\'" onclick="openProduct('+p.id+')">' +
+        '<div class="card-body" onclick="openProduct('+p.id+')">' +
+          '<div class="card-title">'+p.title+'</div>' +
+          '<div class="card-price">US$'+p.price.toFixed(2)+'</div>' +
         '</div>' +
-        '<button class="card-buy" onclick="event.stopPropagation();showBuyPopup(' + p.id + ',' + p.price + ',\\'' + p.title.replace(/'/g,"\\'").substring(0,40) + '\\')">Buy now</button>';
+        '<button class="card-buy" onclick="event.stopPropagation();showBuyPopup('+p.id+','+p.price+',\''+safeTitle+'\')">Buy now</button>';
       grid.appendChild(card);
     });
 
-    if(data.items.length < 20 || currentPage * 20 >= totalItems){
-      allLoaded = true;
-    }
-  } catch(e){
-    showToast("Error loading products", "error");
-  }
+    if(data.items.length < 20 || currentPage*20 >= totalItems) allLoaded = true;
+  } catch(e){ showToast("Error loading products","error"); }
   isLoading = false;
 }
 
-// ===== INFINITE SCROLL =====
 window.addEventListener("scroll", function(){
-  var scrollBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-  if(scrollBottom < 400 && !isLoading && !allLoaded){
+  if(document.documentElement.scrollHeight - window.innerHeight - window.scrollY < 400 && !isLoading && !allLoaded){
     currentPage++;
     loadProducts(false);
   }
 });
 
-// ===== SORT / FILTER DRAWER =====
+// ===== SORT =====
 function openSort(){
-  drawerMode = "sort";
-  document.getElementById("drawerTitle").innerText = "Sort";
-  tempSort = currentSort;
-  var sortOptions = [
-    { val:"", label:"Recommendation" },
-    { val:"sales", label:"Sales" },
-    { val:"price_asc", label:"Price ↑" },
-    { val:"price_desc", label:"Price ↓" },
-  ];
-  var html = '<div class="drawer-section"><h4>Sort by</h4>';
-  sortOptions.forEach(function(o){
-    html += '<div class="sort-item' + (tempSort===o.val?" active":"") + '" onclick="selectSort(\\'' + o.val + '\\')">' + o.label + '</div>';
-  });
-  html += '</div>';
-  document.getElementById("drawerContent").innerHTML = html;
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("drawerOverlay").classList.add("show");
+  sortOpen = !sortOpen;
+  document.getElementById("sortOverlay").className = "sort-overlay"+(sortOpen?" show":"");
+  if(sortOpen){ document.getElementById("filterDrawer").classList.remove("open"); document.getElementById("filterOverlay").classList.remove("show"); }
 }
 
 function selectSort(val){
-  tempSort = val;
-  var items = document.querySelectorAll(".sort-item");
-  var opts = ["",'sales','price_asc','price_desc'];
-  items.forEach(function(el,i){ el.className = "sort-item" + (opts[i]===val?" active":""); });
+  currentSort = val;
+  document.getElementById("sopt0").classList.toggle("active", val==="");
+  document.getElementById("sopt1").classList.toggle("active", val==="sales");
+  document.getElementById("sopt2").classList.remove("active");
+  document.getElementById("sortOverlay").classList.remove("show");
+  sortOpen = false;
+  loadProducts(true);
 }
 
+function selectSortPrice(){
+  priceSortDir = priceSortDir==="asc"?"desc":"asc";
+  currentSort  = "price_"+priceSortDir;
+  document.getElementById("priceArrow").innerText = priceSortDir==="asc"?"▲":"▼";
+  document.getElementById("sopt0").classList.remove("active");
+  document.getElementById("sopt1").classList.remove("active");
+  document.getElementById("sopt2").classList.add("active");
+  document.getElementById("sortOverlay").classList.remove("show");
+  sortOpen = false;
+  loadProducts(true);
+}
+
+document.addEventListener("click", function(e){
+  if(!sortOpen) return;
+  var ov = document.getElementById("sortOverlay");
+  var tb = document.querySelector(".top-bar");
+  if(!ov.contains(e.target) && !tb.contains(e.target)){ ov.classList.remove("show"); sortOpen=false; }
+});
+
+// ===== FILTER =====
 function openFilter(){
-  drawerMode = "filter";
-  document.getElementById("drawerTitle").innerText = "Filter";
-  tempMin = currentMin;
-  tempMax = currentMax;
-  var html = '<div class="drawer-section"><h4>Price range</h4>' +
-    '<div class="price-range">' +
-      '<input type="number" id="filterMin" placeholder="Lowest" value="' + (tempMin||"") + '">' +
-      '<span>—</span>' +
-      '<input type="number" id="filterMax" placeholder="Highest" value="' + (tempMax||"") + '">' +
-    '</div></div>';
-  document.getElementById("drawerContent").innerHTML = html;
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("drawerOverlay").classList.add("show");
+  tempCat = currentCat;
+  document.getElementById("filterMin").value = currentMin||"";
+  document.getElementById("filterMax").value = currentMax||"";
+  CATS.forEach(function(c,i){
+    var el=document.getElementById("cat_"+i);
+    if(!el) return;
+    el.className = "cat-item"+(c===tempCat?" active":"");
+    el.innerHTML = c===tempCat ? c+'<span class="cat-check">✓</span>' : c;
+  });
+  document.getElementById("filterDrawer").classList.add("open");
+  document.getElementById("filterOverlay").classList.add("show");
+  document.getElementById("sortOverlay").classList.remove("show");
+  sortOpen = false;
 }
 
-function closeDrawer(){
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("drawerOverlay").classList.remove("show");
+function closeFilter(){
+  document.getElementById("filterDrawer").classList.remove("open");
+  document.getElementById("filterOverlay").classList.remove("show");
 }
 
-function clearDrawer(){
-  if(drawerMode==="sort"){ tempSort=""; selectSort(""); }
-  else { document.getElementById("filterMin").value=""; document.getElementById("filterMax").value=""; }
+function selectCat(el, cat){
+  tempCat = (tempCat===cat)?"":cat;
+  CATS.forEach(function(c,i){
+    var e=document.getElementById("cat_"+i);
+    if(!e) return;
+    e.className="cat-item"+(c===tempCat?" active":"");
+    e.innerHTML = c===tempCat ? c+'<span class="cat-check">✓</span>' : c;
+  });
 }
 
-function applyDrawer(){
-  if(drawerMode==="sort"){
-    currentSort = tempSort;
-  } else {
-    currentMin = document.getElementById("filterMin").value;
-    currentMax = document.getElementById("filterMax").value;
-  }
-  closeDrawer();
+function clearFilter(){
+  tempCat="";
+  document.getElementById("filterMin").value="";
+  document.getElementById("filterMax").value="";
+  CATS.forEach(function(c,i){
+    var e=document.getElementById("cat_"+i);
+    if(e){ e.className="cat-item"; e.innerHTML=c; }
+  });
+}
+
+function applyFilter(){
+  currentMin = document.getElementById("filterMin").value;
+  currentMax = document.getElementById("filterMax").value;
+  currentCat = tempCat;
+  closeFilter();
   loadProducts(true);
 }
 
 // ===== BUY NOW POPUP =====
 function showBuyPopup(id, price, title){
   selectedProductId = id;
-  var supplierPrice = price * (1 - commRate/100);
-  var profit = price - supplierPrice;
-  document.getElementById("popupTitle").innerText = title.substring(0,50);
-  document.getElementById("popupSupplier").innerText = "US$" + supplierPrice.toFixed(2);
-  document.getElementById("popupStore").innerText   = "US$" + price.toFixed(2);
-  document.getElementById("popupProfit").innerText  = "US$" + profit.toFixed(2);
-  document.getElementById("popupComm").innerText    = commRate + "% (VIP " + vipLevel + ")";
+  var sp = price*(1-commRate/100);
+  document.getElementById("popupTitle").innerText    = title.substring(0,50);
+  document.getElementById("popupSupplier").innerText = "US$"+sp.toFixed(2);
+  document.getElementById("popupStore").innerText    = "US$"+price.toFixed(2);
+  document.getElementById("popupProfit").innerText   = "US$"+(price-sp).toFixed(2);
+  document.getElementById("popupComm").innerText     = commRate+"% (VIP "+vipLevel+")";
   document.getElementById("popupOverlay").classList.add("show");
 }
 
 function closePopup(){
   document.getElementById("popupOverlay").classList.remove("show");
-  selectedProductId = null;
+  selectedProductId=null;
 }
 
 async function confirmAddToStore(){
   if(!selectedProductId) return;
-  var btn = document.getElementById("popupOkBtn");
-  btn.disabled = true; btn.innerText = "Adding...";
+  var btn=document.getElementById("popupOkBtn");
+  btn.disabled=true; btn.innerText="Adding...";
   try {
-    var res = await fetch("/api/add-to-store", {
-      method:"POST",
-      headers:{"Content-Type":"application/json","Authorization":"Bearer " + token},
-      body: JSON.stringify({ productId: selectedProductId })
-    });
-    var data = await res.json();
-    if(data.success){
-      closePopup();
-      showToast("✅ Product added to your store!", "success");
-    } else {
-      showToast("❌ " + (data.message||"Failed"), "error");
-    }
-  } catch(e){
-    showToast("❌ Connection error", "error");
-  }
-  btn.disabled = false; btn.innerText = "✓ OK - Add to My Store";
+    var res=await fetch("/api/add-to-store",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({productId:selectedProductId})});
+    var data=await res.json();
+    if(data.success){ closePopup(); showToast("✅ Product added to your store!","success"); }
+    else{ showToast("❌ "+(data.message||"Failed"),"error"); }
+  } catch(e){ showToast("❌ Connection error","error"); }
+  btn.disabled=false; btn.innerText="✓ OK - Add to My Store";
 }
 
-// ===== OPEN PRODUCT DETAIL =====
 function openProduct(id){
-  localStorage.setItem("listingProductId", id);
-  window.location.href = "/listing-product";
+  localStorage.setItem("listingProductId",id);
+  window.location.href="/listing-product";
 }
 
 loadProducts(true);
@@ -8143,6 +8174,7 @@ loadProducts(true);
 </body>
 </html>`);
 });
+
 
 // ================= LISTING PRODUCT DETAIL PAGE =================
 app.get("/listing-product", authMiddleware, (req, res) => {
