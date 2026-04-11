@@ -1452,18 +1452,15 @@ app.post("/update-store-desc", authMiddleware, (req, res) => {
 
 // جلب كل الطلبات (للأدمن)
 app.get("/all-store-applications", (req, res) => {
-    // إرجاع المتاجر المعتمدة فقط للمستخدمين العاديين
     const token = req.cookies?.adminToken;
     let isAdmin = false;
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         if (decoded.role === "admin") isAdmin = true;
     } catch {}
-
     if (isAdmin) {
         res.json(storeApplications);
     } else {
-        // المستخدم العادي يرى المتاجر المعتمدة فقط
         res.json(storeApplications.filter(s => s.status === "approved"));
     }
 });
@@ -2908,8 +2905,10 @@ try {
             let storeDesc = descObj ? descObj.desc : "";
 
             // حساب VIP (نفس المنطق المستخدم في المتجر)
+            function calcVIP(count){ if(count>=100)return 5; if(count>=50)return 4; if(count>=20)return 3; if(count>=10)return 2; if(count>=1)return 1; return 0; }
+            // عدد المنتجات ثابت 20 لأن المنتجات من fakestoreapi limit=20
+            let productsCount = 0;
             let vipLevel = 0;
-            let productsCount = 20;
 
             let card = document.createElement("div");
             card.style.cssText = "background:#1976d2;border-radius:16px;padding:18px 15px 15px 15px;margin-bottom:14px;cursor:pointer;box-shadow:0 3px 10px rgba(25,118,210,0.3);";
@@ -6913,16 +6912,8 @@ async function loadStoreInfo(){
                || (data.found ? data.storeLogo : "");
     if(logo && logo.length > 10) document.getElementById("storeLogo").src = logo;
 
-    // حساب VIP من المتابعين
-    function calcVIP(count){ if(count>=100)return 5; if(count>=50)return 4; if(count>=20)return 3; if(count>=10)return 2; if(count>=1)return 1; return 0; }
-    try {
-        let fRes = await fetch("/followers/" + encodeURIComponent(user.email));
-        let fData = await fRes.json();
-        let followers = fData.followers || 0;
-        document.getElementById("vipBadge").innerText = "VIP " + calcVIP(followers);
-    } catch(e) {
-        document.getElementById("vipBadge").innerText = "VIP 0";
-    }
+    // VIP دائماً 0 للمتاجر الجديدة
+    document.getElementById("vipBadge").innerText = "VIP 0";
 }
 
 // تغيير شعار المتجر
@@ -7895,7 +7886,6 @@ fetch("/followers/" + encodeURIComponent(sEmail))
   .then(function(d){
     baseFollowers = d.followers || 0;
     renderFollowers();
-    document.getElementById("vipLevel").innerText = 0;
   }).catch(function(){});
 
 function updateHeartUI(){
@@ -8016,8 +8006,8 @@ fetch("https://fakestoreapi.com/products?limit=20")
 .then(function(r){ return r.json(); })
 .then(function(products){
   var cnt = products.length;
-  document.getElementById("productCount").innerText = cnt;
-  // VIP يُحسب من المتابعين (تم التحديث في fetch followers أعلاه)
+  document.getElementById("productCount").innerText = 0;
+  document.getElementById("vipLevel").innerText = 0;
 
   var grid = document.getElementById("productGrid");
   grid.innerHTML = "";
