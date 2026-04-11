@@ -4029,10 +4029,14 @@ function goSlide(idx) {
   document.querySelectorAll(".thumbs img").forEach(function(t,i){ t.className = (i===idx?"active":""); });
 }
 
+// بيانات المنتج الحالي
+var currentProduct = null;
+
 // تحميل المنتج
 if(id && id.startsWith("local_")) {
   var p = localProducts[id];
   if(p) {
+    currentProduct = { id: id, title: p.title, price: p.price, img: p.images[0], store: "TikTok Mall Store" };
     document.getElementById("productTitle").innerText = p.title;
     document.getElementById("productPrice").innerText = "\$" + p.price.toLocaleString();
     document.getElementById("productDesc").innerText = p.description;
@@ -4043,6 +4047,7 @@ if(id && id.startsWith("local_")) {
   fetch("https://fakestoreapi.com/products/" + id)
   .then(function(r){ return r.json(); })
   .then(function(p) {
+    currentProduct = { id: p.id, title: p.title, price: p.price, img: p.image, store: "TikTok Mall Store" };
     document.getElementById("productTitle").innerText = p.title;
     document.getElementById("productPrice").innerText = "\$" + p.price;
     document.getElementById("productDesc").innerText = p.description || "";
@@ -4056,8 +4061,11 @@ function toggleHeart(){
 }
 
 function addToCart(){
+  if(!currentProduct){ alert("Product not loaded yet"); return; }
   var cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  cart.push(id);
+  var existing = cart.find(function(c){ return c.id == currentProduct.id; });
+  if(existing){ existing.qty = (existing.qty||1) + 1; }
+  else { cart.push({ id: currentProduct.id, title: currentProduct.title, price: currentProduct.price, qty: 1, img: currentProduct.img, store: currentProduct.store }); }
   localStorage.setItem("cart", JSON.stringify(cart));
   alert("Added to cart ✅");
 }
