@@ -2358,24 +2358,35 @@ Hi, <span id="username"></span>
 </div>
 
 </div>
-<div id="langMenu" style="display:none;position:fixed;top:50px;left:0;width:100%;height:calc(100% - 50px);background:white;z-index:999;overflow-y:auto;padding-bottom:30px;box-sizing:border-box;">
-<p onclick="setLang('en')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">English</p>
-<p onclick="setLang('ar')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">عربي</p>
-<p onclick="setLang('cn')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">简体中文</p>
-<p onclick="setLang('tw')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">繁體中文</p>
-<p onclick="setLang('jp')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">日本語</p>
-<p onclick="setLang('kr')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">한국인</p>
-<p onclick="setLang('es')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Español</p>
-<p onclick="setLang('fr')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Français</p>
-<p onclick="setLang('vi')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Tiếng Việt</p>
-<p onclick="setLang('it')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Italiano</p>
-<p onclick="setLang('de')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Deutsch</p>
-<p onclick="setLang('th')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">แบบไทย</p>
-<p onclick="setLang('hi')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">हिन्दी</p>
-<p onclick="setLang('ms')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Melayu</p>
-<p onclick="setLang('pt')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Português</p>
-<p onclick="setLang('fi')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">suomi</p>
-<p onclick="setLang('sv')" style="padding:12px;border-bottom:1px solid #ccc;text-align:center;margin:0;cursor:pointer;">Svenska</p>
+<!-- overlay خلفية شفافة -->
+<div id="langOverlay" onclick="toggleLang()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:998;"></div>
+
+<!-- bottom sheet اللغات -->\n<div id="langMenu" style="display:none;position:fixed;bottom:0;left:0;width:100%;height:55%;background:white;z-index:999;border-radius:18px 18px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.2);box-sizing:border-box;flex-direction:column;">
+  <!-- handle bar -->
+  <div style="text-align:center;padding:10px 0 5px;flex-shrink:0;">
+    <div style="width:40px;height:4px;background:#ccc;border-radius:4px;display:inline-block;"></div>
+  </div>
+  <!-- قائمة اللغات قابلة للتمرير -->
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;">
+<p onclick="setLang('en')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">English</p>
+<p onclick="setLang('ar')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">عربي</p>
+<p onclick="setLang('cn')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">简体中文</p>
+<p onclick="setLang('tw')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">繁體中文</p>
+<p onclick="setLang('jp')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">日本語</p>
+<p onclick="setLang('kr')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">한국인</p>
+<p onclick="setLang('es')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Español</p>
+<p onclick="setLang('fr')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Français</p>
+<p onclick="setLang('vi')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Tiếng Việt</p>
+<p onclick="setLang('it')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Italiano</p>
+<p onclick="setLang('de')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Deutsch</p>
+<p onclick="setLang('th')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">แบบไทย</p>
+<p onclick="setLang('hi')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">हिन्दी</p>
+<p onclick="setLang('ms')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Melayu</p>
+<p onclick="setLang('pt')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Português</p>
+<p onclick="setLang('fi')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">suomi</p>
+<p onclick="setLang('sv')" style="padding:13px;border-bottom:1px solid #eee;text-align:center;margin:0;cursor:pointer;font-size:15px;">Svenska</p>
+  </div>
+</div>
 
 <!-- TikTok Mall Info Section -->
 <div style="padding:20px 16px 30px;color:#333;font-size:15px;line-height:1.8;">
@@ -2723,8 +2734,11 @@ menu.style.display = menu.style.display === "none" ? "block" : "none";
 }
 
 function toggleLang(){
-let menu = document.getElementById("langMenu");
-menu.style.display = menu.style.display === "none" ? "block" : "none";
+  var menu = document.getElementById("langMenu");
+  var overlay = document.getElementById("langOverlay");
+  var isOpen = menu.style.display === "flex";
+  menu.style.display = isOpen ? "none" : "flex";
+  if(overlay) overlay.style.display = isOpen ? "none" : "block";
 }
 
 function setLang(lang){
@@ -5167,7 +5181,7 @@ text-align:center;
   <div style="display:flex;align-items:center;gap:10px;">
     <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
     <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-    <span style="font-size:16px;font-weight:bold;">Saved items</span>
+    <span style="font-size:16px;font-weight:bold;"></span>
   </div>
   <div style="display:flex;align-items:center;gap:15px;">
     <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
