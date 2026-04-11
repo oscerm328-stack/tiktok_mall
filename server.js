@@ -2493,58 +2493,58 @@ Hi, <span id="username"></span>
 <div class="section-title">New Product</div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- Apple iPhone 17 Pro -->
+  <!-- iPhone 17 Pro Max -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- MacBook Air M2 -->
+  <!-- MacBook -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Tricex Diamond Watch -->
+  <!-- Gaming Laptop ROG -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Wedding Ball Gown -->
+  <!-- Camera -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
 <div class="section-title">Hot Selling</div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- DJI Avata Drone -->
+  <!-- Samsung Galaxy -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Canon Camcorder -->
+  <!-- iPad -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Dell Business Laptop -->
+  <!-- Smart Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Movado Watch -->
+  <!-- Headphones -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- INSYOO Drone 4K -->
+  <!-- Drone -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Leather Handbag -->
+  <!-- iPhone 17 Pro Max -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Lucky Harvey Watch -->
+  <!-- TV Screen -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Evening Dress -->
+  <!-- Luxury Bag -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
@@ -2789,24 +2789,8 @@ function openProduct(id){
 }
 
 function openLocalProduct(id){
-    var p = localProducts[id];
-    if(!p) return;
-    var prod = {
-        id: id,
-        t: p.title,
-        p: p.price,
-        img: p.images[0],
-        imgs: p.images,
-        rating: 5.0,
-        sales: 0,
-        description: p.description,
-        colors: [],
-        sizes: [],
-        folder: "",
-        cat: ""
-    };
-    localStorage.setItem("catProduct", JSON.stringify(prod));
-    window.location.href = "/cat-product-detail";
+    localStorage.setItem("productId", id);
+    window.location.href = "/product";
 }
 
 function toggleSearch(){
@@ -3296,142 +3280,6 @@ function openCategory(name){
     window.location.href = "/category?name=" + encodeURIComponent(name);
 }
 
-// ================= LOCAL PRODUCTS DATA =================
-var localProducts = {
-  "local_1": {
-    title: "Apple iPhone 17 Pro- 256GB,512GB, 1TB",
-    price: 1079.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/4.jpg"
-    ],
-    description: "Apple iPhone 17 Pro- 256GB,512GB, 1TB"
-  },
-  "local_2": {
-    title: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera",
-    price: 1073.80,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/4.jpg"
-    ],
-    description: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera."
-  },
-  "local_3": {
-    title: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch",
-    price: 1260.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/4.jpg"
-    ],
-    description: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch."
-  },
-  "local_4": {
-    title: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress",
-    price: 95.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/4.jpg"
-    ],
-    description: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress."
-  },
-  "local_5": {
-    title: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV with 4K Stabilized Video",
-    price: 1390.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/4.jpg"
-    ],
-    description: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV Quadcopter with 4K Stabilized Video, Super-Wide 155° FOV, Built-in Propeller Guard, HD Low-Latency Transmission."
-  },
-  "local_6": {
-    title: "Canon VIXIA HF G50 4K30P Camcorder",
-    price: 1100.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/4.jpg"
-    ],
-    description: "Canon VIXIA HF G50 4K30P Camcorder, Black."
-  },
-  "local_7": {
-    title: "Dell Precision 3590 Business Laptop, 2025, 14\" FHD IPS, Intel Core Ultra 7 155U, 16GB DDR5, 512GB SSD",
-    price: 1099.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/4.jpg"
-    ],
-    description: "Dell Precision 3590 Business Laptop, 2025, 14\" 1920x1080 IPS, Intel Core Ultra 7 155U 12-Core, 16GB DDR5, 512GB SSD, Win10 Pro, Wi-Fi 6E."
-  },
-  "local_8": {
-    title: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph",
-    price: 1395.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/4.jpg"
-    ],
-    description: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph."
-  },
-  "local_9": {
-    title: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, 5GHz FPV, Brushless Motor",
-    price: 365.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/4.jpg"
-    ],
-    description: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, Professional 5GHz FPV Transmission, Brushless Motor, 9842ft Long Range, 1 Battery 25 Mins Flight Time, GPS Auto Return."
-  },
-  "local_10": {
-    title: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag",
-    price: 86.12,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/4.jpg"
-    ],
-    description: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag Ladies Shoulder Bag for Mother's Day."
-  },
-  "local_11": {
-    title: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial",
-    price: 1699.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/4.jpg"
-    ],
-    description: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial."
-  },
-  "local_12": {
-    title: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid",
-    price: 1156.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/4.jpg"
-    ],
-    description: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid."
-  }
-};
-
 </script>
 
 </body>
@@ -3894,136 +3742,136 @@ var images = [];
 // منتجات محلية مخصصة
 var localProducts = {
   "local_1": {
-    title: "Apple iPhone 17 Pro- 256GB,512GB, 1TB",
-    price: 1079.00,
+    title: "Apple iPhone 17 Pro Max - 256GB - Natural Titanium",
+    price: 1299.99,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/4.jpg"
+      "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&q=80",
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80",
+      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80",
+      "https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=600&q=80"
     ],
-    description: "Apple iPhone 17 Pro- 256GB,512GB, 1TB"
+    description: "iPhone 17 Pro Max features a grade-5 titanium design, the thinnest borders ever on an Apple product, and the most advanced display. A18 Pro chip with 6-core GPU delivers incredible performance. 5x Optical zoom camera system. All-day battery life with up to 33 hours video playback. Supports USB 3 for up to 2x faster transfers. Emergency SOS via satellite."
   },
   "local_2": {
-    title: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera",
-    price: 1073.80,
+    title: "Apple MacBook Pro 16-inch M4 Pro - Space Black",
+    price: 2499.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/4.jpg"
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80",
+      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&q=80",
+      "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=600&q=80"
     ],
-    description: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera."
+    description: "MacBook Pro with M4 Pro chip delivers exceptional performance for professionals. Features a stunning 16-inch Liquid Retina XDR display, up to 24 hours of battery life, and a next-generation camera and audio system. With up to 64GB unified memory and 8TB SSD storage."
   },
   "local_3": {
-    title: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch",
-    price: 1260.00,
+    title: "ASUS 2025 ROG Strix G16 Gaming Laptop - Intel Core i7 - RTX 5060",
+    price: 2299.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Automatic%20Moissanite%20Diamond%20Watch%20for%20Men/4.jpg"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&q=80",
+      "https://images.unsplash.com/photo-1593640408182-31c228fa7bf9?w=600&q=80",
+      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&q=80",
+      "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80"
     ],
-    description: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch."
+    description: "ASUS ROG Strix G16 16 inch WUXGA IPS LED-backlit Gaming Laptop. Display: 16 WUXGA (1920x1200) IPS 165Hz Refresh Rate. Processor: Intel Core i7-14650HX 16-Core. Graphics: NVIDIA GeForce RTX 5060 8GB GDDR7. Memory: 64GB DDR5 SDRAM. Storage: 4TB NVMe M.2 SSD. RGB Backlit Keyboard. Wi-Fi 7. Windows 11 Home."
   },
   "local_4": {
-    title: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress",
-    price: 95.00,
+    title: "Sony Alpha A7 IV Full-Frame Mirrorless Camera",
+    price: 2498.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/4.jpg"
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80",
+      "https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=600&q=80",
+      "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&q=80",
+      "https://images.unsplash.com/photo-1617005082133-548c4dd27f35?w=600&q=80"
     ],
-    description: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress."
+    description: "Sony Alpha A7 IV 33MP full-frame Exmor R BSI CMOS sensor. 4K 60p video recording. Real-time Eye AF for humans, animals and birds. 10fps continuous shooting. 5-axis in-body image stabilization. Dual card slots. Weather-sealed body. Perfect for professional photography and videography."
   },
   "local_5": {
-    title: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV with 4K Stabilized Video",
-    price: 1390.00,
+    title: "Samsung Galaxy S25 Ultra - 512GB - Titanium Black",
+    price: 1299.99,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/4.jpg"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&q=80",
+      "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600&q=80",
+      "https://images.unsplash.com/photo-1574755393849-623942496936?w=600&q=80",
+      "https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=600&q=80"
     ],
-    description: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV Quadcopter with 4K Stabilized Video, Super-Wide 155° FOV, Built-in Propeller Guard, HD Low-Latency Transmission."
+    description: "Samsung Galaxy S25 Ultra with Snapdragon 8 Elite processor. 200MP quad rear camera system with 100x Space Zoom. Built-in S Pen with AI features. 6.9-inch QHD+ Dynamic AMOLED 2X display at 120Hz. 5000mAh battery with 45W fast charging. 12GB RAM with 512GB storage."
   },
   "local_6": {
-    title: "Canon VIXIA HF G50 4K30P Camcorder",
-    price: 1100.00,
-    images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/4.jpg"
-    ],
-    description: "Canon VIXIA HF G50 4K30P Camcorder, Black."
-  },
-  "local_7": {
-    title: "Dell Precision 3590 Business Laptop, 2025, 14\" FHD IPS, Intel Core Ultra 7 155U, 16GB DDR5, 512GB SSD",
+    title: "Apple iPad Pro 13-inch M4 - 256GB WiFi",
     price: 1099.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/4.jpg"
+      "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80",
+      "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=600&q=80",
+      "https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=600&q=80",
+      "https://images.unsplash.com/photo-1589739900243-4b52cd9b104e?w=600&q=80"
     ],
-    description: "Dell Precision 3590 Business Laptop, 2025, 14\" 1920x1080 IPS, Intel Core Ultra 7 155U 12-Core, 16GB DDR5, 512GB SSD, Win10 Pro, Wi-Fi 6E."
+    description: "iPad Pro with M4 chip is the thinnest Apple product ever. Ultra Retina XDR display with nano-texture glass. Apple Pencil Pro and Magic Keyboard support. 13-inch tandem OLED display with ProMotion technology. 10-core CPU and 10-core GPU. Advanced camera system with LiDAR scanner."
+  },
+  "local_7": {
+    title: "Apple Watch Ultra 2 - 49mm Titanium",
+    price: 799.00,
+    images: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80",
+      "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=600&q=80",
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&q=80",
+      "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80"
+    ],
+    description: "Apple Watch Ultra 2 is the most capable and rugged Apple Watch. 49mm titanium case. Up to 60 hours battery life with low-power mode. Built for extreme environments. Precision dual-frequency GPS. Action button for instant access. Depth gauge and water temperature sensor. S9 SiP chip."
   },
   "local_8": {
-    title: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph",
-    price: 1395.00,
+    title: "Sony WH-1000XM5 Wireless Noise Canceling Headphones",
+    price: 348.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/4.jpg"
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=600&q=80",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&q=80",
+      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&q=80"
     ],
-    description: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph."
+    description: "Sony WH-1000XM5 with industry-leading noise canceling technology. 30 hours battery life with quick charge. Multipoint connection to two devices simultaneously. Crystal clear hands-free calling with 4 beamforming microphones. Auto Noise Canceling Optimizer. Speak-to-Chat technology."
   },
   "local_9": {
-    title: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, 5GHz FPV, Brushless Motor",
-    price: 365.00,
+    title: "DJI Phantom 4 Pro V2 Drone - 4K Camera",
+    price: 1599.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/4.jpg"
+      "https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=600&q=80",
+      "https://images.unsplash.com/photo-1508614999368-9260051292e5?w=600&q=80",
+      "https://images.unsplash.com/photo-1533310266094-8898a03807dd?w=600&q=80",
+      "https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=600&q=80"
     ],
-    description: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, Professional 5GHz FPV Transmission, Brushless Motor, 9842ft Long Range, 1 Battery 25 Mins Flight Time, GPS Auto Return."
+    description: "DJI Phantom 4 Pro V2 features a 1-inch 20MP CMOS sensor capable of shooting 4K/60fps video. Mechanical shutter eliminates rolling shutter distortion. 30-minute max flight time. OcuSync 2.0 transmission system with a range of up to 8km. Obstacle sensing in 5 directions."
   },
   "local_10": {
-    title: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag",
-    price: 86.12,
+    title: "Apple iPhone 17 Pro Max - 512GB - Desert Titanium",
+    price: 1399.99,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/4.jpg"
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80",
+      "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=600&q=80",
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&q=80",
+      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80"
     ],
-    description: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag Ladies Shoulder Bag for Mother's Day."
+    description: "The all-new iPhone 17 Pro Max in Desert Titanium. Features Apple's most powerful A18 Pro chip, a stunning 6.9-inch Super Retina XDR ProMotion display with always-on technology. ProCamera system with 5x Optical Zoom, 48MP Main camera, and Action button. Titanium design with Ceramic Shield front. Up to 33 hours battery life."
   },
   "local_11": {
-    title: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial",
-    price: 1699.00,
+    title: "Samsung 65-inch QLED 4K Smart TV - QN65Q80C",
+    price: 1197.99,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165015_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/4.jpg"
+      "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&q=80",
+      "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&q=80",
+      "https://images.unsplash.com/photo-1539786774582-0707555f1f72?w=600&q=80",
+      "https://images.unsplash.com/photo-1567690187548-f07b1d7bf5a9?w=600&q=80"
     ],
-    description: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial."
+    description: "Samsung 65-inch QLED 4K Smart TV with Quantum Dot technology delivers brilliant color. 4K AI Upscaling Pro. Quantum HDR+ for spectacular contrast. Real Game Enhancer+ with 144Hz refresh rate. Object Tracking Sound. Alexa and Google Assistant built-in. Motion Xcelerator Turbo+ technology."
   },
   "local_12": {
-    title: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid",
-    price: 1156.00,
+    title: "Gucci Marmont Matelassé Mini Bag - Black Leather",
+    price: 1350.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/4.jpg"
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",
+      "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80",
+      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&q=80"
     ],
-    description: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid."
+    description: "Gucci Marmont Matelassé Mini Bag in soft black leather with gold-toned hardware. Chevron quilted leather with a GG logo. Adjustable and removable shoulder strap. Internal zip pocket. Suede lining. Made in Italy. This iconic design is a timeless addition to any wardrobe."
   }
 };
 
