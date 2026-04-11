@@ -8510,6 +8510,14 @@ fetch("/followers/" + encodeURIComponent(sEmail))
     baseFollowers = d.followers || 0;
     renderFollowers();
   }).catch(function(){});
+\n// جلب مستوى VIP الحقيقي من السيرفر
+if(sEmail){
+  fetch("/store-vip/" + encodeURIComponent(sEmail))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      document.getElementById("vipLevel").innerText = d.vipLevel || 0;
+    }).catch(function(){});
+}
 
 function updateHeartUI(){
   var btn = document.getElementById("heartTopBtn");
