@@ -2495,19 +2495,19 @@ Hi, <span id="username"></span>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
   <!-- Apple iPhone 17 Pro -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple iPhone 17 Pro- 256GB512GB 1TB/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- MacBook Air M2 -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022 Apple MacBook Air Laptop with M2 chip 136-in/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Tricex Diamond Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex Mens Automatic Moissanite Diamond Watch  Fu/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Wedding Ball Gown -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless Satin Ball Gown Wedding Dresses for Brid/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
@@ -2516,35 +2516,35 @@ Hi, <span id="username"></span>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
   <!-- DJI Avata Drone -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI Avata Pro-View Combo DJI Goggles 2 - First-Per/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Canon Camcorder -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon VIXIA HF G50 4K30P Camcorder Black StyleG50/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Dell Business Laptop -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell Precision 3590 Business Laptop 2025 14 1920 x/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Movado Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado Museum Classic Mens Watch - Swiss Quartz Ch/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- INSYOO Drone 4K -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO F7 Drones with Camera for Adults 4k with Th/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Leather Handbag -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU Cow Leather Purses and Small Handbag for/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Lucky Harvey Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky Harvey Snake Automatic Men Watch 925 Silver/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Evening Dress -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
-    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening Dresses Long Elegant Full of Beading Cryst/1.jpg" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/1.jpg" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
@@ -3761,10 +3761,10 @@ var localProducts = {
     title: "Apple iPhone 17 Pro- 256GB,512GB, 1TB",
     price: 1079.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple iPhone 17 Pro- 256GB512GB 1TB/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple iPhone 17 Pro- 256GB512GB 1TB/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple iPhone 17 Pro- 256GB512GB 1TB/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple iPhone 17 Pro- 256GB512GB 1TB/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165027_Apple%20iPhone%2017%20Pro-%20256GB512GB%201TB/4.jpg"
     ],
     description: "Apple iPhone 17 Pro- 256GB,512GB, 1TB"
   },
@@ -3772,10 +3772,10 @@ var localProducts = {
     title: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera",
     price: 1073.80,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022 Apple MacBook Air Laptop with M2 chip 136-in/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022 Apple MacBook Air Laptop with M2 chip 136-in/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022 Apple MacBook Air Laptop with M2 chip 136-in/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022 Apple MacBook Air Laptop with M2 chip 136-in/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164991_2022%20Apple%20MacBook%20Air%20Laptop%20with%20M2%20chip%20136-in/4.jpg"
     ],
     description: "2022 Apple MacBook Air Laptop with M2 chip: 13.6-inch Liquid Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, 1080p FaceTime HD Camera."
   },
@@ -3783,10 +3783,10 @@ var localProducts = {
     title: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch",
     price: 1260.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex Mens Automatic Moissanite Diamond Watch  Fu/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex Mens Automatic Moissanite Diamond Watch  Fu/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex Mens Automatic Moissanite Diamond Watch  Fu/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex Mens Automatic Moissanite Diamond Watch  Fu/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165033_Tricex%20Mens%20Automatic%20Moissanite%20Diamond%20Watch%20%20Fu/4.jpg"
     ],
     description: "Tricex Men's Automatic Moissanite Diamond Watch – Full Iced Out Luxury Hip Hop Watch."
   },
@@ -3794,10 +3794,10 @@ var localProducts = {
     title: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress",
     price: 95.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless Satin Ball Gown Wedding Dresses for Brid/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless Satin Ball Gown Wedding Dresses for Brid/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless Satin Ball Gown Wedding Dresses for Brid/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless Satin Ball Gown Wedding Dresses for Brid/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165148_Strapless%20Satin%20Ball%20Gown%20Wedding%20Dresses%20for%20Brid/4.jpg"
     ],
     description: "Strapless Satin Ball Gown Wedding Dresses for Bride Split Prom Dress."
   },
@@ -3805,10 +3805,10 @@ var localProducts = {
     title: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV with 4K Stabilized Video",
     price: 1390.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI Avata Pro-View Combo DJI Goggles 2 - First-Per/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI Avata Pro-View Combo DJI Goggles 2 - First-Per/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI Avata Pro-View Combo DJI Goggles 2 - First-Per/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI Avata Pro-View Combo DJI Goggles 2 - First-Per/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164968_DJI%20Avata%20Pro-View%20Combo%20DJI%20Goggles%202%20-%20First-Per/4.jpg"
     ],
     description: "DJI Avata Pro-View Combo (DJI Goggles 2) - First-Person View Drone UAV Quadcopter with 4K Stabilized Video, Super-Wide 155° FOV, Built-in Propeller Guard, HD Low-Latency Transmission."
   },
@@ -3816,10 +3816,10 @@ var localProducts = {
     title: "Canon VIXIA HF G50 4K30P Camcorder",
     price: 1100.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon VIXIA HF G50 4K30P Camcorder Black StyleG50/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon VIXIA HF G50 4K30P Camcorder Black StyleG50/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon VIXIA HF G50 4K30P Camcorder Black StyleG50/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon VIXIA HF G50 4K30P Camcorder Black StyleG50/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164992_Canon%20VIXIA%20HF%20G50%204K30P%20Camcorder%20Black%20StyleG50/4.jpg"
     ],
     description: "Canon VIXIA HF G50 4K30P Camcorder, Black."
   },
@@ -3827,10 +3827,10 @@ var localProducts = {
     title: "Dell Precision 3590 Business Laptop, 2025, 14\" FHD IPS, Intel Core Ultra 7 155U, 16GB DDR5, 512GB SSD",
     price: 1099.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell Precision 3590 Business Laptop 2025 14 1920 x/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell Precision 3590 Business Laptop 2025 14 1920 x/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell Precision 3590 Business Laptop 2025 14 1920 x/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell Precision 3590 Business Laptop 2025 14 1920 x/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/165034_Dell%20Precision%203590%20Business%20Laptop%202025%2014%201920%20x/4.jpg"
     ],
     description: "Dell Precision 3590 Business Laptop, 2025, 14\" 1920x1080 IPS, Intel Core Ultra 7 155U 12-Core, 16GB DDR5, 512GB SSD, Win10 Pro, Wi-Fi 6E."
   },
@@ -3838,10 +3838,10 @@ var localProducts = {
     title: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph",
     price: 1395.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado Museum Classic Mens Watch - Swiss Quartz Ch/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado Museum Classic Mens Watch - Swiss Quartz Ch/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado Museum Classic Mens Watch - Swiss Quartz Ch/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado Museum Classic Mens Watch - Swiss Quartz Ch/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165010_Movado%20Museum%20Classic%20Mens%20Watch%20-%20Swiss%20Quartz%20Ch/4.jpg"
     ],
     description: "Movado Museum Classic Men's Watch - Swiss Quartz Chronograph."
   },
@@ -3849,10 +3849,10 @@ var localProducts = {
     title: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, 5GHz FPV, Brushless Motor",
     price: 365.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO F7 Drones with Camera for Adults 4k with Th/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO F7 Drones with Camera for Adults 4k with Th/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO F7 Drones with Camera for Adults 4k with Th/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO F7 Drones with Camera for Adults 4k with Th/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/164958_INSYOO%20F7%20Drones%20with%20Camera%20for%20Adults%204k%20with%20Th/4.jpg"
     ],
     description: "INSYOO F7 Drones with Camera for Adults 4K with Three-axis Gimbal, Professional 5GHz FPV Transmission, Brushless Motor, 9842ft Long Range, 1 Battery 25 Mins Flight Time, GPS Auto Return."
   },
@@ -3860,10 +3860,10 @@ var localProducts = {
     title: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag",
     price: 86.12,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU Cow Leather Purses and Small Handbag for/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU Cow Leather Purses and Small Handbag for/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU Cow Leather Purses and Small Handbag for/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU Cow Leather Purses and Small Handbag for/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/165070_LAORENTOU%20Cow%20Leather%20Purses%20and%20Small%20Handbag%20for/4.jpg"
     ],
     description: "LAORENTOU Cow Leather Purses and Small Handbag for Women Satchel Tote Bag Ladies Shoulder Bag for Mother's Day."
   },
@@ -3871,10 +3871,10 @@ var localProducts = {
     title: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial",
     price: 1699.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky Harvey Snake Automatic Men Watch 925 Silver/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky Harvey Snake Automatic Men Watch 925 Silver/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky Harvey Snake Automatic Men Watch 925 Silver/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky Harvey Snake Automatic Men Watch 925 Silver/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/21_Watches/165019_Lucky%20Harvey%20Snake%20Automatic%20Men%20Watch%20925%20Silver/4.jpg"
     ],
     description: "Lucky Harvey Snake Automatic Men Watch 925 Silver Snake Dial."
   },
@@ -3882,10 +3882,10 @@ var localProducts = {
     title: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid",
     price: 1156.00,
     images: [
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening Dresses Long Elegant Full of Beading Cryst/1.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening Dresses Long Elegant Full of Beading Cryst/2.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening Dresses Long Elegant Full of Beading Cryst/3.jpg",
-      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening Dresses Long Elegant Full of Beading Cryst/4.jpg"
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/1.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/2.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/3.jpg",
+      "https://res.cloudinary.com/doabtbdsh/image/upload/products/17_Clothing_and_Accessories/164576_Evening%20Dresses%20Long%20Elegant%20Full%20of%20Beading%20Cryst/4.jpg"
     ],
     description: "Evening Dresses Long Elegant Full of Beading Crystal Mermaid."
   }
