@@ -3696,7 +3696,7 @@ res.send(pageHTML);
 });
 // ================= PRODUCT DETAIL PAGE =================
 app.get("/product-detail", (req, res) => {
-res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;padding-top:50px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:200;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/cart\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;fetch("https://fakestoreapi.com/products/" + productId).then(function(r){return r.json();}).then(function(p){document.getElementById("mainImg").src = p.image;var thumbs = document.getElementById("thumbs");for(var i=0;i<5;i++){var img = document.createElement("img");img.src = p.image;if(i===0) img.classList.add("active");img.onclick = function(){document.getElementById("mainImg").src = this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);}window._pData = p;document.getElementById("productTitle").innerText = p.title;document.getElementById("productPrice").innerText = "$" + p.price;var desc = document.getElementById("descList");var points = p.description ? p.description.split(".").filter(function(s){return s.trim();}) : [p.description];points.forEach(function(point){if(point && point.trim()){var li = document.createElement("li");li.innerText = point.trim();desc.appendChild(li);}});});function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){if(!window._pData){alert("Product not loaded yet");return;}var cart=JSON.parse(localStorage.getItem("cart")||"[]");var existing=cart.find(function(c){return c.id==window._pData.id;});if(existing){existing.qty=(existing.qty||1)+1;}else{cart.push({id:window._pData.id,title:window._pData.title,price:window._pData.price,qty:1,img:window._pData.image,store:"S&R Store"});}localStorage.setItem("cart",JSON.stringify(cart));alert("Added to cart \u2705");}function buyNow(){window.location.href="/wallet";}<\/script></body></html>');
+res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;padding-top:50px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:200;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;fetch("https://fakestoreapi.com/products/" + productId).then(function(r){return r.json();}).then(function(p){document.getElementById("mainImg").src = p.image;var thumbs = document.getElementById("thumbs");for(var i=0;i<5;i++){var img = document.createElement("img");img.src = p.image;if(i===0) img.classList.add("active");img.onclick = function(){document.getElementById("mainImg").src = this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);}document.getElementById("productTitle").innerText = p.title;document.getElementById("productPrice").innerText = "$" + p.price;var desc = document.getElementById("descList");var points = p.description ? p.description.split(".").filter(function(s){return s.trim();}) : [p.description];points.forEach(function(point){if(point && point.trim()){var li = document.createElement("li");li.innerText = point.trim();desc.appendChild(li);}});});function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var cart=JSON.parse(localStorage.getItem("cart")||"[]");cart.push(productId);localStorage.setItem("cart",JSON.stringify(cart));alert("Added to cart");}function buyNow(){window.location.href="/wallet";}<\/script></body></html>');
 });
 
 // ================= PRODUCT PAGE =================
@@ -3836,10 +3836,7 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
-  <span class="icon-btn" id="cartIconBtn" onclick="window.location.href='/cart'" style="position:relative;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    <span id="cartCountBadge" style="display:none;position:absolute;top:-5px;right:-5px;background:#e8791d;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;text-align:center;line-height:16px;padding:0 3px;"></span>
-  </span>
+  <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
   <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
   <div class="buy-btn" onclick="buyNow()">Buy now</div>
 </div>
@@ -4029,14 +4026,10 @@ function goSlide(idx) {
   document.querySelectorAll(".thumbs img").forEach(function(t,i){ t.className = (i===idx?"active":""); });
 }
 
-// بيانات المنتج الحالي
-var currentProduct = null;
-
 // تحميل المنتج
 if(id && id.startsWith("local_")) {
   var p = localProducts[id];
   if(p) {
-    currentProduct = { id: id, title: p.title, price: p.price, img: p.images[0], store: "TikTok Mall Store" };
     document.getElementById("productTitle").innerText = p.title;
     document.getElementById("productPrice").innerText = "\$" + p.price.toLocaleString();
     document.getElementById("productDesc").innerText = p.description;
@@ -4047,7 +4040,6 @@ if(id && id.startsWith("local_")) {
   fetch("https://fakestoreapi.com/products/" + id)
   .then(function(r){ return r.json(); })
   .then(function(p) {
-    currentProduct = { id: p.id, title: p.title, price: p.price, img: p.image, store: "TikTok Mall Store" };
     document.getElementById("productTitle").innerText = p.title;
     document.getElementById("productPrice").innerText = "\$" + p.price;
     document.getElementById("productDesc").innerText = p.description || "";
@@ -4061,11 +4053,8 @@ function toggleHeart(){
 }
 
 function addToCart(){
-  if(!currentProduct){ alert("Product not loaded yet"); return; }
   var cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  var existing = cart.find(function(c){ return c.id == currentProduct.id; });
-  if(existing){ existing.qty = (existing.qty||1) + 1; }
-  else { cart.push({ id: currentProduct.id, title: currentProduct.title, price: currentProduct.price, qty: 1, img: currentProduct.img, store: currentProduct.store }); }
+  cart.push(id);
   localStorage.setItem("cart", JSON.stringify(cart));
   alert("Added to cart ✅");
 }
@@ -6999,7 +6988,7 @@ margin-bottom:5px;
 <p>Store setting</p>
 </div>
 
-<div class="tool">
+<div class="tool" onclick="window.location.href='/vip-upgrade'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/2331/2331949.png">
 <p>Store Operating fund</p>
 </div>
@@ -7048,8 +7037,17 @@ async function loadStoreInfo(){
         }
     }
 
-    // VIP دائماً 0 للمتاجر الجديدة
-    document.getElementById("vipBadge").innerText = "VIP 0";
+    // VIP Level - جلب من السيرفر
+    try {
+      let token2 = localStorage.getItem("token") || "";
+      let vipRes = await fetch("/my-vip-info", { headers:{"Authorization":"Bearer " + token2} });
+      let vipData = await vipRes.json();
+      if(vipData.success){
+        document.getElementById("vipBadge").innerText = "VIP " + (vipData.vipLevel || 0);
+      }
+    } catch(e){
+      document.getElementById("vipBadge").innerText = "VIP 0";
+    }
 }
 
 // تغيير شعار المتجر
@@ -7095,7 +7093,10 @@ function loadVisitorCounter(){
   let user = JSON.parse(localStorage.getItem("user") || "{}");
   let key = "visitorData_" + (user.email || "guest");
 
-  const DAILY_TARGET = 50;
+  // جدول الزوار حسب VIP
+  const VIP_VISITORS = [50, 600, 1000, 3000, 10000, 30000];
+  let vipLevel = user.vipLevel || 0;
+  const DAILY_TARGET = VIP_VISITORS[vipLevel] || 50;
   const VERSION = "v3"; // تغيير هذا يمسح البيانات القديمة
 
   function getEndOfDay(){ let d = new Date(); d.setHours(23,59,59,999); return d.getTime(); }
@@ -7202,6 +7203,450 @@ loadVisitorCounter();
 loadProductsCount();
 setInterval(loadMerchantBalance, 5000);
 </script>
+</html>`);
+});
+
+// ================= VIP UPGRADE API =================
+const VIP_PLANS = [
+    { level: 0, capital: 0,       visitors: 50,    products: 20,  commission: 15 },
+    { level: 1, capital: 500,     visitors: 600,   products: 35,  commission: 17 },
+    { level: 2, capital: 5000,    visitors: 1000,  products: 80,  commission: 20 },
+    { level: 3, capital: 20000,   visitors: 3000,  products: 120, commission: 22 },
+    { level: 4, capital: 50000,   visitors: 10000, products: 300, commission: 25 },
+    { level: 5, capital: 200000,  visitors: 30000, products: 1000,commission: 40 }
+];
+
+app.post("/upgrade-vip", authMiddleware, (req, res) => {
+    const { targetLevel } = req.body;
+    const email = req.userEmail;
+
+    const user = users.find(u => u.email === email);
+    if (!user) return res.json({ success: false, message: "User not found" });
+
+    const currentLevel = user.vipLevel || 0;
+    const nextLevel = parseInt(targetLevel);
+
+    if (isNaN(nextLevel) || nextLevel <= currentLevel || nextLevel > 5) {
+        return res.json({ success: false, message: "Invalid level" });
+    }
+
+    const plan = VIP_PLANS.find(p => p.level === nextLevel);
+    if (!plan) return res.json({ success: false, message: "Plan not found" });
+
+    const balance = parseFloat(user.balance || 0);
+    if (balance < plan.capital) {
+        return res.json({ success: false, message: "Insufficient balance. You need $" + plan.capital.toLocaleString() + " to upgrade." });
+    }
+
+    // خصم رأس المال وتحديث مستوى VIP
+    user.balance = (balance - plan.capital).toFixed(2);
+    user.vipLevel = nextLevel;
+    user.vipCapital = plan.capital;
+    user.vipVisitors = plan.visitors;
+    user.vipProducts = plan.products;
+    user.vipCommission = plan.commission;
+    user.vipUpgradedAt = new Date().toISOString();
+
+    saveUsers();
+    addLog("vip_upgrade", "Upgraded to VIP " + nextLevel + " | Capital: $" + plan.capital, email);
+
+    res.json({ success: true, vipLevel: nextLevel, newBalance: user.balance });
+});
+
+app.get("/my-vip-info", authMiddleware, (req, res) => {
+    const user = users.find(u => u.email === req.userEmail);
+    if (!user) return res.json({ success: false });
+    res.json({
+        success: true,
+        vipLevel: user.vipLevel || 0,
+        balance: parseFloat(user.balance || 0).toFixed(2)
+    });
+});
+
+// ================= VIP UPGRADE PAGE =================
+app.get("/vip-upgrade", (req, res) => {
+res.send(`<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store Operating Fund</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  background:#f4f6fb;
+  min-height:100vh;
+  padding-bottom:30px;
+}
+
+/* HEADER */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:linear-gradient(135deg,#1565c0,#1976d2);
+  color:white;
+  padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 2px 12px rgba(21,101,192,0.3);
+}
+.header h2{margin:0;font-size:17px;font-weight:600;}
+
+/* BALANCE BANNER */
+.balance-banner{
+  margin:70px 14px 0;
+  background:linear-gradient(135deg,#1565c0,#0d47a1);
+  border-radius:16px;
+  padding:18px 20px;
+  color:white;
+  display:flex;justify-content:space-between;align-items:center;
+  box-shadow:0 4px 20px rgba(21,101,192,0.25);
+}
+.balance-banner .label{font-size:13px;opacity:0.85;margin-bottom:4px;}
+.balance-banner .amount{font-size:26px;font-weight:700;}
+.balance-banner .vip-tag{
+  background:rgba(255,255,255,0.2);
+  border-radius:20px;padding:6px 14px;
+  font-size:13px;font-weight:600;
+  border:1px solid rgba(255,255,255,0.3);
+}
+
+/* SECTION TITLE */
+.section-title{
+  margin:20px 14px 10px;
+  font-size:15px;font-weight:600;color:#333;
+}
+
+/* VIP CARD */
+.vip-card{
+  background:white;
+  margin:0 14px 14px;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.07);
+  border:2px solid transparent;
+  transition:all 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.vip-card.current{
+  border-color:#e8f0fe;
+  background:linear-gradient(135deg,#f8fafe,white);
+}
+.vip-card.locked{
+  opacity:0.7;
+}
+.vip-card.vip5{
+  border-color:#ffd700;
+  background:linear-gradient(135deg,#fffbf0,white);
+}
+
+/* VIP CARD HEADER */
+.vip-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:14px;
+}
+.vip-name{
+  display:flex;align-items:center;gap:8px;
+}
+.vip-badge{
+  background:linear-gradient(135deg,#f5a623,#e8791d);
+  color:white;
+  padding:5px 14px;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:700;
+}
+.vip-badge.vip5-badge{
+  background:linear-gradient(135deg,#ffd700,#ffb300);
+  color:#5d3a00;
+}
+.capital-tag{
+  font-size:13px;
+  color:#1976d2;
+  font-weight:600;
+  background:#e3f0ff;
+  padding:4px 12px;
+  border-radius:20px;
+}
+.capital-tag.free{
+  color:#2e7d32;
+  background:#e8f5e9;
+}
+
+/* FEATURES GRID */
+.features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.feature-item{
+  background:#f8f9ff;
+  border-radius:10px;
+  padding:10px 12px;
+  display:flex;align-items:center;gap:8px;
+}
+.feature-item .icon{font-size:18px;}
+.feature-item .info{}
+.feature-item .info .val{font-size:15px;font-weight:700;color:#1a1a2e;}
+.feature-item .info .key{font-size:11px;color:#888;margin-top:1px;}
+
+/* BEST VALUE BADGE */
+.best-value{
+  background:linear-gradient(135deg,#ff6b00,#ff9800);
+  color:white;
+  font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  display:inline-block;margin-left:8px;
+  vertical-align:middle;
+}
+
+/* UPGRADE BUTTON */
+.upgrade-btn{
+  width:100%;
+  padding:13px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#1976d2,#1565c0);
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+  letter-spacing:0.3px;
+}
+.upgrade-btn:hover{
+  background:linear-gradient(135deg,#1565c0,#0d47a1);
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(21,101,192,0.4);
+}
+.upgrade-btn:active{transform:translateY(0);}
+
+.current-btn{
+  width:100%;
+  padding:13px;
+  border:2px solid #ccc;
+  border-radius:12px;
+  background:#f5f5f5;
+  color:#999;
+  font-size:15px;
+  font-weight:600;
+  cursor:default;
+}
+
+/* COMMISSION BADGE */
+.commission-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;
+  background:#f0f7ff;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+.commission-row .label{font-size:13px;color:#555;}
+.commission-row .val{font-size:16px;font-weight:700;color:#1976d2;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:30px;left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:#333;color:white;
+  padding:12px 24px;border-radius:30px;
+  font-size:14px;z-index:999;
+  transition:transform 0.3s;
+  white-space:nowrap;
+  max-width:90%;
+  text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.success{background:#2e7d32;}
+.toast.error{background:#c62828;}
+
+/* VIP5 CROWN */
+.crown{font-size:20px;margin-right:4px;}
+
+/* DIVIDER */
+.divider{height:1px;background:#f0f0f0;margin:0 14px 14px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <h2>Store Operating Fund</h2>
+</div>
+
+<!-- BALANCE BANNER -->
+<div class="balance-banner">
+  <div>
+    <div class="label">Available Balance</div>
+    <div class="amount">$<span id="bannerBalance">0.00</span></div>
+  </div>
+  <div class="vip-tag" id="currentVipTag">VIP 0</div>
+</div>
+
+<div class="section-title">Select your plan</div>
+
+<!-- VIP CARDS CONTAINER -->
+<div id="vipCards"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const PLANS = [
+  { level:0, capital:0,      visitors:50,    products:20,  commission:15, label:"VIP 0" },
+  { level:1, capital:500,    visitors:600,   products:35,  commission:17, label:"VIP 1" },
+  { level:2, capital:5000,   visitors:1000,  products:80,  commission:20, label:"VIP 2" },
+  { level:3, capital:20000,  visitors:3000,  products:120, commission:22, label:"VIP 3" },
+  { level:4, capital:50000,  visitors:10000, products:300, commission:25, label:"VIP 4" },
+  { level:5, capital:200000, visitors:30000, products:1000,commission:40, label:"VIP 5", best:true }
+];
+
+let currentVip = 0;
+let currentBalance = 0;
+
+function fmt(n){ return n.toLocaleString(); }
+
+function showToast(msg, type=""){
+  let t = document.getElementById("toast");
+  t.className = "toast " + type;
+  t.innerText = msg;
+  t.classList.add("show");
+  setTimeout(()=>{ t.classList.remove("show"); }, 3500);
+}
+
+function renderCards(){
+  let container = document.getElementById("vipCards");
+  container.innerHTML = "";
+
+  PLANS.forEach(function(plan){
+    let isCurrent = plan.level === currentVip;
+    let isUpgraded = plan.level < currentVip;
+    let canUpgrade = plan.level === currentVip + 1;
+    let isLocked = plan.level > currentVip + 1;
+
+    let card = document.createElement("div");
+    let extraClass = isCurrent ? "current" : (isLocked ? "locked" : "");
+    if(plan.level === 5) extraClass += " vip5";
+    card.className = "vip-card " + extraClass;
+
+    let badgeClass = plan.level === 5 ? "vip-badge vip5-badge" : "vip-badge";
+    let capitalClass = plan.capital === 0 ? "capital-tag free" : "capital-tag";
+    let capitalText = plan.capital === 0 ? "Free" : "$" + fmt(plan.capital);
+    let crownHtml = plan.level === 5 ? '<span class="crown">👑</span>' : '';
+    let bestValueHtml = plan.best ? '<span class="best-value">⭐ Best Value</span>' : '';
+
+    let btnHtml = "";
+    if(isCurrent){
+      btnHtml = '<button class="current-btn">🔘 Current Plan</button>';
+    } else if(isUpgraded){
+      btnHtml = '<button class="current-btn" style="background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32;">✅ Upgraded</button>';
+    } else if(canUpgrade){
+      btnHtml = '<button class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">🔘 Upgrade to VIP ' + plan.level + '</button>';
+    } else {
+      btnHtml = '<button class="current-btn" style="background:#f5f5f5;color:#bbb;">🔒 Locked</button>';
+    }
+
+    card.innerHTML =
+      '<div class="vip-header">' +
+        '<div class="vip-name">' +
+          crownHtml +
+          '<span class="' + badgeClass + '">' + plan.label + '</span>' +
+          bestValueHtml +
+        '</div>' +
+        '<span class="' + capitalClass + '">' + capitalText + '</span>' +
+      '</div>' +
+      '<div class="commission-row">' +
+        '<span class="label">💰 Sales Commission</span>' +
+        '<span class="val">' + plan.commission + '%</span>' +
+      '</div>' +
+      '<div class="features">' +
+        '<div class="feature-item"><span class="icon">👥</span><div class="info"><div class="val">' + fmt(plan.visitors) + '</div><div class="key">Daily Visitors</div></div></div>' +
+        '<div class="feature-item"><span class="icon">📦</span><div class="info"><div class="val">' + fmt(plan.products) + '</div><div class="key">Product Limit</div></div></div>' +
+      '</div>' +
+      btnHtml;
+
+    container.appendChild(card);
+
+    // divider between cards
+    let div = document.createElement("div");
+    div.className = "divider";
+    container.appendChild(div);
+  });
+}
+
+async function loadInfo(){
+  try {
+    let token = localStorage.getItem("token") || "";
+    let res = await fetch("/my-vip-info", {
+      headers:{ "Authorization": "Bearer " + token }
+    });
+    let data = await res.json();
+    if(data.success){
+      currentVip = data.vipLevel || 0;
+      currentBalance = parseFloat(data.balance || 0);
+      document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+      document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
+      renderCards();
+    }
+  } catch(e){
+    // fallback: use localStorage balance
+    let user = JSON.parse(localStorage.getItem("user") || "{}");
+    currentBalance = parseFloat(user.balance || 0);
+    currentVip = user.vipLevel || 0;
+    document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
+    renderCards();
+  }
+}
+
+async function doUpgrade(level){
+  let plan = PLANS.find(p => p.level === level);
+  if(!plan) return;
+
+  if(currentBalance < plan.capital){
+    showToast("❌ Insufficient balance. Need $" + fmt(plan.capital), "error");
+    return;
+  }
+
+  if(!confirm("Upgrade to VIP " + level + "?\\nThis will deduct $" + fmt(plan.capital) + " from your balance.")){
+    return;
+  }
+
+  try {
+    let token = localStorage.getItem("token") || "";
+    let res = await fetch("/upgrade-vip", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + token },
+      body: JSON.stringify({ targetLevel: level })
+    });
+    let data = await res.json();
+    if(data.success){
+      currentVip = data.vipLevel;
+      currentBalance = parseFloat(data.newBalance);
+      document.getElementById("bannerBalance").innerText = currentBalance.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+      document.getElementById("currentVipTag").innerText = "VIP " + currentVip;
+      // تحديث localStorage
+      let user = JSON.parse(localStorage.getItem("user") || "{}");
+      user.vipLevel = currentVip;
+      user.balance = data.newBalance;
+      localStorage.setItem("user", JSON.stringify(user));
+      renderCards();
+      showToast("🎉 Successfully upgraded to VIP " + currentVip + "!", "success");
+    } else {
+      showToast("❌ " + (data.message || "Upgrade failed"), "error");
+    }
+  } catch(e){
+    showToast("❌ Connection error", "error");
+  }
+}
+
+loadInfo();
+</script>
+
+</body>
 </html>`);
 });
 
@@ -8393,10 +8838,7 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;padding-top:50px;m
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
-  <span class="icon-btn" id="cartIconBtn" onclick="window.location.href='/cart'" style="position:relative;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    <span id="cartCountBadge" style="display:none;position:absolute;top:-5px;right:-5px;background:#e8791d;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;text-align:center;line-height:16px;padding:0 3px;"></span>
-  </span>
+  <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
   <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
   <div class="buy-btn" onclick="buyNow()">Buy now</div>
 </div>
@@ -8550,331 +8992,15 @@ document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers
 
 function addToCart(){
   var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  // تحقق إذا كان المنتج موجوداً مسبقاً
-  var existing = cart.find(function(c){ return c.id == p.id; });
-  if(existing){ existing.qty = (existing.qty||1) + 1; }
-  else { cart.push({ id: p.id, title: p.t, price: p.p, qty: 1, img: p.img, store: sName }); }
+  cart.push({ id: p.id, title: p.t, price: p.p, qty: 1, img: p.img });
   localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartBadge();
   showToast("&#10003; Added to cart");
 }
-
-function updateCartBadge(){
-  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  var total = cart.reduce(function(s,c){ return s+(c.qty||1); },0);
-  var badge = document.getElementById("cartCountBadge");
-  if(badge){
-    if(total>0){ badge.style.display="inline-block"; badge.innerText=total>99?"99+":total; }
-    else { badge.style.display="none"; }
-  }
-}
-// تحديث عداد السلة عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", updateCartBadge);
 
 function buyNow(){
   window.location.href = "/wallet";
 }
 <\/script>
-</body>
-</html>`);
-});
-
-// ================= CART PAGE =================
-app.get("/cart", (req, res) => {
-  res.send(`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Cart</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#f5f5f5;min-height:100vh;padding-top:50px;padding-bottom:30px;}
-/* HEADER */
-.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:200;height:50px;}
-.h-icons{display:flex;align-items:center;gap:15px;}
-/* TOP BAR */
-.top-bar{display:flex;align-items:center;justify-content:space-between;background:white;padding:12px 15px;border-bottom:1px solid #eee;gap:8px;}
-.edit-btn{border:1.5px solid #2ecc71;color:#333;font-size:14px;padding:8px 24px;border-radius:6px;background:white;cursor:pointer;font-weight:500;white-space:nowrap;}
-.total-area{display:flex;align-items:center;gap:6px;flex:1;justify-content:center;}
-.total-check{width:20px;height:20px;border:1.5px solid #ccc;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.total-check.checked{background:#1976d2;border-color:#1976d2;}
-.total-check.checked::after{content:'\\2713';color:white;font-size:12px;}
-.total-label{font-size:13px;color:#333;}
-.total-price{font-size:13px;font-weight:bold;color:#1976d2;}
-.settle-btn{background:#1976d2;color:white;border:none;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;white-space:nowrap;}
-/* STORE GROUP */
-.store-group{background:white;margin-top:8px;overflow:hidden;}
-.store-header{display:flex;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;gap:10px;}
-.store-header-name{flex:1;font-size:14px;color:#222;font-weight:500;}
-.store-arrow{color:#bbb;font-size:18px;}
-/* CART ITEM */
-.cart-item{display:flex;align-items:center;padding:14px 15px;gap:12px;border-bottom:1px solid #f5f5f5;}
-.item-check{width:22px;height:22px;border:1.5px solid #ccc;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.item-check.checked{background:#1976d2;border-color:#1976d2;}
-.item-check.checked::after{content:'\\2713';color:white;font-size:12px;}
-.item-img{width:90px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #eee;flex-shrink:0;}
-.item-info{flex:1;min-width:0;}
-.item-price{font-size:16px;font-weight:bold;color:#222;margin-bottom:4px;}
-.item-title{font-size:12px;color:#666;margin-bottom:2px;line-height:1.4;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-.item-brand{font-size:11px;color:#aaa;margin-bottom:8px;}
-.qty-row{display:flex;align-items:center;gap:2px;}
-.qty-btn{width:28px;height:28px;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#555;border-radius:50%;}
-.qty-num{width:34px;text-align:center;font-size:14px;color:#333;}
-/* EMPTY */
-.empty-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;}
-.empty-wrap svg{opacity:0.3;margin-bottom:20px;}
-.empty-wrap p{font-size:15px;color:#999;margin-bottom:24px;}
-.go-shop-btn{background:#1976d2;color:white;border:none;padding:13px 40px;border-radius:25px;font-size:14px;cursor:pointer;}
-</style>
-</head>
-<body>
-
-<!-- HEADER -->
-<div class="header">
-  <div style="display:flex;align-items:center;gap:8px;">
-    <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </span>
-  </div>
-  <div class="h-icons">
-    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </span>
-  </div>
-</div>
-
-<!-- TOP BAR -->
-<div class="top-bar">
-  <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">Edit</button>
-  <div class="total-area">
-    <div class="total-check" id="selectAllBtn" onclick="toggleSelectAll()"></div>
-    <span class="total-label">Total:&nbsp;</span>
-    <span class="total-price" id="totalPrice">US$ 0.00</span>
-  </div>
-  <button class="settle-btn" onclick="settlement()">Settlement</button>
-</div>
-
-<!-- CONTENT -->
-<div id="cartContainer"></div>
-
-<script>
-var cart = [];
-var editMode = false;
-var selectedItems = {};
-
-function loadCart(){
-  try {
-    var raw = localStorage.getItem("cart");
-    if(!raw){ cart=[]; renderCart(); return; }
-    var parsed = JSON.parse(raw);
-    if(!Array.isArray(parsed)){ cart=[]; renderCart(); return; }
-
-    // فصل العناصر: كاملة vs قديمة (ID فقط)
-    var complete = [];
-    var needFetch = []; // { id, index }
-
-    parsed.forEach(function(item, i){
-      if(typeof item === 'string' || typeof item === 'number'){
-        // بيانات قديمة - ID فقط، نحتاج جلبها
-        needFetch.push({ id: item, origIdx: i });
-        complete.push(null); // placeholder
-      } else {
-        complete.push({
-          id:    item.id    || i,
-          title: item.title || item.t || 'Product',
-          price: parseFloat(item.price || item.p || 0),
-          qty:   parseInt(item.qty  || 1),
-          img:   item.img   || '',
-          store: item.store || 'Store'
-        });
-      }
-    });
-
-    if(needFetch.length === 0){
-      cart = complete;
-      selectedItems = {};
-      cart.forEach(function(_,i){ selectedItems[i]=false; });
-      renderCart();
-      return;
-    }
-
-    // جلب البيانات الناقصة من API
-    var fetched = 0;
-    needFetch.forEach(function(entry){
-      fetch('https://fakestoreapi.com/products/' + entry.id)
-        .then(function(r){ return r.json(); })
-        .then(function(p){
-          complete[entry.origIdx] = {
-            id:    p.id,
-            title: p.title || 'Product',
-            price: parseFloat(p.price || 0),
-            qty:   1,
-            img:   p.image || '',
-            store: 'Store'
-          };
-        })
-        .catch(function(){
-          complete[entry.origIdx] = {
-            id: entry.id, title: 'Product #'+entry.id,
-            price: 0, qty: 1, img: '', store: 'Store'
-          };
-        })
-        .finally(function(){
-          fetched++;
-          if(fetched === needFetch.length){
-            cart = complete.filter(function(x){ return x !== null; });
-            // حفظ البيانات الكاملة في localStorage لاستخدامها لاحقاً
-            localStorage.setItem('cart', JSON.stringify(cart));
-            selectedItems = {};
-            cart.forEach(function(_,i){ selectedItems[i]=false; });
-            renderCart();
-          }
-        });
-    });
-  } catch(e){
-    cart=[];
-    selectedItems={};
-    renderCart();
-  }
-}
-
-function renderCart(){
-  var container = document.getElementById("cartContainer");
-
-  if(!cart || !cart.length){
-    container.innerHTML = '<div class="empty-wrap">'
-      + '<svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>'
-      + '<p>Your cart is empty</p>'
-      + '<button class="go-shop-btn" onclick="window.location.href=\'/dashboard\'">Go Shopping</button>'
-      + '</div>';
-    updateTotal();
-    return;
-  }
-
-  // تجميع حسب المتجر
-  var stores = {};
-  cart.forEach(function(item, idx){
-    var sn = item.store || 'Store';
-    if(!stores[sn]) stores[sn] = [];
-    stores[sn].push({ item:item, idx:idx });
-  });
-
-  var html = '';
-  Object.keys(stores).forEach(function(sName){
-    html += '<div class="store-group">';
-    html += '<div class="store-header">';
-    html += '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
-    html += '<span class="store-header-name">'+esc(sName)+'</span>';
-    html += '<span class="store-arrow">&#8250;</span>';
-    html += '</div>';
-    stores[sName].forEach(function(e){
-      var it = e.item, idx = e.idx;
-      var chk = selectedItems[idx] ? ' checked' : '';
-      var imgSrc = it.img || 'https://via.placeholder.com/90x90?text=IMG';
-      html += '<div class="cart-item" id="ci'+idx+'">';
-      html += '<div class="item-check'+chk+'" onclick="toggleItem('+idx+')"></div>';
-      html += '<img class="item-img" src="'+esc(imgSrc)+'" onerror="this.src=\'https://via.placeholder.com/90x90?text=IMG\'">';
-      html += '<div class="item-info">';
-      html += '<div class="item-price">US$'+Number(it.price||0).toFixed(2)+'</div>';
-      html += '<div class="item-title">'+esc(it.title||'')+'</div>';
-      html += '<div class="item-brand">'+esc(it.store||'')+'</div>';
-      html += '<div class="qty-row">';
-      html += '<button class="qty-btn" onclick="chQty('+idx+',-1)">&#8722;</button>';
-      html += '<span class="qty-num" id="qn'+idx+'">'+Number(it.qty||1)+'</span>';
-      html += '<button class="qty-btn" onclick="chQty('+idx+',1)">+</button>';
-      html += '</div></div></div>';
-    });
-    html += '</div>';
-  });
-
-  container.innerHTML = html;
-  updateTotal();
-  syncSelectAll();
-}
-
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function toggleItem(idx){
-  selectedItems[idx] = !selectedItems[idx];
-  var el = document.querySelector('#ci'+idx+' .item-check');
-  if(el){ el.className = 'item-check' + (selectedItems[idx]?' checked':''); }
-  updateTotal();
-  syncSelectAll();
-}
-
-function toggleSelectAll(){
-  var all = cart.length > 0 && cart.every(function(_,i){ return selectedItems[i]; });
-  cart.forEach(function(_,i){ selectedItems[i] = !all; });
-  renderCart();
-}
-
-function syncSelectAll(){
-  var btn = document.getElementById('selectAllBtn');
-  if(!btn) return;
-  var all = cart.length > 0 && cart.every(function(_,i){ return selectedItems[i]; });
-  btn.className = 'total-check' + (all ? ' checked' : '');
-}
-
-function chQty(idx, d){
-  var item = cart[idx];
-  if(!item) return;
-  var nq = (item.qty||1) + d;
-  if(nq < 1){
-    cart.splice(idx, 1);
-    var ns = {};
-    Object.keys(selectedItems).forEach(function(k){
-      var ki = parseInt(k);
-      if(ki < idx) ns[ki] = selectedItems[k];
-      else if(ki > idx) ns[ki-1] = selectedItems[k];
-    });
-    selectedItems = ns;
-    localStorage.setItem('cart', JSON.stringify(cart));
-    renderCart();
-    return;
-  }
-  item.qty = nq;
-  localStorage.setItem('cart', JSON.stringify(cart));
-  var qEl = document.getElementById('qn'+idx);
-  if(qEl) qEl.innerText = nq;
-  updateTotal();
-}
-
-function updateTotal(){
-  var t = 0;
-  cart.forEach(function(it,i){ if(selectedItems[i]) t += Number(it.price||0) * Number(it.qty||1); });
-  var el = document.getElementById('totalPrice');
-  if(el) el.innerText = 'US$ ' + t.toFixed(2);
-}
-
-function toggleEditMode(){
-  editMode = !editMode;
-  var btn = document.getElementById('editBtn');
-  if(btn) btn.innerText = editMode ? 'Done' : 'Edit';
-}
-
-function settlement(){
-  var sel = cart.filter(function(_,i){ return selectedItems[i]; });
-  if(!sel.length){ alert('Please select at least one item'); return; }
-  window.location.href = '/wallet';
-}
-
-loadCart();
-</script>
 </body>
 </html>`);
 });
