@@ -6894,25 +6894,20 @@ async function loadStoreInfo(){
     let user = JSON.parse(localStorage.getItem("user"));
     if(!user) return;
 
-    // عرض البيانات فوراً من localStorage قبل الـ fetch
-    let savedName = localStorage.getItem("merchant_storeName_" + user.email);
-    if(savedName) document.getElementById("storeNameDisplay").innerText = savedName;
-    let savedLogo = localStorage.getItem("merchant_storeLogo_" + user.email) || localStorage.getItem("storeLogo");
-    if(savedLogo && savedLogo.length > 10) document.getElementById("storeLogo").src = savedLogo;
-
     let res = await fetch("/store-status/" + encodeURIComponent(user.email));
     let data = await res.json();
 
     if(data.found){
-        let name = savedName || data.storeName || "";
-        document.getElementById("storeNameDisplay").innerText = name;
+        // الاسم: نأخذ الاسم المحفوظ محلياً أولاً (لو عدّله المستخدم)
+        let savedName = localStorage.getItem("merchant_storeName_" + user.email);
+        document.getElementById("storeNameDisplay").innerText = savedName || data.storeName || "";
         if(data.status === "approved"){
             document.getElementById("storeStatusBadge").innerText = "";
         }
     }
 
-    // شعار المتجر
-    let logo = localStorage.getItem("merchant_storeLogo_" + user.email)
+    // شعار المتجر - نجلبه من التسجيل أو من التعديل المحلي
+    let logo = localStorage.getItem("merchant_storeLogo_" + (user ? user.email : ""))
                || localStorage.getItem("storeLogo")
                || (data.found ? data.storeLogo : "");
     if(logo && logo.length > 10) document.getElementById("storeLogo").src = logo;
