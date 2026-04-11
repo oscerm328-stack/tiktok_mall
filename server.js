@@ -2495,56 +2495,56 @@ Hi, <span id="username"></span>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
   <!-- iPhone 17 Pro Max -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_1')">
-    <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- MacBook -->
+  <!-- Luxury Gucci Bag -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_2')">
-    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Gaming Laptop ROG -->
+  <!-- Gold Jewelry -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_3')">
-    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Camera -->
+  <!-- Luxury Watch -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_4')">
-    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
 <div class="section-title">Hot Selling</div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;">
-  <!-- Samsung Galaxy -->
+  <!-- MacBook Laptop -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_5')">
-    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- iPad -->
+  <!-- DSLR Camera -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_6')">
-    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Smart Watch -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
-    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
-  </div>
-  <!-- Headphones -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
-    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
   <!-- Drone -->
-  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_7')">
     <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- iPhone 17 Pro Max -->
+  <!-- Smart Watch -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_8')">
+    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Men's Sneakers / Shoes -->
+  <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_9')">
+    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+  </div>
+  <!-- Beauty / Skincare -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_10')">
-    <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- TV Screen -->
+  <!-- Smart Home Speaker -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_11')">
-    <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1512446816042-444d641267d4?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
-  <!-- Luxury Bag -->
+  <!-- Men's Fashion Jacket -->
   <div class="card" style="border-radius:0;cursor:pointer;" onclick="openLocalProduct('local_12')">
-    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
+    <img src="https://images.unsplash.com/photo-1520975954732-35dd22299614?w=400&q=80" style="width:100%;height:180px;object-fit:cover;">
   </div>
 </div>
 
