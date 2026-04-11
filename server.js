@@ -2926,7 +2926,14 @@ try {
             .catch(() => ({ email: store.email, desc: "" }));
     });
 
-    Promise.all([Promise.all(storePromises), Promise.all(storeDescPromises)]).then(([storesWithFollowers, storesWithDesc]) => {
+    let storeVipPromises = found.map(store => {
+        return fetch("/store-vip/" + encodeURIComponent(store.email))
+            .then(r => r.json())
+            .then(d => ({ email: store.email, vipLevel: d.vipLevel || 0 }))
+            .catch(() => ({ email: store.email, vipLevel: 0 }));
+    });
+
+    Promise.all([Promise.all(storePromises), Promise.all(storeDescPromises), Promise.all(storeVipPromises)]).then(([storesWithFollowers, storesWithDesc, storesWithVip]) => {
         // حذف رسالة "Searching..."
         resultsDiv.innerHTML = "<h3 style='padding:0 0 10px 0;'>" + found.length + " store(s) found</h3>";
 
@@ -2935,12 +2942,9 @@ try {
             let displayLogo = store.storeLogo || localStorage.getItem("merchant_storeLogo_" + store.email) || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             let descObj = storesWithDesc.find(d => d.email === store.email);
             let storeDesc = descObj ? descObj.desc : "";
-
-            // حساب VIP (نفس المنطق المستخدم في المتجر)
-            function calcVIP(count){ if(count>=100)return 5; if(count>=50)return 4; if(count>=20)return 3; if(count>=10)return 2; if(count>=1)return 1; return 0; }
-            // عدد المنتجات ثابت 20 لأن المنتجات من fakestoreapi limit=20
+            let vipObj = storesWithVip.find(d => d.email === store.email);
+            let vipLevel = vipObj ? vipObj.vipLevel : 0;
             let productsCount = 0;
-            let vipLevel = 0;
 
             let card = document.createElement("div");
             card.style.cssText = "background:#1976d2;border-radius:16px;padding:18px 15px 15px 15px;margin-bottom:14px;cursor:pointer;box-shadow:0 3px 10px rgba(25,118,210,0.3);";
@@ -7238,9 +7242,8 @@ app.post("/upgrade-vip", authMiddleware, (req, res) => {
         return res.json({ success: false, message: "Insufficient balance. You need $" + plan.capital.toLocaleString() + " to upgrade." });
     }
 
-    // خصم رأس المال وتحديث مستوى VIP
-    user.balance = (balance - plan.capital).toFixed(2);
     user.vipLevel = nextLevel;
+    // الرصيد يبقى كما هو - الترقية تعتمد على الرصيد كشرط فقط
     user.vipCapital = plan.capital;
     user.vipVisitors = plan.visitors;
     user.vipProducts = plan.products;
@@ -7261,6 +7264,12 @@ app.get("/my-vip-info", authMiddleware, (req, res) => {
         vipLevel: user.vipLevel || 0,
         balance: parseFloat(user.balance || 0).toFixed(2)
     });
+});
+
+// endpoint عام لجلب VIP مستخدم معين (للمتاجر العامة)
+app.get("/store-vip/:email", (req, res) => {
+    const user = users.find(u => u.email === req.params.email);
+    res.json({ vipLevel: user ? (user.vipLevel || 0) : 0 });
 });
 
 // ================= VIP UPGRADE PAGE =================
@@ -7589,7 +7598,7 @@ async function doUpgrade(level){
     return;
   }
 
-  if(!confirm("Upgrade to VIP " + level + "?\\nThis will deduct $" + fmt(plan.capital) + " from your balance.")){
+  if(!confirm("Upgrade to VIP " + level + "?\\nConfirm upgrade to VIP " + level + ".")){
     return;
   }
 
@@ -8958,14 +8967,27 @@ var seedStr      = (p.t || "") + (p.id || "") + (p.p || "");
 var sid          = hashId(seedStr);
 var sName        = storeNames[sid % storeNames.length];
 var sAvatar      = storeAvatars[sid % storeAvatars.length];
-var sVip         = sid % 5;
 var sProducts    = 20 + (sid % 480);
 var sFollowers   = (sid * 7) % 9800;
 document.getElementById("storeName").innerText     = sName;
 document.getElementById("storeLogo").src           = sAvatar;
-document.getElementById("storeVip").innerHTML      = "&#10004; VIP " + sVip;
 document.getElementById("storeProducts").innerText   = "Products " + sProducts;
 document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers.toLocaleString();
+
+// جلب VIP الحقيقي من السيرفر إذا كان المتجر معروفاً
+(function(){
+  var storeEmail = localStorage.getItem("viewStoreEmail") || "";
+  if(storeEmail){
+    fetch("/store-vip/" + encodeURIComponent(storeEmail))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        document.getElementById("storeVip").innerHTML = "&#10004; VIP " + (d.vipLevel || 0);
+      })
+      .catch(function(){ document.getElementById("storeVip").innerHTML = "&#10004; VIP 0"; });
+  } else {
+    document.getElementById("storeVip").innerHTML = "&#10004; VIP 0";
+  }
+})();
 // ===== نهاية بيانات المتجر =====
 
 function addToCart(){
