@@ -7386,14 +7386,15 @@ async function loadDashboardStats(){
     if(wrEl) wrEl.innerText = d.waitingRefund || 0;
 
     // Balance
+    function fmt(n){ return parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
     let balEl = document.getElementById("merchantBalance");
-    if(balEl) balEl.innerText = parseFloat(d.availableBalance||0).toFixed(2);
+    if(balEl) balEl.innerText = fmt(d.availableBalance);
     let capEl = document.getElementById("merchantTotalCapital");
-    if(capEl) capEl.innerText = parseFloat(d.totalWorkingCapital||0).toFixed(2);
+    if(capEl) capEl.innerText = fmt(d.totalWorkingCapital);
     let podEl = document.getElementById("profitOfDay");
-    if(podEl) podEl.innerText = parseFloat(d.profitOfDay||0).toFixed(2);
+    if(podEl) podEl.innerText = fmt(d.profitOfDay);
     let tpcEl = document.getElementById("totalProfitCredited");
-    if(tpcEl) tpcEl.innerText = parseFloat(d.totalProfitCredited||0).toFixed(2);
+    if(tpcEl) tpcEl.innerText = fmt(d.totalProfitCredited);
   } catch(e){ console.error(e); }
 }
 
