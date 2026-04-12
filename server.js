@@ -7023,10 +7023,10 @@ margin-bottom:5px;
 <!-- ORDER STATUS -->
 <div class="card">
 <div class="grid4">
-<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingPayment">0</span><br><small>Waiting for payment</small></div>
-<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingShipping">0</span><br><small>Waiting for shipping</small></div>
-<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingDelivery">0</span><br><small>Waiting for delivery</small></div>
-<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingRefund">0</span><br><small>Waiting for refund</small></div>
+<div onclick="window.location.href='/manage-orders?tab=waiting_payment'" style="cursor:pointer;"><span id="waitingPayment">0</span><br><small>Waiting for payment</small></div>
+<div onclick="window.location.href='/manage-orders?tab=waiting_shipping'" style="cursor:pointer;"><span id="waitingShipping">0</span><br><small>Waiting for shipping</small></div>
+<div onclick="window.location.href='/manage-orders?tab=in_delivery'" style="cursor:pointer;"><span id="waitingDelivery">0</span><br><small>Waiting for delivery</small></div>
+<div onclick="window.location.href='/manage-orders?tab=waiting_refund'" style="cursor:pointer;"><span id="waitingRefund">0</span><br><small>Waiting for refund</small></div>
 </div>
 </div>
 
@@ -9761,7 +9761,7 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
     const profit = parseFloat((price - supplierPrice).toFixed(2));
 
     const order = {
-        id: "ORD" + Date.now(),
+        id: String(Date.now()).slice(-11).padStart(11,'0'),
         buyerEmail,
         sellerEmail,
         product: {
@@ -11127,6 +11127,35 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .ship-cancel-btn{flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;}
 .ship-ok-btn{flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .ship-ok-btn:active{opacity:0.88;}
+
+/* PRODUCT DETAIL MODAL */
+.prod-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:flex-end;justify-content:center;}
+.prod-modal-overlay.open{display:flex;}
+.prod-modal-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:slideUp2 0.3s ease;}
+.prod-modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 8px;}
+.prod-modal-close{position:absolute;top:14px;right:16px;width:30px;height:30px;border-radius:50%;background:#f0f0f0;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* IMAGE SLIDER */
+.img-slider{position:relative;width:100%;height:260px;overflow:hidden;background:#f0f0f0;}
+.img-slider-track{display:flex;transition:transform 0.4s ease;height:100%;}
+.img-slide{min-width:100%;height:100%;object-fit:cover;}
+.slider-dot-wrap{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
+.slider-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:background 0.2s;}
+.slider-dot.active{background:white;}
+.slider-prev,.slider-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.35);color:white;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.slider-prev{left:10px;}
+.slider-next{right:10px;}
+
+/* PASSWORD POPUP */
+.pwd-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;align-items:center;justify-content:center;}
+.pwd-popup-overlay.open{display:flex;}
+.pwd-popup-box{background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+.pwd-popup-title{font-size:16px;font-weight:700;color:#111;margin-bottom:6px;}
+.pwd-popup-sub{font-size:13px;color:#888;margin-bottom:18px;}
+.pwd-input{width:100%;border:1.5px solid #ddd;border-radius:12px;padding:12px 16px;font-size:15px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:14px;}
+.pwd-input:focus{border-color:#1976d2;}
+.pwd-ship-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:15px;font-weight:700;cursor:pointer;}
+.pwd-cancel-btn{width:100%;padding:11px;border:none;border-radius:12px;background:#f5f5f5;color:#666;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;}
 </style>
 </head>
 <body>
@@ -11175,6 +11204,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <div style="font-size:15px;font-weight:700;color:#111;padding:14px 20px 4px;">🚚 Confirm Shipment</div>
     <div style="font-size:12px;color:#888;padding:0 20px 10px;">Supplier cost will be deducted from your balance</div>
     <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
+      <span style="font-size:13px;color:#555;">Order Number</span>
+      <span style="font-size:13px;font-weight:700;color:#333;font-family:monospace;" id="shipPopupOrderNum">-</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
       <span style="font-size:13px;color:#555;">Supplier Price</span>
       <span style="font-size:14px;font-weight:700;color:#e65100;" id="shipPopupSupplier">US$0.00</span>
     </div>
@@ -11188,7 +11221,80 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     </div>
     <div style="display:flex;gap:10px;padding:14px 20px 0;">
       <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="confirmShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ Confirm Ship</button>
+      <button onclick="openPasswordPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ OK Ship Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD POPUP -->
+<div id="pwdPopupOverlay" class="pwd-popup-overlay">
+  <div class="pwd-popup-box">
+    <div class="pwd-popup-title">🔐 Enter Your Password</div>
+    <div class="pwd-popup-sub">Please enter your account password to confirm shipment</div>
+    <input class="pwd-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password">
+    <button class="pwd-ship-btn" onclick="confirmShipWithPassword()">🚚 Ship Now</button>
+    <button class="pwd-cancel-btn" onclick="closePwdPopup()">Cancel</button>
+  </div>
+</div>
+
+<!-- TRACKING MODAL (in_delivery full map) -->
+<div id="trackingModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:850;align-items:flex-end;justify-content:center;">
+  <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp2 0.3s ease;">
+    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 8px;"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px 12px;">
+      <span style="font-size:15px;font-weight:700;color:#111;">📦 Order Tracking</span>
+      <button onclick="closeTrackingModal()" style="border:none;background:#f0f0f0;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;">✕</button>
+    </div>
+    <div id="trackingModalOrderNum" style="padding:0 16px 8px;font-size:12px;color:#888;font-family:monospace;"></div>
+    <div id="trackingModalTitle" style="padding:0 16px 12px;font-size:13px;font-weight:600;color:#222;"></div>
+    <div style="margin:0 16px 12px;border-radius:14px;overflow:hidden;height:220px;position:relative;background:#e8f4fd;">
+      <canvas id="trackingModalCanvas" style="width:100%;height:100%;"></canvas>
+      <div id="trackingModalLabel" style="position:absolute;bottom:8px;right:10px;font-size:11px;color:#1976d2;background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:8px;">📍 In transit</div>
+    </div>
+    <div id="trackingModalRoute" style="padding:0 16px 16px;font-size:13px;color:#555;line-height:1.7;"></div>
+  </div>
+</div>
+
+<!-- REFUND/DELIVERY STATUS MODAL -->
+<div id="refundModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:850;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+    <div style="font-size:48px;margin-bottom:12px;" id="refundModalIcon">📦</div>
+    <div style="font-size:16px;font-weight:700;color:#111;margin-bottom:6px;" id="refundModalTitle">Delivery Status</div>
+    <div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:18px;" id="refundModalBody"></div>
+    <button onclick="closeRefundModal()" style="width:100%;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">OK</button>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="prodDetailOverlay" class="prod-modal-overlay">
+  <div class="prod-modal-box" style="position:relative;">
+    <div class="prod-modal-handle"></div>
+    <button class="prod-modal-close" onclick="closeProdModal()">✕</button>
+
+    <!-- IMAGE SLIDER -->
+    <div class="img-slider" id="sliderWrap">
+      <div class="img-slider-track" id="sliderTrack"></div>
+      <button class="slider-prev" onclick="sliderMove(-1)">‹</button>
+      <button class="slider-next" onclick="sliderMove(1)">›</button>
+      <div class="slider-dot-wrap" id="sliderDots"></div>
+    </div>
+
+    <!-- INFO -->
+    <div style="padding:14px 16px 6px;">
+      <div id="prodModalTitle" style="font-size:14px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;"></div>
+      <div id="prodModalPrice" style="font-size:16px;font-weight:800;color:#1976d2;margin-bottom:4px;"></div>
+      <div id="prodModalProfit" style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:10px;"></div>
+    </div>
+
+    <!-- COUNTDOWN IN MODAL -->
+    <div id="prodModalCountdown" style="margin:0 16px 10px;background:#fff8e1;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e65100" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Ship within: <b id="prodModalCdTxt">--:--:--</b></span>
+    </div>
+
+    <!-- SHIP BUTTON IN MODAL -->
+    <div style="padding:0 16px 20px;">
+      <button id="prodModalShipBtn" class="ship-btn" onclick="shipOrderFromModal()">🚚 Ship Now</button>
     </div>
   </div>
 </div>
@@ -11197,6 +11303,117 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 var myToken = localStorage.getItem("token") || "";
 var allOrders = [];
 var currentTab = "waiting_shipping";
+
+// ===== PRODUCT DETAIL MODAL =====
+var sliderCurrentIdx = 0;
+var sliderImages = [];
+var modalOrderId = null;
+var modalCdInterval = null;
+
+function openProdModal(order){
+    modalOrderId = order.id;
+    var catMap3 = {17:'17_Clothing_and_Accessories',19:'19_Medical_Bags_and_Sunglasses',20:'20_Shoes',21:'21_Watches',22:'22_Jewelry',27:'27_Electronics',28:'28_Smart_Home',31:'31_Luxury_Brands',32:'32_Beauty_and_Personal_Care',34:'34_Mens_Fashion',35:'35_Health_and_Household',36:'36_Home_and_Kitchen'};
+    var catF = catMap3[(order.product&&order.product.category_id)] || '27_Electronics';
+    var baseUrl = 'https://res.cloudinary.com/doabtbdsh/image/upload/products/';
+    var folder = order.product && order.product.folder ? order.product.folder : '';
+
+    // Build images array (try up to 8)
+    sliderImages = [];
+    if(folder){
+        for(var i=1;i<=8;i++){
+            sliderImages.push(baseUrl + catF + '/' + folder + '/' + i + '.jpg');
+        }
+    } else {
+        sliderImages = ['https://via.placeholder.com/400x260?text=No+Image'];
+    }
+
+    // Build slider
+    sliderCurrentIdx = 0;
+    var track = document.getElementById("sliderTrack");
+    var dots = document.getElementById("sliderDots");
+    track.innerHTML = "";
+    dots.innerHTML = "";
+    sliderImages.forEach(function(src, idx){
+        var img = document.createElement("img");
+        img.className = "img-slide";
+        img.src = src;
+        img.onerror = function(){ if(idx > 0) this.parentNode && this.parentNode.removeChild && this.closest && this.remove(); };
+        track.appendChild(img);
+        var dot = document.createElement("div");
+        dot.className = "slider-dot" + (idx===0?" active":"");
+        dot.onclick = (function(i){ return function(){ goToSlide(i); }; })(idx);
+        dots.appendChild(dot);
+    });
+    updateSlider();
+
+    // Info
+    document.getElementById("prodModalTitle").innerText = order.product ? order.product.title : "Product";
+    document.getElementById("prodModalPrice").innerText = "US$" + parseFloat(order.total).toFixed(2);
+    document.getElementById("prodModalProfit").innerText = "+US$" + parseFloat(order.profit*(order.quantity||1)).toFixed(2) + " profit";
+
+    // Countdown in modal
+    startModalCountdown(order);
+
+    document.getElementById("prodDetailOverlay").classList.add("open");
+}
+
+function closeProdModal(){
+    document.getElementById("prodDetailOverlay").classList.remove("open");
+    if(modalCdInterval){ clearInterval(modalCdInterval); modalCdInterval = null; }
+    modalOrderId = null;
+}
+
+function startModalCountdown(order){
+    if(modalCdInterval){ clearInterval(modalCdInterval); }
+    var created = new Date(order.createdAt).getTime();
+    var deadline = created + 48*60*60*1000;
+    var cdEl = document.getElementById("prodModalCdTxt");
+    var cdWrap = document.getElementById("prodModalCountdown");
+    function tick(){
+        var remaining = Math.max(0, deadline - Date.now());
+        if(remaining <= 0){
+            clearInterval(modalCdInterval);
+            cdWrap.style.background = "#fce4ec";
+            cdWrap.style.color = "#c62828";
+            cdWrap.querySelector("svg").setAttribute("stroke","#c62828");
+            cdWrap.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><b>⏰ TIME OUT</b></span>';
+        } else {
+            if(cdEl) cdEl.innerText = formatTime(remaining);
+        }
+    }
+    tick();
+    modalCdInterval = setInterval(tick, 1000);
+}
+
+function sliderMove(dir){
+    goToSlide(sliderCurrentIdx + dir);
+}
+
+function goToSlide(idx){
+    var total = sliderImages.length;
+    sliderCurrentIdx = (idx + total) % total;
+    updateSlider();
+}
+
+function updateSlider(){
+    document.getElementById("sliderTrack").style.transform = "translateX(-" + (sliderCurrentIdx*100) + "%)";
+    var dots = document.getElementById("sliderDots").children;
+    for(var i=0;i<dots.length;i++) dots[i].classList.toggle("active", i===sliderCurrentIdx);
+}
+
+function shipOrderFromModal(){
+    if(!modalOrderId) return;
+    shipOrder(modalOrderId);
+}
+
+// ===== GENERATE 11-DIGIT ORDER NUMBER =====
+function generateOrderNum(orderId){
+    // Use last 11 digits of order id (timestamp-based), or pad
+    var str = String(orderId).replace(/\D/g,'');
+    if(str.length >= 11) return str.slice(-11);
+    while(str.length < 11) str = "0" + str;
+    return str;
+}
 
 async function load(){
     try {
@@ -11241,6 +11458,7 @@ function renderOrders(){
 function buildOrderCard(o){
     var card = document.createElement("div");
     card.className = "ocard";
+    card.style.cursor = "pointer";
 
     var statusLabels = { waiting_shipping:"Waiting to Ship", in_delivery:"In Delivery", waiting_refund:"Waiting Refund", completed:"Completed" };
     var statusClasses = { waiting_shipping:"ship", in_delivery:"del", waiting_refund:"ref", completed:"done" };
@@ -11249,8 +11467,10 @@ function buildOrderCard(o){
     var catF3 = catMap3[(o.product&&o.product.category_id)] || '27_Electronics';
     var imgSrc = o.product&&o.product.folder ? 'https://res.cloudinary.com/doabtbdsh/image/upload/products/'+catF3+'/'+o.product.folder+'/1.jpg' : 'https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/placeholder/1.jpg';
 
+    var orderNum = generateOrderNum(o.id);
+
     var html = '<div class="ocard-top">' +
-        '<span class="order-id">#' + o.id + '</span>' +
+        '<span class="order-id">#' + orderNum + '</span>' +
         '<span class="status-badge ' + statusClasses[o.status] + '">' + statusLabels[o.status] + '</span>' +
         '</div>' +
         '<div class="ocard-mid">' +
@@ -11258,7 +11478,7 @@ function buildOrderCard(o){
         '<div class="ocard-info">' +
         '<div class="ocard-title">' + escHtml(o.product ? o.product.title : "Product") + '</div>' +
         '<div class="ocard-price">US$' + parseFloat(o.total).toFixed(2) + '</div>' +
-        '<div class="ocard-profit">+US$' + parseFloat(o.profit*o.quantity).toFixed(2) + ' profit</div>' +
+        '<div class="ocard-profit">+US$' + parseFloat(o.profit*(o.quantity||1)).toFixed(2) + ' profit</div>' +
         '</div></div>';
 
     // Countdown for waiting_shipping
@@ -11270,7 +11490,7 @@ function buildOrderCard(o){
         html += '<div class="countdown" id="cd-' + o.id + '" style="' + (isTimeout ? 'background:#fce4ec;color:#c62828;' : '') + '">' +
             '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + (isTimeout ? '#c62828' : '#e65100') + '" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
             '<span>' + (isTimeout ? '<b>⏰ TIME OUT</b>' : 'Ship within: <b id="cdtxt-' + o.id + '">' + formatTime(remaining) + '</b>') + '</span></div>';
-        html += '<button class="ship-btn" onclick="shipOrder(\'' + o.id + '\')">🚚 Ship Now</button>';
+        html += '<button class="ship-btn" onclick="event.stopPropagation();shipOrder(\'' + o.id + '\')">🚚 Ship Now</button>';
     }
 
     // Map for in_delivery
@@ -11279,25 +11499,36 @@ function buildOrderCard(o){
             '<span class="map-label">📍 In transit</span></div>';
     }
 
-    // Waiting refund info
+    // Waiting refund info - show "قيد التسليم" (in delivery/pending)
     if(o.status === "waiting_refund"){
-        html += '<div style="background:#fce4ec;border-radius:10px;padding:10px 12px;font-size:12px;color:#c62828;font-weight:600;margin-top:4px;">⏳ Waiting for admin to confirm delivery & release your earnings</div>';
+        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;margin-top:4px;text-align:center;">⏳ قيد التسليم — Pending Delivery Confirmation</div>';
     }
 
-    // Completed
+    // Completed - show "تم التسليم"
     if(o.status === "completed"){
-        html += '<div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;font-size:12px;color:#2e7d32;font-weight:600;margin-top:4px;">✅ Completed — Profit added to your wallet</div>';
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;margin-top:4px;text-align:center;">✅ تم التسليم — Delivery Completed<br><small style="font-weight:400;color:#555;">Profit added to your wallet</small></div>';
     }
 
     card.innerHTML = html;
 
-    // Start countdown timer
+    // Click on card opens product detail for waiting_shipping orders
     if(o.status === "waiting_shipping"){
+        card.onclick = function(e){ 
+            if(e.target.tagName === "BUTTON") return;
+            openProdModal(o); 
+        };
         startCountdown(o.id, o.createdAt);
     }
-    // Draw map
+
+    // Click on in_delivery card opens full map
     if(o.status === "in_delivery"){
+        card.onclick = function(){ openTrackingModal(o); };
         setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
+    }
+
+    // Click on waiting_refund card opens delivery status
+    if(o.status === "waiting_refund"){
+        card.onclick = function(){ openRefundModal(o); };
     }
 
     return card;
@@ -11434,7 +11665,6 @@ function drawMap(canvasId, trackingPath, deliveryStart){
 var pendingShipOrderId = null;
 
 function shipOrder(orderId){
-    // ابحث عن الطلب في allOrders
     var order = allOrders.find(function(o){ return o.id === orderId; });
     if(!order) return;
 
@@ -11443,11 +11673,16 @@ function shipOrder(orderId){
     var supplierPrice = parseFloat(order.supplierPrice) * (order.quantity||1);
     var retailPrice   = parseFloat(order.total);
     var profit        = parseFloat(order.profit) * (order.quantity||1);
+    var orderNum      = generateOrderNum(order.id);
 
+    document.getElementById("shipPopupOrderNum").innerText = orderNum;
     document.getElementById("shipPopupSupplier").innerText = "US$" + supplierPrice.toFixed(2);
     document.getElementById("shipPopupRetail").innerText   = "US$" + retailPrice.toFixed(2);
     document.getElementById("shipPopupProfit").innerText   = "US$" + profit.toFixed(2);
     document.getElementById("shipConfirmPopup").style.display = "flex";
+
+    // Close product modal if open
+    closeProdModal();
 }
 
 function closeShipPopup(){
@@ -11455,10 +11690,44 @@ function closeShipPopup(){
     pendingShipOrderId = null;
 }
 
-async function confirmShip(){
+// Step 2: open password popup
+function openPasswordPopup(){
     if(!pendingShipOrderId) return;
+    document.getElementById("shipConfirmPopup").style.display = "none";
+    document.getElementById("pwdInput").value = "";
+    document.getElementById("pwdPopupOverlay").classList.add("open");
+}
+
+function closePwdPopup(){
+    document.getElementById("pwdPopupOverlay").classList.remove("open");
+}
+
+// Step 3: verify password then ship
+async function confirmShipWithPassword(){
+    var pwd = document.getElementById("pwdInput").value;
+    if(!pwd){ showToast("⚠️ Please enter your password"); return; }
+    if(!pendingShipOrderId){ closePwdPopup(); return; }
+
+    // Verify password via login endpoint
+    var user = JSON.parse(localStorage.getItem("user") || "{}");
+    try {
+        var vr = await fetch("/login", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ email: user.email, password: pwd })
+        });
+        var vd = await vr.json();
+        if(vd.error){
+            showToast("❌ Wrong password");
+            document.getElementById("pwdInput").value = "";
+            return;
+        }
+    } catch(e){ showToast("⚠️ Error verifying password"); return; }
+
     var orderId = pendingShipOrderId;
-    closeShipPopup();
+    closePwdPopup();
+    pendingShipOrderId = null;
+
     try {
         var r = await fetch("/ship-store-order", {
             method:"POST",
@@ -11466,16 +11735,158 @@ async function confirmShip(){
             body: JSON.stringify({ orderId })
         });
         var d = await r.json();
-        if(d.success){ showToast("✅ Order shipped!"); load(); }
+        if(d.success){ showToast("✅ Order shipped successfully!"); load(); }
         else showToast("⚠️ " + (d.message||"Failed to ship"));
-    } catch(e){ showToast("⚠️ Error"); }
+    } catch(e){ showToast("⚠️ Network error"); }
+}
+
+// Legacy - keep for backward compat
+async function confirmShip(){
+    openPasswordPopup();
 }
 
 function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
 
+// ===== TRACKING MODAL (in_delivery) =====
+function openTrackingModal(order){
+    var overlay = document.getElementById("trackingModalOverlay");
+    overlay.style.display = "flex";
+    document.getElementById("trackingModalOrderNum").innerText = "#" + generateOrderNum(order.id);
+    document.getElementById("trackingModalTitle").innerText = order.product ? order.product.title : "Product";
+
+    var tp = order.trackingPath;
+    if(tp){
+        document.getElementById("trackingModalRoute").innerHTML =
+            '<b>📍 Route:</b> ' + (tp.origin ? tp.origin.name : '?') + ' → ' + (tp.destination ? tp.destination.name : '?') +
+            '<br><span style="color:#1976d2;font-weight:600;">✈ Package is on the way</span>';
+    }
+
+    // Draw map on canvas
+    setTimeout(function(){
+        var canvas = document.getElementById("trackingModalCanvas");
+        if(!canvas) return;
+        canvas.width = canvas.offsetWidth || 400;
+        canvas.height = canvas.offsetHeight || 220;
+        drawMapOnCanvas(canvas, order.trackingPath, order.deliveryStart);
+    }, 100);
+}
+
+function closeTrackingModal(){
+    document.getElementById("trackingModalOverlay").style.display = "none";
+}
+
+function drawMapOnCanvas(canvas, trackingPath, deliveryStart){
+    var ctx = canvas.getContext("2d");
+    var W = canvas.width, H = canvas.height;
+    if(!trackingPath) return;
+
+    var grad = ctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,"#e3f2fd");
+    grad.addColorStop(1,"#bbdefb");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.fillStyle = "rgba(25,118,210,0.08)";
+    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45],[0.5,0.65,35]].forEach(function(c){
+        ctx.beginPath(); ctx.arc(c[0]*W,c[1]*H,c[2],0,Math.PI*2); ctx.fill();
+    });
+
+    function toCanvas(lat, lng){
+        return { x: ((lng+180)/360)*W, y: ((90-lat)/180)*H };
+    }
+
+    var origin = trackingPath.origin;
+    var dest   = trackingPath.destination;
+    var mid    = trackingPath.midpoint;
+    var p0 = toCanvas(origin.lat, origin.lng);
+    var p1 = toCanvas(mid.lat, mid.lng);
+    var p2 = toCanvas(dest.lat, dest.lng);
+
+    var elapsed = deliveryStart ? Date.now() - deliveryStart : 0;
+    var progress = Math.min(1, elapsed / (72*60*60*1000));
+
+    ctx.setLineDash([5,4]);
+    ctx.strokeStyle = "rgba(25,118,210,0.3)";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.quadraticCurveTo(p1.x,p1.y,p2.x,p2.y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = "#1976d2"; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
+    var steps=60;
+    for(var t=0;t<=progress;t+=1/steps){
+        var bx=(1-t)*(1-t)*p0.x+2*(1-t)*t*p1.x+t*t*p2.x;
+        var by=(1-t)*(1-t)*p0.y+2*(1-t)*t*p1.y+t*t*p2.y;
+        ctx.lineTo(bx,by);
+    }
+    ctx.stroke();
+
+    var pt=progress;
+    var px=(1-pt)*(1-pt)*p0.x+2*(1-pt)*pt*p1.x+pt*pt*p2.x;
+    var py=(1-pt)*(1-pt)*p0.y+2*(1-pt)*pt*p1.y+pt*pt*p2.y;
+    ctx.fillStyle="#1976d2"; ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText("✈",px,py);
+
+    [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
+        ctx.fillStyle="#ff6b35"; ctx.beginPath(); ctx.arc(item[0].x,item[0].y,5,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle="#333"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
+        ctx.fillText(item[1],item[0].x,item[0].y-12);
+    });
+
+    ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left";
+    ctx.fillText(origin.name, Math.max(2,p0.x-20), p0.y+14);
+    ctx.textAlign="right";
+    ctx.fillText(dest.name, Math.min(W-2,p2.x+20), p2.y+14);
+}
+
+// ===== REFUND/DELIVERY MODAL =====
+function openRefundModal(order){
+    var overlay = document.getElementById("refundModalOverlay");
+    overlay.style.display = "flex";
+
+    // Check if completed (delivered) vs waiting_refund (pending)
+    if(order.status === "completed"){
+        document.getElementById("refundModalIcon").innerText = "✅";
+        document.getElementById("refundModalTitle").innerText = "تم التسليم";
+        document.getElementById("refundModalBody").innerHTML =
+            "Order <b>#" + generateOrderNum(order.id) + "</b><br>" +
+            "Delivery has been confirmed successfully.<br>" +
+            "<span style='color:#2e7d32;font-weight:600;'>Your profit has been added to your wallet.</span>";
+    } else {
+        document.getElementById("refundModalIcon").innerText = "🚚";
+        document.getElementById("refundModalTitle").innerText = "قيد التسليم";
+        document.getElementById("refundModalBody").innerHTML =
+            "Order <b>#" + generateOrderNum(order.id) + "</b><br>" +
+            "The package has been delivered to the customer.<br>" +
+            "<span style='color:#e65100;'>Waiting for delivery confirmation to release your earnings.</span>";
+    }
+}
+
+function closeRefundModal(){
+    document.getElementById("refundModalOverlay").style.display = "none";
+}
+
 load();
 setInterval(load, 30000);
+
+// Auto-switch tab from URL param
+(function(){
+    var params = new URLSearchParams(window.location.search);
+    var tab = params.get("tab");
+    if(tab && ["waiting_shipping","in_delivery","waiting_refund","completed","waiting_payment"].includes(tab)){
+        // waiting_payment maps to waiting_shipping for display
+        if(tab === "waiting_payment") tab = "waiting_shipping";
+        currentTab = tab;
+        var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
+        if(tabKey){
+            document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+            var tabEl = document.getElementById("tab-"+tabKey);
+            if(tabEl) tabEl.classList.add("active");
+        }
+    }
+})();
 </script>
 </body>
 </html>`);
@@ -11621,114 +12032,245 @@ app.get("/instructions", (req, res) => {
 <title>Instructions - TikTok Mall</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
-.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
-.header h2{font-size:16px;font-weight:700;}
-.hero{background:linear-gradient(135deg,#1976d2 0%,#0d47a1 100%);padding:28px 20px 32px;text-align:center;color:white;}
-.hero-logo{font-size:48px;margin-bottom:10px;}
-.hero h1{font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:0.5px;}
-.hero p{font-size:13px;opacity:0.88;line-height:1.7;max-width:340px;margin:0 auto;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:40px;}
+.header{background:#010101;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);}
+.header h2{font-size:16px;font-weight:700;color:white;}
+
+/* HERO */
+.hero{background:#010101;padding:28px 20px 36px;text-align:center;color:white;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(105,201,208,0.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(255,0,80,0.12) 0%,transparent 60%);}
+.tiktok-logo{display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;position:relative;z-index:1;}
+.tiktok-logo svg{width:64px;height:64px;}
+.hero h1{font-size:26px;font-weight:900;margin-bottom:10px;letter-spacing:0.5px;position:relative;z-index:1;}
+.hero h1 span.tt1{color:#69c9d0;}
+.hero h1 span.tt2{color:#ee1d52;}
+.hero p{font-size:13px;opacity:0.85;line-height:1.8;max-width:340px;margin:0 auto;position:relative;z-index:1;}
+
+/* STATS BAR */
+.stats-bar{display:flex;background:#111;color:white;padding:14px 0;}
+.stat-item{flex:1;text-align:center;border-right:1px solid #333;}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:18px;font-weight:800;color:#69c9d0;}
+.stat-label{font-size:10px;color:#888;margin-top:2px;}
+
+/* SECTION */
 .section{background:white;margin:12px;border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
-.section h3{font-size:15px;font-weight:700;color:#1976d2;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f5f5f5;}
+.section h3{font-size:15px;font-weight:700;color:#010101;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+/* STEP */
+.step{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f5f5f5;}
 .step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
-.step-text h4{font-size:13px;font-weight:700;color:#222;margin-bottom:4px;}
-.step-text p{font-size:12px;color:#666;line-height:1.6;}
+.step-num{width:34px;height:34px;border-radius:50%;background:#010101;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;border:2px solid #ee1d52;}
+.step-text h4{font-size:13px;font-weight:700;color:#111;margin-bottom:5px;}
+.step-text p{font-size:12px;color:#666;line-height:1.7;}
+.step-text .badge{display:inline-block;background:#f0f0f0;border-radius:6px;font-size:11px;padding:2px 8px;margin-top:5px;color:#333;}
+
+/* VIP */
 .vip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.vip-card{border:1.5px solid #e0e0e0;border-radius:12px;padding:12px;text-align:center;}
-.vip-card .vip-name{font-size:13px;font-weight:700;color:#1976d2;margin-bottom:4px;}
-.vip-card .vip-pcts{font-size:11px;color:#666;line-height:1.7;}
-.vip-card .vip-disc{font-size:12px;font-weight:700;color:#2e7d32;}
-.highlight{background:#e3f2fd;border-radius:10px;padding:12px;font-size:13px;color:#1565c0;line-height:1.7;margin-top:4px;}
+.vip-card{border:1.5px solid #e0e0e0;border-radius:14px;padding:14px 12px;text-align:center;transition:transform 0.15s;}
+.vip-card:active{transform:scale(0.97);}
+.vip-card .vip-name{font-size:14px;font-weight:800;color:#111;margin-bottom:5px;}
+.vip-card .vip-pcts{font-size:11px;color:#666;line-height:1.8;}
+.vip-card .vip-disc{font-size:13px;font-weight:700;color:#2e7d32;}
+.vip-card.top{border-color:#ee1d52;background:linear-gradient(135deg,#fff5f5,white);}
+.vip-card.top .vip-name{color:#ee1d52;}
+.vip-card.top .vip-disc{color:#ee1d52;}
+
+/* HIGHLIGHT */
+.highlight{background:#f9f9f9;border-left:4px solid #010101;border-radius:0 10px 10px 0;padding:14px 16px;font-size:13px;color:#222;line-height:1.8;margin-top:4px;}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid #f0f0f0;padding:14px 0;}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{font-size:13px;font-weight:700;color:#111;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-a{font-size:12px;color:#666;line-height:1.7;margin-top:8px;display:none;}
+.faq-item.open .faq-a{display:block;}
+.faq-item.open .faq-arr{transform:rotate(180deg);}
+.faq-arr{transition:transform 0.2s;color:#aaa;}
+
+/* EARNING TABLE */
+.earn-table{width:100%;border-collapse:collapse;font-size:12px;}
+.earn-table th{background:#010101;color:white;padding:9px 8px;text-align:center;}
+.earn-table td{padding:9px 8px;text-align:center;border-bottom:1px solid #f0f0f0;}
+.earn-table tr:last-child td{border-bottom:none;}
+.earn-table tr:nth-child(even) td{background:#fafafa;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
   </span>
   <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+  <h2>Instructions for Operation</h2>
 </div>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-logo">🛍️</div>
-  <h1>TikTok Mall</h1>
-  <p>The world's leading social commerce platform — where millions of sellers earn real income by listing global products in their personal stores.</p>
+  <div class="tiktok-logo">
+    <!-- TikTok official logo SVG -->
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <rect width="48" height="48" rx="10" fill="#010101"/>
+      <path d="M34.2 14.6c-1.7-1.1-3-2.8-3.5-4.8H27v20.4c0 2-1.6 3.6-3.6 3.6s-3.6-1.6-3.6-3.6 1.6-3.6 3.6-3.6c.4 0 .7.1 1.1.2v-4.1c-.4-.1-.7-.1-1.1-.1-4.3 0-7.8 3.5-7.8 7.8s3.5 7.8 7.8 7.8 7.8-3.5 7.8-7.8V20.3c1.5 1.1 3.4 1.7 5.3 1.7v-4.1c-1 0-2-.3-2.3-.3z" fill="white"/>
+      <path d="M34.2 14.6c-1.7-1.1-3-2.8-3.5-4.8H27v20.4c0 2-1.6 3.6-3.6 3.6s-3.6-1.6-3.6-3.6 1.6-3.6 3.6-3.6c.4 0 .7.1 1.1.2v-4.1c-.4-.1-.7-.1-1.1-.1-4.3 0-7.8 3.5-7.8 7.8s3.5 7.8 7.8 7.8 7.8-3.5 7.8-7.8V20.3c1.5 1.1 3.4 1.7 5.3 1.7v-4.1c-1 0-2-.3-2.3-.3z" fill="#ee1d52" opacity="0.6"/>
+      <path d="M31.7 15.2c1.7 1.1 3.6 1.7 5.6 1.7v-4.1c-1.1 0-2.2-.4-3.1-1c-.8-.6-1.4-1.4-1.7-2.3H28v20.7c-.1 1.9-1.7 3.4-3.6 3.4s-3.6-1.6-3.6-3.6 1.6-3.6 3.6-3.6c.4 0 .7.1 1.1.2v-4.1c-4.1.1-7.4 3.4-7.4 7.5s3.4 7.5 7.5 7.5 7.5-3.4 7.5-7.5l.1-14.8z" fill="#69c9d0" opacity="0.7"/>
+    </svg>
+  </div>
+  <h1><span class="tt1">TikTok</span> <span class="tt2">Mall</span></h1>
+  <p>The world's #1 social commerce platform — powering millions of merchants to build profitable online stores and earn real income from home.</p>
 </div>
 
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num">50K+</div><div class="stat-label">Products</div></div>
+  <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Categories</div></div>
+  <div class="stat-item"><div class="stat-num">40%</div><div class="stat-label">Max Profit</div></div>
+  <div class="stat-item"><div class="stat-num">3-Day</div><div class="stat-label">Delivery</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
 <div class="section">
   <h3>🚀 How It Works</h3>
   <div class="step">
     <div class="step-num">1</div>
     <div class="step-text">
-      <h4>Open Your Store</h4>
-      <p>Register and apply for a merchant account. Once approved, your personalized TikTok Mall store is instantly live and ready for customers worldwide.</p>
+      <h4>Register & Open Your Store</h4>
+      <p>Sign up with an invite code and apply for a merchant account. Once approved, your personalized TikTok Mall store is instantly live and accessible to customers worldwide. Customize your store name and logo to build your brand identity.</p>
+      <span class="badge">⏱ Takes under 5 minutes</span>
     </div>
   </div>
   <div class="step">
     <div class="step-num">2</div>
     <div class="step-text">
-      <h4>Browse & Add Products</h4>
-      <p>Access 50,000+ premium products from verified suppliers across 12 categories — Electronics, Watches, Luxury, Beauty, and more. Add any product to your store in one tap.</p>
+      <h4>Browse & Add Products to Your Store</h4>
+      <p>Access 50,000+ premium products from verified global suppliers across 12 categories — Electronics, Watches, Luxury Brands, Beauty, Shoes, Jewelry, and more. Add any product to your store with a single tap. No inventory needed — you never hold stock.</p>
+      <span class="badge">📦 0 inventory required</span>
     </div>
   </div>
   <div class="step">
     <div class="step-num">3</div>
     <div class="step-text">
-      <h4>Customers Buy from You</h4>
-      <p>When a customer purchases from your store, you receive the full retail price. Your working capital is only used to pay the discounted supplier price when you confirm shipment.</p>
+      <h4>Customers Buy From Your Store</h4>
+      <p>When a customer purchases from your store, the full retail price is credited to your account. Your working capital is only used to pay the discounted supplier price at the moment you confirm shipment — meaning you earn the difference as pure profit.</p>
+      <span class="badge">💰 Pay supplier only when you ship</span>
     </div>
   </div>
   <div class="step">
     <div class="step-num">4</div>
     <div class="step-text">
-      <h4>Collect Your Profits</h4>
-      <p>After delivery is confirmed, your profit is instantly credited to your wallet — that's the difference between the retail price and the supplier price.</p>
+      <h4>Confirm Shipment Within 48 Hours</h4>
+      <p>After receiving an order, you have 48 hours to confirm shipment. A countdown timer is shown for every pending order. Use your account password to authorize the shipment — this deducts the supplier cost from your balance and triggers the delivery process.</p>
+      <span class="badge">⏰ 48-hour shipping window</span>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-text">
+      <h4>Track & Collect Your Profits</h4>
+      <p>Every order includes real-time tracking with a live map showing the shipment route from origin warehouse to the customer. After the 3-day delivery window, your profit is automatically credited to your wallet — ready to withdraw anytime.</p>
+      <span class="badge">🗺 Live tracking map per order</span>
     </div>
   </div>
 </div>
 
+<!-- VIP LEVELS -->
 <div class="section">
-  <h3>💎 VIP Commission Rates</h3>
+  <h3>💎 VIP Commission Levels</h3>
+  <p style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">Your VIP level determines how many products you can list and how large your supplier discount is. Upgrade by maintaining a sufficient working capital balance.</p>
   <div class="vip-grid">
-    <div class="vip-card"><div class="vip-name">VIP 0</div><div class="vip-pcts">20 products max<br><span class="vip-disc">15% off supplier</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 1</div><div class="vip-pcts">35 products max<br><span class="vip-disc">17% off supplier</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 2</div><div class="vip-pcts">80 products max<br><span class="vip-disc">20% off supplier</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 3</div><div class="vip-pcts">120 products max<br><span class="vip-disc">22% off supplier</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 4</div><div class="vip-pcts">300 products max<br><span class="vip-disc">25% off supplier</span></div></div>
-    <div class="vip-card" style="border-color:#f5a623;"><div class="vip-name" style="color:#e65100;">VIP 5</div><div class="vip-pcts">1000 products max<br><span class="vip-disc" style="color:#e65100;">40% off supplier</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 0</div><div class="vip-pcts">Up to 20 products<br>50 daily visitors<br><span class="vip-disc">15% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 1</div><div class="vip-pcts">Up to 35 products<br>600 daily visitors<br><span class="vip-disc">17% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 2</div><div class="vip-pcts">Up to 80 products<br>1,000 daily visitors<br><span class="vip-disc">20% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 3</div><div class="vip-pcts">Up to 120 products<br>3,000 daily visitors<br><span class="vip-disc">22% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 4</div><div class="vip-pcts">Up to 300 products<br>10,000 daily visitors<br><span class="vip-disc">25% supplier discount</span></div></div>
+    <div class="vip-card top"><div class="vip-name">VIP 5 ⭐</div><div class="vip-pcts">Up to 1,000 products<br>30,000 daily visitors<br><span class="vip-disc">40% supplier discount</span></div></div>
   </div>
 </div>
 
+<!-- EARNINGS TABLE -->
 <div class="section">
-  <h3>📋 Key Rules</h3>
+  <h3>📊 Estimated Earnings Example</h3>
+  <p style="font-size:12px;color:#888;margin-bottom:12px;">Based on a $100 product sold at retail price:</p>
+  <table class="earn-table">
+    <tr><th>VIP Level</th><th>Supplier Price</th><th>Your Profit</th><th>Profit %</th></tr>
+    <tr><td>VIP 0</td><td>$85.00</td><td>$15.00</td><td>15%</td></tr>
+    <tr><td>VIP 1</td><td>$83.00</td><td>$17.00</td><td>17%</td></tr>
+    <tr><td>VIP 2</td><td>$80.00</td><td>$20.00</td><td>20%</td></tr>
+    <tr><td>VIP 3</td><td>$78.00</td><td>$22.00</td><td>22%</td></tr>
+    <tr><td>VIP 4</td><td>$75.00</td><td>$25.00</td><td>25%</td></tr>
+    <tr><td style="color:#ee1d52;font-weight:700;">VIP 5</td><td style="color:#ee1d52;font-weight:700;">$60.00</td><td style="color:#ee1d52;font-weight:700;">$40.00</td><td style="color:#ee1d52;font-weight:700;">40%</td></tr>
+  </table>
+</div>
+
+<!-- KEY RULES -->
+<div class="section">
+  <h3>📋 Platform Rules</h3>
   <div class="step">
     <div class="step-num">✓</div>
     <div class="step-text">
       <h4>48-Hour Shipping Commitment</h4>
-      <p>Once a customer places an order, you must confirm shipment within 48 hours to maintain your store's credibility rating.</p>
+      <p>You must confirm shipment within 48 hours of receiving an order. Failure to do so results in a TIME OUT status, which may affect your store's credibility rating. Always monitor your pending orders.</p>
     </div>
   </div>
   <div class="step">
     <div class="step-num">✓</div>
     <div class="step-text">
-      <h4>3-Day Delivery Tracking</h4>
-      <p>Every order has a real-time tracking map. Delivery is simulated over 3 days with a unique route for each order.</p>
+      <h4>Password-Protected Shipments</h4>
+      <p>To authorize a shipment, you must enter your account password. This security step ensures only you can trigger payments and shipments from your store.</p>
     </div>
   </div>
   <div class="step">
     <div class="step-num">✓</div>
     <div class="step-text">
-      <h4>Upgrade to Earn More</h4>
-      <p>Higher VIP levels unlock more product slots, bigger discounts, and more daily visitors to your store — increasing your earning potential significantly.</p>
+      <h4>3-Day Delivery Window</h4>
+      <p>Every order is tracked in real-time on a live map. The delivery simulation runs over 72 hours. Once complete, the order moves to "Waiting for Refund" and your profit is released upon admin confirmation.</p>
     </div>
+  </div>
+  <div class="step">
+    <div class="step-num">✓</div>
+    <div class="step-text">
+      <h4>Maintain Sufficient Working Capital</h4>
+      <p>Your balance must cover the supplier cost at the time of shipment. If your balance is insufficient, you will not be able to confirm the shipment. Recharge your wallet regularly to keep your store operational.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">✓</div>
+    <div class="step-text">
+      <h4>Store Credibility Rating</h4>
+      <p>Your credibility rating increases with every completed order. A higher rating builds customer trust and is factored into your store's visibility and ranking on the platform.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <h3>❓ Frequently Asked Questions</h3>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">How do I receive payments from customers? <span class="faq-arr">▼</span></div>
+    <div class="faq-a">Customer payments are collected by TikTok Mall and added to your available balance. You can withdraw your earnings at any time through the Wallet section using your registered USDT address.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">Do I need to handle shipping myself? <span class="faq-arr">▼</span></div>
+    <div class="faq-a">No. TikTok Mall handles all logistics. When you confirm shipment, our supplier network dispatches the product directly to the customer. You simply authorize the transaction from your dashboard.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">When is my profit credited to my wallet? <span class="faq-arr">▼</span></div>
+    <div class="faq-a">After the 3-day delivery window, the order moves to "Waiting for Refund" status. Once the platform admin confirms delivery, your profit (retail price minus supplier price) is instantly added to your Available Balance.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">How do I upgrade my VIP level? <span class="faq-arr">▼</span></div>
+    <div class="faq-a">Go to Store Operating Fund in your merchant dashboard. Each VIP level requires a minimum working capital balance. Your balance must meet or exceed the required capital for the target level. Upgrading is free — no deduction is made.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-q">What happens if I miss the 48-hour shipping window? <span class="faq-arr">▼</span></div>
+    <div class="faq-a">The order timer will show "TIME OUT". You can still ship the order, but it may negatively impact your credibility rating. We strongly recommend shipping all orders promptly to maintain a high rating.</div>
   </div>
 </div>
 
 <div class="section">
   <div class="highlight">
-    💡 <strong>Pro Tip:</strong> The higher your VIP level, the more you earn per sale. A VIP 5 merchant earns 40% of every product's retail price as pure profit — the highest commission on the platform.
+    💡 <strong>Pro Tip:</strong> Upgrade to VIP 5 to unlock the maximum 40% profit margin. A merchant selling 10 products per day at an average price of $200 can earn up to <strong>$800/day</strong> in pure profit at VIP 5 level.
   </div>
 </div>
 
