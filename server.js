@@ -11129,107 +11129,75 @@ app.get("/manage-orders", (req, res) => {
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
-.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
-.header h2{font-size:16px;font-weight:700;}
-
-/* TABS */
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
 .tabs{display:flex;background:white;border-bottom:2px solid #f0f0f0;position:sticky;top:50px;z-index:99;}
-.tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:#999;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;line-height:1.3;}
+.tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:#999;cursor:pointer;border-bottom:3px solid transparent;}
 .tab.active{color:#1976d2;border-bottom-color:#1976d2;}
-.tab .count{background:#ff3b30;color:white;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px;vertical-align:middle;}
-
-/* ORDER CARD */
+.tab .cnt{background:#ff3b30;color:white;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px;}
 .orders-list{padding:12px;}
-.ocard{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+.ocard{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.07);cursor:pointer;}
 .ocard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .order-id{font-size:11px;color:#aaa;font-family:monospace;}
-.status-badge{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:700;}
-.status-badge.ship{background:#fff3e0;color:#e65100;}
-.status-badge.del{background:#e3f2fd;color:#1976d2;}
-.status-badge.ref{background:#fce4ec;color:#c62828;}
-.status-badge.done{background:#e8f5e9;color:#2e7d32;}
-
-.ocard-mid{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.sbadge{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:700;}
+.sbadge.ship{background:#fff3e0;color:#e65100;}
+.sbadge.del{background:#e3f2fd;color:#1976d2;}
+.sbadge.ref{background:#fff3e0;color:#e65100;}
+.sbadge.done{background:#e8f5e9;color:#2e7d32;}
+.ocard-mid{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
 .ocard-img{width:65px;height:65px;border-radius:10px;object-fit:cover;background:#f0f0f0;flex-shrink:0;}
-.ocard-info{}
 .ocard-title{font-size:13px;font-weight:600;color:#222;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .ocard-price{font-size:13px;color:#1976d2;font-weight:700;}
 .ocard-profit{font-size:11px;color:#2e7d32;margin-top:2px;}
-
-/* COUNTDOWN */
 .countdown{display:flex;align-items:center;gap:6px;background:#fff8e1;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
-.countdown svg{flex-shrink:0;}
-
-/* MAP */
+.ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .map-wrap{border-radius:12px;overflow:hidden;height:160px;background:#e8f4fd;margin-bottom:10px;position:relative;}
 .map-canvas{width:100%;height:100%;}
 .map-label{position:absolute;bottom:6px;right:8px;font-size:10px;color:#1976d2;background:rgba(255,255,255,0.9);padding:2px 7px;border-radius:8px;}
-
-/* BUTTONS */
-.ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
-.ship-btn:active{opacity:0.88;}
-.ship-btn:disabled{background:#bbb;cursor:not-allowed;}
-
 .empty{text-align:center;padding:60px 20px;color:#aaa;}
 .empty-icon{font-size:48px;margin-bottom:12px;}
-.loading-wrap{text-align:center;padding:50px;color:#aaa;}
-.loading-spinner{width:32px;height:32px;border:3px solid #e0e0e0;border-top-color:#1976d2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px;}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;}
+.toast.show{display:block;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;}
-.toast.show{display:block;animation:fadeUp 0.3s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
 
-/* SHIP CONFIRM POPUP */
-.ship-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;}
-.ship-popup-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 20px;animation:slideUp2 0.3s ease;}
-@keyframes slideUp2{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.ship-popup-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
-.ship-popup-title{font-size:15px;font-weight:700;color:#111;padding:14px 20px 6px;}
-.ship-popup-sub{font-size:12px;color:#888;padding:0 20px 12px;}
-.ship-popup-row{display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;}
-.ship-popup-row:last-of-type{border-bottom:none;}
-.ship-popup-label{font-size:13px;color:#555;}
-.ship-popup-val{font-size:14px;font-weight:700;}
-.ship-popup-val.s{color:#e65100;}
-.ship-popup-val.r{color:#1976d2;}
-.ship-popup-val.g{color:#2e7d32;}
-.ship-popup-btns{display:flex;gap:10px;padding:16px 20px 0;}
-.ship-cancel-btn{flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;}
-.ship-ok-btn{flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
-.ship-ok-btn:active{opacity:0.88;}
-
-/* PRODUCT DETAIL MODAL */
-.prod-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:flex-end;justify-content:center;}
-.prod-modal-overlay.open{display:flex;}
-.prod-modal-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:slideUp2 0.3s ease;}
-.prod-modal-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 8px;}
-.prod-modal-close{position:absolute;top:14px;right:16px;width:30px;height:30px;border-radius:50%;background:#f0f0f0;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-/* IMAGE SLIDER */
-.img-slider{position:relative;width:100%;height:260px;overflow:hidden;background:#f0f0f0;}
-.img-slider-track{display:flex;transition:transform 0.4s ease;height:100%;}
-.img-slide{min-width:100%;height:100%;object-fit:cover;}
-.slider-dot-wrap{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
-.slider-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:background 0.2s;}
-.slider-dot.active{background:white;}
-.slider-prev,.slider-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.35);color:white;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.slider-prev{left:10px;}
-.slider-next{right:10px;}
+/* SHIP POPUP */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;}
+.popup-overlay.open{display:flex;}
+.popup-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 24px;animation:slideUp 0.3s ease;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.popup-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
+.popup-row{display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;}
+.popup-row:last-of-type{border-bottom:none;}
 
 /* PASSWORD POPUP */
-.pwd-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:900;align-items:center;justify-content:center;}
-.pwd-popup-overlay.open{display:flex;}
-.pwd-popup-box{background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
-.pwd-popup-title{font-size:16px;font-weight:700;color:#111;margin-bottom:6px;}
-.pwd-popup-sub{font-size:13px;color:#888;margin-bottom:18px;}
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:center;justify-content:center;}
+.pwd-overlay.open{display:flex;}
+.pwd-box{background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;}
 .pwd-input{width:100%;border:1.5px solid #ddd;border-radius:12px;padding:12px 16px;font-size:15px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:14px;}
 .pwd-input:focus{border-color:#1976d2;}
-.pwd-ship-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:15px;font-weight:700;cursor:pointer;}
-.pwd-cancel-btn{width:100%;padding:11px;border:none;border-radius:12px;background:#f5f5f5;color:#666;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;}
+
+/* TRACKING MODAL */
+.track-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:flex-end;justify-content:center;}
+.track-overlay.open{display:flex;}
+.track-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease;}
+
+/* PRODUCT MODAL */
+.prod-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:flex-end;justify-content:center;}
+.prod-overlay.open{display:flex;}
+.prod-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;animation:slideUp 0.3s ease;position:relative;}
+.slider-wrap{position:relative;width:100%;height:260px;overflow:hidden;background:#f0f0f0;}
+.slider-track{display:flex;transition:transform 0.4s ease;height:100%;}
+.slide{min-width:100%;height:100%;object-fit:cover;}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.35);color:white;border:none;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;}
+.slider-btn.prev{left:10px;}
+.slider-btn.next{right:10px;}
+.dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;}
+.dot.active{background:white;}
 </style>
 </head>
 <body>
-<div class="header" style="display:flex;justify-content:space-between;align-items:center;">
+
+<div class="header">
   <div style="display:flex;align-items:center;gap:12px;">
     <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -11237,603 +11205,310 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </span>
-  </div>
-  <div style="display:flex;align-items:center;gap:14px;">
-    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;position:relative;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </span>
-    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </span>
+    <span style="font-size:16px;font-weight:700;">Manage Orders</span>
   </div>
 </div>
 
 <div class="tabs">
-  <div class="tab active" id="tab-ship" onclick="switchTab('waiting_shipping')">Shipping<span class="count" id="cnt-ship">0</span></div>
-  <div class="tab" id="tab-del" onclick="switchTab('in_delivery')">Delivery<span class="count" id="cnt-del">0</span></div>
-  <div class="tab" id="tab-ref" onclick="switchTab('waiting_refund')">Refund<span class="count" id="cnt-ref">0</span></div>
-  <div class="tab" id="tab-done" onclick="switchTab('completed')">Done<span class="count" id="cnt-done">0</span></div>
+  <div class="tab active" id="tab-ship" onclick="switchTab('waiting_shipping')">Shipping<span class="cnt" id="cnt-ship" style="display:none;">0</span></div>
+  <div class="tab" id="tab-del" onclick="switchTab('in_delivery')">Delivery<span class="cnt" id="cnt-del" style="display:none;">0</span></div>
+  <div class="tab" id="tab-ref" onclick="switchTab('waiting_refund')">Refund<span class="cnt" id="cnt-ref" style="display:none;">0</span></div>
+  <div class="tab" id="tab-done" onclick="switchTab('completed')">Done<span class="cnt" id="cnt-done" style="display:none;">0</span></div>
 </div>
 
 <div class="orders-list" id="ordersList">
-  <div class="loading-wrap"><div class="loading-spinner"></div><p>Loading orders...</p></div>
+  <div class="empty"><div class="empty-icon">📦</div><p>Loading...</p></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <!-- SHIP CONFIRM POPUP -->
-<div id="shipConfirmPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;">
-  <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 24px;animation:slideUp2 0.3s ease;">
-    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;"></div>
+<div id="shipPopup" class="popup-overlay">
+  <div class="popup-box">
+    <div class="popup-handle"></div>
     <div style="font-size:15px;font-weight:700;color:#111;padding:14px 20px 4px;">🚚 Confirm Shipment</div>
     <div style="font-size:12px;color:#888;padding:0 20px 10px;">Supplier cost will be deducted from your balance</div>
-    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
-      <span style="font-size:13px;color:#555;">Order Number</span>
-      <span style="font-size:13px;font-weight:700;color:#333;font-family:monospace;" id="shipPopupOrderNum">-</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
-      <span style="font-size:13px;color:#555;">Supplier Price</span>
-      <span style="font-size:14px;font-weight:700;color:#e65100;" id="shipPopupSupplier">US$0.00</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
-      <span style="font-size:13px;color:#555;">Retail Price</span>
-      <span style="font-size:14px;font-weight:700;color:#1976d2;" id="shipPopupRetail">US$0.00</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:12px 20px;">
-      <span style="font-size:13px;color:#555;">Your Profit</span>
-      <span style="font-size:14px;font-weight:700;color:#2e7d32;" id="shipPopupProfit">US$0.00</span>
-    </div>
+    <div class="popup-row"><span style="font-size:13px;color:#555;">Order Number</span><span style="font-size:13px;font-weight:700;font-family:monospace;" id="sp-num">-</span></div>
+    <div class="popup-row"><span style="font-size:13px;color:#555;">Supplier Price</span><span style="font-size:14px;font-weight:700;color:#e65100;" id="sp-sup">$0.00</span></div>
+    <div class="popup-row"><span style="font-size:13px;color:#555;">Retail Price</span><span style="font-size:14px;font-weight:700;color:#1976d2;" id="sp-ret">$0.00</span></div>
+    <div class="popup-row"><span style="font-size:13px;color:#555;">Your Profit</span><span style="font-size:14px;font-weight:700;color:#2e7d32;" id="sp-pro">$0.00</span></div>
     <div style="display:flex;gap:10px;padding:14px 20px 0;">
       <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="openPasswordPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ OK Ship Now</button>
+      <button onclick="openPwdPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ OK Ship Now</button>
     </div>
   </div>
 </div>
 
 <!-- PASSWORD POPUP -->
-<div id="pwdPopupOverlay" class="pwd-popup-overlay">
-  <div class="pwd-popup-box">
-    <div class="pwd-popup-title">🔐 Enter Your Password</div>
-    <div class="pwd-popup-sub">Please enter your account password to confirm shipment</div>
-    <input class="pwd-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password">
-    <button class="pwd-ship-btn" onclick="confirmShipWithPassword()">🚚 Ship Now</button>
-    <button class="pwd-cancel-btn" onclick="closePwdPopup()">Cancel</button>
+<div id="pwdPopup" class="pwd-overlay">
+  <div class="pwd-box">
+    <div style="font-size:16px;font-weight:700;color:#111;margin-bottom:6px;">🔐 Enter Your Password</div>
+    <div style="font-size:13px;color:#888;margin-bottom:18px;">Enter your account password to confirm shipment</div>
+    <input class="pwd-input" type="password" id="pwdInput" placeholder="••••••••">
+    <button onclick="doShip()" style="width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:15px;font-weight:700;cursor:pointer;">🚚 Ship Now</button>
+    <button onclick="closePwdPopup()" style="width:100%;padding:11px;border:none;border-radius:12px;background:#f5f5f5;color:#666;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;">Cancel</button>
   </div>
 </div>
 
-<!-- TRACKING MODAL (in_delivery full map) -->
-<div id="trackingModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:850;align-items:flex-end;justify-content:center;">
-  <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp2 0.3s ease;">
-    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 8px;"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px 12px;">
-      <span style="font-size:15px;font-weight:700;color:#111;">📦 Order Tracking</span>
-      <button onclick="closeTrackingModal()" style="border:none;background:#f0f0f0;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;">✕</button>
+<!-- TRACKING MODAL -->
+<div id="trackModal" class="track-overlay">
+  <div class="track-box">
+    <div class="popup-handle"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;">
+      <span style="font-size:15px;font-weight:700;">📦 Order Tracking</span>
+      <button onclick="closeTrackModal()" style="border:none;background:#f0f0f0;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;">✕</button>
     </div>
-    <div id="trackingModalOrderNum" style="padding:0 16px 8px;font-size:12px;color:#888;font-family:monospace;"></div>
-    <div id="trackingModalTitle" style="padding:0 16px 12px;font-size:13px;font-weight:600;color:#222;"></div>
-    <div style="margin:0 16px 12px;border-radius:14px;overflow:hidden;height:220px;position:relative;background:#e8f4fd;">
-      <canvas id="trackingModalCanvas" style="width:100%;height:100%;"></canvas>
-      <div id="trackingModalLabel" style="position:absolute;bottom:8px;right:10px;font-size:11px;color:#1976d2;background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:8px;">📍 In transit</div>
+    <div id="track-num" style="padding:0 16px 6px;font-size:12px;color:#888;font-family:monospace;"></div>
+    <div id="track-title" style="padding:0 16px 10px;font-size:13px;font-weight:600;color:#222;"></div>
+    <div style="margin:0 16px 10px;border-radius:12px;overflow:hidden;height:200px;position:relative;background:#e8f4fd;">
+      <canvas id="track-canvas" style="width:100%;height:100%;"></canvas>
     </div>
-    <div id="trackingModalRoute" style="padding:0 16px 16px;font-size:13px;color:#555;line-height:1.7;"></div>
-  </div>
-</div>
-
-<!-- REFUND/DELIVERY STATUS MODAL -->
-<div id="refundModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:850;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
-    <div style="font-size:48px;margin-bottom:12px;" id="refundModalIcon">📦</div>
-    <div style="font-size:16px;font-weight:700;color:#111;margin-bottom:6px;" id="refundModalTitle">Delivery Status</div>
-    <div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:18px;" id="refundModalBody"></div>
-    <button onclick="closeRefundModal()" style="width:100%;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">OK</button>
+    <div id="track-route" style="padding:0 16px 20px;font-size:13px;color:#555;line-height:1.7;"></div>
   </div>
 </div>
 
 <!-- PRODUCT DETAIL MODAL -->
-<div id="prodDetailOverlay" class="prod-modal-overlay">
-  <div class="prod-modal-box" style="position:relative;">
-    <div class="prod-modal-handle"></div>
-    <button class="prod-modal-close" onclick="closeProdModal()">✕</button>
-
-    <!-- IMAGE SLIDER -->
-    <div class="img-slider" id="sliderWrap">
-      <div class="img-slider-track" id="sliderTrack"></div>
-      <button class="slider-prev" onclick="sliderMove(-1)">‹</button>
-      <button class="slider-next" onclick="sliderMove(1)">›</button>
-      <div class="slider-dot-wrap" id="sliderDots"></div>
+<div id="prodModal" class="prod-overlay">
+  <div class="prod-box">
+    <div class="popup-handle"></div>
+    <button onclick="closeProdModal()" style="position:absolute;top:14px;right:16px;border:none;background:#f0f0f0;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;">✕</button>
+    <div class="slider-wrap" id="sliderWrap">
+      <div class="slider-track" id="sliderTrack"></div>
+      <button class="slider-btn prev" onclick="slideMove(-1)">‹</button>
+      <button class="slider-btn next" onclick="slideMove(1)">›</button>
+      <div class="dots" id="sliderDots"></div>
     </div>
-
-    <!-- INFO -->
     <div style="padding:14px 16px 6px;">
-      <div id="prodModalTitle" style="font-size:14px;font-weight:700;color:#222;line-height:1.5;margin-bottom:8px;"></div>
-      <div id="prodModalPrice" style="font-size:16px;font-weight:800;color:#1976d2;margin-bottom:4px;"></div>
-      <div id="prodModalProfit" style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:10px;"></div>
+      <div id="pm-title" style="font-size:14px;font-weight:700;color:#222;line-height:1.5;margin-bottom:6px;"></div>
+      <div id="pm-price" style="font-size:16px;font-weight:800;color:#1976d2;margin-bottom:3px;"></div>
+      <div id="pm-profit" style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:10px;"></div>
     </div>
-
-    <!-- COUNTDOWN IN MODAL -->
-    <div id="prodModalCountdown" style="margin:0 16px 10px;background:#fff8e1;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e65100" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Ship within: <b id="prodModalCdTxt">--:--:--</b></span>
+    <div id="pm-countdown" style="margin:0 16px 10px;background:#fff8e1;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
+      ⏱ Ship within: <b id="pm-cd">--:--:--</b>
     </div>
-
-    <!-- SHIP BUTTON IN MODAL -->
     <div style="padding:0 16px 20px;">
-      <button id="prodModalShipBtn" class="ship-btn" onclick="shipOrderFromModal()">🚚 Ship Now</button>
+      <button class="ship-btn" onclick="shipFromModal()">🚚 Ship Now</button>
     </div>
   </div>
 </div>
 
 <script>
-var myToken = localStorage.getItem("token") || (function(){ var u=JSON.parse(localStorage.getItem("user")||"{}"); return u.token||""; })() || "";
+var user = JSON.parse(localStorage.getItem("user") || "{}");
+var token = localStorage.getItem("token") || user.token || "";
 var allOrders = [];
 var currentTab = "waiting_shipping";
+var pendingOrderId = null;
+var slideIdx = 0;
+var slideImgs = [];
+var modalCdTimer = null;
 
-// Apply tab from URL param IMMEDIATELY before any render
+// Auto-switch tab from URL
 (function(){
-    var params = new URLSearchParams(window.location.search);
-    var tab = params.get("tab");
-    if(tab && ["waiting_shipping","in_delivery","waiting_refund","completed","waiting_payment"].includes(tab)){
-        if(tab === "waiting_payment") tab = "waiting_shipping";
-        currentTab = tab;
-        var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
-        if(tabKey){
-            document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
-            var tabEl = document.getElementById("tab-"+tabKey);
-            if(tabEl) tabEl.classList.add("active");
+    var p = new URLSearchParams(window.location.search);
+    var t = p.get("tab");
+    if(t){
+        if(t === "waiting_payment") t = "waiting_shipping";
+        if(["waiting_shipping","in_delivery","waiting_refund","completed"].includes(t)){
+            currentTab = t;
+            var k = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[t];
+            document.querySelectorAll(".tab").forEach(function(x){ x.classList.remove("active"); });
+            var el = document.getElementById("tab-"+k);
+            if(el) el.classList.add("active");
         }
     }
 })();
 
-// ===== PRODUCT DETAIL MODAL =====
-var sliderCurrentIdx = 0;
-var sliderImages = [];
-var modalOrderId = null;
-var modalCdInterval = null;
-
-function openProdModal(order){
-    modalOrderId = order.id;
-    var catMap3 = {17:'17_Clothing_and_Accessories',19:'19_Medical_Bags_and_Sunglasses',20:'20_Shoes',21:'21_Watches',22:'22_Jewelry',27:'27_Electronics',28:'28_Smart_Home',31:'31_Luxury_Brands',32:'32_Beauty_and_Personal_Care',34:'34_Mens_Fashion',35:'35_Health_and_Household',36:'36_Home_and_Kitchen'};
-    var catF = catMap3[(order.product&&order.product.category_id)] || '27_Electronics';
-    var baseUrl = 'https://res.cloudinary.com/doabtbdsh/image/upload/products/';
-    var folder = order.product && order.product.folder ? order.product.folder : '';
-
-    // Build images array (try up to 8)
-    sliderImages = [];
-    if(folder){
-        for(var i=1;i<=8;i++){
-            sliderImages.push(baseUrl + catF + '/' + folder + '/' + i + '.jpg');
-        }
-    } else {
-        sliderImages = ['https://via.placeholder.com/400x260?text=No+Image'];
-    }
-
-    // Build slider
-    sliderCurrentIdx = 0;
-    var track = document.getElementById("sliderTrack");
-    var dots = document.getElementById("sliderDots");
-    track.innerHTML = "";
-    dots.innerHTML = "";
-    sliderImages.forEach(function(src, idx){
-        var img = document.createElement("img");
-        img.className = "img-slide";
-        img.src = src;
-        img.onerror = function(){ if(idx > 0) this.parentNode && this.parentNode.removeChild && this.closest && this.remove(); };
-        track.appendChild(img);
-        var dot = document.createElement("div");
-        dot.className = "slider-dot" + (idx===0?" active":"");
-        dot.onclick = (function(i){ return function(){ goToSlide(i); }; })(idx);
-        dots.appendChild(dot);
-    });
-    updateSlider();
-
-    // Info
-    document.getElementById("prodModalTitle").innerText = order.product ? order.product.title : "Product";
-    document.getElementById("prodModalPrice").innerText = "US$" + parseFloat(order.total).toFixed(2);
-    document.getElementById("prodModalProfit").innerText = "+US$" + parseFloat(order.profit*(order.quantity||1)).toFixed(2) + " profit";
-
-    // Countdown in modal
-    startModalCountdown(order);
-
-    document.getElementById("prodDetailOverlay").classList.add("open");
-}
-
-function closeProdModal(){
-    document.getElementById("prodDetailOverlay").classList.remove("open");
-    if(modalCdInterval){ clearInterval(modalCdInterval); modalCdInterval = null; }
-    modalOrderId = null;
-}
-
-function startModalCountdown(order){
-    if(modalCdInterval){ clearInterval(modalCdInterval); }
-    var created = new Date(order.createdAt).getTime();
-    var deadline = created + 48*60*60*1000;
-    var cdEl = document.getElementById("prodModalCdTxt");
-    var cdWrap = document.getElementById("prodModalCountdown");
-    function tick(){
-        var remaining = Math.max(0, deadline - Date.now());
-        if(remaining <= 0){
-            clearInterval(modalCdInterval);
-            cdWrap.style.background = "#fce4ec";
-            cdWrap.style.color = "#c62828";
-            cdWrap.querySelector("svg").setAttribute("stroke","#c62828");
-            cdWrap.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><b>⏰ TIME OUT</b></span>';
-        } else {
-            if(cdEl) cdEl.innerText = formatTime(remaining);
-        }
-    }
-    tick();
-    modalCdInterval = setInterval(tick, 1000);
-}
-
-function sliderMove(dir){
-    goToSlide(sliderCurrentIdx + dir);
-}
-
-function goToSlide(idx){
-    var total = sliderImages.length;
-    sliderCurrentIdx = (idx + total) % total;
-    updateSlider();
-}
-
-function updateSlider(){
-    document.getElementById("sliderTrack").style.transform = "translateX(-" + (sliderCurrentIdx*100) + "%)";
-    var dots = document.getElementById("sliderDots").children;
-    for(var i=0;i<dots.length;i++) dots[i].classList.toggle("active", i===sliderCurrentIdx);
-}
-
-function shipOrderFromModal(){
-    if(!modalOrderId) return;
-    shipOrder(modalOrderId);
-}
-
-// ===== GENERATE 11-DIGIT ORDER NUMBER =====
-function generateOrderNum(orderId){
-    // Use last 11 digits of order id (timestamp-based), or pad
-    var str = String(orderId).replace(/\D/g,'');
-    if(str.length >= 11) return str.slice(-11);
-    while(str.length < 11) str = "0" + str;
-    return str;
-}
-
+// ===== LOAD ORDERS =====
 async function load(){
-    var listEl = document.getElementById("ordersList");
-    try {
-        var user = JSON.parse(localStorage.getItem("user") || "{}");
-        var token = localStorage.getItem("token") || user.token || "";
-        myToken = token;
+    var el = document.getElementById("ordersList");
+    var orders = null;
 
-        var orders = null;
-
-        // Method 1: try with token
-        if(token){
-            try {
-                var r1 = await fetch("/my-store-orders", {
-                    headers: {"Authorization": "Bearer " + token},
-                    credentials: "include"
-                });
-                if(r1.ok){
-                    var d1 = await r1.json();
-                    if(d1.success) orders = d1.orders;
-                }
-            } catch(e){}
-        }
-
-        // Method 2: fallback with email directly
-        if(orders === null && user.email){
-            try {
-                var r2 = await fetch("/store-orders-by-email/" + encodeURIComponent(user.email), {
-                    credentials: "include"
-                });
-                if(r2.ok){
-                    var d2 = await r2.json();
-                    if(d2.success) orders = d2.orders;
-                }
-            } catch(e){}
-        }
-
-        if(orders === null){
-            listEl.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><p>Session expired. <a href="/login-page" style="color:#1976d2;font-weight:600;">Login again</a></p></div>';
-            return;
-        }
-
-        allOrders = orders || [];
-        updateCounts();
-        renderOrders();
-
-    } catch(e){
-        listEl.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders yet</p></div>';
+    // Try token first
+    if(token){
+        try {
+            var r = await fetch("/my-store-orders", {
+                headers: {"Authorization": "Bearer " + token},
+                credentials: "include"
+            });
+            if(r.ok){ var d = await r.json(); if(d.success) orders = d.orders; }
+        } catch(e){}
     }
-}
 
-function updateCounts(){
+    // Fallback: use email
+    if(orders === null && user.email){
+        try {
+            var r2 = await fetch("/store-orders-by-email/" + encodeURIComponent(user.email), { credentials:"include" });
+            if(r2.ok){ var d2 = await r2.json(); if(d2.success) orders = d2.orders; }
+        } catch(e){}
+    }
+
+    if(orders === null){
+        el.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><p>Please <a href="/login-page" style="color:#1976d2;">login again</a></p></div>';
+        return;
+    }
+
+    allOrders = orders;
+    // Update counts
     ["waiting_shipping","in_delivery","waiting_refund","completed"].forEach(function(s){
-        var key = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[s];
-        var cnt = allOrders.filter(function(o){ return o.status===s; }).length;
-        document.getElementById("cnt-"+key).innerText = cnt;
-        document.getElementById("cnt-"+key).style.display = cnt > 0 ? "" : "none";
+        var k = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[s];
+        var n = allOrders.filter(function(o){ return o.status===s; }).length;
+        var ce = document.getElementById("cnt-"+k);
+        if(ce){ ce.innerText = n; ce.style.display = n>0?"":"none"; }
     });
+    render();
 }
 
-function switchTab(tab){
-    currentTab = tab;
-    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
-    var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
-    document.getElementById("tab-"+tabKey).classList.add("active");
-    renderOrders();
-}
-
-function renderOrders(){
-    var list = allOrders.filter(function(o){ return o.status === currentTab; });
+function render(){
+    var list = allOrders.filter(function(o){ return o.status===currentTab; });
     var el = document.getElementById("ordersList");
     if(list.length === 0){
-        el.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders in this section</p></div>';
+        el.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders here</p></div>';
         return;
     }
     el.innerHTML = "";
-    list.forEach(function(o){ el.appendChild(buildOrderCard(o)); });
+    list.forEach(function(o){ el.appendChild(buildCard(o)); });
 }
 
-function buildOrderCard(o){
+function switchTab(t){
+    currentTab = t;
+    document.querySelectorAll(".tab").forEach(function(x){ x.classList.remove("active"); });
+    var k = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[t];
+    var el = document.getElementById("tab-"+k);
+    if(el) el.classList.add("active");
+    render();
+}
+
+function orderNum(id){
+    var s = String(id).replace(/\\D/g,"");
+    if(s.length>=11) return s.slice(-11);
+    while(s.length<11) s="0"+s;
+    return s;
+}
+
+var catMap = {17:"17_Clothing_and_Accessories",19:"19_Medical_Bags_and_Sunglasses",20:"20_Shoes",21:"21_Watches",22:"22_Jewelry",27:"27_Electronics",28:"28_Smart_Home",31:"31_Luxury_Brands",32:"32_Beauty_and_Personal_Care",34:"34_Mens_Fashion",35:"35_Health_and_Household",36:"36_Home_and_Kitchen"};
+
+function imgUrl(o){
+    var cat = catMap[(o.product&&o.product.category_id)] || "27_Electronics";
+    var folder = o.product&&o.product.folder ? o.product.folder : "";
+    if(!folder) return "https://via.placeholder.com/65x65?text=No+Image";
+    return "https://res.cloudinary.com/doabtbdsh/image/upload/products/"+cat+"/"+folder+"/1.jpg";
+}
+
+function buildCard(o){
     var card = document.createElement("div");
     card.className = "ocard";
-    card.style.cursor = "pointer";
-
-    var statusLabels = { waiting_shipping:"Waiting to Ship", in_delivery:"In Delivery", waiting_refund:"Waiting Refund", completed:"Completed" };
-    var statusClasses = { waiting_shipping:"ship", in_delivery:"del", waiting_refund:"ref", completed:"done" };
-
-    var catMap3 = {17:'17_Clothing_and_Accessories',19:'19_Medical_Bags_and_Sunglasses',20:'20_Shoes',21:'21_Watches',22:'22_Jewelry',27:'27_Electronics',28:'28_Smart_Home',31:'31_Luxury_Brands',32:'32_Beauty_and_Personal_Care',34:'34_Mens_Fashion',35:'35_Health_and_Household',36:'36_Home_and_Kitchen'};
-    var catF3 = catMap3[(o.product&&o.product.category_id)] || '27_Electronics';
-    var imgSrc = o.product&&o.product.folder ? 'https://res.cloudinary.com/doabtbdsh/image/upload/products/'+catF3+'/'+o.product.folder+'/1.jpg' : 'https://res.cloudinary.com/doabtbdsh/image/upload/products/27_Electronics/placeholder/1.jpg';
-
-    var orderNum = generateOrderNum(o.id);
+    var labels = {waiting_shipping:"Waiting to Ship",in_delivery:"In Delivery",waiting_refund:"قيد التسليم",completed:"تم التسليم"};
+    var cls = {waiting_shipping:"ship",in_delivery:"del",waiting_refund:"ref",completed:"done"};
+    var num = orderNum(o.id);
+    var img = imgUrl(o);
+    var profit = parseFloat(o.profit||0)*parseInt(o.quantity||1);
 
     var html = '<div class="ocard-top">' +
-        '<span class="order-id">#' + orderNum + '</span>' +
-        '<span class="status-badge ' + statusClasses[o.status] + '">' + statusLabels[o.status] + '</span>' +
+        '<span class="order-id">#'+num+'</span>' +
+        '<span class="sbadge '+cls[o.status]+'">'+labels[o.status]+'</span>' +
         '</div>' +
         '<div class="ocard-mid">' +
-        '<img class="ocard-img" src="' + imgSrc + '" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
-        '<div class="ocard-info">' +
-        '<div class="ocard-title">' + escHtml(o.product ? o.product.title : "Product") + '</div>' +
-        '<div class="ocard-price">US$' + parseFloat(o.total).toFixed(2) + '</div>' +
-        '<div class="ocard-profit">+US$' + parseFloat(o.profit*(o.quantity||1)).toFixed(2) + ' profit</div>' +
-        '</div></div>';
+        '<img class="ocard-img" src="'+img+'" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
+        '<div><div class="ocard-title">'+(o.product?o.product.title:"Product")+'</div>' +
+        '<div class="ocard-price">US$'+parseFloat(o.total||0).toFixed(2)+'</div>' +
+        '<div class="ocard-profit">+US$'+profit.toFixed(2)+' profit</div></div>' +
+        '</div>';
 
-    // Countdown for waiting_shipping
     if(o.status === "waiting_shipping"){
         var created = new Date(o.createdAt).getTime();
-        var deadline = created + 48 * 60 * 60 * 1000;
-        var remaining = Math.max(0, deadline - Date.now());
-        var isTimeout = remaining === 0;
-        html += '<div class="countdown" id="cd-' + o.id + '" style="' + (isTimeout ? 'background:#fce4ec;color:#c62828;' : '') + '">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + (isTimeout ? '#c62828' : '#e65100') + '" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-            '<span>' + (isTimeout ? '<b>⏰ TIME OUT</b>' : 'Ship within: <b id="cdtxt-' + o.id + '">' + formatTime(remaining) + '</b>') + '</span></div>';
-        html += '<button class="ship-btn" onclick="event.stopPropagation();shipOrder(\'' + o.id + '\')">🚚 Ship Now</button>';
+        var remaining = Math.max(0, created + 48*60*60*1000 - Date.now());
+        var isTO = remaining === 0;
+        html += '<div class="countdown" id="cd-'+o.id+'" style="'+(isTO?"background:#fce4ec;color:#c62828;":"")+'">' +
+            '⏱ '+(isTO?'<b>⏰ TIME OUT</b>':'Ship within: <b id="cdt-'+o.id+'">'+fmtTime(remaining)+'</b>')+'</div>';
+        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">🚚 Ship Now</button>';
     }
 
-    // Map for in_delivery
     if(o.status === "in_delivery"){
-        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-' + o.id + '"></canvas>' +
-            '<span class="map-label">📍 In transit</span></div>';
+        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-'+o.id+'"></canvas><span class="map-label">📍 In transit</span></div>';
     }
 
-    // Waiting refund info - show "قيد التسليم" (in delivery/pending)
     if(o.status === "waiting_refund"){
-        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;margin-top:4px;text-align:center;">⏳ قيد التسليم — Pending Delivery Confirmation</div>';
+        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;text-align:center;">⏳ قيد التسليم — Pending Confirmation</div>';
     }
 
-    // Completed - show "تم التسليم"
     if(o.status === "completed"){
-        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;margin-top:4px;text-align:center;">✅ تم التسليم — Delivery Completed<br><small style="font-weight:400;color:#555;">Profit added to your wallet</small></div>';
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;text-align:center;">✅ تم التسليم — Profit added to wallet</div>';
     }
 
     card.innerHTML = html;
 
-    // Click on card opens product detail for waiting_shipping orders
     if(o.status === "waiting_shipping"){
-        card.onclick = function(e){ 
-            if(e.target.tagName === "BUTTON") return;
-            openProdModal(o); 
-        };
-        startCountdown(o.id, o.createdAt);
+        card.onclick = function(e){ if(e.target.tagName==="BUTTON") return; openProdModal(o); };
+        startCd(o.id, o.createdAt);
     }
-
-    // Click on in_delivery card opens full map
     if(o.status === "in_delivery"){
-        card.onclick = function(){ openTrackingModal(o); };
+        card.onclick = function(){ openTrackModal(o); };
         setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
     }
-
-    // Click on waiting_refund card opens delivery status
     if(o.status === "waiting_refund"){
-        card.onclick = function(){ openRefundModal(o); };
+        card.onclick = function(){ showToast("⏳ Order is pending delivery confirmation"); };
     }
-
+    if(o.status === "completed"){
+        card.onclick = function(){ showToast("✅ تم التسليم — Profit has been credited"); };
+    }
     return card;
 }
 
-function startCountdown(orderId, createdAt){
-    var created = new Date(createdAt).getTime();
-    var deadline = created + 48 * 60 * 60 * 1000;
-    var el = document.getElementById("cdtxt-"+orderId);
-    var cdDiv = document.getElementById("cd-"+orderId);
-    if(!el) return;
-    var interval = setInterval(function(){
-        var remaining = Math.max(0, deadline - Date.now());
-        if(remaining <= 0){
-            clearInterval(interval);
-            if(cdDiv){
-                cdDiv.style.background = "#fce4ec";
-                cdDiv.style.color = "#c62828";
-                cdDiv.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><b>⏰ TIME OUT</b></span>';
-            }
+function startCd(id, createdAt){
+    var deadline = new Date(createdAt).getTime() + 48*60*60*1000;
+    var t = setInterval(function(){
+        var r = Math.max(0, deadline - Date.now());
+        var el = document.getElementById("cdt-"+id);
+        var wrap = document.getElementById("cd-"+id);
+        if(r === 0){
+            clearInterval(t);
+            if(wrap){ wrap.style.background="#fce4ec"; wrap.style.color="#c62828"; wrap.innerHTML="⏱ <b>⏰ TIME OUT</b>"; }
         } else {
-            if(el) el.innerText = formatTime(remaining);
+            if(el) el.innerText = fmtTime(r);
         }
     }, 1000);
 }
 
-function formatTime(ms){
-    var s = Math.floor(ms/1000);
-    var h = Math.floor(s/3600);
-    var m = Math.floor((s%3600)/60);
-    var sec = s%60;
-    return pad(h) + ":" + pad(m) + ":" + pad(sec);
+function fmtTime(ms){
+    var s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
+    return pad(h)+":"+pad(m)+":"+pad(sec);
 }
-function pad(n){ return n < 10 ? "0"+n : ""+n; }
+function pad(n){ return n<10?"0"+n:""+n; }
 
-function drawMap(canvasId, trackingPath, deliveryStart){
-    var canvas = document.getElementById(canvasId);
-    if(!canvas) return;
-    var ctx = canvas.getContext("2d");
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-
-    if(!trackingPath) return;
-
-    var W = canvas.width, H = canvas.height;
-    var origin = trackingPath.origin;
-    var dest   = trackingPath.destination;
-    var mid    = trackingPath.midpoint;
-
-    // Background gradient
-    var grad = ctx.createLinearGradient(0,0,W,H);
-    grad.addColorStop(0,"#e3f2fd");
-    grad.addColorStop(1,"#bbdefb");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,W,H);
-
-    // Simple world map outline (circles for continents - decorative)
-    ctx.fillStyle = "rgba(25,118,210,0.08)";
-    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45],[0.5,0.65,35]].forEach(function(c){
-        ctx.beginPath(); ctx.arc(c[0]*W,c[1]*H,c[2],0,Math.PI*2); ctx.fill();
-    });
-
-    // Convert lat/lng to canvas coordinates
-    function toCanvas(lat, lng){
-        var x = ((lng + 180) / 360) * W;
-        var y = ((90 - lat) / 180) * H;
-        return { x: x, y: y };
-    }
-
-    var p0 = toCanvas(origin.lat, origin.lng);
-    var p1 = toCanvas(mid.lat, mid.lng);
-    var p2 = toCanvas(dest.lat, dest.lng);
-
-    // Progress based on time elapsed (72 hours total)
-    var elapsed = deliveryStart ? Date.now() - deliveryStart : 0;
-    var progress = Math.min(1, elapsed / (72 * 60 * 60 * 1000));
-
-    // Draw full path (dashed)
-    ctx.setLineDash([5,4]);
-    ctx.strokeStyle = "rgba(25,118,210,0.3)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(p0.x, p0.y);
-    ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw progress path (solid)
-    ctx.strokeStyle = "#1976d2";
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    // Interpolate along quadratic curve
-    var steps = 60;
-    ctx.moveTo(p0.x, p0.y);
-    for(var t = 0; t <= progress; t += 1/steps){
-        var bx = (1-t)*(1-t)*p0.x + 2*(1-t)*t*p1.x + t*t*p2.x;
-        var by = (1-t)*(1-t)*p0.y + 2*(1-t)*t*p1.y + t*t*p2.y;
-        ctx.lineTo(bx, by);
-    }
-    ctx.stroke();
-
-    // Draw plane at current position
-    var pt = progress;
-    var planeX = (1-pt)*(1-pt)*p0.x + 2*(1-pt)*pt*p1.x + pt*pt*p2.x;
-    var planeY = (1-pt)*(1-pt)*p0.y + 2*(1-pt)*pt*p1.y + pt*pt*p2.y;
-    ctx.fillStyle = "#1976d2";
-    ctx.beginPath(); ctx.arc(planeX, planeY, 7, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "white";
-    ctx.font = "10px Arial";
-    ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText("✈", planeX, planeY);
-
-    // Origin & Dest dots
-    [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
-        var pp = item[0], icon = item[1];
-        ctx.fillStyle = "#ff6b35";
-        ctx.beginPath(); ctx.arc(pp.x, pp.y, 5, 0, Math.PI*2); ctx.fill();
-        ctx.fillStyle = "#333"; ctx.font = "11px Arial";
-        ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText(icon, pp.x, pp.y - 12);
-    });
-
-    // Labels
-    ctx.fillStyle = "#1976d2"; ctx.font = "bold 9px Arial"; ctx.textAlign = "left";
-    ctx.fillText(origin.name, Math.max(2, p0.x - 20), p0.y + 14);
-    ctx.textAlign = "right";
-    ctx.fillText(dest.name, Math.min(W-2, p2.x + 20), p2.y + 14);
-
-    // Animate every 2 minutes
-    setTimeout(function(){ drawMap(canvasId, trackingPath, deliveryStart); }, 120000);
-}
-
-// --- Ship Confirm Popup ---
-var pendingShipOrderId = null;
-
-function shipOrder(orderId){
-    var order = allOrders.find(function(o){ return o.id === orderId; });
-    if(!order) return;
-
-    pendingShipOrderId = orderId;
-
-    var supplierPrice = parseFloat(order.supplierPrice) * (order.quantity||1);
-    var retailPrice   = parseFloat(order.total);
-    var profit        = parseFloat(order.profit) * (order.quantity||1);
-    var orderNum      = generateOrderNum(order.id);
-
-    document.getElementById("shipPopupOrderNum").innerText = orderNum;
-    document.getElementById("shipPopupSupplier").innerText = "US$" + supplierPrice.toFixed(2);
-    document.getElementById("shipPopupRetail").innerText   = "US$" + retailPrice.toFixed(2);
-    document.getElementById("shipPopupProfit").innerText   = "US$" + profit.toFixed(2);
-    document.getElementById("shipConfirmPopup").style.display = "flex";
-
-    // Close product modal if open
+// ===== SHIP POPUP =====
+function openShipPopup(id){
+    var o = allOrders.find(function(x){ return x.id===id; });
+    if(!o) return;
+    pendingOrderId = id;
+    var sup = parseFloat(o.supplierPrice||0)*parseInt(o.quantity||1);
+    var ret = parseFloat(o.total||0);
+    var pro = parseFloat(o.profit||0)*parseInt(o.quantity||1);
+    document.getElementById("sp-num").innerText = orderNum(o.id);
+    document.getElementById("sp-sup").innerText = "US$"+sup.toFixed(2);
+    document.getElementById("sp-ret").innerText = "US$"+ret.toFixed(2);
+    document.getElementById("sp-pro").innerText = "US$"+pro.toFixed(2);
+    document.getElementById("shipPopup").classList.add("open");
     closeProdModal();
 }
-
 function closeShipPopup(){
-    document.getElementById("shipConfirmPopup").style.display = "none";
-    pendingShipOrderId = null;
+    document.getElementById("shipPopup").classList.remove("open");
 }
-
-// Step 2: open password popup
-function openPasswordPopup(){
-    if(!pendingShipOrderId) return;
-    document.getElementById("shipConfirmPopup").style.display = "none";
+function openPwdPopup(){
+    if(!pendingOrderId) return;
+    document.getElementById("shipPopup").classList.remove("open");
     document.getElementById("pwdInput").value = "";
-    document.getElementById("pwdPopupOverlay").classList.add("open");
+    document.getElementById("pwdPopup").classList.add("open");
 }
-
 function closePwdPopup(){
-    document.getElementById("pwdPopupOverlay").classList.remove("open");
+    document.getElementById("pwdPopup").classList.remove("open");
 }
 
-// Step 3: verify password then ship
-async function confirmShipWithPassword(){
+async function doShip(){
     var pwd = document.getElementById("pwdInput").value;
-    if(!pwd){ showToast("⚠️ Please enter your password"); return; }
-    if(!pendingShipOrderId){ closePwdPopup(); return; }
+    if(!pwd){ showToast("⚠️ Enter your password"); return; }
+    if(!pendingOrderId){ closePwdPopup(); return; }
 
-    // Verify password via login endpoint
-    var user = JSON.parse(localStorage.getItem("user") || "{}");
+    // Verify password
     try {
         var vr = await fetch("/login", {
             method:"POST",
@@ -11841,164 +11516,150 @@ async function confirmShipWithPassword(){
             body: JSON.stringify({ email: user.email, password: pwd })
         });
         var vd = await vr.json();
-        if(vd.error){
-            showToast("❌ Wrong password");
-            document.getElementById("pwdInput").value = "";
-            return;
-        }
-    } catch(e){ showToast("⚠️ Error verifying password"); return; }
+        if(vd.error){ showToast("❌ Wrong password"); document.getElementById("pwdInput").value=""; return; }
+    } catch(e){ showToast("⚠️ Error"); return; }
 
-    var orderId = pendingShipOrderId;
+    var id = pendingOrderId;
     closePwdPopup();
-    pendingShipOrderId = null;
+    pendingOrderId = null;
 
     try {
         var r = await fetch("/ship-store-order", {
             method:"POST",
-            headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
             credentials:"include",
-            body: JSON.stringify({ orderId })
+            body: JSON.stringify({ orderId: id })
         });
         var d = await r.json();
-        if(d.success){ showToast("✅ Order shipped successfully!"); load(); }
-        else showToast("⚠️ " + (d.message||"Failed to ship"));
+        if(d.success){ showToast("✅ Shipped successfully!"); load(); }
+        else showToast("⚠️ " + (d.message||"Failed"));
     } catch(e){ showToast("⚠️ Network error"); }
 }
 
-// Legacy - keep for backward compat
-async function confirmShip(){
-    openPasswordPopup();
+// ===== PRODUCT MODAL =====
+function openProdModal(o){
+    var cat = catMap[(o.product&&o.product.category_id)] || "27_Electronics";
+    var folder = o.product&&o.product.folder ? o.product.folder : "";
+    var base = "https://res.cloudinary.com/doabtbdsh/image/upload/products/";
+    slideImgs = folder ? [1,2,3,4,5,6,7,8].map(function(i){ return base+cat+"/"+folder+"/"+i+".jpg"; }) : ["https://via.placeholder.com/400x260?text=No+Image"];
+    slideIdx = 0;
+
+    var track = document.getElementById("sliderTrack");
+    var dots = document.getElementById("sliderDots");
+    track.innerHTML = "";
+    dots.innerHTML = "";
+    slideImgs.forEach(function(src,i){
+        var img = document.createElement("img");
+        img.className = "slide"; img.src = src;
+        track.appendChild(img);
+        var dot = document.createElement("div");
+        dot.className = "dot"+(i===0?" active":"");
+        dot.onclick = (function(idx){ return function(){ goSlide(idx); }; })(i);
+        dots.appendChild(dot);
+    });
+    updateSlider();
+
+    document.getElementById("pm-title").innerText = o.product ? o.product.title : "Product";
+    document.getElementById("pm-price").innerText = "US$"+parseFloat(o.total||0).toFixed(2);
+    document.getElementById("pm-profit").innerText = "+US$"+parseFloat(o.profit*(o.quantity||1)||0).toFixed(2)+" profit";
+
+    // Countdown
+    if(modalCdTimer) clearInterval(modalCdTimer);
+    var deadline = new Date(o.createdAt).getTime() + 48*60*60*1000;
+    function tick(){
+        var r = Math.max(0, deadline - Date.now());
+        var el = document.getElementById("pm-cd");
+        var wrap = document.getElementById("pm-countdown");
+        if(r===0){ clearInterval(modalCdTimer); if(wrap){ wrap.style.background="#fce4ec"; wrap.style.color="#c62828"; wrap.innerHTML="⏰ TIME OUT"; } }
+        else { if(el) el.innerText = fmtTime(r); }
+    }
+    tick();
+    modalCdTimer = setInterval(tick, 1000);
+
+    // Store current order id for shipFromModal
+    document.getElementById("prodModal").dataset.orderId = o.id;
+    document.getElementById("prodModal").classList.add("open");
+}
+function closeProdModal(){
+    document.getElementById("prodModal").classList.remove("open");
+    if(modalCdTimer){ clearInterval(modalCdTimer); modalCdTimer=null; }
+}
+function shipFromModal(){
+    var id = document.getElementById("prodModal").dataset.orderId;
+    if(id) openShipPopup(id);
+}
+function slideMove(d){ goSlide(slideIdx+d); }
+function goSlide(i){ slideIdx=(i+slideImgs.length)%slideImgs.length; updateSlider(); }
+function updateSlider(){
+    document.getElementById("sliderTrack").style.transform="translateX(-"+slideIdx*100+"%)";
+    var ds=document.getElementById("sliderDots").children;
+    for(var i=0;i<ds.length;i++) ds[i].classList.toggle("active",i===slideIdx);
 }
 
-function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
-
-// ===== TRACKING MODAL (in_delivery) =====
-function openTrackingModal(order){
-    var overlay = document.getElementById("trackingModalOverlay");
-    overlay.style.display = "flex";
-    document.getElementById("trackingModalOrderNum").innerText = "#" + generateOrderNum(order.id);
-    document.getElementById("trackingModalTitle").innerText = order.product ? order.product.title : "Product";
-
-    var tp = order.trackingPath;
+// ===== TRACKING MODAL =====
+function openTrackModal(o){
+    document.getElementById("track-num").innerText = "#"+orderNum(o.id);
+    document.getElementById("track-title").innerText = o.product ? o.product.title : "";
+    var tp = o.trackingPath;
     if(tp){
-        document.getElementById("trackingModalRoute").innerHTML =
-            '<b>📍 Route:</b> ' + (tp.origin ? tp.origin.name : '?') + ' → ' + (tp.destination ? tp.destination.name : '?') +
-            '<br><span style="color:#1976d2;font-weight:600;">✈ Package is on the way</span>';
+        document.getElementById("track-route").innerHTML =
+            "<b>📍 Route:</b> "+(tp.origin?tp.origin.name:"?")+" → "+(tp.destination?tp.destination.name:"?")+
+            "<br><span style='color:#1976d2;font-weight:600;'>✈ Package is on the way</span>";
     }
-
-    // Draw map on canvas
+    document.getElementById("trackModal").classList.add("open");
     setTimeout(function(){
-        var canvas = document.getElementById("trackingModalCanvas");
-        if(!canvas) return;
-        canvas.width = canvas.offsetWidth || 400;
-        canvas.height = canvas.offsetHeight || 220;
-        drawMapOnCanvas(canvas, order.trackingPath, order.deliveryStart);
+        var c = document.getElementById("track-canvas");
+        if(!c) return;
+        c.width = c.offsetWidth||400; c.height = c.offsetHeight||200;
+        drawMap2(c, o.trackingPath, o.deliveryStart);
     }, 100);
 }
+function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); }
 
-function closeTrackingModal(){
-    document.getElementById("trackingModalOverlay").style.display = "none";
+function drawMap(canvasId, tp, ds){
+    var c = document.getElementById(canvasId);
+    if(!c) return;
+    c.width=c.offsetWidth; c.height=c.offsetHeight;
+    drawMap2(c, tp, ds);
 }
-
-function drawMapOnCanvas(canvas, trackingPath, deliveryStart){
-    var ctx = canvas.getContext("2d");
-    var W = canvas.width, H = canvas.height;
-    if(!trackingPath) return;
-
-    var grad = ctx.createLinearGradient(0,0,W,H);
-    grad.addColorStop(0,"#e3f2fd");
-    grad.addColorStop(1,"#bbdefb");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,W,H);
-
-    ctx.fillStyle = "rgba(25,118,210,0.08)";
-    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45],[0.5,0.65,35]].forEach(function(c){
-        ctx.beginPath(); ctx.arc(c[0]*W,c[1]*H,c[2],0,Math.PI*2); ctx.fill();
+function drawMap2(c, tp, ds){
+    if(!tp||!c) return;
+    var ctx=c.getContext("2d"), W=c.width, H=c.height;
+    var g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#e3f2fd"); g.addColorStop(1,"#bbdefb");
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="rgba(25,118,210,0.08)";
+    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45]].forEach(function(c2){
+        ctx.beginPath(); ctx.arc(c2[0]*W,c2[1]*H,c2[2],0,Math.PI*2); ctx.fill();
     });
-
-    function toCanvas(lat, lng){
-        return { x: ((lng+180)/360)*W, y: ((90-lat)/180)*H };
-    }
-
-    var origin = trackingPath.origin;
-    var dest   = trackingPath.destination;
-    var mid    = trackingPath.midpoint;
-    var p0 = toCanvas(origin.lat, origin.lng);
-    var p1 = toCanvas(mid.lat, mid.lng);
-    var p2 = toCanvas(dest.lat, dest.lng);
-
-    var elapsed = deliveryStart ? Date.now() - deliveryStart : 0;
-    var progress = Math.min(1, elapsed / (72*60*60*1000));
-
-    ctx.setLineDash([5,4]);
-    ctx.strokeStyle = "rgba(25,118,210,0.3)";
-    ctx.lineWidth = 2;
+    function tc(lat,lng){ return {x:((lng+180)/360)*W, y:((90-lat)/180)*H}; }
+    var p0=tc(tp.origin.lat,tp.origin.lng), p1=tc(tp.midpoint.lat,tp.midpoint.lng), p2=tc(tp.destination.lat,tp.destination.lng);
+    var elapsed=ds?Date.now()-ds:0, prog=Math.min(1,elapsed/(72*60*60*1000));
+    ctx.setLineDash([5,4]); ctx.strokeStyle="rgba(25,118,210,0.3)"; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.quadraticCurveTo(p1.x,p1.y,p2.x,p2.y); ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.strokeStyle = "#1976d2"; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
-    var steps=60;
-    for(var t=0;t<=progress;t+=1/steps){
-        var bx=(1-t)*(1-t)*p0.x+2*(1-t)*t*p1.x+t*t*p2.x;
-        var by=(1-t)*(1-t)*p0.y+2*(1-t)*t*p1.y+t*t*p2.y;
-        ctx.lineTo(bx,by);
-    }
+    ctx.setLineDash([]); ctx.strokeStyle="#1976d2"; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
+    for(var t=0;t<=prog;t+=1/60){ var bx=(1-t)*(1-t)*p0.x+2*(1-t)*t*p1.x+t*t*p2.x, by=(1-t)*(1-t)*p0.y+2*(1-t)*t*p1.y+t*t*p2.y; ctx.lineTo(bx,by); }
     ctx.stroke();
-
-    var pt=progress;
-    var px=(1-pt)*(1-pt)*p0.x+2*(1-pt)*pt*p1.x+pt*pt*p2.x;
-    var py=(1-pt)*(1-pt)*p0.y+2*(1-pt)*pt*p1.y+pt*pt*p2.y;
+    var pt=prog, px=(1-pt)*(1-pt)*p0.x+2*(1-pt)*pt*p1.x+pt*pt*p2.x, py=(1-pt)*(1-pt)*p0.y+2*(1-pt)*pt*p1.y+pt*pt*p2.y;
     ctx.fillStyle="#1976d2"; ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.fillText("✈",px,py);
-
+    ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("✈",px,py);
     [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
         ctx.fillStyle="#ff6b35"; ctx.beginPath(); ctx.arc(item[0].x,item[0].y,5,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle="#333"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
-        ctx.fillText(item[1],item[0].x,item[0].y-12);
+        ctx.fillStyle="#333"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(item[1],item[0].x,item[0].y-12);
     });
-
-    ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left";
-    ctx.fillText(origin.name, Math.max(2,p0.x-20), p0.y+14);
-    ctx.textAlign="right";
-    ctx.fillText(dest.name, Math.min(W-2,p2.x+20), p2.y+14);
+    ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left"; ctx.fillText(tp.origin.name,Math.max(2,p0.x-20),p0.y+14);
+    ctx.textAlign="right"; ctx.fillText(tp.destination.name,Math.min(W-2,p2.x+20),p2.y+14);
 }
 
-// ===== REFUND/DELIVERY MODAL =====
-function openRefundModal(order){
-    var overlay = document.getElementById("refundModalOverlay");
-    overlay.style.display = "flex";
+function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
 
-    // Check if completed (delivered) vs waiting_refund (pending)
-    if(order.status === "completed"){
-        document.getElementById("refundModalIcon").innerText = "✅";
-        document.getElementById("refundModalTitle").innerText = "تم التسليم";
-        document.getElementById("refundModalBody").innerHTML =
-            "Order <b>#" + generateOrderNum(order.id) + "</b><br>" +
-            "Delivery has been confirmed successfully.<br>" +
-            "<span style='color:#2e7d32;font-weight:600;'>Your profit has been added to your wallet.</span>";
-    } else {
-        document.getElementById("refundModalIcon").innerText = "🚚";
-        document.getElementById("refundModalTitle").innerText = "قيد التسليم";
-        document.getElementById("refundModalBody").innerHTML =
-            "Order <b>#" + generateOrderNum(order.id) + "</b><br>" +
-            "The package has been delivered to the customer.<br>" +
-            "<span style='color:#e65100;'>Waiting for delivery confirmation to release your earnings.</span>";
-    }
-}
-
-function closeRefundModal(){
-    document.getElementById("refundModalOverlay").style.display = "none";
-}
-
+// Start loading immediately
 load();
 setInterval(load, 30000);
 </script>
 </body>
 </html>`);
 });
+
 
 
 // =================== STORE SETTING PAGE ===================
