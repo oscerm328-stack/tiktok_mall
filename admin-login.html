@@ -122,50 +122,6 @@ cursor:pointer;
 .approve{background:green;color:white;}
 .reject{background:red;color:white;}
 
-/* FREEZE MODAL */
-#freezeModal {
-    display:none;
-    position:fixed;
-    top:0;left:0;width:100%;height:100%;
-    background:rgba(0,0,0,0.6);
-    z-index:99999;
-    justify-content:center;
-    align-items:center;
-}
-#freezeModal.show { display:flex; }
-.freeze-box {
-    background:#1a1a1a;
-    border:1px solid #ff3b30;
-    border-radius:16px;
-    padding:28px;
-    width:340px;
-    text-align:center;
-    box-shadow:0 0 40px rgba(255,59,48,0.3);
-}
-.freeze-box h3 { color:#ff3b30; margin:0 0 6px; font-size:18px; }
-.freeze-box p  { color:#aaa; font-size:13px; margin:0 0 16px; }
-.freeze-box textarea {
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #444;
-    background:#111;
-    color:white;
-    font-size:14px;
-    resize:vertical;
-    min-height:90px;
-    box-sizing:border-box;
-}
-.freeze-box .btn-row { display:flex; gap:10px; margin-top:14px; }
-.freeze-box .btn-confirm {
-    flex:1;padding:10px;border:none;border-radius:10px;
-    background:#ff3b30;color:white;font-weight:bold;cursor:pointer;font-size:14px;
-}
-.freeze-box .btn-cancel {
-    flex:1;padding:10px;border:none;border-radius:10px;
-    background:#333;color:white;cursor:pointer;font-size:14px;
-}
-
 </style>
 </head>
 
@@ -664,7 +620,7 @@ function renderUsersTable(data){
     countryFlag = flagMap[country] || "🌍";
 
     return `
-<div style="border:1px solid ${user.frozen ? '#ff3b30' : '#e0e0e0'};border-radius:12px;padding:14px 16px;margin-bottom:10px;background:${user.frozen ? '#fff5f5' : '#fafafa'};">
+<div style="border:1px solid #e0e0e0;border-radius:12px;padding:14px 16px;margin-bottom:10px;background:#fafafa;">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
     <div style="flex:1;min-width:0;">
       <div style="font-weight:bold;font-size:14px;color:#111;margin-bottom:6px;">📧 ${sanitize(user.email)}</div>
@@ -677,15 +633,10 @@ function renderUsersTable(data){
       ${user.registeredAt ? `<div style="font-size:11px;color:#999;">📅 Registered: ${sanitize(user.registeredAt)}</div>` : ""}
     </div>
     <div style="flex-shrink:0;">
-      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+      <div style="display:flex;gap:6px;">
         <button onclick="editUser('${sanitize(user.email)}')" style="padding:6px 12px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;">✏️ Edit</button>
         <button onclick="deleteUser('${sanitize(user.email)}')" style="padding:6px 12px;background:#e53935;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;">🗑️ Delete</button>
-        ${user.frozen
-            ? `<button onclick="unfreezeUser('${sanitize(user.email)}')" style="padding:6px 12px;background:#ff9800;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;">❄️ Unfreeze</button>`
-            : `<button onclick="openFreezeModal('${sanitize(user.email)}')" style="padding:6px 12px;background:#546e7a;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;">🧊 Freeze</button>`
-        }
       </div>
-      ${user.frozen ? `<div style="margin-top:6px;text-align:right;font-size:11px;color:#ff3b30;font-weight:bold;">🔒 FROZEN</div>` : ""}
     </div>
   </div>
 
@@ -1504,8 +1455,7 @@ function renderLogs(logs){
         login:"#e8f5e9", login_failed:"#ffebee", register:"#e3f2fd",
         admin_login:"#f3e5f5", admin_login_failed:"#ffebee",
         deposit_approved:"#e8f5e9", withdraw_approved:"#fff3e0",
-        request_rejected:"#ffebee",
-        freeze_user:"#fff3e0", unfreeze_user:"#e8f5e9"
+        request_rejected:"#ffebee"
     };
     container.innerHTML = logs.map(l => `
         <div style="padding:10px 14px;border-radius:8px;margin-bottom:6px;background:${colors[l.type]||'#f5f5f5'};font-size:13px;">
@@ -1719,73 +1669,6 @@ async function addManualOrder(){
   } catch(e) {
     alert('Connection error ❌');
   }
-}
-</script>
-<!-- FREEZE MODAL -->
-<div id="freezeModal">
-  <div class="freeze-box">
-    <h3>🧊 Freeze Account</h3>
-    <p id="freezeModalEmail" style="color:#ff8a80;font-size:13px;margin-bottom:12px;"></p>
-    <p>Enter the reason that will be shown to the user:</p>
-    <textarea id="freezeReasonInput" placeholder="e.g. Your account has been suspended due to suspicious activity. Please contact support."></textarea>
-    <div class="btn-row">
-      <button class="btn-cancel" onclick="closeFreezeModal()">Cancel</button>
-      <button class="btn-confirm" onclick="confirmFreeze()">🔒 Freeze</button>
-    </div>
-  </div>
-</div>
-
-<script>
-var _freezeTargetEmail = "";
-
-function openFreezeModal(email){
-    _freezeTargetEmail = email;
-    document.getElementById("freezeModalEmail").innerText = email;
-    document.getElementById("freezeReasonInput").value = "";
-    document.getElementById("freezeModal").classList.add("show");
-}
-
-function closeFreezeModal(){
-    document.getElementById("freezeModal").classList.remove("show");
-    _freezeTargetEmail = "";
-}
-
-async function confirmFreeze(){
-    var reason = document.getElementById("freezeReasonInput").value.trim();
-    if(!reason){ alert("Please enter a reason for freezing."); return; }
-
-    var res = await adminFetch("/freeze-user", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ email: _freezeTargetEmail, reason: reason })
-    });
-    var data = await res.json();
-
-    if(data.success){
-        closeFreezeModal();
-        alert("✅ Account frozen successfully!");
-        showPage("users");
-    } else {
-        alert("❌ Error: " + (data.message || "Unknown error"));
-    }
-}
-
-async function unfreezeUser(email){
-    if(!confirm("Unfreeze account for " + email + "?")) return;
-
-    var res = await adminFetch("/unfreeze-user", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ email: email })
-    });
-    var data = await res.json();
-
-    if(data.success){
-        alert("✅ Account unfrozen! User can login again.");
-        showPage("users");
-    } else {
-        alert("❌ Error: " + (data.message || "Unknown error"));
-    }
 }
 </script>
 
