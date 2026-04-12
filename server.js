@@ -7799,42 +7799,59 @@ loadInfo();
 </html>`);
 });
 
-// ================= ADDRESS PAGE =================
-// ===== ADDRESS API =====
+// ================= ADDRESS API =================
+// جلب عناوين المستخدم
 app.get("/api/addresses", authMiddleware, (req, res) => {
     const user = users.find(u => u.email === req.userEmail);
-    res.json({ addresses: (user && user.addresses) ? user.addresses : [] });
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json(user.addresses || []);
 });
 
-app.post("/api/addresses/save", authMiddleware, (req, res) => {
+// إضافة عنوان جديد
+app.post("/api/addresses", authMiddleware, (req, res) => {
     const user = users.find(u => u.email === req.userEmail);
-    if (!user) return res.json({ success: false });
+    if (!user) return res.status(404).json({ error: "User not found" });
     if (!user.addresses) user.addresses = [];
-    const { id, name, mobile, mobileCode, country, province, city, exactLocation, postalCode, isDefault } = req.body;
+    const { name, mobile, countryCode, country, province, city, exactLocation, postalCode, isDefault } = req.body;
+    if (!name || !mobile || !country || !city) return res.status(400).json({ error: "Missing required fields" });
+    // إذا كان default، نلغي default عن الباقين
     if (isDefault) user.addresses.forEach(a => a.isDefault = false);
-    if (id) {
-        const idx = user.addresses.findIndex(a => a.id === id);
-        if (idx !== -1) {
-            user.addresses[idx] = { id, name, mobile, mobileCode, country, province, city, exactLocation, postalCode, isDefault: !!isDefault };
-        }
-    } else {
-        const newId = "addr_" + Date.now();
-        if (user.addresses.length === 0) isDefault = true;
-        user.addresses.push({ id: newId, name, mobile, mobileCode, country, province, city, exactLocation, postalCode, isDefault: !!isDefault });
-    }
+    const newAddress = {
+        id: Date.now().toString(),
+        name, mobile, countryCode: countryCode || "+1",
+        country, province: province || "", city,
+        exactLocation: exactLocation || "", postalCode: postalCode || "",
+        isDefault: isDefault || false,
+        createdAt: new Date().toISOString()
+    };
+    user.addresses.push(newAddress);
     saveUsers();
-    res.json({ success: true, addresses: user.addresses });
+    res.json({ success: true, address: newAddress });
 });
 
-app.post("/api/addresses/delete", authMiddleware, (req, res) => {
+// تعديل عنوان
+app.put("/api/addresses/:id", authMiddleware, (req, res) => {
     const user = users.find(u => u.email === req.userEmail);
-    if (!user) return res.json({ success: false });
-    const { id } = req.body;
-    user.addresses = (user.addresses || []).filter(a => a.id !== id);
+    if (!user || !user.addresses) return res.status(404).json({ error: "Not found" });
+    const idx = user.addresses.findIndex(a => a.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: "Address not found" });
+    const { name, mobile, countryCode, country, province, city, exactLocation, postalCode, isDefault } = req.body;
+    if (isDefault) user.addresses.forEach(a => a.isDefault = false);
+    user.addresses[idx] = { ...user.addresses[idx], name, mobile, countryCode: countryCode || "+1", country, province: province || "", city, exactLocation: exactLocation || "", postalCode: postalCode || "", isDefault: isDefault || false };
     saveUsers();
-    res.json({ success: true, addresses: user.addresses });
+    res.json({ success: true, address: user.addresses[idx] });
 });
 
+// حذف عنوان
+app.delete("/api/addresses/:id", authMiddleware, (req, res) => {
+    const user = users.find(u => u.email === req.userEmail);
+    if (!user || !user.addresses) return res.status(404).json({ error: "Not found" });
+    user.addresses = user.addresses.filter(a => a.id !== req.params.id);
+    saveUsers();
+    res.json({ success: true });
+});
+
+// ================= ADDRESS PAGE =================
 app.get("/address", (req, res) => {
 res.send(`<!DOCTYPE html>
 <html>
@@ -7843,259 +7860,328 @@ res.send(`<!DOCTYPE html>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:Arial,sans-serif;background:#f5f5f5;min-height:100vh;}
-.header{background:white;padding:14px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;}
-.header-left{display:flex;align-items:center;gap:10px;}
-.header-title{font-size:17px;font-weight:bold;color:#222;}
-.add-btn{background:#1976d2;color:white;border:none;border-radius:22px;padding:8px 18px;font-size:14px;cursor:pointer;}
+
+/* HEADER */
+.header{background:white;padding:15px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10;}
+.back-btn{cursor:pointer;display:inline-flex;align-items:center;padding:4px;}
+.header b{font-size:17px;color:#222;}
+
+/* ADD BUTTON */
+.add-btn{display:block;margin:16px;padding:14px;background:white;border:none;border-radius:12px;font-size:15px;font-weight:600;color:#333;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.add-btn:active{background:#f0f0f0;}
+
+/* EMPTY */
 .empty{text-align:center;margin-top:120px;color:#bbb;}
-.empty-icon{font-size:64px;margin-bottom:12px;}
-.empty p{font-size:15px;}
-.list{padding:14px;}
-.addr-card{background:#1976d2;border-radius:14px;padding:16px 18px;margin-bottom:12px;color:white;position:relative;}
-.addr-card .addr-name{font-size:15px;font-weight:bold;margin-bottom:4px;}
-.addr-card .addr-line{font-size:13px;opacity:0.9;margin-bottom:2px;}
-.addr-card .default-badge{display:inline-block;background:rgba(255,255,255,0.25);font-size:11px;padding:2px 8px;border-radius:10px;margin-top:6px;}
-.addr-card .actions{position:absolute;top:12px;right:12px;display:flex;gap:8px;}
-.addr-card .actions button{background:rgba(255,255,255,0.2);border:none;color:white;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;}
-.addr-card .actions button:hover{background:rgba(255,255,255,0.35);}
-/* OVERLAY */
-.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;justify-content:flex-end;flex-direction:column;}
-.overlay.open{display:flex !important;}
-.sheet{background:white;border-radius:20px 20px 0 0;padding:20px 18px 30px;max-height:90vh;overflow-y:auto;}
-.sheet-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
-.sheet-back{background:none;border:none;cursor:pointer;display:flex;align-items:center;}
-.sheet-title{font-size:17px;font-weight:bold;flex:1;text-align:center;}
-.field-label{font-size:13px;color:#666;margin-bottom:5px;margin-top:14px;}
-.field-input{width:100%;padding:11px 13px;border:1px solid #ddd;border-radius:10px;font-size:14px;color:#222;outline:none;}
-.field-input:focus{border-color:#1976d2;}
-.mobile-row{display:flex;gap:8px;}
-.mobile-code{width:90px;padding:11px 10px;border:1px solid #ddd;border-radius:10px;font-size:14px;color:#222;background:white;}
-.default-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding:10px 0;}
-.default-row span{font-size:14px;color:#333;}
-.toggle{width:44px;height:24px;background:#ddd;border-radius:12px;position:relative;cursor:pointer;transition:background 0.2s;}
-.toggle.on{background:#1976d2;}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:left 0.2s;}
-.toggle.on::after{left:23px;}
-.save-btn{width:100%;padding:14px;background:#1976d2;color:white;border:none;border-radius:12px;font-size:16px;cursor:pointer;margin-top:20px;}
+.empty svg{width:70px;height:70px;margin-bottom:12px;opacity:0.4;}
+.empty p{font-size:14px;}
+
+/* ADDRESS CARDS */
+.cards-list{padding:0 16px 100px;}
+.addr-card{background:white;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.07);border:2px solid transparent;position:relative;}
+.addr-card.default{border-color:#1976d2;}
+.addr-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.addr-name{font-weight:700;font-size:15px;color:#222;}
+.default-badge{background:#1976d2;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.addr-phone{font-size:13px;color:#666;margin-bottom:4px;}
+.addr-detail{font-size:13px;color:#444;line-height:1.5;}
+.addr-actions{display:flex;gap:10px;margin-top:12px;border-top:1px solid #f0f0f0;padding-top:10px;}
+.btn-edit{flex:1;padding:8px;background:#f0f6ff;color:#1976d2;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+.btn-delete{flex:1;padding:8px;background:#fff0f0;color:#e53935;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* BOTTOM SHEET OVERLAY */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;}
+.overlay.show{display:block;}
+
+/* BOTTOM SHEET */
+.sheet{position:fixed;bottom:-100%;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-radius:22px 22px 0 0;z-index:101;transition:bottom 0.35s cubic-bezier(.4,0,.2,1);max-height:92vh;overflow-y:auto;padding-bottom:20px;}
+.sheet.open{bottom:0;}
+.sheet-header{padding:16px 16px 10px;display:flex;align-items:center;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:white;z-index:2;}
+.sheet-back{cursor:pointer;display:inline-flex;align-items:center;margin-right:8px;}
+.sheet-title{font-size:16px;font-weight:700;color:#222;}
+
+/* FORM */
+.form-group{padding:12px 16px 0;}
+.form-group label{font-size:12px;color:#666;margin-bottom:5px;display:block;}
+.form-group input,.form-group select{width:100%;padding:12px;border:1px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;background:white;}
+.form-group input:focus,.form-group select:focus{border-color:#1976d2;}
+.phone-row{display:flex;gap:8px;}
+.phone-code{width:100px;flex-shrink:0;}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 0;}
+.toggle-label{font-size:14px;color:#333;}
+.toggle{position:relative;width:44px;height:24px;}
+.toggle input{opacity:0;width:0;height:0;}
+.slider{position:absolute;inset:0;background:#ccc;border-radius:24px;cursor:pointer;transition:.3s;}
+.slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s;}
+input:checked+.slider{background:#1976d2;}
+input:checked+.slider:before{transform:translateX(20px);}
+
+/* SAVE BTN */
+.save-btn{display:block;margin:20px 16px 0;padding:15px;background:#1976d2;color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;width:calc(100% - 32px);cursor:pointer;}
 .save-btn:active{opacity:0.85;}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:10px 22px;border-radius:30px;font-size:14px;z-index:999;display:none;white-space:nowrap;}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <div class="header-left">
-    <span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </span>
-    <span class="header-title">📍 Address</span>
-  </div>
-  <button class="add-btn" onclick="openSheet(null)">+ Add a new address</button>
+  <span class="back-btn" onclick="goBack()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <b>📍 Address</b>
 </div>
 
-<div id="emptyState" class="empty">
-  <div class="empty-icon">📄</div>
+<!-- ADD BUTTON -->
+<button class="add-btn" onclick="openSheet(null)">＋ Add a new address</button>
+
+<!-- CARDS -->
+<div class="cards-list" id="cardsList"></div>
+
+<!-- EMPTY -->
+<div class="empty" id="emptyState" style="display:none;">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/><circle cx="17" cy="17" r="3"/><line x1="19.5" y1="19.5" x2="21" y2="21"/></svg>
   <p>Not Available</p>
 </div>
 
-<div id="addrList" class="list" style="display:none;"></div>
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
 
-<!-- SHEET OVERLAY -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
-  <div class="sheet" id="sheet">
-    <div class="sheet-header">
-      <button class="sheet-back" onclick="closeSheet()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <span class="sheet-title">Add another address</span>
-    </div>
-
-    <input type="hidden" id="editId">
-
-    <div class="field-label">Name</div>
-    <input class="field-input" id="fName" placeholder="Please fill in receiver name">
-
-    <div class="field-label">Mobile</div>
-    <div class="mobile-row">
-      <select class="mobile-code" id="fCode">
-        <option>+1</option><option>+7</option><option>+20</option><option>+27</option>
-        <option>+30</option><option>+31</option><option>+33</option><option>+34</option>
-        <option>+39</option><option>+40</option><option>+44</option><option>+49</option>
-        <option>+55</option><option>+61</option><option>+62</option><option>+63</option>
-        <option>+64</option><option>+65</option><option>+66</option><option>+81</option>
-        <option>+82</option><option>+84</option><option>+86</option><option>+90</option>
-        <option>+91</option><option>+92</option><option>+93</option><option>+94</option>
-        <option>+95</option><option>+98</option><option>+212</option><option>+213</option>
-        <option>+216</option><option>+218</option><option>+220</option><option>+221</option>
-        <option>+249</option><option>+966</option><option>+971</option><option>+972</option>
-        <option>+973</option><option>+974</option><option>+962</option><option>+961</option>
-        <option>+964</option><option>+967</option><option>+855</option><option>+856</option>
-      </select>
-      <input class="field-input" id="fMobile" placeholder="Please add receiver mobile" style="flex:1;">
-    </div>
-
-    <div class="field-label">Country / Region</div>
-    <input class="field-input" id="fCountry" placeholder="Please select Country / Region">
-
-    <div class="field-label">Province/State/Region</div>
-    <input class="field-input" id="fProvince" placeholder="Please fill in Province/State/Region">
-
-    <div class="field-label">City</div>
-    <input class="field-input" id="fCity" placeholder="Please fill in the City">
-
-    <div class="field-label">Exact location</div>
-    <input class="field-input" id="fExact" placeholder="Please fill in Exact Location">
-
-    <div class="field-label">Postal code</div>
-    <input class="field-input" id="fPostal" placeholder="Please fill in postal code">
-
-    <div class="default-row">
-      <span>Default address</span>
-      <div class="toggle" id="defaultToggle" onclick="this.classList.toggle('on')"></div>
-    </div>
-
-    <button class="save-btn" onclick="saveAddress()">Save</button>
+<!-- BOTTOM SHEET -->
+<div class="sheet" id="sheet">
+  <div class="sheet-header">
+    <span class="sheet-back" onclick="closeSheet()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span class="sheet-title">Add another address</span>
   </div>
+
+  <div class="form-group">
+    <label>Name</label>
+    <input id="f_name" placeholder="Please fill in receiver name">
+  </div>
+
+  <div class="form-group">
+    <label>Mobile</label>
+    <div class="phone-row">
+      <select id="f_code" class="phone-code">
+        <option value="+1">🇺🇸 +1</option>
+        <option value="+44">🇬🇧 +44</option>
+        <option value="+91">🇮🇳 +91</option>
+        <option value="+966">🇸🇦 +966</option>
+        <option value="+971">🇦🇪 +971</option>
+        <option value="+20">🇪🇬 +20</option>
+        <option value="+964">🇮🇶 +964</option>
+        <option value="+963">🇸🇾 +963</option>
+        <option value="+962">🇯🇴 +962</option>
+        <option value="+212">🇲🇦 +212</option>
+        <option value="+213">🇩🇿 +213</option>
+        <option value="+216">🇹🇳 +216</option>
+        <option value="+249">🇸🇩 +249</option>
+        <option value="+855">🇰🇭 +855</option>
+        <option value="+86">🇨🇳 +86</option>
+        <option value="+81">🇯🇵 +81</option>
+        <option value="+82">🇰🇷 +82</option>
+        <option value="+65">🇸🇬 +65</option>
+        <option value="+60">🇲🇾 +60</option>
+        <option value="+33">🇫🇷 +33</option>
+        <option value="+49">🇩🇪 +49</option>
+        <option value="+39">🇮🇹 +39</option>
+        <option value="+7">🇷🇺 +7</option>
+        <option value="+55">🇧🇷 +55</option>
+        <option value="+52">🇲🇽 +52</option>
+        <option value="+234">🇳🇬 +234</option>
+        <option value="+254">🇰🇪 +254</option>
+        <option value="+27">🇿🇦 +27</option>
+        <option value="+62">🇮🇩 +62</option>
+        <option value="+63">🇵🇭 +63</option>
+        <option value="+66">🇹🇭 +66</option>
+        <option value="+84">🇻🇳 +84</option>
+        <option value="+90">🇹🇷 +90</option>
+        <option value="+98">🇮🇷 +98</option>
+        <option value="+92">🇵🇰 +92</option>
+        <option value="+880">🇧🇩 +880</option>
+      </select>
+      <input id="f_mobile" placeholder="Please add receiver mobile" style="flex:1;">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Country / Region</label>
+    <input id="f_country" placeholder="Please select Country / Region">
+  </div>
+
+  <div class="form-group">
+    <label>Province / State / Region</label>
+    <input id="f_province" placeholder="Please fill in Province/State/Region">
+  </div>
+
+  <div class="form-group">
+    <label>City</label>
+    <input id="f_city" placeholder="Please fill in the City">
+  </div>
+
+  <div class="form-group">
+    <label>Exact location</label>
+    <input id="f_exact" placeholder="Please fill in Exact Location">
+  </div>
+
+  <div class="form-group">
+    <label>Postal code</label>
+    <input id="f_postal" placeholder="Please fill in postal code">
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Default address</span>
+    <label class="toggle">
+      <input type="checkbox" id="f_default">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <button class="save-btn" onclick="saveAddress()">Save</button>
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-var addresses = [];
+const user = JSON.parse(localStorage.getItem("user") || "{}");
+const token = localStorage.getItem("token") || user.token || "";
+let editingId = null;
+let addresses = [];
 
-function authHeaders(){
-  return { "Content-Type":"application/json" };
+function goBack(){ window.history.back(); }
+
+function showToast(msg, dur=2200){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.style.display = "block";
+  setTimeout(() => t.style.display = "none", dur);
 }
 
-function loadAddresses(){
-  fetch("/api/addresses", { headers: authHeaders(), credentials: "include" })
-    .then(r=>r.json())
-    .then(d=>{
-      addresses = d.addresses || [];
-      renderAddresses();
-    }).catch(()=>{});
+async function loadAddresses(){
+  try {
+    const r = await fetch("/api/addresses", { headers:{ "Authorization":"Bearer "+token } });
+    if(!r.ok){ if(r.status===401) window.location.href="/login-page"; return; }
+    addresses = await r.json();
+    renderCards();
+  } catch(e){ showToast("Connection error"); }
 }
 
-function renderAddresses(){
-  var list = document.getElementById("addrList");
-  var empty = document.getElementById("emptyState");
-  if(addresses.length === 0){
-    list.style.display = "none";
-    empty.style.display = "block";
-    return;
-  }
-  empty.style.display = "none";
-  list.style.display = "block";
-  list.innerHTML = "";
-  addresses.forEach(function(a){
-    var div = document.createElement("div");
-    div.className = "addr-card";
-    div.innerHTML =
-      '<div class="actions">' +
-        '<button onclick="openSheet(\''+a.id+'\')">✏️ Edit</button>' +
-        '<button onclick="deleteAddr(\''+a.id+'\')">🗑️ Delete</button>' +
-      '</div>' +
-      '<div class="addr-name">'+escHtml(a.name)+'  '+escHtml(a.mobileCode||'')+'  '+escHtml(a.mobile)+'</div>' +
-      '<div class="addr-line">'+escHtml(a.country)+' - '+escHtml(a.province)+'</div>' +
-      '<div class="addr-line">'+escHtml(a.city)+', '+escHtml(a.exactLocation)+'</div>' +
-      (a.postalCode ? '<div class="addr-line">Postal: '+escHtml(a.postalCode)+'</div>' : '') +
-      (a.isDefault ? '<span class="default-badge">✓ Default</span>' : '');
-    list.appendChild(div);
-  });
+function renderCards(){
+  const list = document.getElementById("cardsList");
+  const empty = document.getElementById("emptyState");
+  if(!addresses.length){ list.innerHTML=""; empty.style.display="block"; return; }
+  empty.style.display="none";
+  list.innerHTML = addresses.map(a => \`
+    <div class="addr-card \${a.isDefault?'default':''}" id="card_\${a.id}">
+      <div class="addr-card-header">
+        <span class="addr-name">\${esc(a.name)}</span>
+        \${a.isDefault ? '<span class="default-badge">Default</span>' : ''}
+      </div>
+      <div class="addr-phone">\${esc(a.countryCode)} \${esc(a.mobile)}</div>
+      <div class="addr-detail">
+        \${[a.exactLocation,a.city,a.province,a.country,a.postalCode].filter(Boolean).map(esc).join(', ')}
+      </div>
+      <div class="addr-actions">
+        <button class="btn-edit" onclick="openSheet('\${a.id}')">✏️ Edit</button>
+        <button class="btn-delete" onclick="deleteAddress('\${a.id}')">🗑️ Delete</button>
+      </div>
+    </div>
+  \`).join('');
 }
 
-function escHtml(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function openSheet(id){
-  document.getElementById("editId").value = id || "";
-  document.getElementById("fName").value = "";
-  document.getElementById("fMobile").value = "";
-  document.getElementById("fCode").value = "+1";
-  document.getElementById("fCountry").value = "";
-  document.getElementById("fProvince").value = "";
-  document.getElementById("fCity").value = "";
-  document.getElementById("fExact").value = "";
-  document.getElementById("fPostal").value = "";
-  document.getElementById("defaultToggle").classList.remove("on");
-  document.querySelector(".sheet-title").innerText = id ? "Edit address" : "Add another address";
+  editingId = id;
+  const sheet = document.getElementById("sheet");
+  const overlay = document.getElementById("overlay");
+  // reset form
+  ["f_name","f_mobile","f_country","f_province","f_city","f_exact","f_postal"].forEach(i=>document.getElementById(i).value="");
+  document.getElementById("f_code").value="+1";
+  document.getElementById("f_default").checked=false;
+  document.querySelector(".sheet-title").textContent = id ? "Edit address" : "Add another address";
 
   if(id){
-    var a = addresses.find(function(x){ return x.id === id; });
+    const a = addresses.find(x=>x.id===id);
     if(a){
-      document.getElementById("fName").value = a.name || "";
-      document.getElementById("fMobile").value = a.mobile || "";
-      document.getElementById("fCode").value = a.mobileCode || "+1";
-      document.getElementById("fCountry").value = a.country || "";
-      document.getElementById("fProvince").value = a.province || "";
-      document.getElementById("fCity").value = a.city || "";
-      document.getElementById("fExact").value = a.exactLocation || "";
-      document.getElementById("fPostal").value = a.postalCode || "";
-      if(a.isDefault) document.getElementById("defaultToggle").classList.add("on");
+      document.getElementById("f_name").value = a.name||"";
+      document.getElementById("f_mobile").value = a.mobile||"";
+      document.getElementById("f_code").value = a.countryCode||"+1";
+      document.getElementById("f_country").value = a.country||"";
+      document.getElementById("f_province").value = a.province||"";
+      document.getElementById("f_city").value = a.city||"";
+      document.getElementById("f_exact").value = a.exactLocation||"";
+      document.getElementById("f_postal").value = a.postalCode||"";
+      document.getElementById("f_default").checked = !!a.isDefault;
     }
   }
-  var ov = document.getElementById("overlay");
-  ov.classList.add("open");
-  ov.style.display = "flex";
+  overlay.classList.add("show");
+  setTimeout(()=>sheet.classList.add("open"),10);
 }
 
 function closeSheet(){
-  var ov = document.getElementById("overlay");
-  ov.classList.remove("open");
-  ov.style.display = "none";
+  document.getElementById("sheet").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
 }
 
-function handleOverlayClick(e){
-  if(e.target === document.getElementById("overlay")) closeSheet();
-}
+async function saveAddress(){
+  const name = document.getElementById("f_name").value.trim();
+  const mobile = document.getElementById("f_mobile").value.trim();
+  const country = document.getElementById("f_country").value.trim();
+  const city = document.getElementById("f_city").value.trim();
+  if(!name){ showToast("Please enter receiver name"); return; }
+  if(!mobile){ showToast("Please enter mobile number"); return; }
+  if(!country){ showToast("Please enter country"); return; }
+  if(!city){ showToast("Please enter city"); return; }
 
-function saveAddress(){
-  var id = document.getElementById("editId").value;
-  var payload = {
-    id: id || undefined,
-    name: document.getElementById("fName").value.trim(),
-    mobile: document.getElementById("fMobile").value.trim(),
-    mobileCode: document.getElementById("fCode").value,
-    country: document.getElementById("fCountry").value.trim(),
-    province: document.getElementById("fProvince").value.trim(),
-    city: document.getElementById("fCity").value.trim(),
-    exactLocation: document.getElementById("fExact").value.trim(),
-    postalCode: document.getElementById("fPostal").value.trim(),
-    isDefault: document.getElementById("defaultToggle").classList.contains("on")
+  const body = {
+    name, mobile,
+    countryCode: document.getElementById("f_code").value,
+    country,
+    province: document.getElementById("f_province").value.trim(),
+    city,
+    exactLocation: document.getElementById("f_exact").value.trim(),
+    postalCode: document.getElementById("f_postal").value.trim(),
+    isDefault: document.getElementById("f_default").checked
   };
-  if(!payload.name || !payload.mobile){
-    alert("Please fill in Name and Mobile");
-    return;
-  }
-  fetch("/api/addresses/save", {
-    method:"POST",
-    headers: authHeaders(),
-    credentials: "include",
-    body: JSON.stringify(payload)
-  }).then(r=>r.json()).then(d=>{
+
+  try {
+    const url = editingId ? "/api/addresses/"+editingId : "/api/addresses";
+    const method = editingId ? "PUT" : "POST";
+    const r = await fetch(url, {
+      method, headers:{ "Authorization":"Bearer "+token, "Content-Type":"application/json" },
+      body: JSON.stringify(body)
+    });
+    const d = await r.json();
     if(d.success){
-      addresses = d.addresses;
-      renderAddresses();
       closeSheet();
-    } else {
-      alert("Failed to save. Please login again.");
-    }
-  }).catch(()=>alert("Network error"));
+      showToast(editingId ? "Address updated ✓" : "Address saved ✓");
+      await loadAddresses();
+    } else { showToast(d.error || "Error saving"); }
+  } catch(e){ showToast("Connection error"); }
 }
 
-function deleteAddr(id){
+async function deleteAddress(id){
   if(!confirm("Delete this address?")) return;
-  fetch("/api/addresses/delete", {
-    method:"POST",
-    headers: authHeaders(),
-    credentials: "include",
-    body: JSON.stringify({ id: id })
-  }).then(r=>r.json()).then(d=>{
-    if(d.success){
-      addresses = d.addresses;
-      renderAddresses();
-    }
-  });
+  try {
+    const r = await fetch("/api/addresses/"+id, {
+      method:"DELETE", headers:{ "Authorization":"Bearer "+token }
+    });
+    const d = await r.json();
+    if(d.success){ showToast("Address deleted"); await loadAddresses(); }
+    else showToast("Error deleting");
+  } catch(e){ showToast("Connection error"); }
 }
 
+// تحميل العناوين عند فتح الصفحة
 loadAddresses();
 </script>
+
 </body>
 </html>`);
 });
