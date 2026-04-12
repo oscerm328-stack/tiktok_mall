@@ -10242,8 +10242,8 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
     const seller = users.find(u => u.email === sellerEmail);
     const vipLevel = seller ? (seller.vipLevel || 0) : 0;
     const commissionPct = VIP_COMMISSION[vipLevel] || 15;
-    const supplierPrice = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
-    const profit = parseFloat((price - supplierPrice).toFixed(2));
+    const supplierPricePerUnit = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
+    const profitPerUnit = parseFloat((price - supplierPricePerUnit).toFixed(2));
 
     // طلب واحد فقط بالكمية المطلوبة
     const qty = parseInt(quantity) || 1;
@@ -10261,8 +10261,8 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
         },
         quantity: qty,
         total: parseFloat((price * qty).toFixed(2)),
-        supplierPrice: parseFloat((supplierPrice * qty).toFixed(2)),
-        profit: parseFloat((profit * qty).toFixed(2)),
+        supplierPrice: supplierPricePerUnit,
+        profit: parseFloat((profitPerUnit * qty).toFixed(2)),
         status: "waiting_shipping",
         createdAt: new Date().toISOString(),
         shippedAt: null,
@@ -10315,8 +10315,8 @@ app.post("/ship-store-order", authMiddleware, (req, res) => {
     const seller = users.find(u => u.email === email);
     if(!seller) return res.json({ success: false, message: "Seller not found" });
 
-    // خصم سعر المورد من رصيد البائع
-    const supplierCost = order.supplierPrice * order.quantity;
+    // خصم سعر المورد من رصيد البائع (supplierPrice هو سعر الوحدة)
+    const supplierCost = parseFloat((order.supplierPrice * order.quantity).toFixed(2));
     if((parseFloat(seller.balance) || 0) < supplierCost){
         return res.json({ success: false, message: "Insufficient balance to ship" });
     }
@@ -10339,20 +10339,23 @@ app.post("/confirm-store-delivery", adminMiddleware, (req, res) => {
 
     const seller = users.find(u => u.email === order.sellerEmail);
     if(seller){
-        const refund = (order.supplierPrice * order.quantity) + (order.profit * order.quantity);
+        // supplierPrice = سعر الوحدة، profit = إجمالي الربح (qty مضروبة مسبقاً)
+        const supplierTotal = parseFloat((order.supplierPrice * order.quantity).toFixed(2));
+        const profitTotal = parseFloat(order.profit);
+        const refund = supplierTotal + profitTotal;
         seller.balance = ((parseFloat(seller.balance) || 0) + refund).toFixed(2);
         // Total working capital: أضف الربح فقط
         if(!seller.totalCapital) seller.totalCapital = parseFloat(seller.balance) || 0;
-        seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + (order.profit * order.quantity)).toFixed(2);
+        seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + profitTotal).toFixed(2);
         // profit today
         const today = new Date().toDateString();
         if(!seller.profitToday || seller.profitTodayDate !== today){
             seller.profitToday = 0;
             seller.profitTodayDate = today;
         }
-        seller.profitToday = ((parseFloat(seller.profitToday) || 0) + (order.profit * order.quantity)).toFixed(2);
+        seller.profitToday = ((parseFloat(seller.profitToday) || 0) + profitTotal).toFixed(2);
         // total profit credited
-        seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + (order.profit * order.quantity)).toFixed(2);
+        seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + profitTotal).toFixed(2);
         // turnover
         seller.turnover = ((parseFloat(seller.turnover) || 0) + order.total).toFixed(2);
         // number of orders
@@ -10583,19 +10586,21 @@ app.post("/admin-update-order-status", adminMiddleware, (req, res) => {
     if(status === "completed" && oldStatus !== "completed"){
         const seller = users.find(u => u.email === order.sellerEmail);
         if(seller){
-            const refund = (order.supplierPrice * order.quantity) + (order.profit * order.quantity);
+            const supplierTotal2 = parseFloat((order.supplierPrice * order.quantity).toFixed(2));
+            const profitTotal2 = parseFloat(order.profit);
+            const refund = supplierTotal2 + profitTotal2;
             seller.balance = ((parseFloat(seller.balance) || 0) + refund).toFixed(2);
             const today = new Date().toDateString();
             if(!seller.profitToday || seller.profitTodayDate !== today){
                 seller.profitToday = 0;
                 seller.profitTodayDate = today;
             }
-            seller.profitToday = ((parseFloat(seller.profitToday) || 0) + (order.profit * order.quantity)).toFixed(2);
-            seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + (order.profit * order.quantity)).toFixed(2);
+            seller.profitToday = ((parseFloat(seller.profitToday) || 0) + profitTotal2).toFixed(2);
+            seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + profitTotal2).toFixed(2);
             seller.turnover = ((parseFloat(seller.turnover) || 0) + order.total).toFixed(2);
             seller.orderCount = (parseInt(seller.orderCount) || 0) + 1;
             if(!seller.totalCapital) seller.totalCapital = parseFloat(seller.balance) || 0;
-            seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + (order.profit * order.quantity)).toFixed(2);
+            seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + profitTotal2).toFixed(2);
             saveUsers();
         }
         order.completedAt = new Date().toISOString();
