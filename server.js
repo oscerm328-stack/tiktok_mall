@@ -10211,8 +10211,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 
 /* LOADING */
 .loading-wrap{text-align:center;padding:60px 20px;grid-column:1/-1;}
-.loading-spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:#1976d2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.sun-spinner{width:42px;height:42px;margin:0 auto 12px;position:relative;animation:spin 0.8s linear infinite;}
+.sun-spinner::before{content:'';display:block;width:100%;height:100%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='7' fill='%231976d2'/%3E%3Cg stroke='%231976d2' stroke-width='3' stroke-linecap='round'%3E%3Cline x1='20' y1='2' x2='20' y2='8' opacity='1'/%3E%3Cline x1='20' y1='32' x2='20' y2='38' opacity='0.2'/%3E%3Cline x1='2' y1='20' x2='8' y2='20' opacity='0.55'/%3E%3Cline x1='32' y1='20' x2='38' y2='20' opacity='0.35'/%3E%3Cline x1='6.1' y1='6.1' x2='10.4' y2='10.4' opacity='0.9'/%3E%3Cline x1='29.6' y1='29.6' x2='33.9' y2='33.9' opacity='0.15'/%3E%3Cline x1='33.9' y1='6.1' x2='29.6' y2='10.4' opacity='0.7'/%3E%3Cline x1='10.4' y1='29.6' x2='6.1' y2='33.9' opacity='0.45'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/contain;}
 .no-results{grid-column:1/-1;text-align:center;padding:60px 20px;color:#aaa;font-size:14px;}
 
 /* SELL NOW POPUP */
@@ -10304,7 +10305,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 <div class="items-count" id="itemsCount">Loading...</div>
 
 <!-- PRODUCT GRID -->
-<div class="grid" id="productGrid"></div>
+<div class="grid" id="productGrid">
+  <div class="loading-wrap">
+    <div class="sun-spinner"></div>
+    <p style="color:#aaa;font-size:13px;">Loading products...</p>
+  </div>
+</div>
 
 <!-- FILTER OVERLAY & PANEL -->
 <div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
