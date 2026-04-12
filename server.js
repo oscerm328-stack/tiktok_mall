@@ -8865,9 +8865,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
 .spec-val{color:#333;font-weight:600;}
 
 /* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px 14px 14px;border-top:1px solid #eee;display:flex;gap:10px;box-shadow:0 -2px 12px rgba(0,0,0,0.07);}
-.cart-btn{flex:1;padding:13px;border:1.5px solid #1976d2;border-radius:12px;background:white;color:#1976d2;font-size:14px;font-weight:700;cursor:pointer;}
-.buy-btn{flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px 14px 14px;border-top:1px solid #eee;display:flex;align-items:center;gap:8px;box-shadow:0 -2px 12px rgba(0,0,0,0.07);}
+.bar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:#555;}
+.cart-btn{flex:1;padding:13px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;font-weight:700;cursor:pointer;}
+.buy-btn{flex:2;padding:13px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .buy-btn:active,.cart-btn:active{opacity:0.85;}
 
 /* BUY SHEET */
@@ -8944,6 +8945,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
     <div class="store-name" id="storeName">Store</div>
     <div class="store-meta" id="storeMeta">Official Store · TikTok Mall</div>
     <span class="store-vip" id="storeVip">✓ VIP 0</span>
+    <div style="font-size:11px;color:#999;margin-top:3px;" id="storeFollowers"></div>
   </div>
   <span class="store-arrow">›</span>
 </div>
@@ -8957,7 +8959,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
 
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
-  <button class="cart-btn" onclick="openSheet('cart')">🛒 Add to Cart</button>
+  <div class="bar-icon" onclick="window.location.href='/live-chat'">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+  </div>
+  <div class="bar-icon" onclick="openSheet('cart')">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  </div>
+  <button class="cart-btn" onclick="openSheet('cart')">Add to Cart</button>
   <button class="buy-btn" onclick="openSheet('buy')">Buy Now</button>
 </div>
 
@@ -9033,6 +9041,10 @@ async function init(){
     try {
         var vd = await fetch("/store-vip/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         document.getElementById("storeVip").innerText = "✓ VIP "+(vd.vipLevel||0);
+        var prods = await fetch("/store-products/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
+        var prodCount = (prods.products||[]).length;
+        var followers = Math.floor(Math.abs(sEmail.split("").reduce(function(h,c){return Math.imul(31,h)+c.charCodeAt(0)|0;},0)) % 9800) + 100;
+        document.getElementById("storeFollowers").innerText = "Products "+prodCount+" · Followers "+followers.toLocaleString();
     }catch(e){}
 
     // Sheet info
