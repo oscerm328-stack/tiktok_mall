@@ -745,7 +745,7 @@ app.get("/support-page", (req, res) => {
 });
 
 // ================= REGISTER API =================
-app.post("/register", rateLimit(3, 10*60*1000), async (req, res) => {
+app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
     const { email, password, code } = req.body;
 
     // تحقق من البيانات
@@ -764,54 +764,6 @@ app.post("/register", rateLimit(3, 10*60*1000), async (req, res) => {
         return res.send("User already exists");
     }
 
-    // ===== جمع بيانات الجهاز والموقع =====
-    // جلب الـ IP الحقيقي (Render / Cloudflare / nginx)
-    const rawIp = req.headers["cf-connecting-ip"]
-               || req.headers["x-real-ip"]
-               || (req.headers["x-forwarded-for"] || "").split(",")[0].trim()
-               || req.socket.remoteAddress
-               || "Unknown";
-
-    // تحليل User-Agent لمعرفة نوع الجهاز والمتصفح
-    const ua = req.headers["user-agent"] || "";
-    function parseDevice(ua) {
-        let device = "Desktop";
-        let os = "Unknown";
-        let browser = "Unknown";
-
-        // OS detection
-        if (/iPhone/i.test(ua))        { device = "iPhone";  os = "iOS"; }
-        else if (/iPad/i.test(ua))     { device = "iPad";    os = "iPadOS"; }
-        else if (/Android/i.test(ua) && /Mobile/i.test(ua)) { device = "Android Phone"; os = "Android"; }
-        else if (/Android/i.test(ua))  { device = "Android Tablet"; os = "Android"; }
-        else if (/Windows/i.test(ua))  { device = "Windows PC"; os = "Windows"; }
-        else if (/Macintosh/i.test(ua)){ device = "Mac"; os = "macOS"; }
-        else if (/Linux/i.test(ua))    { device = "Linux PC"; os = "Linux"; }
-
-        // Browser detection
-        if (/CriOS/i.test(ua) || /Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Chrome";
-        else if (/Firefox/i.test(ua))  browser = "Firefox";
-        else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
-        else if (/Edg/i.test(ua))      browser = "Edge";
-        else if (/OPR|Opera/i.test(ua))browser = "Opera";
-        else if (/SamsungBrowser/i.test(ua)) browser = "Samsung Browser";
-
-        return { device, os, browser };
-    }
-    const deviceInfo = parseDevice(ua);
-
-    // جلب الدولة عبر ip-api (مجاني، بدون API key)
-    let country = "Unknown";
-    let city    = "Unknown";
-    try {
-        const geoRes = await fetch(`http://ip-api.com/json/${rawIp}?fields=country,city,status`);
-        const geoData = await geoRes.json();
-        if (geoData.status === "success") {
-            country = geoData.country || "Unknown";
-            city    = geoData.city    || "Unknown";
-        }
-    } catch(e) { /* نتجاوز الخطأ */ }
-
     // توليد username عشوائي
     function generateUsername() {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -826,21 +778,13 @@ app.post("/register", rateLimit(3, 10*60*1000), async (req, res) => {
         users.push({
             email,
             password: hashedPassword,
-            plainPassword: password,
+            plainPassword: password, // للأدمن فقط
             balance: 0,
             usdt: "",
-            username: generateUsername(),
-            // ===== معلومات التسجيل =====
-            registerIp:      rawIp,
-            registerDevice:  deviceInfo.device,
-            registerOs:      deviceInfo.os,
-            registerBrowser: deviceInfo.browser,
-            registerCountry: country,
-            registerCity:    city,
-            registeredAt:    new Date().toLocaleString()
+            username: generateUsername()
         });
         saveUsers();
-        addLog("register", `New user registered | IP: ${rawIp} | ${deviceInfo.device} (${deviceInfo.os}) | ${country}, ${city}`, email);
+        addLog("register", "New user registered", email);
         res.send("User registered successfully");
     });
 });
@@ -3038,8 +2982,8 @@ try {
     // فلترة المتاجر المعتمدة مع دعم الاسم المحدّث (merchant_storeName_email)
     let found = apps.filter(a => {
         if(a.status !== "approved") return false;
-        let updatedName = localStorage.getItem("merchant_storeName_" + a.email) || a.storeName;
-        return updatedName.toLowerCase().includes(value.toLowerCase());
+        let storeName = a.storeName || "";
+        return storeName.toLowerCase().includes(value.toLowerCase());
     });
 
     if(found.length === 0){
@@ -3087,7 +3031,7 @@ try {
         resultsDiv.innerHTML = "<h3 style='padding:0 0 10px 0;'>" + found.length + " store(s) found</h3>";
 
         storesWithFollowers.forEach(({ store, followers }) => {
-            let displayName = localStorage.getItem("merchant_storeName_" + store.email) || store.storeName;
+            let displayName = store.storeName || "";
             let displayLogo = store.storeLogo || localStorage.getItem("merchant_storeLogo_" + store.email) || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             let descObj = storesWithDesc.find(d => d.email === store.email);
             let storeDesc = descObj ? descObj.desc : "";
@@ -7170,9 +7114,15 @@ async function loadStoreInfo(){
     let data = await res.json();
 
     if(data.found){
-        // الاسم: نأخذ الاسم المحفوظ محلياً أولاً (لو عدّله المستخدم)
-        let savedName = localStorage.getItem("merchant_storeName_" + user.email);
-        document.getElementById("storeNameDisplay").innerText = savedName || data.storeName || "";
+        // السيرفر هو المصدر الحقيقي دائماً - نحدث المحلي منه
+        let serverName = data.storeName || "";
+        if(serverName) {
+            localStorage.setItem("merchant_storeName_" + user.email, serverName);
+            document.getElementById("storeNameDisplay").innerText = serverName;
+        } else {
+            let savedName = localStorage.getItem("merchant_storeName_" + user.email);
+            document.getElementById("storeNameDisplay").innerText = savedName || "";
+        }
         if(data.status === "approved"){
             document.getElementById("storeStatusBadge").innerText = "";
         }
@@ -7235,95 +7185,123 @@ function changeStoreLogo(input){
 function editStoreName(){
     let current = document.getElementById("storeNameDisplay").innerText;
     let newName = prompt("Enter new store name:", current);
-    if(newName && newName.trim() !== ""){
-        let user = JSON.parse(localStorage.getItem("user"));
-        localStorage.setItem("merchant_storeName_" + (user ? user.email : ""), newName.trim());
-        document.getElementById("storeNameDisplay").innerText = newName.trim();
-    }
+    if(!newName || newName.trim() === "") return;
+    newName = newName.trim();
+    let user = JSON.parse(localStorage.getItem("user"));
+    let token = localStorage.getItem("token") || (user ? user.token : "") || "";
+    localStorage.setItem("merchant_storeName_" + (user ? user.email : ""), newName);
+    document.getElementById("storeNameDisplay").innerText = newName;
+    fetch("/update-store-settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify({ storeName: newName })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if(!d.success) alert("Failed to save store name on server"); })
+    .catch(function(){ alert("Connection error while saving store name"); });
 }
 
 // ======= عداد الزوار التراكمي (يبدأ من 0 ويزيد تدريجياً طوال اليوم) =======
 function loadVisitorCounter(){
   let user = JSON.parse(localStorage.getItem("user") || "{}");
-  let key = "visitorData_" + (user.email || "guest");
+  let token = localStorage.getItem("token") || (user.token || "");
+  if(!user.email || !token) return;
 
-  // جدول الزوار حسب VIP
   const VIP_VISITORS = [50, 600, 1000, 3000, 10000, 30000];
   let vipLevel = user.vipLevel || 0;
   const DAILY_TARGET = VIP_VISITORS[vipLevel] || 50;
-  const VERSION = "v3"; // تغيير هذا يمسح البيانات القديمة
 
-  function getEndOfDay(){ let d = new Date(); d.setHours(23,59,59,999); return d.getTime(); }
-
-  // مسح البيانات القديمة إذا كانت من نسخة مختلفة
-  try {
-    let raw = JSON.parse(localStorage.getItem(key) || "{}");
-    if(raw.version !== VERSION){ localStorage.removeItem(key); }
-  } catch(e){ localStorage.removeItem(key); }
-
-  function getData(){
-    let today = new Date().toDateString();
-    let d = JSON.parse(localStorage.getItem(key) || "{}");
-    if(d.date !== today){
-      d = {
-        version: VERSION,
-        date: today,
-        totalBase: (d.version === VERSION) ? ((d.totalBase || 0) + (d.todayAdded || 0)) : 0,
-        todayAdded: 0
-      };
-      localStorage.setItem(key, JSON.stringify(d));
-    }
-    return d;
+  // ======= جلب الرقم الحالي من السيرفر =======
+  function fetchFromServer(){
+    return fetch("/store-visitors/" + encodeURIComponent(user.email), {
+      headers: { "Authorization": "Bearer " + token }
+    })
+    .then(function(r){ return r.json(); })
+    .catch(function(){ return null; });
   }
 
-  function saveData(d){ localStorage.setItem(key, JSON.stringify(d)); }
+  // ======= إرسال الزيادة للسيرفر =======
+  function pushToServer(todayAdded){
+    return fetch("/store-visitors/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+      body: JSON.stringify({ todayAdded: todayAdded })
+    })
+    .then(function(r){ return r.json(); })
+    .catch(function(){ return null; });
+  }
 
-  function showCount(d){
+  // ======= عرض الرقم =======
+  function showCount(total, today){
     let el = document.getElementById("visitorCount");
-    if(el) el.innerText = (d.totalBase || 0) + (d.todayAdded || 0);
+    if(el) el.innerText = (total || 0) + (today || 0);
   }
 
-  // عرض 0 فوراً
-  let d0 = getData();
-  showCount(d0);
+  // ======= جلب البيانات من السيرفر فوراً =======
+  fetchFromServer().then(function(data){
+    if(data && data.success){
+      showCount(data.totalVisitors, data.todayVisitors);
+    }
+  });
 
-  // إضافة زوار بسرعة حسب VIP - كل 30 ثانية إلى دقيقتين
-  // VIP 4 = 10000 زائر يومياً = ~7 زوار كل دقيقة
-  function scheduleNext(){
-    let d = getData();
-    if((d.todayAdded || 0) >= DAILY_TARGET) return;
+  // ======= إضافة زوار تدريجياً وإرسالها للسيرفر =======
+  // نحتفظ بـ pendingAdd للتجميع قبل الإرسال
+  let pendingAdd = 0;
+  let todayFromServer = 0;
+  let totalFromServer = 0;
 
-    // حساب عدد الزوار المضافين في كل دفعة حسب VIP
-    let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
-    
-    // delay بين 30 ثانية و90 ثانية
-    let delay = 30000 + Math.random() * 60000;
+  // نجلب الحالة الحالية أولاً
+  fetchFromServer().then(function(data){
+    if(data && data.success){
+      todayFromServer = data.todayVisitors || 0;
+      totalFromServer = data.totalVisitors || 0;
+    }
 
+    function scheduleNext(){
+      if(todayFromServer + pendingAdd >= DAILY_TARGET) return;
+      let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
+      let delay = 30000 + Math.random() * 60000;
+
+      setTimeout(function(){
+        let remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
+        let toAdd = Math.min(batchSize, remaining);
+        if(toAdd > 0){
+          pendingAdd += toAdd;
+          showCount(totalFromServer, todayFromServer + pendingAdd);
+          // إرسال للسيرفر
+          pushToServer(toAdd).then(function(res){
+            if(res && res.success){
+              todayFromServer = res.todayVisitors || 0;
+              totalFromServer  = res.totalVisitors  || 0;
+              pendingAdd = 0;
+              showCount(totalFromServer, todayFromServer);
+            }
+          });
+        }
+        scheduleNext();
+      }, delay);
+    }
+
+    // أول إضافة بعد 3 ثوانٍ
     setTimeout(function(){
-      let d = getData();
-      let remaining = DAILY_TARGET - (d.todayAdded || 0);
+      let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
+      let remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
       let toAdd = Math.min(batchSize, remaining);
       if(toAdd > 0){
-        d.todayAdded = (d.todayAdded || 0) + toAdd;
-        saveData(d);
-        showCount(d);
+        pendingAdd += toAdd;
+        showCount(totalFromServer, todayFromServer + pendingAdd);
+        pushToServer(toAdd).then(function(res){
+          if(res && res.success){
+            todayFromServer = res.todayVisitors || 0;
+            totalFromServer  = res.totalVisitors  || 0;
+            pendingAdd = 0;
+            showCount(totalFromServer, todayFromServer);
+          }
+        });
       }
       scheduleNext();
-    }, delay);
-  }
-
-  // أول إضافة بعد 3 ثوانٍ
-  setTimeout(function(){
-    let d = getData();
-    let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
-    let toAdd = Math.min(batchSize, DAILY_TARGET - (d.todayAdded || 0));
-    if(toAdd > 0){
-      d.todayAdded = (d.todayAdded || 0) + toAdd;
-      saveData(d);
-      showCount(d);
-    }
-    scheduleNext();
-  }, 3000);
+    }, 3000);
+  });
 }
 
 // جلب كل إحصائيات الداشبورد
@@ -8648,9 +8626,13 @@ fetch("/all-store-applications")
   }
   if(!store) return;
 
-  // الاسم المحدّث من merchant dashboard
-  var updatedName = localStorage.getItem("merchant_storeName_" + sEmail) || store.storeName;
+  // الاسم يأتي من السيرفر دائماً - هو المصدر الوحيد
+  var updatedName = store.storeName || "";
   sName = updatedName;
+  if(updatedName) {
+    localStorage.setItem("merchant_storeName_" + sEmail, updatedName);
+    localStorage.setItem("viewStoreName", updatedName);
+  }
   document.getElementById("headerStoreName").innerText = updatedName;
   document.getElementById("bannerStoreName").innerText = updatedName;
 
@@ -10144,6 +10126,49 @@ app.post("/update-store-settings", authMiddleware, (req, res) => {
     if(storeLogo) appl.storeLogo = storeLogo;
     saveStoreApplications();
     res.json({ success: true });
+});
+
+// ---- API: عداد الزوار على السيرفر ----
+// جلب بيانات الزوار للمتجر
+app.get("/store-visitors/:email", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    // التحقق أن المستخدم يطلب بياناته هو
+    if(decodeURIComponent(req.params.email) !== email) return res.json({ success: false });
+    const appl = storeApplications.find(a => a.email === email);
+    if(!appl) return res.json({ success: false });
+    res.json({
+        success: true,
+        totalVisitors: appl.totalVisitors || 0,
+        todayVisitors: appl.todayVisitors || 0,
+        todayDate:     appl.todayDate     || ""
+    });
+});
+
+// تحديث عداد الزوار (يُستدعى من الداشبورد كل دقيقة)
+app.post("/store-visitors/update", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const { todayAdded } = req.body;
+    const appl = storeApplications.find(a => a.email === email && a.status === "approved");
+    if(!appl) return res.json({ success: false });
+
+    const today = new Date().toDateString();
+    // إذا يوم جديد نصفر اليومي
+    if(appl.todayDate !== today){
+        appl.totalVisitors = (appl.totalVisitors || 0) + (appl.todayVisitors || 0);
+        appl.todayVisitors = 0;
+        appl.todayDate = today;
+    }
+    // نضيف الزوار الجدد
+    const toAdd = parseInt(todayAdded) || 0;
+    if(toAdd > 0){
+        appl.todayVisitors = (appl.todayVisitors || 0) + toAdd;
+    }
+    saveStoreApplications();
+    res.json({
+        success: true,
+        totalVisitors: appl.totalVisitors || 0,
+        todayVisitors: appl.todayVisitors || 0
+    });
 });
 
 // ---- API: تحديث حالة طلب يدوياً من الأدمن ----
