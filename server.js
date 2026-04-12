@@ -8820,29 +8820,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
 .h-left{display:flex;align-items:center;gap:14px;}
 .h-right{display:flex;align-items:center;gap:14px;}
 .h-icon{cursor:pointer;display:inline-flex;align-items:center;}
-/* CART BADGE */
-.cart-icon-wrap{position:relative;cursor:pointer;display:inline-flex;align-items:center;}
-.cart-badge{position:absolute;top:-6px;right:-7px;background:#e53935;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
-.cart-badge.show{display:flex;}
-/* CART SHEET */
-.cart-sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:600;}
-.cart-sheet-overlay.open{display:block;}
-.cart-sheet{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:700;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.35s ease;}
-.cart-sheet.open{transform:translateY(0);}
-.cs-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
-.cs-title{font-size:15px;font-weight:700;color:#111;padding:12px 16px 8px;}
-.cs-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #f5f5f5;}
-.cs-img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;}
-.cs-info{flex:1;min-width:0;}
-.cs-name{font-size:12px;color:#333;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cs-price{font-size:13px;color:#e53935;font-weight:700;margin-top:2px;}
-.cs-qty{display:flex;align-items:center;gap:0;margin-top:4px;}
-.cs-qty-btn{width:26px;height:26px;border:1px solid #e0e0e0;background:white;font-size:14px;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;}
-.cs-qty-num{width:32px;text-align:center;font-size:13px;font-weight:700;}
-.cs-del{color:#e53935;font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;}
-.cs-empty{text-align:center;padding:30px;color:#aaa;font-size:14px;}
-.cs-total{display:flex;justify-content:space-between;padding:12px 16px;font-size:14px;font-weight:700;}
-.cs-checkout-btn{margin:0 16px 16px;width:calc(100% - 32px);padding:14px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
 
 /* SLIDER */
 .slider-wrap{background:white;position:relative;overflow:hidden;height:310px;}
@@ -8918,6 +8895,30 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
 .toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:#323232;color:white;padding:10px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;}
 .toast.show{display:block;animation:fadeUp 0.3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
+
+/* CART BADGE */
+.cart-icon-wrap{position:relative;cursor:pointer;display:inline-flex;align-items:center;}
+.cart-badge{position:absolute;top:-6px;right:-7px;background:#e53935;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
+.cart-badge.show{display:flex;}
+/* CART SHEET */
+.cart-sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:600;}
+.cart-sheet-overlay.open{display:block;}
+.cart-sheet{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:700;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.35s ease;}
+.cart-sheet.open{transform:translateY(0);}
+.cs-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
+.cs-title{font-size:15px;font-weight:700;color:#111;padding:12px 16px 8px;}
+.cs-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #f5f5f5;}
+.cs-img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+.cs-info{flex:1;min-width:0;}
+.cs-name{font-size:12px;color:#333;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cs-price{font-size:13px;color:#e53935;font-weight:700;margin-top:2px;}
+.cs-qty{display:flex;align-items:center;gap:0;margin-top:4px;}
+.cs-qty-btn{width:26px;height:26px;border:1px solid #e0e0e0;background:white;font-size:14px;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.cs-qty-num{width:32px;text-align:center;font-size:13px;font-weight:700;}
+.cs-del{color:#e53935;font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;}
+.cs-empty{text-align:center;padding:30px;color:#aaa;font-size:14px;}
+.cs-total{display:flex;justify-content:space-between;padding:12px 16px;font-size:14px;font-weight:700;}
+.cs-checkout-btn{margin:0 16px 16px;width:calc(100% - 32px);padding:14px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -9124,13 +9125,9 @@ function updateTotalPrice(){
 
 async function doCart(){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    // تحقق هل المنتج موجود في السلة
     var existing = cart.find(function(i){ return i.product && i.product.id == p.id && i.sellerEmail == sEmail; });
-    if(existing){
-        existing.qty = (existing.qty||1) + qty;
-    } else {
-        cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
-    }
+    if(existing){ existing.qty = (existing.qty||1) + qty; }
+    else { cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() }); }
     localStorage.setItem("cart", JSON.stringify(cart));
     closeSheet();
     updateCartBadge();
@@ -9139,15 +9136,11 @@ async function doCart(){
 
 function updateCartBadge(){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    // فلتر فقط منتجات نفس المتجر
     var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
     var badge = document.getElementById("cartBadge");
-    if(storeCart.length > 0){
-        badge.innerText = storeCart.length;
-        badge.classList.add("show");
-    } else {
-        badge.classList.remove("show");
-    }
+    if(!badge) return;
+    if(storeCart.length > 0){ badge.innerText = storeCart.length; badge.classList.add("show"); }
+    else { badge.classList.remove("show"); }
 }
 
 function openCartSheet(){
@@ -9167,13 +9160,7 @@ function renderCartItems(){
     var listEl = document.getElementById("cartItemsList");
     var totalEl = document.getElementById("cartTotal");
     var totalAmtEl = document.getElementById("cartTotalAmt");
-
-    if(storeCart.length === 0){
-        listEl.innerHTML = '<div class="cs-empty">Your cart is empty</div>';
-        totalEl.style.display = "none";
-        return;
-    }
-
+    if(storeCart.length === 0){ listEl.innerHTML = '<div class="cs-empty">Your cart is empty</div>'; totalEl.style.display="none"; return; }
     listEl.innerHTML = "";
     var total = 0;
     storeCart.forEach(function(item, idx){
@@ -9181,22 +9168,14 @@ function renderCartItems(){
         var catMap = {17:"17_Clothing_and_Accessories",19:"19_Medical_Bags_and_Sunglasses",20:"20_Shoes",21:"21_Watches",22:"22_Jewelry",27:"27_Electronics",28:"28_Smart_Home",31:"31_Luxury_Brands",32:"32_Beauty_and_Personal_Care",34:"34_Mens_Fashion",35:"35_Health_and_Household",36:"36_Home_and_Kitchen"};
         var cf = catMap[p2.category_id]||"27_Electronics";
         var imgS = "https://res.cloudinary.com/doabtbdsh/image/upload/products/"+cf+"/"+p2.folder+"/1.jpg";
-        var price = parseFloat(p2.price)||0;
-        total += price * item.qty;
-
-        var div = document.createElement("div");
-        div.className = "cs-item";
-        div.innerHTML =
-          '<img class="cs-img" src="'+imgS+'" onerror="this.src='https://via.placeholder.com/52x52'">'+
-          '<div class="cs-info">'+
-            '<div class="cs-name">'+(p2.title||"").substring(0,40)+'</div>'+
-            '<div class="cs-price">US$'+price.toFixed(2)+'</div>'+
-            '<div class="cs-qty">'+
-              '<button class="cs-qty-btn" onclick="changeCartQty('+idx+',-1)">−</button>'+
-              '<span class="cs-qty-num" id="csqty'+idx+'">'+item.qty+'</span>'+
-              '<button class="cs-qty-btn" onclick="changeCartQty('+idx+',1)">+</button>'+
-            '</div>'+
-          '</div>'+
+        total += parseFloat(p2.price||0) * item.qty;
+        var div = document.createElement("div"); div.className = "cs-item";
+        div.innerHTML = '<img class="cs-img" src="'+imgS+'" onerror="this.src=\'https://via.placeholder.com/52x52\'">' +
+          '<div class="cs-info"><div class="cs-name">'+(p2.title||"").substring(0,40)+'</div>' +
+          '<div class="cs-price">US$'+parseFloat(p2.price||0).toFixed(2)+'</div>' +
+          '<div class="cs-qty"><button class="cs-qty-btn" onclick="changeCartQty('+idx+',-1)">−</button>' +
+          '<span class="cs-qty-num" id="csqty'+idx+'">'+item.qty+'</span>' +
+          '<button class="cs-qty-btn" onclick="changeCartQty('+idx+',1)">+</button></div></div>' +
           '<span class="cs-del" onclick="removeCartItem('+idx+')">✕</span>';
         listEl.appendChild(div);
     });
@@ -9208,22 +9187,19 @@ function changeCartQty(idx, delta){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
     var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
     if(!storeCart[idx]) return;
-    var globalIdx = cart.indexOf(storeCart[idx]);
-    cart[globalIdx].qty = Math.max(1, (cart[globalIdx].qty||1) + delta);
+    var gi = cart.indexOf(storeCart[idx]);
+    cart[gi].qty = Math.max(1, (cart[gi].qty||1) + delta);
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCartItems();
-    updateCartBadge();
+    renderCartItems(); updateCartBadge();
 }
 
 function removeCartItem(idx){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
     var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
     if(!storeCart[idx]) return;
-    var globalIdx = cart.indexOf(storeCart[idx]);
-    cart.splice(globalIdx, 1);
+    cart.splice(cart.indexOf(storeCart[idx]), 1);
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCartItems();
-    updateCartBadge();
+    renderCartItems(); updateCartBadge();
 }
 
 async function checkoutCart(){
@@ -9232,30 +9208,19 @@ async function checkoutCart(){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
     var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
     if(storeCart.length === 0){ showToast("⚠️ Cart is empty"); return; }
-
     var btn = document.getElementById("cartCheckoutBtn");
     btn.disabled = true; btn.innerText = "Placing orders...";
-
     var success = 0, failed = 0;
     for(var i=0; i<storeCart.length; i++){
         try {
-            var r = await fetch("/create-store-order",{
-                method:"POST",
-                headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
-                body: JSON.stringify({ product: storeCart[i].product, sellerEmail: sEmail, quantity: storeCart[i].qty })
-            });
+            var r = await fetch("/create-store-order",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({product:storeCart[i].product,sellerEmail:sEmail,quantity:storeCart[i].qty})});
             var d = await r.json();
-            if(d.success) success++;
-            else failed++;
+            if(d.success) success++; else failed++;
         } catch(e){ failed++; }
     }
-
-    // حذف منتجات هذا المتجر من السلة
     var remaining = cart.filter(function(i){ return i.sellerEmail != sEmail; });
     localStorage.setItem("cart", JSON.stringify(remaining));
-
-    closeCartSheet();
-    updateCartBadge();
+    closeCartSheet(); updateCartBadge();
     btn.disabled = false; btn.innerText = "Place Order";
     if(success > 0) showToast("✅ "+success+" order(s) placed!");
     if(failed > 0) showToast("⚠️ "+failed+" order(s) failed");
@@ -9289,6 +9254,7 @@ function showToast(msg){
 }
 
 init();
+updateCartBadge();
 </script>
 </body>
 </html>`);
