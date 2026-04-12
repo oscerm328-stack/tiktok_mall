@@ -8820,6 +8820,29 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
 .h-left{display:flex;align-items:center;gap:14px;}
 .h-right{display:flex;align-items:center;gap:14px;}
 .h-icon{cursor:pointer;display:inline-flex;align-items:center;}
+/* CART BADGE */
+.cart-icon-wrap{position:relative;cursor:pointer;display:inline-flex;align-items:center;}
+.cart-badge{position:absolute;top:-6px;right:-7px;background:#e53935;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:none;align-items:center;justify-content:center;}
+.cart-badge.show{display:flex;}
+/* CART SHEET */
+.cart-sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:600;}
+.cart-sheet-overlay.open{display:block;}
+.cart-sheet{position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:700;max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.35s ease;}
+.cart-sheet.open{transform:translateY(0);}
+.cs-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
+.cs-title{font-size:15px;font-weight:700;color:#111;padding:12px 16px 8px;}
+.cs-item{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #f5f5f5;}
+.cs-img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+.cs-info{flex:1;min-width:0;}
+.cs-name{font-size:12px;color:#333;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cs-price{font-size:13px;color:#e53935;font-weight:700;margin-top:2px;}
+.cs-qty{display:flex;align-items:center;gap:0;margin-top:4px;}
+.cs-qty-btn{width:26px;height:26px;border:1px solid #e0e0e0;background:white;font-size:14px;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.cs-qty-num{width:32px;text-align:center;font-size:13px;font-weight:700;}
+.cs-del{color:#e53935;font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;}
+.cs-empty{text-align:center;padding:30px;color:#aaa;font-size:14px;}
+.cs-total{display:flex;justify-content:space-between;padding:12px 16px;font-size:14px;font-weight:700;}
+.cs-checkout-btn{margin:0 16px 16px;width:calc(100% - 32px);padding:14px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
 
 /* SLIDER */
 .slider-wrap{background:white;position:relative;overflow:hidden;height:310px;}
@@ -8905,10 +8928,25 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
     <span class="h-icon" onclick="window.location.href='/dashboard'"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
   </div>
   <div class="h-right">
+    <span class="cart-icon-wrap" onclick="openCartSheet()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </span>
     <span class="h-icon" onclick="window.location.href='/dashboard?search=1'"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-    <span class="h-icon" onclick="window.location.href='/dashboard?messages=1'"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
     <span class="h-icon" onclick="window.location.href='/dashboard?account=1'"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
   </div>
+</div>
+
+<!-- CART SHEET -->
+<div class="cart-sheet-overlay" id="cartSheetOverlay" onclick="closeCartSheet()"></div>
+<div class="cart-sheet" id="cartSheet">
+  <div class="cs-handle"></div>
+  <div class="cs-title">🛒 My Cart</div>
+  <div id="cartItemsList"></div>
+  <div class="cs-total" id="cartTotal" style="display:none;">
+    <span>Total</span><span id="cartTotalAmt" style="color:#e53935;">US$0.00</span>
+  </div>
+  <button class="cs-checkout-btn" id="cartCheckoutBtn" onclick="checkoutCart()">Place Order</button>
 </div>
 
 <!-- SLIDER -->
@@ -9085,10 +9123,141 @@ function updateTotalPrice(){
 
 async function doCart(){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
+    // تحقق هل المنتج موجود في السلة
+    var existing = cart.find(function(i){ return i.product && i.product.id == p.id && i.sellerEmail == sEmail; });
+    if(existing){
+        existing.qty = (existing.qty||1) + qty;
+    } else {
+        cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
+    }
     localStorage.setItem("cart", JSON.stringify(cart));
     closeSheet();
+    updateCartBadge();
     showToast("🛒 Added to cart (×"+qty+")");
+}
+
+function updateCartBadge(){
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    // فلتر فقط منتجات نفس المتجر
+    var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
+    var badge = document.getElementById("cartBadge");
+    if(storeCart.length > 0){
+        badge.innerText = storeCart.length;
+        badge.classList.add("show");
+    } else {
+        badge.classList.remove("show");
+    }
+}
+
+function openCartSheet(){
+    renderCartItems();
+    document.getElementById("cartSheet").classList.add("open");
+    document.getElementById("cartSheetOverlay").classList.add("open");
+}
+
+function closeCartSheet(){
+    document.getElementById("cartSheet").classList.remove("open");
+    document.getElementById("cartSheetOverlay").classList.remove("open");
+}
+
+function renderCartItems(){
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
+    var listEl = document.getElementById("cartItemsList");
+    var totalEl = document.getElementById("cartTotal");
+    var totalAmtEl = document.getElementById("cartTotalAmt");
+
+    if(storeCart.length === 0){
+        listEl.innerHTML = '<div class="cs-empty">Your cart is empty</div>';
+        totalEl.style.display = "none";
+        return;
+    }
+
+    listEl.innerHTML = "";
+    var total = 0;
+    storeCart.forEach(function(item, idx){
+        var p2 = item.product;
+        var catMap = {17:"17_Clothing_and_Accessories",19:"19_Medical_Bags_and_Sunglasses",20:"20_Shoes",21:"21_Watches",22:"22_Jewelry",27:"27_Electronics",28:"28_Smart_Home",31:"31_Luxury_Brands",32:"32_Beauty_and_Personal_Care",34:"34_Mens_Fashion",35:"35_Health_and_Household",36:"36_Home_and_Kitchen"};
+        var cf = catMap[p2.category_id]||"27_Electronics";
+        var imgS = "https://res.cloudinary.com/doabtbdsh/image/upload/products/"+cf+"/"+p2.folder+"/1.jpg";
+        var price = parseFloat(p2.price)||0;
+        total += price * item.qty;
+
+        var div = document.createElement("div");
+        div.className = "cs-item";
+        div.innerHTML =
+          '<img class="cs-img" src="'+imgS+'" onerror="this.src='https://via.placeholder.com/52x52'">'+
+          '<div class="cs-info">'+
+            '<div class="cs-name">'+(p2.title||"").substring(0,40)+'</div>'+
+            '<div class="cs-price">US$'+price.toFixed(2)+'</div>'+
+            '<div class="cs-qty">'+
+              '<button class="cs-qty-btn" onclick="changeCartQty('+idx+',-1)">−</button>'+
+              '<span class="cs-qty-num" id="csqty'+idx+'">'+item.qty+'</span>'+
+              '<button class="cs-qty-btn" onclick="changeCartQty('+idx+',1)">+</button>'+
+            '</div>'+
+          '</div>'+
+          '<span class="cs-del" onclick="removeCartItem('+idx+')">✕</span>';
+        listEl.appendChild(div);
+    });
+    totalEl.style.display = "flex";
+    totalAmtEl.innerText = "US$"+total.toFixed(2);
+}
+
+function changeCartQty(idx, delta){
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
+    if(!storeCart[idx]) return;
+    var globalIdx = cart.indexOf(storeCart[idx]);
+    cart[globalIdx].qty = Math.max(1, (cart[globalIdx].qty||1) + delta);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCartItems();
+    updateCartBadge();
+}
+
+function removeCartItem(idx){
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
+    if(!storeCart[idx]) return;
+    var globalIdx = cart.indexOf(storeCart[idx]);
+    cart.splice(globalIdx, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCartItems();
+    updateCartBadge();
+}
+
+async function checkoutCart(){
+    var token = localStorage.getItem("token")||"";
+    if(!token){ showToast("⚠️ Please login first"); return; }
+    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
+    var storeCart = cart.filter(function(i){ return i.sellerEmail == sEmail; });
+    if(storeCart.length === 0){ showToast("⚠️ Cart is empty"); return; }
+
+    var btn = document.getElementById("cartCheckoutBtn");
+    btn.disabled = true; btn.innerText = "Placing orders...";
+
+    var success = 0, failed = 0;
+    for(var i=0; i<storeCart.length; i++){
+        try {
+            var r = await fetch("/create-store-order",{
+                method:"POST",
+                headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+                body: JSON.stringify({ product: storeCart[i].product, sellerEmail: sEmail, quantity: storeCart[i].qty })
+            });
+            var d = await r.json();
+            if(d.success) success++;
+            else failed++;
+        } catch(e){ failed++; }
+    }
+
+    // حذف منتجات هذا المتجر من السلة
+    var remaining = cart.filter(function(i){ return i.sellerEmail != sEmail; });
+    localStorage.setItem("cart", JSON.stringify(remaining));
+
+    closeCartSheet();
+    updateCartBadge();
+    btn.disabled = false; btn.innerText = "Place Order";
+    if(success > 0) showToast("✅ "+success+" order(s) placed!");
+    if(failed > 0) showToast("⚠️ "+failed+" order(s) failed");
 }
 
 async function doBuy(){
@@ -9979,12 +10148,17 @@ app.post("/update-store-settings", authMiddleware, (req, res) => {
 
 // ---- API: تحديث حالة طلب يدوياً من الأدمن ----
 app.post("/admin-update-order-status", adminMiddleware, (req, res) => {
-    const { orderId, status } = req.body;
+    const { orderId, status, trackingProgress } = req.body;
     const order = storeOrders.find(o => o.id === orderId);
     if(!order) return res.json({ success: false, message: "Order not found" });
 
     const oldStatus = order.status;
     order.status = status;
+
+    // الأدمن يحرك الخريطة — قيمة من 0 إلى 1
+    if(typeof trackingProgress === "number"){
+        order.trackingProgress = Math.min(1, Math.max(0, trackingProgress));
+    }
 
     // إذا انتقل الطلب إلى completed → أعِد المبلغ + الربح للبائع
     if(status === "completed" && oldStatus !== "completed"){
@@ -10902,6 +11076,7 @@ function showToast(msg){
 }
 
 init();
+updateCartBadge();
 </script>
 </body>
 </html>`);
@@ -11182,13 +11357,20 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
       <span style="font-size:13px;color:#555;">Retail Price</span>
       <span style="font-size:14px;font-weight:700;color:#1976d2;" id="shipPopupRetail">US$0.00</span>
     </div>
-    <div style="display:flex;justify-content:space-between;padding:12px 20px;">
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
       <span style="font-size:13px;color:#555;">Your Profit</span>
       <span style="font-size:14px;font-weight:700;color:#2e7d32;" id="shipPopupProfit">US$0.00</span>
     </div>
-    <div style="display:flex;gap:10px;padding:14px 20px 0;">
+    <div style="padding:12px 20px 0;">
+      <div style="font-size:13px;color:#333;font-weight:600;margin-bottom:8px;">🔑 Enter your login password to confirm:</div>
+      <input id="shipPasswordInput" type="password" placeholder="Enter your password"
+        style="width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;color:#222;margin-bottom:4px;"
+        onkeydown="if(event.key==='Enter') confirmShip()">
+      <div id="shipPasswordError" style="color:#e53935;font-size:12px;min-height:18px;padding-bottom:4px;"></div>
+    </div>
+    <div style="display:flex;gap:10px;padding:8px 20px 0;">
       <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="confirmShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ Confirm Ship</button>
+      <button id="shipConfirmBtn" onclick="confirmShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ Confirm Ship</button>
     </div>
   </div>
 </div>
@@ -11211,12 +11393,20 @@ async function load(){
 }
 
 function updateCounts(){
-    ["waiting_shipping","in_delivery","waiting_refund","completed"].forEach(function(s){
-        var key = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[s];
-        var cnt = allOrders.filter(function(o){ return o.status===s; }).length;
-        document.getElementById("cnt-"+key).innerText = cnt;
-        document.getElementById("cnt-"+key).style.display = cnt > 0 ? "" : "none";
-    });
+    // waiting_shipping: count orders waiting
+    var cntShip = allOrders.filter(function(o){ return o.status==="waiting_shipping"; }).length;
+    document.getElementById("cnt-ship").innerText = cntShip;
+    document.getElementById("cnt-ship").style.display = cntShip > 0 ? "" : "none";
+    // in_delivery
+    var cntDel = allOrders.filter(function(o){ return o.status==="in_delivery"; }).length;
+    document.getElementById("cnt-del").innerText = cntDel;
+    document.getElementById("cnt-del").style.display = cntDel > 0 ? "" : "none";
+    // waiting_refund: فقط الطلبات التي لم يتم تأكيد تسليمها بعد
+    var cntRef = allOrders.filter(function(o){ return o.status==="waiting_refund" && !o.completedAt; }).length;
+    document.getElementById("cnt-ref").innerText = cntRef;
+    document.getElementById("cnt-ref").style.display = cntRef > 0 ? "" : "none";
+    // done: لا يظهر عدد خارجي
+    document.getElementById("cnt-done").style.display = "none";
 }
 
 function switchTab(tab){
@@ -11228,7 +11418,13 @@ function switchTab(tab){
 }
 
 function renderOrders(){
-    var list = allOrders.filter(function(o){ return o.status === currentTab; });
+    var list;
+    if(currentTab === "completed"){
+        // يعرض الطلبات المكتملة + waiting_refund التي تم تأكيدها
+        list = allOrders.filter(function(o){ return o.status === "completed"; });
+    } else {
+        list = allOrders.filter(function(o){ return o.status === currentTab; });
+    }
     var el = document.getElementById("ordersList");
     if(list.length === 0){
         el.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders in this section</p></div>';
@@ -11284,9 +11480,13 @@ function buildOrderCard(o){
         html += '<div style="background:#fce4ec;border-radius:10px;padding:10px 12px;font-size:12px;color:#c62828;font-weight:600;margin-top:4px;">⏳ Waiting for admin to confirm delivery & release your earnings</div>';
     }
 
-    // Completed
+    // Completed / Delivered
     if(o.status === "completed"){
-        html += '<div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;font-size:12px;color:#2e7d32;font-weight:600;margin-top:4px;">✅ Completed — Profit added to your wallet</div>';
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;font-size:12px;color:#2e7d32;font-weight:600;margin-top:4px;">✅ Delivered — Profit added to your wallet</div>';
+    }
+    // Waiting refund + completedAt = already delivered but staying visible
+    if(o.status === "waiting_refund" && o.completedAt){
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;font-size:12px;color:#2e7d32;font-weight:600;margin-top:4px;">✅ Delivered — Profit released</div>';
     }
 
     card.innerHTML = html;
@@ -11297,7 +11497,9 @@ function buildOrderCard(o){
     }
     // Draw map
     if(o.status === "in_delivery"){
-        setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
+        var tp = o.trackingPath || {};
+        if(typeof o.trackingProgress === "number") tp.adminProgress = o.trackingProgress;
+        setTimeout(function(){ drawMap("map-"+o.id, tp, o.deliveryStart); }, 100);
     }
 
     return card;
@@ -11371,9 +11573,11 @@ function drawMap(canvasId, trackingPath, deliveryStart){
     var p1 = toCanvas(mid.lat, mid.lng);
     var p2 = toCanvas(dest.lat, dest.lng);
 
-    // Progress based on time elapsed (72 hours total)
+    // Progress: إذا حدده الأدمن نستخدمه، وإلا نعتمد على الوقت
+    var adminProgress = (typeof trackingPath.adminProgress === "number") ? trackingPath.adminProgress : null;
     var elapsed = deliveryStart ? Date.now() - deliveryStart : 0;
-    var progress = Math.min(1, elapsed / (72 * 60 * 60 * 1000));
+    var timeProgress = Math.min(1, elapsed / (72 * 60 * 60 * 1000));
+    var progress = (adminProgress !== null) ? adminProgress : timeProgress;
 
     // Draw full path (dashed)
     ctx.setLineDash([5,4]);
@@ -11453,12 +11657,47 @@ function shipOrder(orderId){
 function closeShipPopup(){
     document.getElementById("shipConfirmPopup").style.display = "none";
     pendingShipOrderId = null;
+    var inp = document.getElementById("shipPasswordInput");
+    var err = document.getElementById("shipPasswordError");
+    if(inp) inp.value = "";
+    if(err) err.innerText = "";
 }
 
 async function confirmShip(){
     if(!pendingShipOrderId) return;
+
+    // التحقق من كلمة المرور
+    var pwd = document.getElementById("shipPasswordInput").value.trim();
+    var errEl = document.getElementById("shipPasswordError");
+    errEl.innerText = "";
+    if(!pwd){ errEl.innerText = "Please enter your password"; return; }
+
+    var btn = document.getElementById("shipConfirmBtn");
+    btn.disabled = true; btn.innerText = "Verifying...";
+
+    // تحقق من الباسورد عبر السيرفر
+    try {
+        var user = JSON.parse(localStorage.getItem("user")||"{}");
+        var vr = await fetch("/login", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ email: user.email, password: pwd })
+        });
+        var vd = await vr.json();
+        if(!vd.token){
+            errEl.innerText = "⚠️ Incorrect password";
+            btn.disabled = false; btn.innerText = "✅ Confirm Ship";
+            return;
+        }
+    } catch(e){
+        errEl.innerText = "⚠️ Network error";
+        btn.disabled = false; btn.innerText = "✅ Confirm Ship";
+        return;
+    }
+
     var orderId = pendingShipOrderId;
     closeShipPopup();
+
     try {
         var r = await fetch("/ship-store-order", {
             method:"POST",
@@ -11469,6 +11708,7 @@ async function confirmShip(){
         if(d.success){ showToast("✅ Order shipped!"); load(); }
         else showToast("⚠️ " + (d.message||"Failed to ship"));
     } catch(e){ showToast("⚠️ Error"); }
+    btn.disabled = false; btn.innerText = "✅ Confirm Ship";
 }
 
 function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
