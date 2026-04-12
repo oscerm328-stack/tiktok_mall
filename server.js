@@ -9766,34 +9766,39 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
     const supplierPrice = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
     const profit = parseFloat((price - supplierPrice).toFixed(2));
 
-    const order = {
-        id: String(Date.now()).slice(-11).padStart(11,'0'),
-        buyerEmail,
-        sellerEmail,
-        product: {
-            id: product.id,
-            title: product.title,
-            price: price,
-            image: product.images ? product.images[0] : "",
-            folder: product.folder || "",
-            category_id: product.category_id || 0
-        },
-        quantity: parseInt(quantity) || 1,
-        total,
-        supplierPrice,
-        profit,
-        status: "waiting_shipping", // waiting_shipping -> in_delivery -> waiting_refund -> completed
-        createdAt: new Date().toISOString(),
-        shippedAt: null,
-        deliveryStart: null,
-        completedAt: null,
-        shippingCountdown: 48 * 60 * 60 * 1000, // 48 hours in ms
-        trackingPath: generateTrackingPath()
-    };
-
-    storeOrders.push(order);
+    // كل وحدة = طلب منفصل
+    const qty = parseInt(quantity) || 1;
+    const createdOrders = [];
+    for(let i = 0; i < qty; i++){
+        const order = {
+            id: String(Date.now() + i).slice(-11).padStart(11,'0'),
+            buyerEmail,
+            sellerEmail,
+            product: {
+                id: product.id,
+                title: product.title,
+                price: price,
+                image: product.images ? product.images[0] : "",
+                folder: product.folder || "",
+                category_id: product.category_id || 0
+            },
+            quantity: 1,
+            total: price,
+            supplierPrice,
+            profit,
+            status: "waiting_shipping",
+            createdAt: new Date().toISOString(),
+            shippedAt: null,
+            deliveryStart: null,
+            completedAt: null,
+            shippingCountdown: 48 * 60 * 60 * 1000,
+            trackingPath: generateTrackingPath()
+        };
+        storeOrders.push(order);
+        createdOrders.push(order);
+    }
     saveStoreOrders();
-    res.json({ success: true, order });
+    res.json({ success: true, order: createdOrders[0], orders: createdOrders });
 });
 
 function generateTrackingPath(){
@@ -11129,8 +11134,8 @@ app.get("/manage-orders", (req, res) => {
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
-.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
-.tabs{display:flex;background:white;border-bottom:2px solid #f0f0f0;position:sticky;top:50px;z-index:99;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;}
+.tabs{display:flex;background:white;border-bottom:2px solid #f0f0f0;}
 .tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:#999;cursor:pointer;border-bottom:3px solid transparent;}
 .tab.active{color:#1976d2;border-bottom-color:#1976d2;}
 .tab .cnt{background:#ff3b30;color:white;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px;}
@@ -11168,10 +11173,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .popup-row{display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;}
 .popup-row:last-of-type{border-bottom:none;}
 
-/* PASSWORD POPUP */
-.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:center;justify-content:center;}
+/* PASSWORD POPUP - bottom sheet */
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:flex-end;justify-content:center;}
 .pwd-overlay.open{display:flex;}
-.pwd-box{background:white;border-radius:20px;width:88%;max-width:360px;padding:28px 24px;text-align:center;}
+.pwd-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 28px;animation:slideUp 0.3s ease;}
 .pwd-input{width:100%;border:1.5px solid #ddd;border-radius:12px;padding:12px 16px;font-size:15px;text-align:center;letter-spacing:3px;outline:none;margin-bottom:14px;}
 .pwd-input:focus{border-color:#1976d2;}
 
@@ -11205,7 +11210,20 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </span>
-    <span style="font-size:16px;font-weight:700;">Manage Orders</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
+    <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </span>
+    <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </span>
+    <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </span>
   </div>
 </div>
 
@@ -11239,14 +11257,19 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
   </div>
 </div>
 
-<!-- PASSWORD POPUP -->
+<!-- PASSWORD POPUP - bottom sheet -->
 <div id="pwdPopup" class="pwd-overlay">
   <div class="pwd-box">
-    <div style="font-size:16px;font-weight:700;color:#111;margin-bottom:6px;">🔐 Enter Your Password</div>
-    <div style="font-size:13px;color:#888;margin-bottom:18px;">Enter your account password to confirm shipment</div>
-    <input class="pwd-input" type="password" id="pwdInput" placeholder="••••••••">
-    <button onclick="doShip()" style="width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:15px;font-weight:700;cursor:pointer;">🚚 Ship Now</button>
-    <button onclick="closePwdPopup()" style="width:100%;padding:11px;border:none;border-radius:12px;background:#f5f5f5;color:#666;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;">Cancel</button>
+    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;"></div>
+    <div style="font-size:15px;font-weight:700;color:#111;padding:14px 20px 4px;">🔐 Enter Your Password</div>
+    <div style="font-size:12px;color:#888;padding:0 20px 14px;">Enter your account password to confirm shipment</div>
+    <div style="padding:0 20px 8px;">
+      <input class="pwd-input" type="password" id="pwdInput" placeholder="••••••••">
+    </div>
+    <div style="display:flex;gap:10px;padding:4px 20px 0;">
+      <button onclick="closePwdPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="doShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;">🚚 Ship Now</button>
+    </div>
   </div>
 </div>
 
