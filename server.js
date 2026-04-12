@@ -9964,6 +9964,46 @@ app.post("/update-store-settings", authMiddleware, (req, res) => {
     res.json({ success: true });
 });
 
+// ---- API: تحديث حالة طلب يدوياً من الأدمن ----
+app.post("/admin-update-order-status", adminMiddleware, (req, res) => {
+    const { orderId, status } = req.body;
+    const order = storeOrders.find(o => o.id === orderId);
+    if(!order) return res.json({ success: false, message: "Order not found" });
+
+    const oldStatus = order.status;
+    order.status = status;
+
+    // إذا انتقل الطلب إلى completed → أعِد المبلغ + الربح للبائع
+    if(status === "completed" && oldStatus !== "completed"){
+        const seller = users.find(u => u.email === order.sellerEmail);
+        if(seller){
+            const refund = (order.supplierPrice * order.quantity) + (order.profit * order.quantity);
+            seller.balance = ((parseFloat(seller.balance) || 0) + refund).toFixed(2);
+            const today = new Date().toDateString();
+            if(!seller.profitToday || seller.profitTodayDate !== today){
+                seller.profitToday = 0;
+                seller.profitTodayDate = today;
+            }
+            seller.profitToday = ((parseFloat(seller.profitToday) || 0) + (order.profit * order.quantity)).toFixed(2);
+            seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + (order.profit * order.quantity)).toFixed(2);
+            seller.turnover = ((parseFloat(seller.turnover) || 0) + order.total).toFixed(2);
+            seller.orderCount = (parseInt(seller.orderCount) || 0) + 1;
+            if(!seller.totalCapital) seller.totalCapital = parseFloat(seller.balance) || 0;
+            seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + (order.profit * order.quantity)).toFixed(2);
+            saveUsers();
+        }
+        order.completedAt = new Date().toISOString();
+    }
+
+    if(status === "in_delivery" && !order.deliveryStart){
+        order.deliveryStart = Date.now();
+        order.shippedAt = new Date().toISOString();
+    }
+
+    saveStoreOrders();
+    res.json({ success: true, order });
+});
+
 // ---- API: جلب كل الطلبات للأدمن ----
 app.get("/admin-store-orders", adminMiddleware, (req, res) => {
     res.json({ success: true, orders: storeOrders });
@@ -11055,6 +11095,25 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;}
 .toast.show{display:block;animation:fadeUp 0.3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
+
+/* SHIP CONFIRM POPUP */
+.ship-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;}
+.ship-popup-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 20px;animation:slideUp2 0.3s ease;}
+@keyframes slideUp2{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.ship-popup-handle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;}
+.ship-popup-title{font-size:15px;font-weight:700;color:#111;padding:14px 20px 6px;}
+.ship-popup-sub{font-size:12px;color:#888;padding:0 20px 12px;}
+.ship-popup-row{display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;}
+.ship-popup-row:last-of-type{border-bottom:none;}
+.ship-popup-label{font-size:13px;color:#555;}
+.ship-popup-val{font-size:14px;font-weight:700;}
+.ship-popup-val.s{color:#e65100;}
+.ship-popup-val.r{color:#1976d2;}
+.ship-popup-val.g{color:#2e7d32;}
+.ship-popup-btns{display:flex;gap:10px;padding:16px 20px 0;}
+.ship-cancel-btn{flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;}
+.ship-ok-btn{flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;}
+.ship-ok-btn:active{opacity:0.88;}
 </style>
 </head>
 <body>
@@ -11095,6 +11154,31 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- SHIP CONFIRM POPUP -->
+<div id="shipConfirmPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:flex-end;justify-content:center;">
+  <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:0 0 24px;animation:slideUp2 0.3s ease;">
+    <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:12px auto 0;"></div>
+    <div style="font-size:15px;font-weight:700;color:#111;padding:14px 20px 4px;">🚚 Confirm Shipment</div>
+    <div style="font-size:12px;color:#888;padding:0 20px 10px;">Supplier cost will be deducted from your balance</div>
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
+      <span style="font-size:13px;color:#555;">Supplier Price</span>
+      <span style="font-size:14px;font-weight:700;color:#e65100;" id="shipPopupSupplier">US$0.00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0f0f0;">
+      <span style="font-size:13px;color:#555;">Retail Price</span>
+      <span style="font-size:14px;font-weight:700;color:#1976d2;" id="shipPopupRetail">US$0.00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;">
+      <span style="font-size:13px;color:#555;">Your Profit</span>
+      <span style="font-size:14px;font-weight:700;color:#2e7d32;" id="shipPopupProfit">US$0.00</span>
+    </div>
+    <div style="display:flex;gap:10px;padding:14px 20px 0;">
+      <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="confirmShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ Confirm Ship</button>
+    </div>
+  </div>
+</div>
 
 <script>
 var myToken = localStorage.getItem("token") || "";
@@ -11169,9 +11253,10 @@ function buildOrderCard(o){
         var created = new Date(o.createdAt).getTime();
         var deadline = created + 48 * 60 * 60 * 1000;
         var remaining = Math.max(0, deadline - Date.now());
-        html += '<div class="countdown" id="cd-' + o.id + '">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e65100" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
-            '<span>Ship within: <b id="cdtxt-' + o.id + '">' + formatTime(remaining) + '</b></span></div>';
+        var isTimeout = remaining === 0;
+        html += '<div class="countdown" id="cd-' + o.id + '" style="' + (isTimeout ? 'background:#fce4ec;color:#c62828;' : '') + '">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + (isTimeout ? '#c62828' : '#e65100') + '" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+            '<span>' + (isTimeout ? '<b>⏰ TIME OUT</b>' : 'Ship within: <b id="cdtxt-' + o.id + '">' + formatTime(remaining) + '</b>') + '</span></div>';
         html += '<button class="ship-btn" onclick="shipOrder(\'' + o.id + '\')">🚚 Ship Now</button>';
     }
 
@@ -11209,11 +11294,20 @@ function startCountdown(orderId, createdAt){
     var created = new Date(createdAt).getTime();
     var deadline = created + 48 * 60 * 60 * 1000;
     var el = document.getElementById("cdtxt-"+orderId);
+    var cdDiv = document.getElementById("cd-"+orderId);
     if(!el) return;
     var interval = setInterval(function(){
         var remaining = Math.max(0, deadline - Date.now());
-        if(el) el.innerText = formatTime(remaining);
-        if(remaining <= 0) clearInterval(interval);
+        if(remaining <= 0){
+            clearInterval(interval);
+            if(cdDiv){
+                cdDiv.style.background = "#fce4ec";
+                cdDiv.style.color = "#c62828";
+                cdDiv.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><b>⏰ TIME OUT</b></span>';
+            }
+        } else {
+            if(el) el.innerText = formatTime(remaining);
+        }
     }, 1000);
 }
 
@@ -11323,9 +11417,35 @@ function drawMap(canvasId, trackingPath, deliveryStart){
     setTimeout(function(){ drawMap(canvasId, trackingPath, deliveryStart); }, 120000);
 }
 
-async function shipOrder(orderId){
-    var btn = event.target;
-    btn.disabled = true; btn.innerText = "Shipping...";
+// --- Ship Confirm Popup ---
+var pendingShipOrderId = null;
+
+function shipOrder(orderId){
+    // ابحث عن الطلب في allOrders
+    var order = allOrders.find(function(o){ return o.id === orderId; });
+    if(!order) return;
+
+    pendingShipOrderId = orderId;
+
+    var supplierPrice = parseFloat(order.supplierPrice) * (order.quantity||1);
+    var retailPrice   = parseFloat(order.total);
+    var profit        = parseFloat(order.profit) * (order.quantity||1);
+
+    document.getElementById("shipPopupSupplier").innerText = "US$" + supplierPrice.toFixed(2);
+    document.getElementById("shipPopupRetail").innerText   = "US$" + retailPrice.toFixed(2);
+    document.getElementById("shipPopupProfit").innerText   = "US$" + profit.toFixed(2);
+    document.getElementById("shipConfirmPopup").style.display = "flex";
+}
+
+function closeShipPopup(){
+    document.getElementById("shipConfirmPopup").style.display = "none";
+    pendingShipOrderId = null;
+}
+
+async function confirmShip(){
+    if(!pendingShipOrderId) return;
+    var orderId = pendingShipOrderId;
+    closeShipPopup();
     try {
         var r = await fetch("/ship-store-order", {
             method:"POST",
@@ -11336,7 +11456,6 @@ async function shipOrder(orderId){
         if(d.success){ showToast("✅ Order shipped!"); load(); }
         else showToast("⚠️ " + (d.message||"Failed to ship"));
     } catch(e){ showToast("⚠️ Error"); }
-    btn.disabled = false; btn.innerText = "🚚 Ship Now";
 }
 
 function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
