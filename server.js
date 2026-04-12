@@ -9927,6 +9927,14 @@ app.get("/my-store-orders", authMiddleware, (req, res) => {
     res.json({ success: true, orders });
 });
 
+// ---- API: جلب طلبات البائع بالإيميل مباشرة (fallback) ----
+app.get("/store-orders-by-email/:email", (req, res) => {
+    const email = decodeURIComponent(req.params.email);
+    if(!email) return res.json({ success: false, orders: [] });
+    const orders = storeOrders.filter(o => o.sellerEmail === email);
+    res.json({ success: true, orders });
+});
+
 // ---- API: جلب طلبات المشتري ----
 app.get("/my-purchases", authMiddleware, (req, res) => {
     const email = req.userEmail;
@@ -11440,32 +11448,48 @@ function generateOrderNum(orderId){
 async function load(){
     var listEl = document.getElementById("ordersList");
     try {
-        // Try to get token from multiple sources
-        var token = localStorage.getItem("token") || "";
-        if(!token){
-            var u = JSON.parse(localStorage.getItem("user")||"{}");
-            token = u.token || "";
-        }
+        var user = JSON.parse(localStorage.getItem("user") || "{}");
+        var token = localStorage.getItem("token") || user.token || "";
         myToken = token;
 
-        // Build headers - if token exists use it, otherwise rely on cookie
-        var headers = {};
-        if(token) headers["Authorization"] = "Bearer " + token;
+        var orders = null;
 
-        var r = await fetch("/my-store-orders", {
-            headers: headers,
-            credentials: "include"  // send cookies automatically
-        });
+        // Method 1: try with token
+        if(token){
+            try {
+                var r1 = await fetch("/my-store-orders", {
+                    headers: {"Authorization": "Bearer " + token},
+                    credentials: "include"
+                });
+                if(r1.ok){
+                    var d1 = await r1.json();
+                    if(d1.success) orders = d1.orders;
+                }
+            } catch(e){}
+        }
 
-        if(r.status === 401){
+        // Method 2: fallback with email directly
+        if(orders === null && user.email){
+            try {
+                var r2 = await fetch("/store-orders-by-email/" + encodeURIComponent(user.email), {
+                    credentials: "include"
+                });
+                if(r2.ok){
+                    var d2 = await r2.json();
+                    if(d2.success) orders = d2.orders;
+                }
+            } catch(e){}
+        }
+
+        if(orders === null){
             listEl.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><p>Session expired. <a href="/login-page" style="color:#1976d2;font-weight:600;">Login again</a></p></div>';
             return;
         }
 
-        var d = await r.json();
-        allOrders = d.orders || [];
+        allOrders = orders || [];
         updateCounts();
         renderOrders();
+
     } catch(e){
         listEl.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders yet</p></div>';
     }
