@@ -6917,17 +6917,17 @@ margin-bottom:5px;
 
 <div>
 <p>Number of order</p>
-<div class="value">0</div>
+<div class="value" id="numberOfOrders">0</div>
 </div>
 
 <div>
 <p>Turnover</p>
-<div class="value">0.00</div>
+<div class="value" id="turnoverVal">0.00</div>
 </div>
 
 <div>
 <p>Credential rating</p>
-<div class="value">0</div>
+<div class="value" id="credentialRating">0</div>
 </div>
 </div>
 </div>
@@ -6935,10 +6935,10 @@ margin-bottom:5px;
 <!-- ORDER STATUS -->
 <div class="card">
 <div class="grid4">
-<div>0<br><small>Waiting for payment</small></div>
-<div>0<br><small>Waiting for shipping</small></div>
-<div>0<br><small>Waiting for delivery</small></div>
-<div>0<br><small>Waiting for refund</small></div>
+<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingPayment">0</span><br><small>Waiting for payment</small></div>
+<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingShipping">0</span><br><small>Waiting for shipping</small></div>
+<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingDelivery">0</span><br><small>Waiting for delivery</small></div>
+<div onclick="window.location.href='/manage-orders'" style="cursor:pointer;"><span id="waitingRefund">0</span><br><small>Waiting for refund</small></div>
 </div>
 </div>
 
@@ -6956,12 +6956,12 @@ margin-bottom:5px;
 </div>
 
 <div onclick="window.location.href='/wallet'" style="cursor:pointer;">
-    <p>0.00</p>
+    <p id="profitOfDay">0.00</p>
     <small>Profit of the day</small>
 </div>
 
 <div onclick="window.location.href='/wallet'" style="cursor:pointer;">
-    <p>0.00</p>
+    <p id="totalProfitCredited">0.00</p>
     <small>Total profit credited</small>
 </div>
 </div>
@@ -6972,22 +6972,22 @@ margin-bottom:5px;
 <b>Basic tools</b>
 
 <div class="tools">
-<div class="tool">
+<div class="tool" onclick="window.location.href='/listings'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png">
 <p>Listings</p>
 </div>
 
-<div class="tool">
+<div class="tool" onclick="window.location.href='/manage-product'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
 <p>Manage product</p>
 </div>
 
-<div class="tool">
+<div class="tool" onclick="window.location.href='/manage-orders'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
 <p>Manage Order</p>
 </div>
 
-<div class="tool">
+<div class="tool" onclick="window.location.href='/store-setting'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png">
 <p>Store setting</p>
 </div>
@@ -6997,7 +6997,7 @@ margin-bottom:5px;
 <p>Store Operating fund</p>
 </div>
 
-<div class="tool">
+<div class="tool" onclick="window.location.href='/instructions'" style="cursor:pointer;">
 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png">
 <p>Instructions for operation</p>
 </div>
@@ -7174,32 +7174,51 @@ function loadVisitorCounter(){
   }, 5000);
 }
 
-// جلب وعرض الرصيد من السيرفر
-async function loadMerchantBalance(){
+// جلب كل إحصائيات الداشبورد
+async function loadDashboardStats(){
   try {
-    let user = JSON.parse(localStorage.getItem("user"));
-    if(!user || !user.email) return;
-    let res = await fetch("/users");
-    let users = await res.json();
-    let me = users.find(u => u.email === user.email);
-    if(me){
-      let bal = parseFloat(me.balance || 0).toFixed(2);
-      document.getElementById("merchantBalance").innerText = bal;
-      document.getElementById("merchantTotalCapital").innerText = bal;
-    }
+    let token = localStorage.getItem("token") || "";
+    let r = await fetch("/seller-dashboard-stats", { headers: {"Authorization": "Bearer " + token} });
+    let d = await r.json();
+    if(!d.success) return;
+
+    // Stats
+    let pEl = document.getElementById("productsForSaleCount");
+    if(pEl) pEl.innerText = d.productsForSale || 0;
+    let noEl = document.getElementById("numberOfOrders");
+    if(noEl) noEl.innerText = d.numberOfOrders || 0;
+    let tvEl = document.getElementById("turnoverVal");
+    if(tvEl) tvEl.innerText = parseFloat(d.turnover||0).toFixed(2);
+    let crEl = document.getElementById("credentialRating");
+    if(crEl) crEl.innerText = parseFloat(d.credentialRating||0).toFixed(1);
+
+    // Order status
+    let wpEl = document.getElementById("waitingPayment");
+    if(wpEl) wpEl.innerText = d.waitingPayment || 0;
+    let wsEl = document.getElementById("waitingShipping");
+    if(wsEl) wsEl.innerText = d.waitingShipping || 0;
+    let wdEl = document.getElementById("waitingDelivery");
+    if(wdEl) wdEl.innerText = d.waitingDelivery || 0;
+    let wrEl = document.getElementById("waitingRefund");
+    if(wrEl) wrEl.innerText = d.waitingRefund || 0;
+
+    // Balance
+    let balEl = document.getElementById("merchantBalance");
+    if(balEl) balEl.innerText = parseFloat(d.availableBalance||0).toFixed(2);
+    let capEl = document.getElementById("merchantTotalCapital");
+    if(capEl) capEl.innerText = parseFloat(d.totalWorkingCapital||0).toFixed(2);
+    let podEl = document.getElementById("profitOfDay");
+    if(podEl) podEl.innerText = parseFloat(d.profitOfDay||0).toFixed(2);
+    let tpcEl = document.getElementById("totalProfitCredited");
+    if(tpcEl) tpcEl.innerText = parseFloat(d.totalProfitCredited||0).toFixed(2);
   } catch(e){ console.error(e); }
 }
 
-// تحميل عدد المنتجات وتحديثه تلقائياً
-function loadProductsCount(){
-    fetch("https://fakestoreapi.com/products?limit=20")
-    .then(function(r){ return r.json(); })
-    .then(function(products){
-        var el = document.getElementById("productsForSaleCount");
-        if(el) el.innerText = products.length;
-    })
-    .catch(function(){});
+async function loadMerchantBalance(){
+  await loadDashboardStats();
 }
+
+function loadProductsCount(){ /* handled by loadDashboardStats */ }
 
 loadStoreInfo();
 loadMerchantBalance();
@@ -9194,6 +9213,1940 @@ Examples of information you can access through the platform service include:<br>
 If you are a developer participating in our Developer Services program, you can access your account and other information and adjust your communication preferences by updating your account in the Developer Services Portal.</p>
 </body></html>`);
 });
+
+
+// =====================================================================
+// =================== LISTINGS & STORE SYSTEM =========================
+// =====================================================================
+
+// ---- بيانات منتجات البائعين (في الذاكرة) ----
+let sellerProducts = {}; // { email: [ {productId, categoryId, addedAt, ...}, ... ] }
+let storeOrders = [];    // طلبات المتجر
+
+try {
+    const sp = fs.readFileSync("sellerProducts.json");
+    sellerProducts = JSON.parse(sp);
+} catch(e){ sellerProducts = {}; }
+
+try {
+    const so = fs.readFileSync("storeOrders.json");
+    storeOrders = JSON.parse(so);
+} catch(e){ storeOrders = []; }
+
+function saveSellerProducts(){
+    try { fs.writeFileSync("sellerProducts.json", JSON.stringify(sellerProducts, null, 2)); } catch(e){}
+    if(db) {
+        Object.entries(sellerProducts).forEach(([email, prods]) => {
+            db.collection("sellerProducts").updateOne({ email }, { $set: { email, products: prods } }, { upsert: true })
+              .catch(()=>{});
+        });
+    }
+}
+
+function saveStoreOrders(){
+    try { fs.writeFileSync("storeOrders.json", JSON.stringify(storeOrders, null, 2)); } catch(e){}
+    if(db){
+        storeOrders.forEach(o => {
+            db.collection("storeOrders").updateOne({ id: o.id }, { $set: o }, { upsert: true }).catch(()=>{});
+        });
+    }
+}
+
+// ---- نسب العمولة حسب VIP ----
+const VIP_COMMISSION = [15, 17, 20, 22, 25, 40];
+const VIP_PRODUCTS   = [20, 35, 80, 120, 300, 1000];
+
+// ---- API: جلب منتجات البائع ----
+app.get("/my-seller-products", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const prods = sellerProducts[email] || [];
+    res.json({ success: true, products: prods });
+});
+
+// ---- API: إضافة منتج للمتجر ----
+app.post("/add-seller-product", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const { product } = req.body;
+    if(!product || !product.id) return res.json({ success: false, message: "Invalid product" });
+
+    const user = users.find(u => u.email === email);
+    const vipLevel = user ? (user.vipLevel || 0) : 0;
+    const maxProducts = VIP_PRODUCTS[vipLevel] || 20;
+
+    if(!sellerProducts[email]) sellerProducts[email] = [];
+    const current = sellerProducts[email];
+
+    // تحقق من التكرار
+    if(current.find(p => p.id === product.id)){
+        return res.json({ success: false, message: "Product already in your store" });
+    }
+
+    // تحقق من الحد الأقصى
+    if(current.length >= maxProducts){
+        return res.json({ success: false, message: `VIP ${vipLevel} limit is ${maxProducts} products` });
+    }
+
+    current.push({ ...product, addedAt: new Date().toISOString() });
+    saveSellerProducts();
+    res.json({ success: true, count: current.length });
+});
+
+// ---- API: حذف منتج من المتجر ----
+app.post("/remove-seller-product", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const { productId } = req.body;
+    if(!sellerProducts[email]) return res.json({ success: false });
+    sellerProducts[email] = sellerProducts[email].filter(p => p.id != productId);
+    saveSellerProducts();
+    res.json({ success: true });
+});
+
+// ---- API: جلب منتجات متجر معين (للزوار) ----
+app.get("/store-products/:email", (req, res) => {
+    const prods = sellerProducts[req.params.email] || [];
+    res.json({ success: true, products: prods });
+});
+
+// ---- API: إنشاء طلب جديد ----
+app.post("/create-store-order", authMiddleware, (req, res) => {
+    const buyerEmail = req.userEmail;
+    const { product, sellerEmail, quantity } = req.body;
+    if(!product || !sellerEmail) return res.json({ success: false, message: "Missing data" });
+
+    const buyer = users.find(u => u.email === buyerEmail);
+    if(!buyer) return res.json({ success: false, message: "User not found" });
+
+    const price = parseFloat(product.price) || 0;
+    const total = price * (parseInt(quantity) || 1);
+
+    if((parseFloat(buyer.balance) || 0) < total){
+        return res.json({ success: false, message: "Insufficient balance" });
+    }
+
+    // خصم الرصيد من المشتري
+    buyer.balance = ((parseFloat(buyer.balance) || 0) - total).toFixed(2);
+    saveUsers();
+
+    const seller = users.find(u => u.email === sellerEmail);
+    const vipLevel = seller ? (seller.vipLevel || 0) : 0;
+    const commissionPct = VIP_COMMISSION[vipLevel] || 15;
+    const supplierPrice = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
+    const profit = parseFloat((price - supplierPrice).toFixed(2));
+
+    const order = {
+        id: "ORD" + Date.now(),
+        buyerEmail,
+        sellerEmail,
+        product: {
+            id: product.id,
+            title: product.title,
+            price: price,
+            image: product.images ? product.images[0] : "",
+            folder: product.folder || "",
+            category_id: product.category_id || 0
+        },
+        quantity: parseInt(quantity) || 1,
+        total,
+        supplierPrice,
+        profit,
+        status: "waiting_shipping", // waiting_shipping -> in_delivery -> waiting_refund -> completed
+        createdAt: new Date().toISOString(),
+        shippedAt: null,
+        deliveryStart: null,
+        completedAt: null,
+        shippingCountdown: 48 * 60 * 60 * 1000, // 48 hours in ms
+        trackingPath: generateTrackingPath()
+    };
+
+    storeOrders.push(order);
+    saveStoreOrders();
+    res.json({ success: true, order });
+});
+
+function generateTrackingPath(){
+    const origins = [
+        { name: "Shanghai", lat: 31.2304, lng: 121.4737 },
+        { name: "Shenzhen", lat: 22.5431, lng: 114.0579 },
+        { name: "Guangzhou", lat: 23.1291, lng: 113.2644 },
+        { name: "Beijing", lat: 39.9042, lng: 116.4074 },
+        { name: "Hong Kong", lat: 22.3193, lng: 114.1694 }
+    ];
+    const destinations = [
+        { name: "New York", lat: 40.7128, lng: -74.0060 },
+        { name: "London", lat: 51.5074, lng: -0.1278 },
+        { name: "Dubai", lat: 25.2048, lng: 55.2708 },
+        { name: "Paris", lat: 48.8566, lng: 2.3522 },
+        { name: "Sydney", lat: -33.8688, lng: 151.2093 },
+        { name: "Toronto", lat: 43.6532, lng: -79.3832 },
+        { name: "Singapore", lat: 1.3521, lng: 103.8198 },
+        { name: "Cairo", lat: 30.0444, lng: 31.2357 },
+        { name: "Riyadh", lat: 24.7136, lng: 46.6753 },
+        { name: "Istanbul", lat: 41.0082, lng: 28.9784 }
+    ];
+    const origin = origins[Math.floor(Math.random() * origins.length)];
+    const dest   = destinations[Math.floor(Math.random() * destinations.length)];
+    // نقطة وسيطة عشوائية
+    const midLat = (origin.lat + dest.lat) / 2 + (Math.random() - 0.5) * 20;
+    const midLng = (origin.lng + dest.lng) / 2 + (Math.random() - 0.5) * 30;
+    return { origin, destination: dest, midpoint: { lat: midLat, lng: midLng } };
+}
+
+// ---- API: شحن طلب ----
+app.post("/ship-store-order", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const { orderId } = req.body;
+    const order = storeOrders.find(o => o.id === orderId && o.sellerEmail === email);
+    if(!order) return res.json({ success: false, message: "Order not found" });
+    if(order.status !== "waiting_shipping") return res.json({ success: false, message: "Already shipped" });
+
+    const seller = users.find(u => u.email === email);
+    if(!seller) return res.json({ success: false, message: "Seller not found" });
+
+    // خصم سعر المورد من رصيد البائع
+    const supplierCost = order.supplierPrice * order.quantity;
+    if((parseFloat(seller.balance) || 0) < supplierCost){
+        return res.json({ success: false, message: "Insufficient balance to ship" });
+    }
+    seller.balance = ((parseFloat(seller.balance) || 0) - supplierCost).toFixed(2);
+    saveUsers();
+
+    order.status = "in_delivery";
+    order.shippedAt = new Date().toISOString();
+    order.deliveryStart = Date.now();
+    saveStoreOrders();
+    res.json({ success: true, order });
+});
+
+// ---- API: تأكيد استلام (أدمن فقط) ----
+app.post("/confirm-store-delivery", adminMiddleware, (req, res) => {
+    const { orderId } = req.body;
+    const order = storeOrders.find(o => o.id === orderId);
+    if(!order) return res.json({ success: false, message: "Order not found" });
+    if(order.status !== "waiting_refund") return res.json({ success: false, message: "Not ready for confirmation" });
+
+    const seller = users.find(u => u.email === order.sellerEmail);
+    if(seller){
+        const refund = (order.supplierPrice * order.quantity) + (order.profit * order.quantity);
+        seller.balance = ((parseFloat(seller.balance) || 0) + refund).toFixed(2);
+        // Total working capital: أضف الربح فقط
+        if(!seller.totalCapital) seller.totalCapital = parseFloat(seller.balance) || 0;
+        seller.totalCapital = ((parseFloat(seller.totalCapital) || 0) + (order.profit * order.quantity)).toFixed(2);
+        // profit today
+        const today = new Date().toDateString();
+        if(!seller.profitToday || seller.profitTodayDate !== today){
+            seller.profitToday = 0;
+            seller.profitTodayDate = today;
+        }
+        seller.profitToday = ((parseFloat(seller.profitToday) || 0) + (order.profit * order.quantity)).toFixed(2);
+        // total profit credited
+        seller.totalProfitCredited = ((parseFloat(seller.totalProfitCredited) || 0) + (order.profit * order.quantity)).toFixed(2);
+        // turnover
+        seller.turnover = ((parseFloat(seller.turnover) || 0) + order.total).toFixed(2);
+        // number of orders
+        seller.orderCount = (parseInt(seller.orderCount) || 0) + 1;
+        // credential rating (عشوائي بين 3-5 نجوم)
+        if(!seller.credentialRating) seller.credentialRating = 0;
+        const ratingDelta = (Math.random() * 0.5).toFixed(1);
+        seller.credentialRating = Math.min(5, ((parseFloat(seller.credentialRating) || 0) + parseFloat(ratingDelta))).toFixed(1);
+        saveUsers();
+    }
+
+    order.status = "completed";
+    order.completedAt = new Date().toISOString();
+    saveStoreOrders();
+    res.json({ success: true });
+});
+
+// ---- API: تحديث حالة الطلبات تلقائياً (cron-like) ----
+// كل دقيقة نتحقق هل انتهت مدة التوصيل (3 أيام = 72 ساعة)
+setInterval(() => {
+    const now = Date.now();
+    let changed = false;
+    storeOrders.forEach(order => {
+        if(order.status === "in_delivery" && order.deliveryStart){
+            const elapsed = now - order.deliveryStart;
+            if(elapsed >= 72 * 60 * 60 * 1000){ // 3 days
+                order.status = "waiting_refund";
+                changed = true;
+            }
+        }
+    });
+    if(changed) saveStoreOrders();
+}, 60 * 1000);
+
+// ---- API: جلب طلبات البائع ----
+app.get("/my-store-orders", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const orders = storeOrders.filter(o => o.sellerEmail === email);
+    res.json({ success: true, orders });
+});
+
+// ---- API: جلب طلبات المشتري ----
+app.get("/my-purchases", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const orders = storeOrders.filter(o => o.buyerEmail === email);
+    res.json({ success: true, orders });
+});
+
+// ---- API: إضافة للسلة ----
+// السلة محلية في localStorage - لا نحتاج API
+
+// ---- API: معلومات داشبورد البائع ----
+app.get("/seller-dashboard-stats", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const user = users.find(u => u.email === email);
+    if(!user) return res.json({ success: false });
+
+    const myOrders = storeOrders.filter(o => o.sellerEmail === email);
+    const today = new Date().toDateString();
+
+    // إعادة تعيين profitToday إذا تغير اليوم
+    if(user.profitTodayDate !== today){
+        user.profitToday = 0;
+        user.profitTodayDate = today;
+        saveUsers();
+    }
+
+    res.json({
+        success: true,
+        productsForSale: (sellerProducts[email] || []).length,
+        numberOfOrders: parseInt(user.orderCount) || 0,
+        turnover: parseFloat(user.turnover) || 0,
+        credentialRating: parseFloat(user.credentialRating) || 0,
+        waitingShipping: myOrders.filter(o => o.status === "waiting_shipping").length,
+        waitingDelivery: myOrders.filter(o => o.status === "in_delivery").length,
+        waitingRefund: myOrders.filter(o => o.status === "waiting_refund").length,
+        waitingPayment: 0,
+        availableBalance: parseFloat(user.balance) || 0,
+        totalWorkingCapital: parseFloat(user.totalCapital) || parseFloat(user.balance) || 0,
+        profitOfDay: parseFloat(user.profitToday) || 0,
+        totalProfitCredited: parseFloat(user.totalProfitCredited) || 0,
+        vipLevel: user.vipLevel || 0
+    });
+});
+
+// ---- API: تحديث إعدادات المتجر (اسم + صورة) ----
+app.post("/update-store-settings", authMiddleware, (req, res) => {
+    const email = req.userEmail;
+    const { storeName, storeLogo } = req.body;
+    const appl = storeApplications.find(a => a.email === email && a.status === "approved");
+    if(!appl) return res.json({ success: false, message: "Store not found" });
+    if(storeName) appl.storeName = storeName;
+    if(storeLogo) appl.storeLogo = storeLogo;
+    saveStoreApplications();
+    res.json({ success: true });
+});
+
+// ---- API: جلب كل الطلبات للأدمن ----
+app.get("/admin-store-orders", adminMiddleware, (req, res) => {
+    res.json({ success: true, orders: storeOrders });
+});
+
+
+
+// =================== LISTINGS PAGE ===================
+app.get("/listings", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Listings - TikTok Mall</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;}
+
+/* HEADER */
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:300;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.header-left{display:flex;align-items:center;gap:12px;}
+.header-right{display:flex;align-items:center;gap:14px;}
+.header h2{font-size:16px;font-weight:700;letter-spacing:0.3px;}
+.h-icon{cursor:pointer;display:inline-flex;align-items:center;}
+
+/* SORT & FILTER BAR */
+.top-bar{display:flex;background:white;border-bottom:1px solid #eee;position:sticky;top:50px;z-index:200;}
+.sort-btn,.filter-btn{flex:1;padding:13px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;color:#333;cursor:pointer;border:none;background:transparent;transition:color 0.2s;}
+.sort-btn{border-right:1px solid #eee;}
+.sort-btn:hover,.filter-btn:hover{color:#1976d2;}
+.sort-arrow{font-size:11px;transition:transform 0.2s;}
+
+/* ITEMS COUNT */
+.items-count{text-align:center;padding:10px;font-size:13px;color:#888;background:white;border-bottom:1px solid #f0f0f0;}
+
+/* SORT DROPDOWN */
+.sort-dropdown{display:none;position:absolute;top:50px;left:0;right:50%;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.12);z-index:400;border-radius:0 0 12px 12px;overflow:hidden;}
+.sort-dropdown.open{display:block;}
+.sort-option{padding:16px 20px;font-size:14px;color:#333;cursor:pointer;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;}
+.sort-option:hover{background:#f5f9ff;}
+.sort-option.active{color:#1976d2;font-weight:600;}
+.price-arrows{display:flex;flex-direction:column;gap:0px;line-height:1;}
+.price-arrow{font-size:10px;color:#aaa;cursor:pointer;padding:1px 3px;}
+.price-arrow.active-arrow{color:#1976d2;}
+
+/* FILTER PANEL */
+.filter-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;}
+.filter-overlay.open{display:block;}
+.filter-panel{position:fixed;top:0;right:0;bottom:0;width:75%;max-width:300px;background:white;z-index:600;overflow-y:auto;transform:translateX(100%);transition:transform 0.3s ease;box-shadow:-4px 0 20px rgba(0,0,0,0.15);}
+.filter-panel.open{transform:translateX(0);}
+.filter-header{padding:16px;border-bottom:1px solid #eee;font-weight:700;font-size:15px;color:#222;}
+.price-range-section{padding:16px;}
+.price-range-title{font-size:13px;font-weight:700;color:#333;margin-bottom:12px;}
+.price-inputs{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.price-input{flex:1;border:1px solid #ddd;border-radius:8px;padding:9px 10px;font-size:13px;outline:none;color:#333;}
+.price-input:focus{border-color:#1976d2;}
+.price-dash{color:#aaa;font-size:16px;}
+.price-btns{display:flex;gap:8px;}
+.price-clear-btn{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;background:white;color:#666;font-size:13px;cursor:pointer;font-weight:600;}
+.price-confirm-btn{flex:1;padding:10px;border:none;border-radius:8px;background:#1976d2;color:white;font-size:13px;cursor:pointer;font-weight:600;}
+.filter-divider{height:8px;background:#f5f5f5;}
+.cat-list{padding:0;}
+.cat-item{padding:15px 16px;font-size:14px;color:#333;cursor:pointer;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;}
+.cat-item:hover{background:#f5f9ff;}
+.cat-item.active{color:#1976d2;font-weight:600;background:#f0f7ff;}
+
+/* PRODUCT GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 10px 80px;}
+.pcard{background:white;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.07);cursor:pointer;transition:transform 0.15s,box-shadow 0.15s;position:relative;}
+.pcard:active{transform:scale(0.97);}
+.pcard:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+.pcard-img{width:100%;height:150px;object-fit:cover;display:block;background:#f5f5f5;}
+.pcard-info{padding:9px 10px 10px;}
+.pcard-name{font-size:12px;color:#333;margin:0 0 6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:33px;}
+.pcard-price{color:#1976d2;font-weight:700;font-size:14px;margin:0 0 8px;}
+.sell-now-btn{width:100%;padding:7px;border:none;border-radius:8px;background:linear-gradient(135deg,#ff6b35,#f7234a);color:white;font-size:12px;font-weight:700;cursor:pointer;transition:opacity 0.2s;letter-spacing:0.3px;}
+.sell-now-btn:hover{opacity:0.88;}
+
+/* LOADING */
+.loading-wrap{text-align:center;padding:60px 20px;grid-column:1/-1;}
+.loading-spinner{width:36px;height:36px;border:3px solid #e0e0e0;border-top-color:#1976d2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.no-results{grid-column:1/-1;text-align:center;padding:60px 20px;color:#aaa;font-size:14px;}
+
+/* SELL NOW POPUP */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center;}
+.popup-overlay.open{display:flex;}
+.popup-box{background:white;border-radius:18px;width:88%;max-width:360px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.2);animation:popIn 0.25s ease;}
+@keyframes popIn{from{transform:scale(0.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+.popup-header{background:linear-gradient(135deg,#1976d2,#1565c0);color:white;padding:16px 18px;text-align:center;}
+.popup-header h3{font-size:15px;font-weight:700;margin:0 0 4px;}
+.popup-header p{font-size:12px;opacity:0.85;margin:0;}
+.popup-body{padding:18px;}
+.profit-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:10px;margin-bottom:8px;}
+.profit-row.supplier{background:#fff3e0;}
+.profit-row.retail{background:#e3f2fd;}
+.profit-row.earn{background:#e8f5e9;}
+.profit-label{font-size:13px;color:#555;font-weight:600;}
+.profit-value{font-size:14px;font-weight:700;}
+.profit-row.supplier .profit-value{color:#e65100;}
+.profit-row.retail .profit-value{color:#1976d2;}
+.profit-row.earn .profit-value{color:#2e7d32;}
+.popup-footer{display:flex;gap:10px;padding:0 18px 18px;}
+.popup-cancel{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;background:white;color:#666;font-size:14px;cursor:pointer;font-weight:600;}
+.popup-ok{flex:2;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;cursor:pointer;font-weight:700;}
+.popup-ok:active{opacity:0.88;}
+
+/* SUCCESS TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:12px 24px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2);}
+.toast.show{display:block;animation:fadeInUp 0.3s ease;}
+@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,20px);}to{opacity:1;transform:translate(-50%,0);}}
+
+/* LOAD MORE */
+.load-more{text-align:center;padding:15px;grid-column:1/-1;}
+.load-more-btn{padding:11px 32px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:13px;font-weight:700;cursor:pointer;}
+.load-more-btn:hover{background:#e3f2fd;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <span class="h-icon" onclick="history.back()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <h2>Listings</h2>
+  </div>
+  <div class="header-right">
+    <span class="h-icon" onclick="window.location.href='/dashboard?search=1'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
+    <span class="h-icon" onclick="window.location.href='/dashboard?messages=1'" style="position:relative;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span style="position:absolute;top:-4px;right:-5px;background:#ff3b30;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;">2</span>
+    </span>
+    <span class="h-icon" onclick="window.location.href='/dashboard?account=1'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </span>
+    <span class="h-icon" onclick="window.location.href='/dashboard?lang=1'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </span>
+  </div>
+</div>
+
+<!-- SORT & FILTER BAR -->
+<div class="top-bar" style="position:relative;">
+  <button class="sort-btn" id="sortBtn" onclick="toggleSort()">
+    Sort <span class="sort-arrow" id="sortArrow">▼</span>
+  </button>
+  <button class="filter-btn" onclick="openFilter()">Filter</button>
+
+  <!-- SORT DROPDOWN -->
+  <div class="sort-dropdown" id="sortDropdown">
+    <div class="sort-option active" id="sortRec" onclick="setSort('recommendation')">
+      Recommendation
+    </div>
+    <div class="sort-option" id="sortSales" onclick="setSort('sales')">
+      Sales
+    </div>
+    <div class="sort-option" id="sortPrice" onclick="togglePriceSort()">
+      Price
+      <div class="price-arrows">
+        <span class="price-arrow" id="priceUp" onclick="event.stopPropagation();setPriceSort('asc')">▲</span>
+        <span class="price-arrow" id="priceDown" onclick="event.stopPropagation();setPriceSort('desc')">▼</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ITEMS COUNT -->
+<div class="items-count" id="itemsCount">Loading...</div>
+
+<!-- PRODUCT GRID -->
+<div class="grid" id="productGrid">
+  <div class="loading-wrap">
+    <div class="loading-spinner"></div>
+    <p style="color:#aaa;font-size:13px;">Loading products...</p>
+  </div>
+</div>
+
+<!-- FILTER OVERLAY & PANEL -->
+<div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
+<div class="filter-panel" id="filterPanel">
+  <div class="filter-header">Price range</div>
+  <div class="price-range-section">
+    <div class="price-inputs">
+      <input class="price-input" id="priceMin" type="number" placeholder="Lowest p" min="0">
+      <span class="price-dash">—</span>
+      <input class="price-input" id="priceMax" type="number" placeholder="Highest p" min="0">
+    </div>
+    <div class="price-btns">
+      <button class="price-clear-btn" onclick="clearPriceFilter()">Clear</button>
+      <button class="price-confirm-btn" onclick="applyPriceFilter()">Confirm</button>
+    </div>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="cat-list" id="catList">
+    <div class="cat-item active" data-cat="all" onclick="selectCat(this,'all')">All Categories</div>
+    <div class="cat-item" data-cat="28" onclick="selectCat(this,'28')">Smart Home</div>
+    <div class="cat-item" data-cat="31" onclick="selectCat(this,'31')">Luxury Brands</div>
+    <div class="cat-item" data-cat="32" onclick="selectCat(this,'32')">Beauty and Personal Care</div>
+    <div class="cat-item" data-cat="34" onclick="selectCat(this,'34')">Men's Fashion</div>
+    <div class="cat-item" data-cat="35" onclick="selectCat(this,'35')">Health and Household</div>
+    <div class="cat-item" data-cat="36" onclick="selectCat(this,'36')">Home and Kitchen</div>
+    <div class="cat-item" data-cat="17" onclick="selectCat(this,'17')">Clothing & Accessories</div>
+    <div class="cat-item" data-cat="19" onclick="selectCat(this,'19')">Medical Bags and Sunglasses</div>
+    <div class="cat-item" data-cat="20" onclick="selectCat(this,'20')">Shoes</div>
+    <div class="cat-item" data-cat="21" onclick="selectCat(this,'21')">Watches</div>
+    <div class="cat-item" data-cat="22" onclick="selectCat(this,'22')">Jewelry</div>
+    <div class="cat-item" data-cat="27" onclick="selectCat(this,'27')">Electronics</div>
+  </div>
+</div>
+
+<!-- SELL NOW POPUP -->
+<div class="popup-overlay" id="sellPopup">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h3 id="popupTitle">Add to your store</h3>
+      <p id="popupSubtitle">Review pricing details</p>
+    </div>
+    <div class="popup-body">
+      <div class="profit-row supplier">
+        <span class="profit-label">🏭 Supplier price</span>
+        <span class="profit-value" id="popupSupplier">—</span>
+      </div>
+      <div class="profit-row retail">
+        <span class="profit-label">🏷️ Sell price</span>
+        <span class="profit-value" id="popupRetail">—</span>
+      </div>
+      <div class="profit-row earn">
+        <span class="profit-label">💰 Your profit</span>
+        <span class="profit-value" id="popupProfit">—</span>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="popup-cancel" onclick="closePopup()">Cancel</button>
+      <button class="popup-ok" onclick="confirmAddProduct()">OK - Add to Store</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== DATA ======
+var ALL_PRODUCTS = [];
+var FILTERED = [];
+var PAGE_SIZE = 20;
+var currentPage = 0;
+var sortMode = 'recommendation';
+var priceSortDir = null; // 'asc' or 'desc'
+var activeCat = 'all';
+var priceMin = null;
+var priceMax = null;
+var selectedProduct = null;
+var VIP_COMMISSION = [15,17,20,22,25,40];
+var myVipLevel = 0;
+var myToken = localStorage.getItem("token") || "";
+
+// ====== LOAD ALL PRODUCTS ======
+var CATEGORIES = [17,19,20,21,22,27,28,31,32,34,35,36];
+var loadedCount = 0;
+
+async function loadAllProducts(){
+    var promises = CATEGORIES.map(function(catId){
+        return fetch("/products-by-cat/" + catId)
+            .then(function(r){ return r.json(); })
+            .then(function(data){ return data.products || []; })
+            .catch(function(){ return []; });
+    });
+    var results = await Promise.all(promises);
+    ALL_PRODUCTS = [];
+    results.forEach(function(prods){ ALL_PRODUCTS = ALL_PRODUCTS.concat(prods); });
+    applyFiltersAndRender(true);
+}
+
+// Load VIP level
+async function loadVip(){
+    try {
+        var r = await fetch("/my-vip-info", { headers: { "Authorization": "Bearer " + myToken } });
+        var d = await r.json();
+        if(d.success) myVipLevel = d.vipLevel || 0;
+    } catch(e){}
+}
+
+// ====== FILTER & SORT ======
+function applyFiltersAndRender(reset){
+    if(reset) currentPage = 0;
+    var list = ALL_PRODUCTS.slice();
+
+    // Category filter
+    if(activeCat !== 'all'){
+        list = list.filter(function(p){ return String(p.category_id) === String(activeCat); });
+    }
+
+    // Price filter
+    if(priceMin !== null){ list = list.filter(function(p){ return parseFloat(p.price) >= priceMin; }); }
+    if(priceMax !== null){ list = list.filter(function(p){ return parseFloat(p.price) <= priceMax; }); }
+
+    // Sort
+    if(sortMode === 'sales'){
+        list.sort(function(a,b){ return (b.sales||0)-(a.sales||0); });
+    } else if(sortMode === 'price'){
+        if(priceSortDir === 'asc') list.sort(function(a,b){ return parseFloat(a.price)-parseFloat(b.price); });
+        else list.sort(function(a,b){ return parseFloat(b.price)-parseFloat(a.price); });
+    } else {
+        // recommendation: shuffle-ish by rating then sales
+        list.sort(function(a,b){ return ((b.rating||0)+(b.sales||0))-((a.rating||0)+(a.sales||0)); });
+    }
+
+    FILTERED = list;
+    document.getElementById("itemsCount").innerText = list.length.toLocaleString() + " Items";
+    renderPage(true);
+}
+
+function renderPage(reset){
+    var grid = document.getElementById("productGrid");
+    if(reset){ grid.innerHTML = ""; currentPage = 0; }
+    if(FILTERED.length === 0){
+        grid.innerHTML = '<div class="no-results">No products found</div>';
+        return;
+    }
+    var start = currentPage * PAGE_SIZE;
+    var end = Math.min(start + PAGE_SIZE, FILTERED.length);
+    var fragment = document.createDocumentFragment();
+
+    for(var i = start; i < end; i++){
+        var p = FILTERED[i];
+        var card = buildCard(p);
+        fragment.appendChild(card);
+    }
+
+    // Load more button
+    if(end < FILTERED.length){
+        var lm = document.createElement("div");
+        lm.className = "load-more";
+        lm.innerHTML = '<button class="load-more-btn" onclick="loadMore()">Load more</button>';
+        fragment.appendChild(lm);
+    }
+
+    grid.appendChild(fragment);
+    currentPage++;
+}
+
+function loadMore(){
+    var lm = document.querySelector(".load-more");
+    if(lm) lm.remove();
+    renderPage(false);
+}
+
+function buildCard(p){
+    var imgSrc = p.images && p.images.length > 0
+        ? "/product-image/" + p.folder + "/" + p.images[0]
+        : "https://via.placeholder.com/150x150?text=No+Image";
+
+    var card = document.createElement("div");
+    card.className = "pcard";
+
+    var img = document.createElement("img");
+    img.className = "pcard-img";
+    img.src = imgSrc;
+    img.alt = p.title;
+    img.onerror = function(){ this.src = "https://via.placeholder.com/150x150?text=No+Image"; };
+    img.loading = "lazy";
+    img.onclick = function(e){ openProductDetail(p); };
+
+    var info = document.createElement("div");
+    info.className = "pcard-info";
+    info.innerHTML =
+        '<p class="pcard-name">' + escHtml(p.title) + '</p>' +
+        '<p class="pcard-price">US$' + parseFloat(p.price).toFixed(2) + '</p>' +
+        '<button class="sell-now-btn" onclick="event.stopPropagation();openSellPopup(' + JSON.stringify(JSON.stringify(p)) + ')">Sell Now</button>';
+
+    card.appendChild(img);
+    card.appendChild(info);
+    return card;
+}
+
+function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// ====== SORT ======
+function toggleSort(){
+    var dd = document.getElementById("sortDropdown");
+    var arrow = document.getElementById("sortArrow");
+    dd.classList.toggle("open");
+    arrow.style.transform = dd.classList.contains("open") ? "rotate(180deg)" : "";
+}
+
+function setSort(mode){
+    sortMode = mode;
+    priceSortDir = null;
+    document.querySelectorAll(".sort-option").forEach(function(el){ el.classList.remove("active"); });
+    if(mode === 'recommendation') document.getElementById("sortRec").classList.add("active");
+    else if(mode === 'sales') document.getElementById("sortSales").classList.add("active");
+    document.getElementById("sortDropdown").classList.remove("open");
+    document.getElementById("sortArrow").style.transform = "";
+    applyFiltersAndRender(true);
+}
+
+function togglePriceSort(){
+    sortMode = 'price';
+    if(!priceSortDir) priceSortDir = 'asc';
+    document.querySelectorAll(".sort-option").forEach(function(el){ el.classList.remove("active"); });
+    document.getElementById("sortPrice").classList.add("active");
+    updatePriceArrows();
+    document.getElementById("sortDropdown").classList.remove("open");
+    document.getElementById("sortArrow").style.transform = "";
+    applyFiltersAndRender(true);
+}
+
+function setPriceSort(dir){
+    sortMode = 'price';
+    priceSortDir = dir;
+    document.querySelectorAll(".sort-option").forEach(function(el){ el.classList.remove("active"); });
+    document.getElementById("sortPrice").classList.add("active");
+    updatePriceArrows();
+    document.getElementById("sortDropdown").classList.remove("open");
+    document.getElementById("sortArrow").style.transform = "";
+    applyFiltersAndRender(true);
+}
+
+function updatePriceArrows(){
+    document.getElementById("priceUp").className = "price-arrow" + (priceSortDir==="asc" ? " active-arrow" : "");
+    document.getElementById("priceDown").className = "price-arrow" + (priceSortDir==="desc" ? " active-arrow" : "");
+}
+
+// ====== FILTER ======
+function openFilter(){
+    document.getElementById("filterOverlay").classList.add("open");
+    document.getElementById("filterPanel").classList.add("open");
+}
+function closeFilter(){
+    document.getElementById("filterOverlay").classList.remove("open");
+    document.getElementById("filterPanel").classList.remove("open");
+}
+function selectCat(el, cat){
+    activeCat = cat;
+    document.querySelectorAll(".cat-item").forEach(function(i){ i.classList.remove("active"); });
+    el.classList.add("active");
+    closeFilter();
+    applyFiltersAndRender(true);
+}
+function clearPriceFilter(){
+    priceMin = null; priceMax = null;
+    document.getElementById("priceMin").value = "";
+    document.getElementById("priceMax").value = "";
+}
+function applyPriceFilter(){
+    var mn = parseFloat(document.getElementById("priceMin").value);
+    var mx = parseFloat(document.getElementById("priceMax").value);
+    priceMin = isNaN(mn) ? null : mn;
+    priceMax = isNaN(mx) ? null : mx;
+    closeFilter();
+    applyFiltersAndRender(true);
+}
+
+// ====== SELL NOW POPUP ======
+function openSellPopup(productJson){
+    var p = JSON.parse(productJson);
+    selectedProduct = p;
+    var price = parseFloat(p.price);
+    var commPct = VIP_COMMISSION[myVipLevel] || 15;
+    var supplierPrice = price * (1 - commPct/100);
+    var profit = price - supplierPrice;
+
+    document.getElementById("popupTitle").innerText = p.title.substring(0,40) + (p.title.length>40?"...":"");
+    document.getElementById("popupSubtitle").innerText = "VIP " + myVipLevel + " — " + commPct + "% discount from supplier";
+    document.getElementById("popupSupplier").innerText = "US$" + supplierPrice.toFixed(2);
+    document.getElementById("popupRetail").innerText = "US$" + price.toFixed(2);
+    document.getElementById("popupProfit").innerText = "US$" + profit.toFixed(2);
+    document.getElementById("sellPopup").classList.add("open");
+}
+function closePopup(){
+    document.getElementById("sellPopup").classList.remove("open");
+    selectedProduct = null;
+}
+async function confirmAddProduct(){
+    if(!selectedProduct) return;
+    var btn = document.querySelector(".popup-ok");
+    btn.disabled = true;
+    btn.innerText = "Adding...";
+    try {
+        var r = await fetch("/add-seller-product", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + myToken },
+            body: JSON.stringify({ product: selectedProduct })
+        });
+        var d = await r.json();
+        closePopup();
+        if(d.success){
+            showToast("✅ Added to your store!");
+        } else {
+            showToast("⚠️ " + (d.message || "Failed to add"));
+        }
+    } catch(e){
+        closePopup();
+        showToast("⚠️ Network error");
+    }
+    btn.disabled = false;
+    btn.innerText = "OK - Add to Store";
+}
+
+// ====== PRODUCT DETAIL ======
+function openProductDetail(p){
+    localStorage.setItem("listingProduct", JSON.stringify(p));
+    window.location.href = "/listing-product-detail";
+}
+
+// ====== TOAST ======
+function showToast(msg){
+    var t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 3000);
+}
+
+// ====== CLOSE SORT ON OUTSIDE CLICK ======
+document.addEventListener("click", function(e){
+    if(!e.target.closest(".sort-btn") && !e.target.closest(".sort-dropdown")){
+        document.getElementById("sortDropdown").classList.remove("open");
+        document.getElementById("sortArrow").style.transform = "";
+    }
+});
+
+// ====== INIT ======
+(async function(){
+    await loadVip();
+    await loadAllProducts();
+})();
+</script>
+</body>
+</html>`);
+});
+
+// ---- Serve products by category ----
+app.get("/products-by-cat/:catId", (req, res) => {
+    const catId = parseInt(req.params.catId);
+    const catFiles = {
+        17: "products_17_clothing.json",
+        19: "products_19_medical.json",
+        20: "products_20_shoes.json",
+        21: "products_21_watches.json",
+        22: "products_22_jewelry.json",
+        27: "products_27_electronics.json",
+        28: "products_28_smarthome.json",
+        31: "products_31_luxury.json",
+        32: "products_32_beauty.json",
+        34: "products_34_mens.json",
+        35: "products_35_health.json",
+        36: "products_36_home.json"
+    };
+    const file = catFiles[catId];
+    if(!file) return res.json({ products: [] });
+    try {
+        const data = JSON.parse(fs.readFileSync(path.join(__dirname, file)));
+        res.json({ products: data });
+    } catch(e){
+        res.json({ products: [] });
+    }
+});
+
+// ---- Serve product images ----
+app.get("/product-image/:folder/:img", (req, res) => {
+    const folder = req.params.folder;
+    const img = req.params.img;
+    const base = path.join(__dirname, "product_images");
+    const fp = path.join(base, folder, img);
+    if(fs.existsSync(fp)){
+        res.sendFile(fp);
+    } else {
+        // Return placeholder
+        res.redirect("https://via.placeholder.com/300x300?text=Product");
+    }
+});
+
+
+
+// =================== LISTING PRODUCT DETAIL PAGE ===================
+app.get("/listing-product-detail", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Product - TikTok Mall</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;padding-bottom:80px;}
+
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.h-icons{display:flex;align-items:center;gap:14px;}
+.h-icon{cursor:pointer;display:inline-flex;align-items:center;}
+
+/* SLIDER */
+.slider-wrap{background:white;position:relative;overflow:hidden;height:300px;}
+.slider-imgs{display:flex;height:100%;transition:transform 0.4s ease;}
+.slider-img{min-width:100%;height:300px;object-fit:cover;display:block;background:#f0f0f0;}
+.slider-dots{display:flex;justify-content:center;gap:6px;padding:10px;background:white;}
+.dot{width:6px;height:6px;border-radius:50%;background:#ddd;cursor:pointer;transition:background 0.2s,transform 0.2s;}
+.dot.active{background:#1976d2;transform:scale(1.3);}
+.slide-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.25);color:white;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:14px;}
+.slide-arrow.left{left:8px;}
+.slide-arrow.right{right:8px;}
+
+/* INFO */
+.info-card{background:white;margin:8px 0 0;padding:14px 15px;}
+.product-title{font-size:15px;font-weight:700;color:#222;line-height:1.5;margin-bottom:10px;}
+.price-row{display:flex;align-items:center;gap:12px;}
+.product-price{color:#1976d2;font-size:24px;font-weight:800;}
+.badge-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.badge{background:#f0f7ff;color:#1976d2;font-size:11px;padding:4px 10px;border-radius:12px;font-weight:600;}
+.badge.green{background:#e8f5e9;color:#2e7d32;}
+.badge.orange{background:#fff3e0;color:#e65100;}
+
+/* SPECS */
+.specs-card{background:white;margin-top:8px;}
+.spec-row{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;border-bottom:1px solid #f5f5f5;font-size:13px;}
+.spec-key{color:#888;}
+.spec-val{color:#333;font-weight:600;text-align:right;}
+
+/* PROFIT PREVIEW */
+.profit-card{background:white;margin-top:8px;padding:15px;}
+.profit-card h4{font-size:13px;font-weight:700;color:#333;margin-bottom:12px;}
+.profit-row{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-radius:10px;margin-bottom:7px;}
+.profit-row.s{background:#fff3e0;}
+.profit-row.r{background:#e3f2fd;}
+.profit-row.e{background:#e8f5e9;}
+.p-label{font-size:12px;color:#666;font-weight:600;}
+.p-val{font-size:13px;font-weight:800;}
+.p-val.s{color:#e65100;}
+.p-val.r{color:#1976d2;}
+.p-val.e{color:#2e7d32;}
+
+/* THUMBNAILS ROW */
+.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}
+.thumb{width:58px;height:58px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;transition:border-color 0.2s;}
+.thumb.active{border-color:#1976d2;}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;gap:10px;padding:10px 15px;border-top:1px solid #eee;box-shadow:0 -2px 12px rgba(0,0,0,0.08);}
+.add-store-btn{flex:1;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#ff6b35,#f7234a);color:white;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.2s;}
+.add-store-btn:active{opacity:0.85;}
+
+/* POPUP */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;align-items:center;justify-content:center;}
+.popup-overlay.open{display:flex;}
+.popup-box{background:white;border-radius:18px;width:88%;max-width:360px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.2);animation:popIn 0.25s ease;}
+@keyframes popIn{from{transform:scale(0.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+.popup-header{background:linear-gradient(135deg,#1976d2,#1565c0);color:white;padding:16px 18px;text-align:center;}
+.popup-header h3{font-size:15px;font-weight:700;margin:0 0 4px;}
+.popup-header p{font-size:12px;opacity:0.85;margin:0;}
+.popup-body{padding:18px;}
+.pr-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:10px;margin-bottom:8px;}
+.pr-row.s{background:#fff3e0;}
+.pr-row.r{background:#e3f2fd;}
+.pr-row.e{background:#e8f5e9;}
+.pr-label{font-size:13px;color:#555;font-weight:600;}
+.pr-val{font-size:14px;font-weight:700;}
+.pr-val.s{color:#e65100;}
+.pr-val.r{color:#1976d2;}
+.pr-val.e{color:#2e7d32;}
+.popup-footer{display:flex;gap:10px;padding:0 18px 18px;}
+.p-cancel{flex:1;padding:12px;border:1px solid #ddd;border-radius:10px;background:white;color:#666;font-size:14px;cursor:pointer;font-weight:600;}
+.p-ok{flex:2;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;cursor:pointer;font-weight:700;}
+
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:12px 24px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2);}
+.toast.show{display:block;animation:fadeInUp 0.3s ease;}
+@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,20px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="h-icon" onclick="history.back()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <span style="font-size:15px;font-weight:700;">Product Detail</span>
+  <span class="h-icon" onclick="window.location.href='/dashboard'">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </span>
+</div>
+
+<!-- SLIDER -->
+<div class="slider-wrap">
+  <div class="slider-imgs" id="sliderImgs"></div>
+  <button class="slide-arrow left" onclick="slide(-1)">&#8249;</button>
+  <button class="slide-arrow right" onclick="slide(1)">&#8250;</button>
+</div>
+<div class="thumbs" id="thumbsRow"></div>
+<div class="slider-dots" id="sliderDots"></div>
+
+<!-- INFO -->
+<div class="info-card">
+  <div class="product-title" id="productTitle">Loading...</div>
+  <div class="price-row">
+    <span class="product-price" id="productPrice"></span>
+  </div>
+  <div class="badge-row">
+    <span class="badge green">Free Shipping</span>
+    <span class="badge green">Free Return</span>
+    <span class="badge orange">⭐ 5.0</span>
+    <span class="badge" id="catBadge"></span>
+  </div>
+</div>
+
+<!-- SPECS -->
+<div class="specs-card">
+  <div class="spec-row"><span class="spec-key">Category</span><span class="spec-val" id="specCat">—</span></div>
+  <div class="spec-row"><span class="spec-key">Shipping fees</span><span class="spec-val">Free shipping</span></div>
+  <div class="spec-row"><span class="spec-key">Guarantee</span><span class="spec-val">Free return</span></div>
+  <div class="spec-row"><span class="spec-key">Sales</span><span class="spec-val" id="specSales">0</span></div>
+</div>
+
+<!-- PROFIT PREVIEW -->
+<div class="profit-card">
+  <h4>💼 Your profit breakdown</h4>
+  <div class="profit-row s"><span class="p-label">🏭 Supplier price</span><span class="p-val s" id="supplierPriceEl">—</span></div>
+  <div class="profit-row r"><span class="p-label">🏷️ Sell in your store</span><span class="p-val r" id="retailPriceEl">—</span></div>
+  <div class="profit-row e"><span class="p-label">💰 Your profit</span><span class="p-val e" id="profitEl">—</span></div>
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <button class="add-store-btn" onclick="openAddPopup()">➕ Add to My Store</button>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="addPopup">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h3>Add to your store</h3>
+      <p id="popSubtitle">Review pricing before adding</p>
+    </div>
+    <div class="popup-body">
+      <div class="pr-row s"><span class="pr-label">🏭 Supplier price</span><span class="pr-val s" id="popSupplier">—</span></div>
+      <div class="pr-row r"><span class="pr-label">🏷️ Sell price</span><span class="pr-val r" id="popRetail">—</span></div>
+      <div class="pr-row e"><span class="pr-label">💰 Your profit</span><span class="pr-val e" id="popProfit">—</span></div>
+    </div>
+    <div class="popup-footer">
+      <button class="p-cancel" onclick="closePopup()">Cancel</button>
+      <button class="p-ok" id="popOkBtn" onclick="confirmAdd()">OK - Add to Store</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var p = JSON.parse(localStorage.getItem("listingProduct") || "null");
+var VIP_COMMISSION = [15,17,20,22,25,40];
+var myVipLevel = 0;
+var myToken = localStorage.getItem("token") || "";
+var currentSlide = 0;
+var imgs = [];
+
+async function init(){
+    // Load VIP
+    try {
+        var r = await fetch("/my-vip-info", { headers: { "Authorization": "Bearer " + myToken } });
+        var d = await r.json();
+        if(d.success) myVipLevel = d.vipLevel || 0;
+    } catch(e){}
+
+    if(!p){ document.getElementById("productTitle").innerText = "Product not found"; return; }
+
+    // Images
+    imgs = (p.images && p.images.length > 0)
+        ? p.images.map(function(img){ return "/product-image/" + p.folder + "/" + img; })
+        : ["https://via.placeholder.com/300x300?text=No+Image"];
+
+    buildSlider();
+
+    // Info
+    document.getElementById("productTitle").innerText = p.title;
+    document.getElementById("productPrice").innerText = "US$" + parseFloat(p.price).toFixed(2);
+    document.getElementById("catBadge").innerText = p.category_name || "";
+    document.getElementById("specCat").innerText = p.category_name || "—";
+    document.getElementById("specSales").innerText = p.sales || 0;
+
+    // Profit
+    var price = parseFloat(p.price);
+    var commPct = VIP_COMMISSION[myVipLevel] || 15;
+    var supplier = price * (1 - commPct/100);
+    var profit = price - supplier;
+    document.getElementById("supplierPriceEl").innerText = "US$" + supplier.toFixed(2);
+    document.getElementById("retailPriceEl").innerText = "US$" + price.toFixed(2);
+    document.getElementById("profitEl").innerText = "US$" + profit.toFixed(2);
+
+    // Auto-slide every 3s
+    setInterval(function(){ slide(1); }, 3000);
+}
+
+function buildSlider(){
+    var container = document.getElementById("sliderImgs");
+    var thumbs = document.getElementById("thumbsRow");
+    var dots = document.getElementById("sliderDots");
+    container.innerHTML = "";
+    thumbs.innerHTML = "";
+    dots.innerHTML = "";
+
+    imgs.forEach(function(src, i){
+        var img = document.createElement("img");
+        img.className = "slider-img";
+        img.src = src;
+        img.onerror = function(){ this.src = "https://via.placeholder.com/300x300?text=No+Image"; };
+        container.appendChild(img);
+
+        var thumb = document.createElement("img");
+        thumb.className = "thumb" + (i===0?" active":"");
+        thumb.src = src;
+        thumb.onerror = function(){ this.src = "https://via.placeholder.com/60x60?text=img"; };
+        thumb.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
+        thumbs.appendChild(thumb);
+
+        var dot = document.createElement("span");
+        dot.className = "dot" + (i===0?" active":"");
+        dot.onclick = (function(idx){ return function(){ goTo(idx); }; })(i);
+        dots.appendChild(dot);
+    });
+}
+
+function slide(dir){
+    goTo((currentSlide + dir + imgs.length) % imgs.length);
+}
+
+function goTo(idx){
+    currentSlide = idx;
+    document.getElementById("sliderImgs").style.transform = "translateX(-" + (idx * 100) + "%)";
+    document.querySelectorAll(".thumb").forEach(function(t,i){ t.classList.toggle("active", i===idx); });
+    document.querySelectorAll(".dot").forEach(function(d,i){ d.classList.toggle("active", i===idx); });
+}
+
+function openAddPopup(){
+    var price = parseFloat(p.price);
+    var commPct = VIP_COMMISSION[myVipLevel] || 15;
+    var supplier = price * (1 - commPct/100);
+    var profit = price - supplier;
+    document.getElementById("popSubtitle").innerText = "VIP " + myVipLevel + " — " + commPct + "% supplier discount";
+    document.getElementById("popSupplier").innerText = "US$" + supplier.toFixed(2);
+    document.getElementById("popRetail").innerText = "US$" + price.toFixed(2);
+    document.getElementById("popProfit").innerText = "US$" + profit.toFixed(2);
+    document.getElementById("addPopup").classList.add("open");
+}
+function closePopup(){ document.getElementById("addPopup").classList.remove("open"); }
+
+async function confirmAdd(){
+    var btn = document.getElementById("popOkBtn");
+    btn.disabled = true; btn.innerText = "Adding...";
+    try {
+        var r = await fetch("/add-seller-product", {
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            body: JSON.stringify({ product: p })
+        });
+        var d = await r.json();
+        closePopup();
+        showToast(d.success ? "✅ Added to your store!" : "⚠️ " + (d.message||"Failed"));
+    } catch(e){ closePopup(); showToast("⚠️ Network error"); }
+    btn.disabled = false; btn.innerText = "OK - Add to Store";
+}
+
+function showToast(msg){
+    var t = document.getElementById("toast");
+    t.innerText = msg;
+    t.classList.add("show");
+    setTimeout(function(){ t.classList.remove("show"); }, 3000);
+}
+
+init();
+</script>
+</body>
+</html>`);
+});
+
+
+// =================== MANAGE PRODUCT PAGE ===================
+app.get("/manage-product", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Manage Products</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.header h2{font-size:16px;font-weight:700;flex:1;}
+.limit-bar{background:white;margin:12px 12px 0;border-radius:12px;padding:14px 15px;box-shadow:0 1px 6px rgba(0,0,0,0.07);}
+.limit-text{font-size:13px;color:#555;margin-bottom:8px;}
+.limit-progress{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;}
+.limit-fill{height:100%;background:linear-gradient(90deg,#1976d2,#42a5f5);border-radius:3px;transition:width 0.5s;}
+.limit-nums{display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:#aaa;}
+.list{padding:12px;}
+.pitem{background:white;border-radius:14px;display:flex;align-items:center;gap:12px;padding:11px 13px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);cursor:pointer;transition:transform 0.15s;}
+.pitem:active{transform:scale(0.98);}
+.pitem-img{width:60px;height:60px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f0f0f0;}
+.pitem-info{flex:1;min-width:0;}
+.pitem-name{font-size:13px;color:#222;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;}
+.pitem-cat{font-size:11px;color:#888;}
+.pitem-price{font-size:13px;color:#1976d2;font-weight:700;margin-top:3px;}
+.delete-btn{background:#fff5f5;border:1px solid #ffcccc;color:#e53935;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:16px;font-weight:700;transition:background 0.2s;}
+.delete-btn:hover{background:#ffebee;}
+.empty{text-align:center;padding:60px 20px;color:#aaa;}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.empty p{font-size:14px;}
+.empty a{color:#1976d2;text-decoration:none;font-weight:600;}
+.loading-wrap{text-align:center;padding:50px;color:#aaa;}
+.loading-spinner{width:32px;height:32px;border:3px solid #e0e0e0;border-top-color:#1976d2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#e53935;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;}
+.toast.show{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+<div class="header">
+  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <h2>Manage Products</h2>
+  <span style="font-size:13px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;" id="countBadge">0 / 20</span>
+</div>
+
+<div class="limit-bar">
+  <div class="limit-text">Products in your store <span id="limitText" style="font-weight:700;color:#1976d2;"></span></div>
+  <div class="limit-progress"><div class="limit-fill" id="limitFill" style="width:0%"></div></div>
+  <div class="limit-nums"><span>0</span><span id="maxText">20</span></div>
+</div>
+
+<div class="list" id="productList">
+  <div class="loading-wrap"><div class="loading-spinner"></div><p>Loading...</p></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var myToken = localStorage.getItem("token") || "";
+var VIP_PRODUCTS = [20,35,80,120,300,1000];
+var myVipLevel = 0;
+
+async function load(){
+    try {
+        var r1 = await fetch("/my-vip-info", { headers: {"Authorization":"Bearer "+myToken} });
+        var d1 = await r1.json();
+        if(d1.success) myVipLevel = d1.vipLevel || 0;
+    } catch(e){}
+
+    var maxP = VIP_PRODUCTS[myVipLevel] || 20;
+
+    try {
+        var r = await fetch("/my-seller-products", { headers: {"Authorization":"Bearer "+myToken} });
+        var d = await r.json();
+        var prods = d.products || [];
+
+        document.getElementById("countBadge").innerText = prods.length + " / " + maxP;
+        document.getElementById("limitText").innerText = prods.length + " of " + maxP;
+        document.getElementById("limitFill").style.width = Math.min(100, (prods.length/maxP)*100) + "%";
+        document.getElementById("maxText").innerText = maxP;
+
+        var list = document.getElementById("productList");
+        if(prods.length === 0){
+            list.innerHTML = '<div class="empty"><div class="empty-icon">🛍️</div><p>No products yet.<br><a href="/listings">Browse Listings</a> to add products.</p></div>';
+            return;
+        }
+        list.innerHTML = "";
+        prods.forEach(function(p){
+            var imgSrc = p.images && p.images.length > 0
+                ? "/product-image/" + p.folder + "/" + p.images[0]
+                : "https://via.placeholder.com/60x60?text=P";
+            var item = document.createElement("div");
+            item.className = "pitem";
+            item.innerHTML =
+                '<img class="pitem-img" src="' + imgSrc + '" onerror="this.src=\\'https://via.placeholder.com/60x60\\'" loading="lazy">' +
+                '<div class="pitem-info">' +
+                  '<div class="pitem-name">' + escHtml(p.title) + '</div>' +
+                  '<div class="pitem-cat">' + (p.category_name||"") + '</div>' +
+                  '<div class="pitem-price">US$' + parseFloat(p.price).toFixed(2) + '</div>' +
+                '</div>' +
+                '<div class="delete-btn" onclick="event.stopPropagation();deleteProduct(' + p.id + ')">✕</div>';
+            item.onclick = function(){
+                localStorage.setItem("listingProduct", JSON.stringify(p));
+                window.location.href = "/listing-product-detail";
+            };
+            list.appendChild(item);
+        });
+    } catch(e){
+        document.getElementById("productList").innerHTML = '<div class="empty"><p>Error loading products</p></div>';
+    }
+}
+
+async function deleteProduct(productId){
+    if(!confirm("Remove this product from your store?")) return;
+    try {
+        var r = await fetch("/remove-seller-product", {
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            body: JSON.stringify({ productId })
+        });
+        var d = await r.json();
+        if(d.success){ showToast("🗑️ Product removed"); load(); }
+        else showToast("⚠️ Failed to remove");
+    } catch(e){ showToast("⚠️ Error"); }
+}
+
+function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
+
+load();
+</script>
+</body>
+</html>`);
+});
+
+
+// =================== MANAGE ORDERS PAGE ===================
+app.get("/manage-orders", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Manage Orders</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.header h2{font-size:16px;font-weight:700;}
+
+/* TABS */
+.tabs{display:flex;background:white;border-bottom:2px solid #f0f0f0;position:sticky;top:50px;z-index:99;}
+.tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;color:#999;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;line-height:1.3;}
+.tab.active{color:#1976d2;border-bottom-color:#1976d2;}
+.tab .count{background:#ff3b30;color:white;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:3px;vertical-align:middle;}
+
+/* ORDER CARD */
+.orders-list{padding:12px;}
+.ocard{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+.ocard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.order-id{font-size:11px;color:#aaa;font-family:monospace;}
+.status-badge{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:700;}
+.status-badge.ship{background:#fff3e0;color:#e65100;}
+.status-badge.del{background:#e3f2fd;color:#1976d2;}
+.status-badge.ref{background:#fce4ec;color:#c62828;}
+.status-badge.done{background:#e8f5e9;color:#2e7d32;}
+
+.ocard-mid{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.ocard-img{width:65px;height:65px;border-radius:10px;object-fit:cover;background:#f0f0f0;flex-shrink:0;}
+.ocard-info{}
+.ocard-title{font-size:13px;font-weight:600;color:#222;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ocard-price{font-size:13px;color:#1976d2;font-weight:700;}
+.ocard-profit{font-size:11px;color:#2e7d32;margin-top:2px;}
+
+/* COUNTDOWN */
+.countdown{display:flex;align-items:center;gap:6px;background:#fff8e1;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
+.countdown svg{flex-shrink:0;}
+
+/* MAP */
+.map-wrap{border-radius:12px;overflow:hidden;height:160px;background:#e8f4fd;margin-bottom:10px;position:relative;}
+.map-canvas{width:100%;height:100%;}
+.map-label{position:absolute;bottom:6px;right:8px;font-size:10px;color:#1976d2;background:rgba(255,255,255,0.9);padding:2px 7px;border-radius:8px;}
+
+/* BUTTONS */
+.ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
+.ship-btn:active{opacity:0.88;}
+.ship-btn:disabled{background:#bbb;cursor:not-allowed;}
+
+.empty{text-align:center;padding:60px 20px;color:#aaa;}
+.empty-icon{font-size:48px;margin-bottom:12px;}
+.loading-wrap{text-align:center;padding:50px;color:#aaa;}
+.loading-spinner{width:32px;height:32px;border:3px solid #e0e0e0;border-top-color:#1976d2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;}
+.toast.show{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+<div class="header">
+  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <h2>Manage Orders</h2>
+</div>
+
+<div class="tabs">
+  <div class="tab active" id="tab-ship" onclick="switchTab('waiting_shipping')">Shipping<span class="count" id="cnt-ship">0</span></div>
+  <div class="tab" id="tab-del" onclick="switchTab('in_delivery')">Delivery<span class="count" id="cnt-del">0</span></div>
+  <div class="tab" id="tab-ref" onclick="switchTab('waiting_refund')">Refund<span class="count" id="cnt-ref">0</span></div>
+  <div class="tab" id="tab-done" onclick="switchTab('completed')">Done<span class="count" id="cnt-done">0</span></div>
+</div>
+
+<div class="orders-list" id="ordersList">
+  <div class="loading-wrap"><div class="loading-spinner"></div><p>Loading orders...</p></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var myToken = localStorage.getItem("token") || "";
+var allOrders = [];
+var currentTab = "waiting_shipping";
+
+async function load(){
+    try {
+        var r = await fetch("/my-store-orders", { headers: {"Authorization":"Bearer "+myToken} });
+        var d = await r.json();
+        allOrders = d.orders || [];
+        updateCounts();
+        renderOrders();
+    } catch(e){
+        document.getElementById("ordersList").innerHTML = '<div class="empty"><p>Error loading orders</p></div>';
+    }
+}
+
+function updateCounts(){
+    ["waiting_shipping","in_delivery","waiting_refund","completed"].forEach(function(s){
+        var key = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[s];
+        var cnt = allOrders.filter(function(o){ return o.status===s; }).length;
+        document.getElementById("cnt-"+key).innerText = cnt;
+        document.getElementById("cnt-"+key).style.display = cnt > 0 ? "" : "none";
+    });
+}
+
+function switchTab(tab){
+    currentTab = tab;
+    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+    var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
+    document.getElementById("tab-"+tabKey).classList.add("active");
+    renderOrders();
+}
+
+function renderOrders(){
+    var list = allOrders.filter(function(o){ return o.status === currentTab; });
+    var el = document.getElementById("ordersList");
+    if(list.length === 0){
+        el.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders in this section</p></div>';
+        return;
+    }
+    el.innerHTML = "";
+    list.forEach(function(o){ el.appendChild(buildOrderCard(o)); });
+}
+
+function buildOrderCard(o){
+    var card = document.createElement("div");
+    card.className = "ocard";
+
+    var statusLabels = { waiting_shipping:"Waiting to Ship", in_delivery:"In Delivery", waiting_refund:"Waiting Refund", completed:"Completed" };
+    var statusClasses = { waiting_shipping:"ship", in_delivery:"del", waiting_refund:"ref", completed:"done" };
+
+    var imgSrc = o.product && o.product.folder && o.product.image
+        ? "/product-image/" + o.product.folder + "/" + o.product.image
+        : "https://via.placeholder.com/65x65?text=P";
+
+    var html = '<div class="ocard-top">' +
+        '<span class="order-id">#' + o.id + '</span>' +
+        '<span class="status-badge ' + statusClasses[o.status] + '">' + statusLabels[o.status] + '</span>' +
+        '</div>' +
+        '<div class="ocard-mid">' +
+        '<img class="ocard-img" src="' + imgSrc + '" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
+        '<div class="ocard-info">' +
+        '<div class="ocard-title">' + escHtml(o.product ? o.product.title : "Product") + '</div>' +
+        '<div class="ocard-price">US$' + parseFloat(o.total).toFixed(2) + '</div>' +
+        '<div class="ocard-profit">+US$' + parseFloat(o.profit*o.quantity).toFixed(2) + ' profit</div>' +
+        '</div></div>';
+
+    // Countdown for waiting_shipping
+    if(o.status === "waiting_shipping"){
+        var created = new Date(o.createdAt).getTime();
+        var deadline = created + 48 * 60 * 60 * 1000;
+        var remaining = Math.max(0, deadline - Date.now());
+        html += '<div class="countdown" id="cd-' + o.id + '">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e65100" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+            '<span>Ship within: <b id="cdtxt-' + o.id + '">' + formatTime(remaining) + '</b></span></div>';
+        html += '<button class="ship-btn" onclick="shipOrder(\'' + o.id + '\')">🚚 Ship Now</button>';
+    }
+
+    // Map for in_delivery
+    if(o.status === "in_delivery"){
+        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-' + o.id + '"></canvas>' +
+            '<span class="map-label">📍 In transit</span></div>';
+    }
+
+    // Waiting refund info
+    if(o.status === "waiting_refund"){
+        html += '<div style="background:#fce4ec;border-radius:10px;padding:10px 12px;font-size:12px;color:#c62828;font-weight:600;margin-top:4px;">⏳ Waiting for admin to confirm delivery & release your earnings</div>';
+    }
+
+    // Completed
+    if(o.status === "completed"){
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;font-size:12px;color:#2e7d32;font-weight:600;margin-top:4px;">✅ Completed — Profit added to your wallet</div>';
+    }
+
+    card.innerHTML = html;
+
+    // Start countdown timer
+    if(o.status === "waiting_shipping"){
+        startCountdown(o.id, o.createdAt);
+    }
+    // Draw map
+    if(o.status === "in_delivery"){
+        setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
+    }
+
+    return card;
+}
+
+function startCountdown(orderId, createdAt){
+    var created = new Date(createdAt).getTime();
+    var deadline = created + 48 * 60 * 60 * 1000;
+    var el = document.getElementById("cdtxt-"+orderId);
+    if(!el) return;
+    var interval = setInterval(function(){
+        var remaining = Math.max(0, deadline - Date.now());
+        if(el) el.innerText = formatTime(remaining);
+        if(remaining <= 0) clearInterval(interval);
+    }, 1000);
+}
+
+function formatTime(ms){
+    var s = Math.floor(ms/1000);
+    var h = Math.floor(s/3600);
+    var m = Math.floor((s%3600)/60);
+    var sec = s%60;
+    return pad(h) + ":" + pad(m) + ":" + pad(sec);
+}
+function pad(n){ return n < 10 ? "0"+n : ""+n; }
+
+function drawMap(canvasId, trackingPath, deliveryStart){
+    var canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    var ctx = canvas.getContext("2d");
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    if(!trackingPath) return;
+
+    var W = canvas.width, H = canvas.height;
+    var origin = trackingPath.origin;
+    var dest   = trackingPath.destination;
+    var mid    = trackingPath.midpoint;
+
+    // Background gradient
+    var grad = ctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,"#e3f2fd");
+    grad.addColorStop(1,"#bbdefb");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+
+    // Simple world map outline (circles for continents - decorative)
+    ctx.fillStyle = "rgba(25,118,210,0.08)";
+    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45],[0.5,0.65,35]].forEach(function(c){
+        ctx.beginPath(); ctx.arc(c[0]*W,c[1]*H,c[2],0,Math.PI*2); ctx.fill();
+    });
+
+    // Convert lat/lng to canvas coordinates
+    function toCanvas(lat, lng){
+        var x = ((lng + 180) / 360) * W;
+        var y = ((90 - lat) / 180) * H;
+        return { x: x, y: y };
+    }
+
+    var p0 = toCanvas(origin.lat, origin.lng);
+    var p1 = toCanvas(mid.lat, mid.lng);
+    var p2 = toCanvas(dest.lat, dest.lng);
+
+    // Progress based on time elapsed (72 hours total)
+    var elapsed = deliveryStart ? Date.now() - deliveryStart : 0;
+    var progress = Math.min(1, elapsed / (72 * 60 * 60 * 1000));
+
+    // Draw full path (dashed)
+    ctx.setLineDash([5,4]);
+    ctx.strokeStyle = "rgba(25,118,210,0.3)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Draw progress path (solid)
+    ctx.strokeStyle = "#1976d2";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    // Interpolate along quadratic curve
+    var steps = 60;
+    ctx.moveTo(p0.x, p0.y);
+    for(var t = 0; t <= progress; t += 1/steps){
+        var bx = (1-t)*(1-t)*p0.x + 2*(1-t)*t*p1.x + t*t*p2.x;
+        var by = (1-t)*(1-t)*p0.y + 2*(1-t)*t*p1.y + t*t*p2.y;
+        ctx.lineTo(bx, by);
+    }
+    ctx.stroke();
+
+    // Draw plane at current position
+    var pt = progress;
+    var planeX = (1-pt)*(1-pt)*p0.x + 2*(1-pt)*pt*p1.x + pt*pt*p2.x;
+    var planeY = (1-pt)*(1-pt)*p0.y + 2*(1-pt)*pt*p1.y + pt*pt*p2.y;
+    ctx.fillStyle = "#1976d2";
+    ctx.beginPath(); ctx.arc(planeX, planeY, 7, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = "white";
+    ctx.font = "10px Arial";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("✈", planeX, planeY);
+
+    // Origin & Dest dots
+    [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
+        var pp = item[0], icon = item[1];
+        ctx.fillStyle = "#ff6b35";
+        ctx.beginPath(); ctx.arc(pp.x, pp.y, 5, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#333"; ctx.font = "11px Arial";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(icon, pp.x, pp.y - 12);
+    });
+
+    // Labels
+    ctx.fillStyle = "#1976d2"; ctx.font = "bold 9px Arial"; ctx.textAlign = "left";
+    ctx.fillText(origin.name, Math.max(2, p0.x - 20), p0.y + 14);
+    ctx.textAlign = "right";
+    ctx.fillText(dest.name, Math.min(W-2, p2.x + 20), p2.y + 14);
+
+    // Animate every 2 minutes
+    setTimeout(function(){ drawMap(canvasId, trackingPath, deliveryStart); }, 120000);
+}
+
+async function shipOrder(orderId){
+    var btn = event.target;
+    btn.disabled = true; btn.innerText = "Shipping...";
+    try {
+        var r = await fetch("/ship-store-order", {
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            body: JSON.stringify({ orderId })
+        });
+        var d = await r.json();
+        if(d.success){ showToast("✅ Order shipped!"); load(); }
+        else showToast("⚠️ " + (d.message||"Failed to ship"));
+    } catch(e){ showToast("⚠️ Error"); }
+    btn.disabled = false; btn.innerText = "🚚 Ship Now";
+}
+
+function escHtml(t){ return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
+
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>`);
+});
+
+
+// =================== STORE SETTING PAGE ===================
+app.get("/store-setting", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Store Setting</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.header h2{font-size:16px;font-weight:700;}
+.section{background:white;margin:12px;border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+.section h3{font-size:14px;font-weight:700;color:#333;margin-bottom:16px;}
+
+/* Logo Upload */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.logo-preview{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #e0e0e0;cursor:pointer;transition:opacity 0.2s;}
+.logo-preview:hover{opacity:0.8;}
+.logo-hint{font-size:12px;color:#aaa;text-align:center;}
+.change-logo-btn{padding:9px 22px;border:1.5px solid #1976d2;border-radius:10px;background:white;color:#1976d2;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* Name Input */
+.input-group{margin-bottom:14px;}
+.input-label{font-size:12px;color:#888;font-weight:600;margin-bottom:6px;display:block;}
+.text-input{width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;outline:none;color:#222;transition:border-color 0.2s;}
+.text-input:focus{border-color:#1976d2;}
+
+/* Save button */
+.save-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:15px;font-weight:700;cursor:pointer;transition:opacity 0.2s;margin-top:4px;}
+.save-btn:active{opacity:0.88;}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;white-space:nowrap;}
+.toast.show{display:block;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translate(-50%,15px);}to{opacity:1;transform:translate(-50%,0);}}
+</style>
+</head>
+<body>
+<div class="header">
+  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <h2>Store Setting</h2>
+</div>
+
+<div class="section">
+  <h3>🖼️ Store Logo</h3>
+  <div class="logo-wrap">
+    <img id="logoPreview" class="logo-preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="document.getElementById('logoInput').click()">
+    <p class="logo-hint">Tap to change your store logo</p>
+    <button class="change-logo-btn" onclick="document.getElementById('logoInput').click()">Change Logo</button>
+    <input type="file" id="logoInput" accept="image/*" style="display:none" onchange="previewLogo(this)">
+  </div>
+</div>
+
+<div class="section">
+  <h3>✏️ Store Name</h3>
+  <div class="input-group">
+    <label class="input-label">Store Name</label>
+    <input class="text-input" id="storeNameInput" type="text" placeholder="Enter your store name" maxlength="40">
+  </div>
+  <button class="save-btn" onclick="saveSettings()">Save Changes</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var myToken = localStorage.getItem("token") || "";
+var newLogoData = null;
+
+async function init(){
+    try {
+        var user = JSON.parse(localStorage.getItem("user") || "{}");
+        if(!user.email) return;
+        var r = await fetch("/store-status/" + encodeURIComponent(user.email));
+        var d = await r.json();
+        if(d.found){
+            document.getElementById("storeNameInput").value = d.storeName || "";
+            if(d.storeLogo && d.storeLogo.length > 10){
+                document.getElementById("logoPreview").src = d.storeLogo;
+            }
+        }
+    } catch(e){}
+}
+
+function previewLogo(input){
+    if(!input.files || !input.files[0]) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+        newLogoData = e.target.result;
+        document.getElementById("logoPreview").src = newLogoData;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
+async function saveSettings(){
+    var name = document.getElementById("storeNameInput").value.trim();
+    if(!name){ showToast("⚠️ Please enter a store name"); return; }
+
+    var body = { storeName: name };
+    if(newLogoData) body.storeLogo = newLogoData;
+
+    try {
+        var r = await fetch("/update-store-settings", {
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            body: JSON.stringify(body)
+        });
+        var d = await r.json();
+        if(d.success){
+            // Update localStorage
+            var user = JSON.parse(localStorage.getItem("user") || "{}");
+            if(user.email){
+                localStorage.setItem("merchant_storeName_" + user.email, name);
+                if(newLogoData) localStorage.setItem("merchant_storeLogo_" + user.email, newLogoData);
+            }
+            showToast("✅ Settings saved!");
+        } else showToast("⚠️ " + (d.message||"Failed to save"));
+    } catch(e){ showToast("⚠️ Network error"); }
+}
+
+function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
+init();
+</script>
+</body>
+</html>`);
+});
+
+// =================== INSTRUCTIONS FOR OPERATION PAGE ===================
+app.get("/instructions", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Instructions - TikTok Mall</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh;padding-bottom:30px;}
+.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(25,118,210,0.3);}
+.header h2{font-size:16px;font-weight:700;}
+.hero{background:linear-gradient(135deg,#1976d2 0%,#0d47a1 100%);padding:28px 20px 32px;text-align:center;color:white;}
+.hero-logo{font-size:48px;margin-bottom:10px;}
+.hero h1{font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:0.5px;}
+.hero p{font-size:13px;opacity:0.88;line-height:1.7;max-width:340px;margin:0 auto;}
+.section{background:white;margin:12px;border-radius:16px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,0.07);}
+.section h3{font-size:15px;font-weight:700;color:#1976d2;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f5f5f5;}
+.step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+.step-text h4{font-size:13px;font-weight:700;color:#222;margin-bottom:4px;}
+.step-text p{font-size:12px;color:#666;line-height:1.6;}
+.vip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.vip-card{border:1.5px solid #e0e0e0;border-radius:12px;padding:12px;text-align:center;}
+.vip-card .vip-name{font-size:13px;font-weight:700;color:#1976d2;margin-bottom:4px;}
+.vip-card .vip-pcts{font-size:11px;color:#666;line-height:1.7;}
+.vip-card .vip-disc{font-size:12px;font-weight:700;color:#2e7d32;}
+.highlight{background:#e3f2fd;border-radius:10px;padding:12px;font-size:13px;color:#1565c0;line-height:1.7;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <span onclick="history.back()" style="cursor:pointer;display:inline-flex;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
+  <h2>Instructions for Operation</h2>
+</div>
+
+<div class="hero">
+  <div class="hero-logo">🛍️</div>
+  <h1>TikTok Mall</h1>
+  <p>The world's leading social commerce platform — where millions of sellers earn real income by listing global products in their personal stores.</p>
+</div>
+
+<div class="section">
+  <h3>🚀 How It Works</h3>
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-text">
+      <h4>Open Your Store</h4>
+      <p>Register and apply for a merchant account. Once approved, your personalized TikTok Mall store is instantly live and ready for customers worldwide.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-text">
+      <h4>Browse & Add Products</h4>
+      <p>Access 50,000+ premium products from verified suppliers across 12 categories — Electronics, Watches, Luxury, Beauty, and more. Add any product to your store in one tap.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-text">
+      <h4>Customers Buy from You</h4>
+      <p>When a customer purchases from your store, you receive the full retail price. Your working capital is only used to pay the discounted supplier price when you confirm shipment.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-text">
+      <h4>Collect Your Profits</h4>
+      <p>After delivery is confirmed, your profit is instantly credited to your wallet — that's the difference between the retail price and the supplier price.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>💎 VIP Commission Rates</h3>
+  <div class="vip-grid">
+    <div class="vip-card"><div class="vip-name">VIP 0</div><div class="vip-pcts">20 products max<br><span class="vip-disc">15% off supplier</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 1</div><div class="vip-pcts">35 products max<br><span class="vip-disc">17% off supplier</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 2</div><div class="vip-pcts">80 products max<br><span class="vip-disc">20% off supplier</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 3</div><div class="vip-pcts">120 products max<br><span class="vip-disc">22% off supplier</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 4</div><div class="vip-pcts">300 products max<br><span class="vip-disc">25% off supplier</span></div></div>
+    <div class="vip-card" style="border-color:#f5a623;"><div class="vip-name" style="color:#e65100;">VIP 5</div><div class="vip-pcts">1000 products max<br><span class="vip-disc" style="color:#e65100;">40% off supplier</span></div></div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📋 Key Rules</h3>
+  <div class="step">
+    <div class="step-num">✓</div>
+    <div class="step-text">
+      <h4>48-Hour Shipping Commitment</h4>
+      <p>Once a customer places an order, you must confirm shipment within 48 hours to maintain your store's credibility rating.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">✓</div>
+    <div class="step-text">
+      <h4>3-Day Delivery Tracking</h4>
+      <p>Every order has a real-time tracking map. Delivery is simulated over 3 days with a unique route for each order.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">✓</div>
+    <div class="step-text">
+      <h4>Upgrade to Earn More</h4>
+      <p>Higher VIP levels unlock more product slots, bigger discounts, and more daily visitors to your store — increasing your earning potential significantly.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="highlight">
+    💡 <strong>Pro Tip:</strong> The higher your VIP level, the more you earn per sale. A VIP 5 merchant earns 40% of every product's retail price as pure profit — the highest commission on the platform.
+  </div>
+</div>
+
+</body>
+</html>`);
+});
+
+
 
 const PORT = process.env.PORT || 3000;
 
