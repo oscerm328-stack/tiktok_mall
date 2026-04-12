@@ -57,6 +57,16 @@ async function syncFromDB() {
         const backupData = await db.collection("settings").findOne({ key: "backupVerifyCode" });
         if(backupData) backupVerifyCode = backupData.value;
 
+        // جلب منتجات البائعين من MongoDB
+        const sellerProdsData = await db.collection("sellerProducts").find({}).toArray();
+        if(sellerProdsData.length > 0) {
+            sellerProdsData.forEach(item => {
+                if(item.email && item.products) {
+                    sellerProducts[item.email] = item.products;
+                }
+            });
+        }
+
         console.log("✅ Data synced from MongoDB - users:", users.length, "stores:", storeApplications.length, "orders:", ordersDB.length);
     } catch(err) {
         console.error("❌ Sync error:", err.message);
@@ -1445,25 +1455,29 @@ app.post("/follow-store", (req, res) => {
     res.json({ success: true, followers: appl.followers });
 });
 
-// زيادة المتابعين تلقائياً كل يوم - يتضاعف
+// زيادة المتابعين تلقائياً كل ساعة حسب VIP
+// VIP 4 = أكثر من 200 متابع يومياً = ~9 كل ساعة
+const VIP_FOLLOWERS_PER_HOUR = [1, 3, 6, 10, 15, 25];
+
 setInterval(() => {
-    const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) {
-        storeApplications.forEach(a => {
-            if (a.status === "approved") {
-                const current = a.followers || 0;
-                // أول يوم 20، ثاني يوم 40، ثالث 80...
-                if (current === 0) {
-                    a.followers = 20;
-                } else {
-                    a.followers = current * 2;
-                }
-            }
-        });
+    let changed = false;
+    storeApplications.forEach(a => {
+        if (a.status === "approved") {
+            if (!a.followers) a.followers = 0;
+            const vipLevel = a.vipLevel || 0;
+            const perHour = VIP_FOLLOWERS_PER_HOUR[vipLevel] || 1;
+            // إضافة عشوائية ±30% للواقعية
+            const jitter = Math.floor(perHour * 0.3 * (Math.random() * 2 - 1));
+            const toAdd = Math.max(1, perHour + jitter);
+            a.followers += toAdd;
+            changed = true;
+        }
+    });
+    if(changed){
         saveStoreApplications();
-        console.log("✅ Followers updated (doubled)");
+        console.log("✅ Followers updated hourly");
     }
-}, 60 * 1000);
+}, 60 * 60 * 1000); // كل ساعة
 
 // ================= STORE DESCRIPTION =================
 // جلب التعريف - يمكن لأي زائر
@@ -3485,12 +3499,12 @@ body{font-family:Arial,sans-serif;background:#f5f5f5;min-height:100vh;}
 .header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:relative;}
 .h-left{display:flex;align-items:center;gap:10px;}
 .h-right{display:flex;align-items:center;gap:14px;}
-.toolbar{display:flex;align-items:center;background:white;padding:12px 20px;border-bottom:1px solid #eee;position:fixed;top:50px;left:0;right:0;z-index:200;}
+.toolbar{display:flex;align-items:center;background:white;padding:12px 20px;border-bottom:1px solid #eee;position:relative;}
 .sort-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;position:relative;}
 .sep{width:1px;height:20px;background:#ddd;margin:0 10px;}
 .filter-btn{flex:1;text-align:center;font-size:15px;color:#333;cursor:pointer;}
 /* Sort dropdown */
-.sort-dropdown{display:none;position:fixed;top:100px;left:0;right:0;background:white;z-index:400;border-bottom:1px solid #eee;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.sort-dropdown{display:none;position:relative;background:white;z-index:400;border-bottom:1px solid #eee;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .sort-item{padding:15px 20px;font-size:15px;color:#333;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
 .sort-item:last-child{border-bottom:none;}
 .sort-item.active{color:#1976d2;}
@@ -7145,41 +7159,43 @@ function loadVisitorCounter(){
   let d0 = getData();
   showCount(d0);
 
-  // بعد 5 ثوانٍ: أول زائر
+  // إضافة زوار بسرعة حسب VIP - كل 30 ثانية إلى دقيقتين
+  // VIP 4 = 10000 زائر يومياً = ~7 زوار كل دقيقة
+  function scheduleNext(){
+    let d = getData();
+    if((d.todayAdded || 0) >= DAILY_TARGET) return;
+
+    // حساب عدد الزوار المضافين في كل دفعة حسب VIP
+    let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
+    
+    // delay بين 30 ثانية و90 ثانية
+    let delay = 30000 + Math.random() * 60000;
+
+    setTimeout(function(){
+      let d = getData();
+      let remaining = DAILY_TARGET - (d.todayAdded || 0);
+      let toAdd = Math.min(batchSize, remaining);
+      if(toAdd > 0){
+        d.todayAdded = (d.todayAdded || 0) + toAdd;
+        saveData(d);
+        showCount(d);
+      }
+      scheduleNext();
+    }, delay);
+  }
+
+  // أول إضافة بعد 3 ثوانٍ
   setTimeout(function(){
     let d = getData();
-    if((d.todayAdded || 0) < DAILY_TARGET){
-      d.todayAdded = (d.todayAdded || 0) + 1;
+    let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
+    let toAdd = Math.min(batchSize, DAILY_TARGET - (d.todayAdded || 0));
+    if(toAdd > 0){
+      d.todayAdded = (d.todayAdded || 0) + toAdd;
       saveData(d);
       showCount(d);
     }
-
-    // زيارة واحدة كل 15~45 دقيقة
-    function scheduleNext(){
-      let d = getData();
-      if((d.todayAdded || 0) >= DAILY_TARGET) return;
-
-      let remaining = DAILY_TARGET - (d.todayAdded || 0);
-      let msLeft    = Math.max(getEndOfDay() - Date.now(), 1);
-      let avg       = msLeft / remaining;
-      let jitter    = avg * 0.2 * (Math.random() * 2 - 1);
-      let delay     = Math.round(avg + jitter);
-      delay = Math.max(delay, 15 * 60 * 1000);
-      delay = Math.min(delay, 45 * 60 * 1000);
-
-      setTimeout(function(){
-        let d = getData();
-        if((d.todayAdded || 0) < DAILY_TARGET){
-          d.todayAdded = (d.todayAdded || 0) + 1;
-          saveData(d);
-          showCount(d);
-        }
-        scheduleNext();
-      }, delay);
-    }
-
     scheduleNext();
-  }, 5000);
+  }, 3000);
 }
 
 // جلب كل إحصائيات الداشبورد
@@ -8887,10 +8903,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   </div>
   <div class="qty-row">
     <span class="qty-label">Quantity</span>
-    <div class="qty-controls">
-      <button class="qty-btn" onclick="changeQty(-1)">−</button>
-      <div class="qty-num" id="qtyNum">1</div>
-      <button class="qty-btn" onclick="changeQty(1)">+</button>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="sheet-total-price" id="sheetTotalPrice" style="color:#e65100;font-size:15px;font-weight:700;"></span>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="qty-num" id="qtyNum">1</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
     </div>
   </div>
   <div class="sheet-btns">
@@ -8977,6 +8996,7 @@ function goTo(idx){
 function openSheet(mode){
     sheetMode = mode;
     qty = 1; document.getElementById("qtyNum").innerText = 1;
+    updateTotalPrice();
     document.getElementById("sheetImg").src = imgs[currentSlide]||imgs[0];
     document.getElementById("buySheet").classList.add("open");
     document.getElementById("sheetOverlay").classList.add("open");
@@ -8988,11 +9008,13 @@ function closeSheet(){
 function changeQty(d){ 
     qty = Math.max(1, qty+d); 
     document.getElementById("qtyNum").innerText = qty;
-    // تحديث السعر الإجمالي
-    if(p && p.p) {
-        var total = (parseFloat(p.p) * qty).toFixed(2);
-        document.getElementById("sheetPrice").innerText = "US$" + total;
-    }
+    updateTotalPrice();
+}
+function updateTotalPrice(){
+    var price = p ? (parseFloat(p.p) || parseFloat(p.price) || 0) : 0;
+    var total = (price * qty).toFixed(2);
+    var el = document.getElementById("sheetTotalPrice");
+    if(el) el.innerText = "US$" + total;
 }
 
 async function doCart(){
