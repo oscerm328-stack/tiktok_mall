@@ -1815,6 +1815,7 @@ password:password.value
 .then(data=>{
 if(data.email){
 localStorage.setItem("user", JSON.stringify(data));
+if(data.token) localStorage.setItem("token", data.token);
 window.location.href="/dashboard";
 }else{
 alert("Login failed");
