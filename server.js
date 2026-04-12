@@ -51,6 +51,12 @@ async function syncFromDB() {
         const requestsData = await db.collection("requests").find({}).toArray();
         if(requestsData.length > 0) requests = requestsData.map(r => { delete r._id; return r; });
 
+        // sync storeOrders from MongoDB
+        const storeOrdersData = await db.collection("storeOrders").find({}).toArray();
+        if(storeOrdersData.length > 0) {
+            storeOrders = storeOrdersData.map(o => { delete o._id; return o; });
+        }
+
         const inviteData = await db.collection("settings").findOne({ key: "inviteCode" });
         if(inviteData) inviteCode = inviteData.value;
 
@@ -11300,9 +11306,25 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 </div>
 
 <script>
-var myToken = localStorage.getItem("token") || "";
+var myToken = localStorage.getItem("token") || (function(){ var u=JSON.parse(localStorage.getItem("user")||"{}"); return u.token||""; })() || "";
 var allOrders = [];
 var currentTab = "waiting_shipping";
+
+// Apply tab from URL param IMMEDIATELY before any render
+(function(){
+    var params = new URLSearchParams(window.location.search);
+    var tab = params.get("tab");
+    if(tab && ["waiting_shipping","in_delivery","waiting_refund","completed","waiting_payment"].includes(tab)){
+        if(tab === "waiting_payment") tab = "waiting_shipping";
+        currentTab = tab;
+        var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
+        if(tabKey){
+            document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+            var tabEl = document.getElementById("tab-"+tabKey);
+            if(tabEl) tabEl.classList.add("active");
+        }
+    }
+})();
 
 // ===== PRODUCT DETAIL MODAL =====
 var sliderCurrentIdx = 0;
@@ -11416,14 +11438,36 @@ function generateOrderNum(orderId){
 }
 
 async function load(){
+    var listEl = document.getElementById("ordersList");
     try {
-        var r = await fetch("/my-store-orders", { headers: {"Authorization":"Bearer "+myToken} });
+        // Try to get token from multiple sources
+        var token = localStorage.getItem("token") || "";
+        if(!token){
+            var u = JSON.parse(localStorage.getItem("user")||"{}");
+            token = u.token || "";
+        }
+        myToken = token;
+
+        // Build headers - if token exists use it, otherwise rely on cookie
+        var headers = {};
+        if(token) headers["Authorization"] = "Bearer " + token;
+
+        var r = await fetch("/my-store-orders", {
+            headers: headers,
+            credentials: "include"  // send cookies automatically
+        });
+
+        if(r.status === 401){
+            listEl.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><p>Session expired. <a href="/login-page" style="color:#1976d2;font-weight:600;">Login again</a></p></div>';
+            return;
+        }
+
         var d = await r.json();
         allOrders = d.orders || [];
         updateCounts();
         renderOrders();
     } catch(e){
-        document.getElementById("ordersList").innerHTML = '<div class="empty"><p>Error loading orders</p></div>';
+        listEl.innerHTML = '<div class="empty"><div class="empty-icon">📦</div><p>No orders yet</p></div>';
     }
 }
 
@@ -11732,6 +11776,7 @@ async function confirmShipWithPassword(){
         var r = await fetch("/ship-store-order", {
             method:"POST",
             headers:{"Content-Type":"application/json","Authorization":"Bearer "+myToken},
+            credentials:"include",
             body: JSON.stringify({ orderId })
         });
         var d = await r.json();
@@ -11870,23 +11915,6 @@ function closeRefundModal(){
 
 load();
 setInterval(load, 30000);
-
-// Auto-switch tab from URL param
-(function(){
-    var params = new URLSearchParams(window.location.search);
-    var tab = params.get("tab");
-    if(tab && ["waiting_shipping","in_delivery","waiting_refund","completed","waiting_payment"].includes(tab)){
-        // waiting_payment maps to waiting_shipping for display
-        if(tab === "waiting_payment") tab = "waiting_shipping";
-        currentTab = tab;
-        var tabKey = {"waiting_shipping":"ship","in_delivery":"del","waiting_refund":"ref","completed":"done"}[tab];
-        if(tabKey){
-            document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
-            var tabEl = document.getElementById("tab-"+tabKey);
-            if(tabEl) tabEl.classList.add("active");
-        }
-    }
-})();
 </script>
 </body>
 </html>`);
