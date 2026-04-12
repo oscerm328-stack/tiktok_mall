@@ -9763,44 +9763,42 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
     const seller = users.find(u => u.email === sellerEmail);
     const vipLevel = seller ? (seller.vipLevel || 0) : 0;
     const commissionPct = VIP_COMMISSION[vipLevel] || 15;
-    const qty = parseInt(quantity) || 1;
-    const supplierPricePerUnit = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
-    const profitPerUnit = parseFloat((price - supplierPricePerUnit).toFixed(2));
-    const totalSupplierPrice = parseFloat((supplierPricePerUnit * qty).toFixed(2));
-    const totalProfit = parseFloat((profitPerUnit * qty).toFixed(2));
-    const totalPrice = parseFloat((price * qty).toFixed(2));
+    const supplierPrice = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
+    const profit = parseFloat((price - supplierPrice).toFixed(2));
 
-    // طلب واحد بالكمية الكاملة
-    const order = {
-        id: String(Date.now()).slice(-11).padStart(11,'0'),
-        buyerEmail,
-        sellerEmail,
-        product: {
-            id: product.id,
-            title: product.title,
-            price: price,
-            image: product.images ? product.images[0] : "",
-            folder: product.folder || "",
-            category_id: product.category_id || 0
-        },
-        quantity: qty,
-        unitPrice: price,
-        total: totalPrice,
-        supplierPrice: supplierPricePerUnit,
-        totalSupplierPrice,
-        profit: profitPerUnit,
-        totalProfit,
-        status: "waiting_shipping",
-        createdAt: new Date().toISOString(),
-        shippedAt: null,
-        deliveryStart: null,
-        completedAt: null,
-        shippingCountdown: 48 * 60 * 60 * 1000,
-        trackingPath: generateTrackingPath()
-    };
-    storeOrders.push(order);
+    // كل وحدة = طلب منفصل
+    const qty = parseInt(quantity) || 1;
+    const createdOrders = [];
+    for(let i = 0; i < qty; i++){
+        const order = {
+            id: String(Date.now() + i).slice(-11).padStart(11,'0'),
+            buyerEmail,
+            sellerEmail,
+            product: {
+                id: product.id,
+                title: product.title,
+                price: price,
+                image: product.images ? product.images[0] : "",
+                folder: product.folder || "",
+                category_id: product.category_id || 0
+            },
+            quantity: 1,
+            total: price,
+            supplierPrice,
+            profit,
+            status: "waiting_shipping",
+            createdAt: new Date().toISOString(),
+            shippedAt: null,
+            deliveryStart: null,
+            completedAt: null,
+            shippingCountdown: 48 * 60 * 60 * 1000,
+            trackingPath: generateTrackingPath()
+        };
+        storeOrders.push(order);
+        createdOrders.push(order);
+    }
     saveStoreOrders();
-    res.json({ success: true, order, orders: [order] });
+    res.json({ success: true, order: createdOrders[0], orders: createdOrders });
 });
 
 function generateTrackingPath(){
@@ -9843,7 +9841,7 @@ app.post("/ship-store-order", authMiddleware, (req, res) => {
     if(!seller) return res.json({ success: false, message: "Seller not found" });
 
     // خصم سعر المورد من رصيد البائع
-    const supplierCost = parseFloat(order.totalSupplierPrice || (order.supplierPrice * order.quantity));
+    const supplierCost = order.supplierPrice * order.quantity;
     if((parseFloat(seller.balance) || 0) < supplierCost){
         return res.json({ success: false, message: "Insufficient balance to ship" });
     }
@@ -9920,7 +9918,6 @@ setInterval(() => {
             const elapsed = now - order.deliveryStart;
             if(elapsed >= 72 * 60 * 60 * 1000){ // 3 days
                 order.status = "waiting_refund";
-                order.waitingRefundAt = new Date().toISOString();
                 changed = true;
             }
         }
@@ -11147,16 +11144,16 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .ocard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .order-id{font-size:11px;color:#aaa;font-family:monospace;}
 .sbadge{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:700;}
-.sbadge.ship{background:transparent;color:#e65100;border:1px solid #e65100;}
+.sbadge.ship{background:#fff3e0;color:#e65100;}
 .sbadge.del{background:#e3f2fd;color:#1976d2;}
 .sbadge.ref{background:#fff3e0;color:#e65100;}
-.sbadge.done{background:transparent;color:#2e7d32;border:1px solid #2e7d32;}
+.sbadge.done{background:#e8f5e9;color:#2e7d32;}
 .ocard-mid{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
 .ocard-img{width:65px;height:65px;border-radius:10px;object-fit:cover;background:#f0f0f0;flex-shrink:0;}
 .ocard-title{font-size:13px;font-weight:600;color:#222;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .ocard-price{font-size:13px;color:#1976d2;font-weight:700;}
 .ocard-profit{font-size:11px;color:#2e7d32;margin-top:2px;}
-.countdown{display:flex;align-items:center;gap:6px;background:transparent;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
+.countdown{display:flex;align-items:center;gap:6px;background:#fff8e1;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
 .ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .map-wrap{border-radius:12px;overflow:hidden;height:160px;background:#e8f4fd;margin-bottom:10px;position:relative;}
 .map-canvas{width:100%;height:100%;}
@@ -11255,7 +11252,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <div class="popup-row"><span style="font-size:13px;color:#555;">Your Profit</span><span style="font-size:14px;font-weight:700;color:#2e7d32;" id="sp-pro">$0.00</span></div>
     <div style="display:flex;gap:10px;padding:14px 20px 0;">
       <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="openPwdPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">OK Ship Now</button>
+      <button onclick="openPwdPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ OK Ship Now</button>
     </div>
   </div>
 </div>
@@ -11271,7 +11268,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     </div>
     <div style="display:flex;gap:10px;padding:4px 20px 0;">
       <button onclick="closePwdPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="doShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;">Ship Now</button>
+      <button onclick="doShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;">🚚 Ship Now</button>
     </div>
   </div>
 </div>
@@ -11309,11 +11306,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
       <div id="pm-price" style="font-size:16px;font-weight:800;color:#1976d2;margin-bottom:3px;"></div>
       <div id="pm-profit" style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:10px;"></div>
     </div>
-    <div id="pm-countdown" style="margin:0 16px 10px;background:transparent;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
+    <div id="pm-countdown" style="margin:0 16px 10px;background:#fff8e1;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
       ⏱ Ship within: <b id="pm-cd">--:--:--</b>
     </div>
     <div style="padding:0 16px 20px;">
-      <button class="ship-btn" onclick="shipFromModal()">Ship Now</button>
+      <button class="ship-btn" onclick="shipFromModal()">🚚 Ship Now</button>
     </div>
   </div>
 </div>
@@ -11369,14 +11366,6 @@ async function load(){
     }
 
     if(orders === null){
-        // Try one more time with cookie only
-        try {
-            var r3 = await fetch("/my-store-orders", { credentials:"include" });
-            if(r3.ok){ var d3 = await r3.json(); if(d3.success) orders = d3.orders; }
-        } catch(e){}
-    }
-
-    if(orders === null){
         el.innerHTML = '<div class="empty"><div class="empty-icon">🔐</div><p>Please <a href="/login-page" style="color:#1976d2;">login again</a></p></div>';
         return;
     }
@@ -11428,34 +11417,14 @@ function imgUrl(o){
     return "https://res.cloudinary.com/doabtbdsh/image/upload/products/"+cat+"/"+folder+"/1.jpg";
 }
 
-function fmtDate(iso){
-    if(!iso) return "";
-    var d = new Date(iso);
-    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return months[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear()+" "+pad(d.getHours())+":"+pad(d.getMinutes());
-}
-
 function buildCard(o){
     var card = document.createElement("div");
     card.className = "ocard";
-    var labels = {waiting_shipping:"Waiting to Ship",in_delivery:"In Delivery",waiting_refund:"Pending Delivery",completed:"Delivered"};
+    var labels = {waiting_shipping:"Waiting to Ship",in_delivery:"In Delivery",waiting_refund:"قيد التسليم",completed:"تم التسليم"};
     var cls = {waiting_shipping:"ship",in_delivery:"del",waiting_refund:"ref",completed:"done"};
     var num = orderNum(o.id);
     var img = imgUrl(o);
-    var qty = parseInt(o.quantity||1);
-    var unitPrice = parseFloat(o.unitPrice||(o.product&&o.product.price)||0);
-    var totalPrice = parseFloat(o.total||0);
-    var supplierPerUnit = parseFloat(o.supplierPrice||0);
-    var totalSupplier = parseFloat(o.totalSupplierPrice||(supplierPerUnit*qty));
-    var profitPerUnit = parseFloat(o.profit||0);
-    var totalProfit = parseFloat(o.totalProfit||(profitPerUnit*qty));
-    var detailsHtml = qty > 1 ?
-        '<div style="margin-top:6px;font-size:11px;color:#666;line-height:1.9;">'
-        + '<span style="color:#888;">Unit price:</span> <b>US$'+unitPrice.toFixed(2)+'</b>'
-        + ' &nbsp;·&nbsp; <span style="color:#888;">Qty:</span> <b>'+qty+'</b><br>'
-        + '<span style="color:#888;">Supplier total:</span> <b>US$'+totalSupplier.toFixed(2)+'</b>'
-        + ' &nbsp;·&nbsp; <span style="color:#888;">Retail total:</span> <b>US$'+totalPrice.toFixed(2)+'</b>'
-        + '</div>' : '';
+    var profit = parseFloat(o.profit||0)*parseInt(o.quantity||1);
 
     var html = '<div class="ocard-top">' +
         '<span class="order-id">#'+num+'</span>' +
@@ -11464,45 +11433,29 @@ function buildCard(o){
         '<div class="ocard-mid">' +
         '<img class="ocard-img" src="'+img+'" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
         '<div><div class="ocard-title">'+(o.product?o.product.title:"Product")+'</div>' +
-        '<div class="ocard-price">US$'+totalPrice.toFixed(2)+(qty>1?' <span style="font-size:11px;color:#999;">(x'+qty+')</span>':'')+'</div>' +
-        '<div class="ocard-profit">+US$'+totalProfit.toFixed(2)+' profit</div>' +
-        detailsHtml +
-        '</div>' +
+        '<div class="ocard-price">US$'+parseFloat(o.total||0).toFixed(2)+'</div>' +
+        '<div class="ocard-profit">+US$'+profit.toFixed(2)+' profit</div></div>' +
         '</div>';
 
     if(o.status === "waiting_shipping"){
         var created = new Date(o.createdAt).getTime();
         var remaining = Math.max(0, created + 48*60*60*1000 - Date.now());
         var isTO = remaining === 0;
-        if(o.createdAt){
-            html += '<div style="font-size:11px;color:#999;padding:4px 0 2px 2px;">📅 Order received: '+fmtDate(o.createdAt)+'</div>';
-        }
         html += '<div class="countdown" id="cd-'+o.id+'" style="'+(isTO?"background:#fce4ec;color:#c62828;":"")+'">' +
             '⏱ '+(isTO?'<b>⏰ TIME OUT</b>':'Ship within: <b id="cdt-'+o.id+'">'+fmtTime(remaining)+'</b>')+'</div>';
-        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">Ship Now</button>';
+        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">🚚 Ship Now</button>';
     }
 
     if(o.status === "in_delivery"){
-        if(o.shippedAt){
-            html += '<div style="font-size:11px;color:#999;padding:4px 0 2px 2px;">📅 Shipped on: '+fmtDate(o.shippedAt)+'</div>';
-        }
         html += '<div class="map-wrap"><canvas class="map-canvas" id="map-'+o.id+'"></canvas><span class="map-label">📍 In transit</span></div>';
     }
 
     if(o.status === "waiting_refund"){
-        var refundDate = o.waitingRefundAt || o.completedAt || null;
-        if(refundDate){
-            html += '<div style="font-size:11px;color:#999;padding:4px 0 2px 2px;">📅 Arrived on: '+fmtDate(refundDate)+'</div>';
-        }
-        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;text-align:center;">⏳ Pending Delivery — Pending Confirmation</div>';
-        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-'+o.id+'"></canvas><span class="map-label">📍 Arrived</span></div>';
+        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;text-align:center;">⏳ قيد التسليم — Pending Confirmation</div>';
     }
 
     if(o.status === "completed"){
-        if(o.completedAt){
-            html += '<div style="font-size:11px;color:#999;padding:4px 0 2px 2px;">📅 Delivered on: '+fmtDate(o.completedAt)+'</div>';
-        }
-        html += '<div class="delivered-bar" style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:12px;font-size:13px;color:#333;font-weight:600;text-align:center;cursor:pointer;">✅ Delivered — Profit added to wallet</div>';
+        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;text-align:center;">✅ تم التسليم — Profit added to wallet</div>';
     }
 
     card.innerHTML = html;
@@ -11517,10 +11470,9 @@ function buildCard(o){
     }
     if(o.status === "waiting_refund"){
         card.onclick = function(){ showToast("⏳ Order is pending delivery confirmation"); };
-        setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart, true); }, 100);
     }
     if(o.status === "completed"){
-        card.onclick = function(){ showDeliveredDetails(o); };
+        card.onclick = function(){ showToast("✅ تم التسليم — Profit has been credited"); };
     }
     return card;
 }
@@ -11687,13 +11639,13 @@ function openTrackModal(o){
 }
 function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); }
 
-function drawMap(canvasId, tp, ds, arrived){
+function drawMap(canvasId, tp, ds){
     var c = document.getElementById(canvasId);
     if(!c) return;
     c.width=c.offsetWidth; c.height=c.offsetHeight;
-    drawMap2(c, tp, ds, arrived);
+    drawMap2(c, tp, ds);
 }
-function drawMap2(c, tp, ds, arrived){
+function drawMap2(c, tp, ds){
     if(!tp||!c) return;
     var ctx=c.getContext("2d"), W=c.width, H=c.height;
     var g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#e3f2fd"); g.addColorStop(1,"#bbdefb");
@@ -11704,62 +11656,21 @@ function drawMap2(c, tp, ds, arrived){
     });
     function tc(lat,lng){ return {x:((lng+180)/360)*W, y:((90-lat)/180)*H}; }
     var p0=tc(tp.origin.lat,tp.origin.lng), p1=tc(tp.midpoint.lat,tp.midpoint.lng), p2=tc(tp.destination.lat,tp.destination.lng);
-    var prog = arrived ? 1 : Math.min(1,(ds?Date.now()-ds:0)/(72*60*60*1000));
+    var elapsed=ds?Date.now()-ds:0, prog=Math.min(1,elapsed/(72*60*60*1000));
     ctx.setLineDash([5,4]); ctx.strokeStyle="rgba(25,118,210,0.3)"; ctx.lineWidth=2;
     ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.quadraticCurveTo(p1.x,p1.y,p2.x,p2.y); ctx.stroke();
     ctx.setLineDash([]); ctx.strokeStyle="#1976d2"; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
     for(var t=0;t<=prog;t+=1/60){ var bx=(1-t)*(1-t)*p0.x+2*(1-t)*t*p1.x+t*t*p2.x, by=(1-t)*(1-t)*p0.y+2*(1-t)*t*p1.y+t*t*p2.y; ctx.lineTo(bx,by); }
     ctx.stroke();
     var pt=prog, px=(1-pt)*(1-pt)*p0.x+2*(1-pt)*pt*p1.x+pt*pt*p2.x, py=(1-pt)*(1-pt)*p0.y+2*(1-pt)*pt*p1.y+pt*pt*p2.y;
-    if(arrived){
-        // show arrived pin at destination
-        ctx.fillStyle="#e65100"; ctx.beginPath(); ctx.arc(p2.x,p2.y,9,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle="white"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("📍",p2.x,p2.y);
-        // Arrived label
-        ctx.fillStyle="#e65100"; ctx.font="bold 10px Arial"; ctx.textAlign="center";
-        ctx.fillText("Arrived",p2.x,p2.y-18);
-    } else {
-        ctx.fillStyle="#1976d2"; ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("✈",px,py);
-    }
+    ctx.fillStyle="#1976d2"; ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("✈",px,py);
     [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
         ctx.fillStyle="#ff6b35"; ctx.beginPath(); ctx.arc(item[0].x,item[0].y,5,0,Math.PI*2); ctx.fill();
         ctx.fillStyle="#333"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(item[1],item[0].x,item[0].y-12);
     });
     ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left"; ctx.fillText(tp.origin.name,Math.max(2,p0.x-20),p0.y+14);
     ctx.textAlign="right"; ctx.fillText(tp.destination.name,Math.min(W-2,p2.x+20),p2.y+14);
-}
-
-function showDeliveredDetails(o){
-    var qty = parseInt(o.quantity||1);
-    var unitPrice = parseFloat(o.unitPrice||(o.product&&o.product.price)||0);
-    var totalPrice = parseFloat(o.total||0);
-    var supplierPerUnit = parseFloat(o.supplierPrice||0);
-    var totalSupplier = parseFloat(o.totalSupplierPrice||(supplierPerUnit*qty));
-    var totalProfit = parseFloat(o.totalProfit||(parseFloat(o.profit||0)*qty));
-    var html = '<div id="deliveredOverlay" onclick="document.getElementById(\'deliveredOverlay\').remove()" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;">'
-        + '<div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;padding:24px 20px;width:320px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.18);">'
-        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">'
-        + '<span style="font-size:15px;font-weight:700;color:#222;">Order Details</span>'
-        + '<span onclick="this.parentElement.parentElement.parentElement.remove()" style="cursor:pointer;font-size:20px;color:#aaa;line-height:1;">&times;</span>'
-        + '</div>'
-        + '<div style="font-size:13px;color:#444;line-height:2.2;">'
-        + '<div style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding-bottom:6px;margin-bottom:6px;">'
-        + '<span style="color:#888;">Product</span><span style="font-weight:600;color:#222;max-width:180px;text-align:right;">'+(o.product?o.product.title:"—")+'</span></div>'
-        + (qty>1?'<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Unit Price</span><span style="font-weight:600;">US$'+unitPrice.toFixed(2)+'</span></div>':'')
-        + (qty>1?'<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Quantity</span><span style="font-weight:600;">'+qty+'</span></div>':'')
-        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Supplier Cost</span><span style="font-weight:600;">US$'+totalSupplier.toFixed(2)+'</span></div>'
-        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Sale Price</span><span style="font-weight:600;">US$'+totalPrice.toFixed(2)+'</span></div>'
-        + '<div style="display:flex;justify-content:space-between;border-top:1px solid #f0f0f0;padding-top:6px;margin-top:6px;">'
-        + '<span style="color:#888;">Profit</span><span style="font-weight:700;color:#2e7d32;">+US$'+totalProfit.toFixed(2)+'</span></div>'
-        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Delivered on</span><span style="font-weight:600;">'+(o.completedAt?fmtDate(o.completedAt):"—")+'</span></div>'
-        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Payment</span><span style="font-weight:700;color:#1976d2;">✅ Paid</span></div>'
-        + '</div>'
-        + '<button onclick="this.parentElement.parentElement.parentElement.remove()" style="margin-top:16px;width:100%;padding:11px;border:none;border-radius:10px;background:#1976d2;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">Close</button>'
-        + '</div></div>';
-    var div = document.createElement("div");
-    div.innerHTML = html;
-    document.body.appendChild(div.firstChild);
 }
 
 function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
