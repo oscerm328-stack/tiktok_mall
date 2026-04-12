@@ -8675,13 +8675,17 @@ var likedKey = "likedStores_" + sEmail;
 var isLiked  = localStorage.getItem(likedKey) === "1";
 var baseFollowers = 0;
 
-// جلب عدد المتابعين من السيرفر
-fetch("/followers/" + encodeURIComponent(sEmail))
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    baseFollowers = d.followers || 0;
-    renderFollowers();
-  }).catch(function(){});
+// جلب عدد المتابعين من السيرفر + تحديث تلقائي كل 10 ثوانٍ
+function refreshFollowers(){
+  fetch("/followers/" + encodeURIComponent(sEmail))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      baseFollowers = d.followers || 0;
+      renderFollowers();
+    }).catch(function(){});
+}
+refreshFollowers();
+setInterval(refreshFollowers, 10000); // كل 10 ثوانٍ
 \n// جلب مستوى VIP الحقيقي من السيرفر
 if(sEmail){
   fetch("/store-vip/" + encodeURIComponent(sEmail))
@@ -9116,7 +9120,8 @@ async function init(){
         document.getElementById("storeVip").innerText = "✓ VIP "+(vd.vipLevel||0);
         var prods = await fetch("/store-products/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         var prodCount = (prods.products||[]).length;
-        var followers = Math.floor(Math.abs(sEmail.split("").reduce(function(h,c){return Math.imul(31,h)+c.charCodeAt(0)|0;},0)) % 9800) + 100;
+        var follRes = await fetch("/followers/"+encodeURIComponent(sEmail)).then(function(r){return r.json();}).catch(function(){return {followers:0};});
+        var followers = follRes.followers || 0;
         var tagsEl = document.getElementById("storeTags");
         if(tagsEl){
             tagsEl.innerHTML = '<span class="store-tag">Products '+prodCount+'</span><span class="store-tag">Followers '+followers.toLocaleString()+'</span>';
