@@ -11147,16 +11147,16 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .ocard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .order-id{font-size:11px;color:#aaa;font-family:monospace;}
 .sbadge{font-size:11px;padding:4px 10px;border-radius:12px;font-weight:700;}
-.sbadge.ship{background:#fff3e0;color:#e65100;}
+.sbadge.ship{background:transparent;color:#e65100;border:1px solid #e65100;}
 .sbadge.del{background:#e3f2fd;color:#1976d2;}
 .sbadge.ref{background:#fff3e0;color:#e65100;}
-.sbadge.done{background:#e8f5e9;color:#2e7d32;}
+.sbadge.done{background:transparent;color:#2e7d32;border:1px solid #2e7d32;}
 .ocard-mid{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
 .ocard-img{width:65px;height:65px;border-radius:10px;object-fit:cover;background:#f0f0f0;flex-shrink:0;}
 .ocard-title{font-size:13px;font-weight:600;color:#222;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .ocard-price{font-size:13px;color:#1976d2;font-weight:700;}
 .ocard-profit{font-size:11px;color:#2e7d32;margin-top:2px;}
-.countdown{display:flex;align-items:center;gap:6px;background:#fff8e1;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
+.countdown{display:flex;align-items:center;gap:6px;background:transparent;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
 .ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .map-wrap{border-radius:12px;overflow:hidden;height:160px;background:#e8f4fd;margin-bottom:10px;position:relative;}
 .map-canvas{width:100%;height:100%;}
@@ -11255,7 +11255,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <div class="popup-row"><span style="font-size:13px;color:#555;">Your Profit</span><span style="font-size:14px;font-weight:700;color:#2e7d32;" id="sp-pro">$0.00</span></div>
     <div style="display:flex;gap:10px;padding:14px 20px 0;">
       <button onclick="closeShipPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="openPwdPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">✅ OK Ship Now</button>
+      <button onclick="openPwdPopup()" style="flex:2;padding:13px;border:none;border-radius:12px;background:#1976d2;color:white;font-size:14px;font-weight:700;cursor:pointer;">OK Ship Now</button>
     </div>
   </div>
 </div>
@@ -11271,7 +11271,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     </div>
     <div style="display:flex;gap:10px;padding:4px 20px 0;">
       <button onclick="closePwdPopup()" style="flex:1;padding:13px;border:1.5px solid #ddd;border-radius:12px;background:white;color:#555;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>
-      <button onclick="doShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;">🚚 Ship Now</button>
+      <button onclick="doShip()" style="flex:2;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;">Ship Now</button>
     </div>
   </div>
 </div>
@@ -11309,11 +11309,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
       <div id="pm-price" style="font-size:16px;font-weight:800;color:#1976d2;margin-bottom:3px;"></div>
       <div id="pm-profit" style="font-size:12px;color:#2e7d32;font-weight:600;margin-bottom:10px;"></div>
     </div>
-    <div id="pm-countdown" style="margin:0 16px 10px;background:#fff8e1;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
+    <div id="pm-countdown" style="margin:0 16px 10px;background:transparent;border-radius:10px;padding:10px 14px;font-size:13px;color:#e65100;font-weight:600;display:flex;align-items:center;gap:8px;">
       ⏱ Ship within: <b id="pm-cd">--:--:--</b>
     </div>
     <div style="padding:0 16px 20px;">
-      <button class="ship-btn" onclick="shipFromModal()">🚚 Ship Now</button>
+      <button class="ship-btn" onclick="shipFromModal()">Ship Now</button>
     </div>
   </div>
 </div>
@@ -11471,7 +11471,7 @@ function buildCard(o){
         }
         html += '<div class="countdown" id="cd-'+o.id+'" style="'+(isTO?"background:#fce4ec;color:#c62828;":"")+'">' +
             '⏱ '+(isTO?'<b>⏰ TIME OUT</b>':'Ship within: <b id="cdt-'+o.id+'">'+fmtTime(remaining)+'</b>')+'</div>';
-        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">🚚 Ship Now</button>';
+        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">Ship Now</button>';
     }
 
     if(o.status === "in_delivery"){
@@ -11494,7 +11494,7 @@ function buildCard(o){
         if(o.completedAt){
             html += '<div style="font-size:11px;color:#999;padding:4px 0 2px 2px;">📅 Delivered on: '+fmtDate(o.completedAt)+'</div>';
         }
-        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;text-align:center;">✅ Delivered — Profit added to wallet</div>';
+        html += '<div class="delivered-bar" style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:12px;font-size:13px;color:#333;font-weight:600;text-align:center;cursor:pointer;">✅ Delivered — Profit added to wallet</div>';
     }
 
     card.innerHTML = html;
@@ -11512,7 +11512,7 @@ function buildCard(o){
         setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart, true); }, 100);
     }
     if(o.status === "completed"){
-        card.onclick = function(){ showToast("✅ Delivered — Profit has been credited"); };
+        card.onclick = function(){ showDeliveredDetails(o); };
     }
     return card;
 }
@@ -11720,6 +11720,38 @@ function drawMap2(c, tp, ds, arrived){
     });
     ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left"; ctx.fillText(tp.origin.name,Math.max(2,p0.x-20),p0.y+14);
     ctx.textAlign="right"; ctx.fillText(tp.destination.name,Math.min(W-2,p2.x+20),p2.y+14);
+}
+
+function showDeliveredDetails(o){
+    var qty = parseInt(o.quantity||1);
+    var unitPrice = parseFloat(o.unitPrice||(o.product&&o.product.price)||0);
+    var totalPrice = parseFloat(o.total||0);
+    var supplierPerUnit = parseFloat(o.supplierPrice||0);
+    var totalSupplier = parseFloat(o.totalSupplierPrice||(supplierPerUnit*qty));
+    var totalProfit = parseFloat(o.totalProfit||(parseFloat(o.profit||0)*qty));
+    var html = '<div onclick="this.parentElement.remove()" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;">'
+        + '<div onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;padding:24px 20px;width:320px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,0.18);">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">'
+        + '<span style="font-size:15px;font-weight:700;color:#222;">Order Details</span>'
+        + '<span onclick="this.closest('[style*=fixed]').remove()" style="cursor:pointer;font-size:20px;color:#aaa;line-height:1;">&times;</span>'
+        + '</div>'
+        + '<div style="font-size:13px;color:#444;line-height:2.2;">'
+        + '<div style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding-bottom:6px;margin-bottom:6px;">'
+        + '<span style="color:#888;">Product</span><span style="font-weight:600;color:#222;max-width:180px;text-align:right;">'+(o.product?o.product.title:"—")+'</span></div>'
+        + (qty>1?'<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Unit Price</span><span style="font-weight:600;">US$'+unitPrice.toFixed(2)+'</span></div>':'')
+        + (qty>1?'<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Quantity</span><span style="font-weight:600;">'+qty+'</span></div>':'')
+        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Supplier Cost</span><span style="font-weight:600;">US$'+totalSupplier.toFixed(2)+'</span></div>'
+        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Sale Price</span><span style="font-weight:600;">US$'+totalPrice.toFixed(2)+'</span></div>'
+        + '<div style="display:flex;justify-content:space-between;border-top:1px solid #f0f0f0;padding-top:6px;margin-top:6px;">'
+        + '<span style="color:#888;">Profit</span><span style="font-weight:700;color:#2e7d32;">+US$'+totalProfit.toFixed(2)+'</span></div>'
+        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Delivered on</span><span style="font-weight:600;">'+(o.completedAt?fmtDate(o.completedAt):"—")+'</span></div>'
+        + '<div style="display:flex;justify-content:space-between;"><span style="color:#888;">Payment</span><span style="font-weight:700;color:#1976d2;">✅ Paid</span></div>'
+        + '</div>'
+        + '<button onclick="this.closest('[style*=fixed]').remove()" style="margin-top:16px;width:100%;padding:11px;border:none;border-radius:10px;background:#1976d2;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">Close</button>'
+        + '</div></div>';
+    var div = document.createElement("div");
+    div.innerHTML = html;
+    document.body.appendChild(div.firstChild);
 }
 
 function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
