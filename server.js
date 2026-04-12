@@ -1480,32 +1480,40 @@ app.post("/follow-store", (req, res) => {
     res.json({ success: true, followers: appl.followers });
 });
 
-// زيادة المتابعين تلقائياً كل ساعة حسب VIP
+// زيادة المتابعين كل 30 ثانية حسب VIP
 // المعدل اليومي: VIP0=30 | VIP1=60 | VIP2=150 | VIP3=400 | VIP4=800 | VIP5=1000
 // المتابعون محفوظون على السيرفر ولا يُحذفون عند التحديث
 const VIP_FOLLOWERS_DAILY = [30, 60, 150, 400, 800, 1000];
+// كل 30 ثانية = 2880 دفعة في اليوم
+// نستخدم عداد تراكمي لإضافة كسور بدقة
+const _followersAccum = {}; // email -> رصيد متراكم
 
 setInterval(() => {
     let changed = false;
+    const INTERVALS_PER_DAY = 2880; // 86400 / 30
     storeApplications.forEach(a => {
         if (a.status === "approved") {
             if (!a.followers) a.followers = 0;
             const vipLevel = a.vipLevel || 0;
             const daily = VIP_FOLLOWERS_DAILY[vipLevel] || 30;
-            // معدل الساعة = اليومي / 24
-            const perHour = daily / 24;
-            // إضافة عشوائية ±20% للواقعية
-            const jitter = perHour * 0.2 * (Math.random() * 2 - 1);
-            const toAdd = Math.max(1, Math.round(perHour + jitter));
-            a.followers += toAdd;
-            changed = true;
+            // كمية كل 30 ثانية كعدد حقيقي
+            const perInterval = daily / INTERVALS_PER_DAY;
+            // تراكم الكسور
+            if (!_followersAccum[a.email]) _followersAccum[a.email] = 0;
+            _followersAccum[a.email] += perInterval;
+            // عندما يصل التراكم لـ 1 أو أكثر نضيف
+            if (_followersAccum[a.email] >= 1) {
+                const toAdd = Math.floor(_followersAccum[a.email]);
+                _followersAccum[a.email] -= toAdd;
+                a.followers += toAdd;
+                changed = true;
+            }
         }
     });
     if(changed){
         saveStoreApplications();
-        console.log("✅ Followers updated hourly");
     }
-}, 60 * 60 * 1000); // كل ساعة
+}, 30 * 1000); // كل 30 ثانية
 
 // ================= STORE DESCRIPTION =================
 // جلب التعريف - يمكن لأي زائر
