@@ -791,23 +791,22 @@ document.getElementById("content").innerHTML = `
 <div class="card">
   <h2>&#128230; Orders Management</h2>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;">
-    <input id="orderSearchEmail" placeholder="Search by email..." style="flex:1;padding:10px;border-radius:8px;border:1px solid #ccc;min-width:180px;">
+    <input id="orderSearchEmail" placeholder="Search by seller/buyer email..." style="flex:1;padding:10px;border-radius:8px;border:1px solid #ccc;min-width:180px;">
     <select id="orderStatusFilter" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
       <option value="">All Statuses</option>
-      <option value="waiting_payment">Waiting Payment</option>
-      <option value="waiting_shipping">Waiting Shipping</option>
-      <option value="shipped">Shipped</option>
-      <option value="completed">Completed</option>
-      <option value="refund">Refund</option>
+      <option value="waiting_shipping">⏳ Waiting Shipping</option>
+      <option value="in_delivery">🚚 In Delivery</option>
+      <option value="waiting_refund">📬 Arrived - Waiting Confirm</option>
+      <option value="completed">✅ Completed</option>
     </select>
     <button onclick="loadAllOrders()" style="padding:10px 18px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;">&#128269; Search</button>
   </div>
   <details style="margin-bottom:15px;">
     <summary style="cursor:pointer;font-weight:bold;padding:10px;background:#f0f0f0;border-radius:8px;">&#10133; Add Manual Order</summary>
     <div style="padding:15px;border:1px solid #ddd;border-radius:8px;margin-top:8px;display:grid;gap:10px;">
-      <input id="newOrderEmail" placeholder="User Email" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+      <input id="newOrderEmail" placeholder="Seller Email" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
       <input id="newOrderTitle" placeholder="Product Title" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
-      <input id="newOrderPrice" placeholder="Price ($)" type="number" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+      <input id="newOrderPrice" placeholder="Retail Price ($)" type="number" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
       <input id="newOrderQty" placeholder="Quantity" type="number" value="1" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
       <button onclick="addManualOrder()" style="padding:10px;background:#28a745;color:white;border:none;border-radius:8px;cursor:pointer;">&#10003; Create Order</button>
     </div>
@@ -1425,78 +1424,147 @@ async function deleteStoreApplication(email){
 
 
 // ===== ORDERS ADMIN FUNCTIONS =====
-var _sLabels = {waiting_payment:'Waiting Payment',waiting_shipping:'Waiting Shipping',shipped:'Shipped',completed:'Completed',refund:'Refund'};
-var _sBg     = {waiting_payment:'#fff3cd',waiting_shipping:'#cce5ff',shipped:'#d4edda',completed:'#d1ecf1',refund:'#f8d7da'};
-var _sCol    = {waiting_payment:'#856404',waiting_shipping:'#004085',shipped:'#155724',completed:'#0c5460',refund:'#721c24'};
+var _sLabels = {
+  waiting_shipping:'⏳ Waiting Shipping',
+  in_delivery:'🚚 In Delivery',
+  waiting_refund:'📬 Arrived - Waiting Confirm',
+  completed:'✅ Completed'
+};
+var _sBg = {
+  waiting_shipping:'#fff3cd',
+  in_delivery:'#cce5ff',
+  waiting_refund:'#d4edda',
+  completed:'#d1ecf1'
+};
+var _sCol = {
+  waiting_shipping:'#856404',
+  in_delivery:'#004085',
+  waiting_refund:'#155724',
+  completed:'#0c5460'
+};
 
 async function loadAllOrders(){
   var container = document.getElementById('adminOrdersList');
   if(!container) return;
-  container.innerHTML = 'Loading...';
-  var res = await adminFetch('/all-orders');
-  var data = await res.json();
-  data = data.reverse();
-  var emailF  = (document.getElementById('orderSearchEmail')||{}).value||'';
-  var statusF = (document.getElementById('orderStatusFilter')||{}).value||'';
-  if(emailF)  data = data.filter(function(o){return o.email.toLowerCase().includes(emailF.toLowerCase());});
-  if(statusF) data = data.filter(function(o){return o.status===statusF;});
-  if(data.length===0){container.innerHTML='<p style="color:#999;text-align:center;padding:30px;">No orders found.</p>';return;}
-  container.innerHTML = data.map(function(o){
-    var bg  = _sBg[o.status]||'#eee';
-    var col = _sCol[o.status]||'#333';
-    var lbl = _sLabels[o.status]||o.status;
-    var opts = ['waiting_payment','waiting_shipping','shipped','completed','refund'].map(function(s){
-      return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+_sLabels[s]+'</option>';
-    }).join('');
-    return '<div style="border:1px solid #ddd;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa;">'+
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px;">'+
-        '<div>'+
-          '<div style="font-weight:bold;font-size:15px;">'+o.productTitle+'</div>'+
-          '<div style="color:#666;font-size:13px;">&#128231; '+o.email+'</div>'+
-          '<div style="color:#1976d2;font-weight:bold;">$'+parseFloat(o.productPrice).toFixed(2)+' &times; '+(o.quantity||1)+'</div>'+
-          '<div style="font-size:11px;color:#999;">'+o.createdAt+'</div>'+
-          (o.profit>0?'<div style="color:#28a745;font-size:13px;font-weight:bold;">+ $'+parseFloat(o.profit).toFixed(2)+' profit</div>':'')+
+  container.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">Loading...</p>';
+  try {
+    var res = await adminFetch('/admin-store-orders');
+    var data = await res.json();
+    var orders = (data.orders || []).slice().reverse();
+
+    var emailF  = (document.getElementById('orderSearchEmail')||{}).value||'';
+    var statusF = (document.getElementById('orderStatusFilter')||{}).value||'';
+    if(emailF)  orders = orders.filter(function(o){ return (o.sellerEmail||'').toLowerCase().includes(emailF.toLowerCase()) || (o.buyerEmail||'').toLowerCase().includes(emailF.toLowerCase()); });
+    if(statusF) orders = orders.filter(function(o){ return o.status === statusF; });
+
+    if(orders.length === 0){
+      container.innerHTML = '<p style="color:#999;text-align:center;padding:30px;">No orders found.</p>';
+      return;
+    }
+
+    container.innerHTML = orders.map(function(o){
+      var bg  = _sBg[o.status]  || '#eee';
+      var col = _sCol[o.status] || '#333';
+      var lbl = _sLabels[o.status] || o.status;
+      var productTitle = (o.product && o.product.title) ? o.product.title : 'Unknown Product';
+      var retailPrice  = parseFloat(o.total || 0).toFixed(2);
+      var supplierPrice= parseFloat((o.supplierPrice||0) * (o.quantity||1)).toFixed(2);
+      var profit       = parseFloat((o.profit||0) * (o.quantity||1)).toFixed(2);
+
+      var opts = ['waiting_shipping','in_delivery','waiting_refund','completed'].map(function(s){
+        return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+_sLabels[s]+'</option>';
+      }).join('');
+
+      return '<div style="border:1px solid #ddd;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa;">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px;">'+
+          '<div>'+
+            '<div style="font-weight:bold;font-size:14px;margin-bottom:3px;">'+sanitize(productTitle)+'</div>'+
+            '<div style="color:#666;font-size:12px;">🏪 Seller: '+sanitize(o.sellerEmail||'-')+'</div>'+
+            '<div style="color:#666;font-size:12px;">🛒 Buyer: '+sanitize(o.buyerEmail||'-')+'</div>'+
+            '<div style="font-size:12px;margin-top:4px;">'+
+              '<span style="color:#e65100;">Supplier: $'+supplierPrice+'</span> &nbsp;'+
+              '<span style="color:#1976d2;">Retail: $'+retailPrice+'</span> &nbsp;'+
+              '<span style="color:#2e7d32;font-weight:bold;">Profit: $'+profit+'</span>'+
+            '</div>'+
+            '<div style="font-size:11px;color:#999;margin-top:2px;">'+sanitize(o.createdAt||'')+'</div>'+
+          '</div>'+
+          '<span style="background:'+bg+';color:'+col+';padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;white-space:nowrap;">'+lbl+'</span>'+
         '</div>'+
-        '<span style="background:'+bg+';color:'+col+';padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;">'+lbl+'</span>'+
-      '</div>'+
-      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'+
-        '<select id="sel_'+o.id+'" style="padding:8px;border-radius:8px;border:1px solid #ccc;font-size:13px;">'+opts+'</select>'+
-        '<input id="profit_'+o.id+'" type="number" placeholder="Profit $" value="'+(o.profit||o.productPrice||'')+'" style="width:100px;padding:8px;border-radius:8px;border:1px solid #ccc;font-size:13px;">'+
-        '<button onclick="updateOrderStatus('+o.id+')" style="padding:8px 14px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;">&#9998; Update</button>'+
-        '<button onclick="deleteOrder('+o.id+')" style="padding:8px 14px;background:#dc3545;color:white;border:none;border-radius:8px;cursor:pointer;">&#128465; Delete</button>'+
-      '</div>'+
-    '</div>';
-  }).join('');
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'+
+          '<select id="sel_'+o.id+'" style="padding:8px;border-radius:8px;border:1px solid #ccc;font-size:13px;flex:1;">'+opts+'</select>'+
+          '<button onclick="updateStoreOrderStatus(\''+o.id+'\')" style="padding:8px 18px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">✏️ Update</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+
+  } catch(e) {
+    container.innerHTML = '<p style="color:red;text-align:center;padding:20px;">Error loading orders.</p>';
+  }
 }
 
-async function updateOrderStatus(id){
-  var status = document.getElementById('sel_'+id).value;
-  var profit = parseFloat(document.getElementById('profit_'+id).value)||0;
-  var res = await adminFetch('/update-order-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id,status:status,profit:profit})});
-  var data = await res.json();
-  if(data.success){
-    alert('Order updated successfully! ✅'+(status==='completed'?' \n$'+profit.toFixed(2)+' profit added to user balance & wallet':''));
-    loadAllOrders();
-  } else { alert('Error ❌'); }
-}
-
-async function deleteOrder(id){
-  if(!confirm('Delete this order?')) return;
-  var res = await adminFetch('/delete-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})});
-  var data = await res.json();
-  if(data.success){ loadAllOrders(); }
+async function updateStoreOrderStatus(orderId){
+  var selEl = document.getElementById('sel_'+orderId);
+  if(!selEl) return;
+  var status = selEl.value;
+  if(!confirm('Update order to: ' + (_sLabels[status]||status) + '?')) return;
+  try {
+    var res = await adminFetch('/admin-update-order-status', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ orderId: orderId, status: status })
+    });
+    var data = await res.json();
+    if(data.success){
+      alert('Order updated ✅' + (status === 'completed' ? '\nProfit credited to seller wallet!' : ''));
+      loadAllOrders();
+    } else {
+      alert('Error: ' + (data.message||'Unknown error'));
+    }
+  } catch(e) {
+    alert('Connection error ❌');
+  }
 }
 
 async function addManualOrder(){
-  var email = document.getElementById('newOrderEmail').value.trim();
-  var title = document.getElementById('newOrderTitle').value.trim();
-  var price = parseFloat(document.getElementById('newOrderPrice').value)||0;
-  var qty   = parseInt(document.getElementById('newOrderQty').value)||1;
-  if(!email||!title){ alert('Please enter email and product title'); return; }
-  var res = await adminFetch('/create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,productTitle:title,productPrice:price,quantity:qty})});
-  var data = await res.json();
-  if(data.success){ alert('Order created ✅'); loadAllOrders(); }
-  else { alert('Error ❌'); }
+  var sellerEmail = document.getElementById('newOrderEmail').value.trim();
+  var title       = document.getElementById('newOrderTitle').value.trim();
+  var price       = parseFloat(document.getElementById('newOrderPrice').value)||0;
+  var qty         = parseInt(document.getElementById('newOrderQty').value)||1;
+  if(!sellerEmail||!title){ alert('Please enter seller email and product title'); return; }
+
+  // حساب سعر المورد والربح (VIP 0 = 15% discount)
+  var supplierPrice = parseFloat((price * 0.85).toFixed(2));
+  var profit        = parseFloat((price - supplierPrice).toFixed(2));
+
+  var order = {
+    id: 'ORD' + Date.now(),
+    buyerEmail: 'customer@tiktok.com',
+    sellerEmail: sellerEmail,
+    product: { id: Date.now(), title: title, price: price, folder:'', category_id:27 },
+    quantity: qty,
+    total: parseFloat((price * qty).toFixed(2)),
+    supplierPrice: supplierPrice,
+    profit: profit,
+    status: 'waiting_shipping',
+    createdAt: new Date().toISOString(),
+    shippedAt: null,
+    deliveryStart: null,
+    completedAt: null,
+    trackingPath: null
+  };
+
+  try {
+    var res = await adminFetch('/admin-create-store-order', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(order)
+    });
+    var data = await res.json();
+    if(data.success){ alert('Order created ✅'); loadAllOrders(); }
+    else { alert('Error: ' + (data.message||'Unknown')); }
+  } catch(e) {
+    alert('Connection error ❌');
+  }
 }
 </script>
 
