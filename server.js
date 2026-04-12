@@ -1209,11 +1209,11 @@ app.get("/approve/:id", adminMiddleware, (req, res) => {
 
     // العمليات
     if (r.type === "recharge") {
-        user.balance += amount;
+        user.balance = parseFloat(((parseFloat(user.balance) || 0) + amount).toFixed(2));
     }
 
     if (r.type === "withdraw") {
-        user.balance -= amount;
+        user.balance = parseFloat(((parseFloat(user.balance) || 0) - amount).toFixed(2));
     }
 
     // ✅ حفظ البيانات
