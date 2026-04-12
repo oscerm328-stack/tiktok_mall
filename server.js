@@ -1480,28 +1480,37 @@ app.post("/follow-store", (req, res) => {
     res.json({ success: true, followers: appl.followers });
 });
 
-// زيادة المتابعين كل 30 ثانية حسب VIP
-// المعدل اليومي: VIP0=30 | VIP1=60 | VIP2=150 | VIP3=400 | VIP4=800 | VIP5=1000
+// زيادة المتابعين كل 10 ثوانٍ حسب VIP
+// كل VIP له فترة مختلفة بين كل معجب:
+// VIP0: كل 120 ث | VIP1: كل 60 ث | VIP2: كل 24 ث | VIP3: كل 15 ث | VIP4: كل 10 ث | VIP5: كل 8 ث
 // المتابعون محفوظون على السيرفر ولا يُحذفون عند التحديث
-const VIP_FOLLOWERS_DAILY = [30, 60, 150, 400, 800, 1000];
-// كل 30 ثانية = 2880 دفعة في اليوم
-// نستخدم عداد تراكمي لإضافة كسور بدقة
+
+// عدد الدفعات بين كل إضافة لكل VIP (كل دفعة = 10 ثوانٍ)
+// VIP0: كل 12 دفعة (120ث) | VIP1: كل 6 (60ث) | VIP2: كل 2.4 | VIP3: كل 1.5 | VIP4: كل دفعة | VIP5: كل دفعة
 const _followersAccum = {}; // email -> رصيد متراكم
 
 setInterval(() => {
     let changed = false;
-    const INTERVALS_PER_DAY = 2880; // 86400 / 30
+    // معدل الإضافة لكل 10 ثوانٍ حسب VIP
+    // VIP0=30/يوم VIP1=60 VIP2=150 VIP3=400 VIP4=معجب كل 10ث VIP5=معجب كل 8ث
+    const PER_INTERVAL = [
+        30  / 8640,   // VIP 0: 30/يوم  ÷ 8640 دفعة/يوم
+        60  / 8640,   // VIP 1: 60/يوم
+        150 / 8640,   // VIP 2: 150/يوم
+        400 / 8640,   // VIP 3: 400/يوم
+        1,            // VIP 4: معجب واحد كل 10 ثوانٍ مباشرة
+        1.2           // VIP 5: أكثر قليلاً من معجب كل 10 ثوانٍ
+    ];
+
     storeApplications.forEach(a => {
         if (a.status === "approved") {
             if (!a.followers) a.followers = 0;
             const vipLevel = a.vipLevel || 0;
-            const daily = VIP_FOLLOWERS_DAILY[vipLevel] || 30;
-            // كمية كل 30 ثانية كعدد حقيقي
-            const perInterval = daily / INTERVALS_PER_DAY;
-            // تراكم الكسور
+            const perInterval = PER_INTERVAL[vipLevel] || PER_INTERVAL[0];
+
             if (!_followersAccum[a.email]) _followersAccum[a.email] = 0;
             _followersAccum[a.email] += perInterval;
-            // عندما يصل التراكم لـ 1 أو أكثر نضيف
+
             if (_followersAccum[a.email] >= 1) {
                 const toAdd = Math.floor(_followersAccum[a.email]);
                 _followersAccum[a.email] -= toAdd;
@@ -1513,7 +1522,7 @@ setInterval(() => {
     if(changed){
         saveStoreApplications();
     }
-}, 30 * 1000); // كل 30 ثانية
+}, 10 * 1000); // كل 10 ثوانٍ
 
 // ================= STORE DESCRIPTION =================
 // جلب التعريف - يمكن لأي زائر
