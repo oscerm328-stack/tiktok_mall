@@ -1499,6 +1499,20 @@ async function deleteStoreApplication(email){
 
 
 // ===== ORDERS ADMIN FUNCTIONS =====
+
+// طلبات مخفية محلياً فقط (لا تُحذف من السيرفر)
+var _hiddenOrders = new Set();
+
+function dismissOrder(orderId) {
+  _hiddenOrders.add(orderId);
+  var el = document.getElementById('order_card_' + orderId);
+  if (el) {
+    el.style.transition = 'opacity 0.25s, max-height 0.3s';
+    el.style.opacity = '0';
+    setTimeout(function(){ el.style.display = 'none'; }, 280);
+  }
+}
+
 var _sLabels = {
   waiting_shipping:'⏳ Waiting Shipping',
   in_delivery:'🚚 In Delivery',
@@ -1532,6 +1546,9 @@ async function loadAllOrders(){
     if(emailF)  orders = orders.filter(function(o){ return (o.sellerEmail||'').toLowerCase().includes(emailF.toLowerCase()) || (o.buyerEmail||'').toLowerCase().includes(emailF.toLowerCase()); });
     if(statusF) orders = orders.filter(function(o){ return o.status === statusF; });
 
+    // إخفاء الطلبات التي ضغط عليها الأدمن X
+    orders = orders.filter(function(o){ return !_hiddenOrders.has(o.id); });
+
     if(orders.length === 0){
       container.innerHTML = '<p style="color:#999;text-align:center;padding:30px;">No orders found.</p>';
       return;
@@ -1545,12 +1562,21 @@ async function loadAllOrders(){
       var retailPrice  = parseFloat(o.total || 0).toFixed(2);
       var supplierPrice= parseFloat((o.supplierPrice||0) * (o.quantity||1)).toFixed(2);
       var profit       = parseFloat((o.profit||0) * (o.quantity||1)).toFixed(2);
+      var isCompleted  = o.status === 'completed';
 
       var opts = ['waiting_shipping','in_delivery','waiting_refund','completed'].map(function(s){
         return '<option value="'+s+'"'+(o.status===s?' selected':'')+'>'+_sLabels[s]+'</option>';
       }).join('');
 
-      return '<div style="border:1px solid #ddd;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa;">'+
+      // زر X يظهر فقط للطلبات المكتملة
+      var dismissBtn = isCompleted
+        ? '<button onclick="dismissOrder(\''+o.id+'\')" title="إخفاء من القائمة" style="'+
+            'width:22px;height:22px;border-radius:50%;border:none;background:#ff3b30;color:white;'+
+            'font-size:13px;font-weight:bold;line-height:1;cursor:pointer;padding:0;flex-shrink:0;'+
+            'display:flex;align-items:center;justify-content:center;">✕</button>'
+        : '';
+
+      return '<div id="order_card_'+o.id+'" style="border:1px solid #ddd;border-radius:12px;padding:15px;margin-bottom:12px;background:#fafafa;">'+
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px;">'+
           '<div>'+
             '<div style="font-weight:bold;font-size:14px;margin-bottom:3px;">'+sanitize(productTitle)+'</div>'+
@@ -1563,7 +1589,10 @@ async function loadAllOrders(){
             '</div>'+
             '<div style="font-size:11px;color:#999;margin-top:2px;">'+sanitize(o.createdAt||'')+'</div>'+
           '</div>'+
-          '<span style="background:'+bg+';color:'+col+';padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;white-space:nowrap;">'+lbl+'</span>'+
+          '<div style="display:flex;align-items:center;gap:8px;">'+
+            '<span style="background:'+bg+';color:'+col+';padding:4px 12px;border-radius:20px;font-size:12px;font-weight:bold;white-space:nowrap;">'+lbl+'</span>'+
+            dismissBtn+
+          '</div>'+
         '</div>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">'+
           '<select id="sel_'+o.id+'" style="padding:8px;border-radius:8px;border:1px solid #ccc;font-size:13px;flex:1;">'+opts+'</select>'+
