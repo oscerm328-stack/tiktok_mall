@@ -8585,12 +8585,12 @@ body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:30px;min-heigh
          onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">
     <div class="banner-info">
       <h2 id="bannerStoreName"></h2>
-      <div class="badges">
-        <span class="vip-badge">&#10003; VIP <span id="vipLevel">0</span></span>
-        <span class="badge">Products <span id="productCount">0</span></span>
-        <span class="badge">Followers <span id="followerCount">0</span></span>
-      </div>
     </div>
+  </div>
+  <div class="badges" style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;">
+    <span class="vip-badge">&#10003; VIP <span id="vipLevel">0</span></span>
+    <span class="badge">Products <span id="productCount">0</span></span>
+    <span class="badge">Followers <span id="followerCount">0</span></span>
   </div>
   <div class="banner-desc-row">
     <div class="desc-text" id="storeDesc" contenteditable="false"
