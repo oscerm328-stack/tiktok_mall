@@ -156,8 +156,20 @@ function sharedAuthMiddleware(req, res, next) {
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) return res.status(401).json({ error: "Token expired or invalid" });
-        req.userEmail = decoded.email || decoded.username;
-        req.userRole  = decoded.role || "user";
+
+        const emailDecoded = decoded.email || decoded.username;
+        const roleDecoded  = decoded.role || "user";
+
+        // التحقق من التجميد للمستخدمين العاديين فقط
+        if (roleDecoded === "user") {
+            const userObj = users.find(u => u.email === emailDecoded);
+            if (userObj && userObj.frozen) {
+                return res.status(403).json({ error: "frozen", reason: userObj.freezeReason || "Account suspended." });
+            }
+        }
+
+        req.userEmail = emailDecoded;
+        req.userRole  = roleDecoded;
         next();
     });
 }
@@ -172,7 +184,15 @@ function authMiddleware(req, res, next) {
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) return res.status(401).json({ error: "Token expired or invalid" });
-        req.userEmail = decoded.email;
+
+        // التحقق من التجميد في كل طلب
+        const userEmail = decoded.email;
+        const userObj = users.find(u => u.email === userEmail);
+        if (userObj && userObj.frozen) {
+            return res.status(403).json({ error: "frozen", reason: userObj.freezeReason || "Account suspended." });
+        }
+
+        req.userEmail = userEmail;
         next();
     });
 }
@@ -880,6 +900,11 @@ app.post("/login", rateLimit(5, 60*1000), (req, res) => {
     const user = users.find(u => u.email === email);
     if (!user) return res.json({ error: "User not found" });
 
+    // التحقق من التجميد قبل كل شيء
+    if (user.frozen) {
+        return res.json({ error: "frozen", reason: user.freezeReason || "Your account has been suspended. Please contact support." });
+    }
+
     // مقارنة الباسورد مع الـ hash
     bcrypt.compare(password, user.password, (err, match) => {
         if (err || !match) {
@@ -948,6 +973,29 @@ app.post("/delete-user", adminMiddleware, (req, res) => {
     } else {
         res.json({ success: false });
     }
+});
+
+// ================= FREEZE / UNFREEZE USER =================
+app.post("/freeze-user", adminMiddleware, (req, res) => {
+    const { email, reason } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) return res.json({ success: false, message: "User not found" });
+    user.frozen = true;
+    user.freezeReason = reason || "Your account has been suspended. Please contact support.";
+    saveUsers();
+    addLog("freeze_user", `Account frozen: ${reason || "No reason given"}`, email);
+    res.json({ success: true });
+});
+
+app.post("/unfreeze-user", adminMiddleware, (req, res) => {
+    const { email } = req.body;
+    const user = users.find(u => u.email === email);
+    if (!user) return res.json({ success: false, message: "User not found" });
+    user.frozen = false;
+    user.freezeReason = "";
+    saveUsers();
+    addLog("unfreeze_user", "Account unfrozen", email);
+    res.json({ success: true });
 });
 
 // ================= ADMIN LOGIN API =================
@@ -1840,6 +1888,19 @@ text-decoration:none;
 <span style="color:#aaa;font-size:13px;">Don't have an account? </span><a href="/register-page" style="color:white;font-weight:bold;font-size:13px;">Register</a>
 </div>
 <script>
+// عرض رسالة التجميد إذا تم التوجيه من صفحة أخرى
+(function(){
+    var params = new URLSearchParams(window.location.search);
+    if(params.get("frozen") === "1"){
+        var reason = decodeURIComponent(params.get("reason") || "Your account has been suspended.");
+        var box = document.createElement("div");
+        box.style.cssText = "margin-top:16px;background:#1a0000;border:1px solid #ff3b30;border-radius:12px;padding:16px;text-align:left;";
+        box.innerHTML = '<div style="color:#ff3b30;font-weight:bold;font-size:15px;margin-bottom:8px;">🔒 Account Suspended</div>'
+            + '<div style="color:#ffaaaa;font-size:13px;line-height:1.6;">' + reason + '</div>';
+        document.querySelector(".box").appendChild(box);
+    }
+})();
+
 function login(){
 fetch("/login",{
 method:"POST",
@@ -1851,7 +1912,18 @@ password:password.value
 })
 .then(res=>res.json())
 .then(data=>{
-if(data.email){
+if(data.error === "frozen"){
+  // إزالة أي رسالة سابقة
+  var old = document.getElementById("freezeMsg");
+  if(old) old.remove();
+  // عرض رسالة التجميد
+  var box = document.createElement("div");
+  box.id = "freezeMsg";
+  box.style.cssText = "margin-top:16px;background:#1a0000;border:1px solid #ff3b30;border-radius:12px;padding:16px;text-align:left;";
+  box.innerHTML = '<div style="color:#ff3b30;font-weight:bold;font-size:15px;margin-bottom:8px;">🔒 Account Suspended</div>'
+    + '<div style="color:#ffaaaa;font-size:13px;line-height:1.6;">' + (data.reason || "Your account has been suspended.") + '</div>';
+  document.querySelector(".box").appendChild(box);
+}else if(data.email){
 localStorage.setItem("user", JSON.stringify(data));
 if(data.token) localStorage.setItem("token", data.token);
 window.location.href="/dashboard";
@@ -2756,7 +2828,21 @@ function userFetch(url, options = {}){
     const token = (user && user.token) ? user.token : "";
     if(token) options.headers["Authorization"] = "Bearer " + token;
     options.headers["Content-Type"] = options.headers["Content-Type"] || "application/json";
-    return fetch(url, options);
+    return fetch(url, options).then(function(res){
+        if(res.status === 403){
+            return res.clone().json().then(function(data){
+                if(data.error === "frozen"){
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("token");
+                    var reason = encodeURIComponent(data.reason || "Your account has been suspended.");
+                    window.location.href = "/login-page?frozen=1&reason=" + reason;
+                }
+                return res;
+            }).catch(function(){ return res; });
+        }
+        return res;
+    });
+}
 }
 
 // ======= USERNAME SYSTEM =======
@@ -5039,7 +5125,21 @@ function userFetch(url, options = {}){
     const token = (user && user.token) ? user.token : "";
     if(token) options.headers["Authorization"] = "Bearer " + token;
     options.headers["Content-Type"] = options.headers["Content-Type"] || "application/json";
-    return fetch(url, options);
+    return fetch(url, options).then(function(res){
+        if(res.status === 403){
+            return res.clone().json().then(function(data){
+                if(data.error === "frozen"){
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("token");
+                    var reason = encodeURIComponent(data.reason || "Your account has been suspended.");
+                    window.location.href = "/login-page?frozen=1&reason=" + reason;
+                }
+                return res;
+            }).catch(function(){ return res; });
+        }
+        return res;
+    });
+}
 }
 
 
