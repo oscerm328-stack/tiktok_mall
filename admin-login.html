@@ -866,8 +866,8 @@ document.getElementById("content").innerHTML = `
 <div class="card">
   <h2>&#128230; Orders Management</h2>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;">
-    <input id="orderSearchEmail" placeholder="Search by seller/buyer email..." style="flex:1;padding:10px;border-radius:8px;border:1px solid #ccc;min-width:180px;">
-    <select id="orderStatusFilter" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+    <input id="orderSearchEmail" placeholder="Search by seller/buyer email..." oninput="loadAllOrders()" style="flex:1;padding:10px;border-radius:8px;border:1px solid #ccc;min-width:180px;">
+    <select id="orderStatusFilter" onchange="loadAllOrders()" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
       <option value="">All Statuses</option>
       <option value="waiting_shipping">⏳ Waiting Shipping</option>
       <option value="in_delivery">🚚 In Delivery</option>
@@ -875,6 +875,7 @@ document.getElementById("content").innerHTML = `
       <option value="completed">✅ Completed</option>
     </select>
     <button onclick="loadAllOrders()" style="padding:10px 18px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;">&#128269; Search</button>
+    <button onclick="restoreHiddenOrders()" title="استرجاع الطلبات المخفية" style="padding:10px 14px;background:#ff9800;color:white;border:none;border-radius:8px;cursor:pointer;">&#128257; Restore Hidden</button>
   </div>
   <details style="margin-bottom:15px;">
     <summary style="cursor:pointer;font-weight:bold;padding:10px;background:#f0f0f0;border-radius:8px;">&#10133; Add Manual Order</summary>
@@ -1500,11 +1501,23 @@ async function deleteStoreApplication(email){
 
 // ===== ORDERS ADMIN FUNCTIONS =====
 
-// طلبات مخفية محلياً فقط (لا تُحذف من السيرفر)
-var _hiddenOrders = new Set();
+// طلبات مخفية - تُحفظ في localStorage حتى تبقى بعد التحديث
+function _loadHiddenOrders(){
+  try {
+    var saved = localStorage.getItem("adminHiddenOrders");
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  } catch(e){ return new Set(); }
+}
+function _saveHiddenOrders(){
+  try {
+    localStorage.setItem("adminHiddenOrders", JSON.stringify(Array.from(_hiddenOrders)));
+  } catch(e){}
+}
+var _hiddenOrders = _loadHiddenOrders();
 
 function dismissOrder(orderId) {
   _hiddenOrders.add(orderId);
+  _saveHiddenOrders();
   var el = document.getElementById('order_card_' + orderId);
   if (el) {
     el.style.transition = 'opacity 0.25s, max-height 0.3s';
@@ -1531,6 +1544,13 @@ var _sCol = {
   waiting_refund:'#155724',
   completed:'#0c5460'
 };
+
+function restoreHiddenOrders(){
+  if(!confirm('هل تريد استرجاع جميع الطلبات المخفية؟')) return;
+  _hiddenOrders.clear();
+  _saveHiddenOrders();
+  loadAllOrders();
+}
 
 async function loadAllOrders(){
   var container = document.getElementById('adminOrdersList');
