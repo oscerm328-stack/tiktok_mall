@@ -573,36 +573,111 @@ adminFetch("/admin/users")
 .then(res => res.json())
 .then(data => {
 
-let rows = "";
-
-if(data.length === 0){
-rows = "<tr><td colspan='3'>No users</td></tr>";
-}
-
-data.forEach(user => {
-rows += `
-<tr>
-<td>${user.email}</td>
-<td>${user.plainPassword || user.password}</td>
-<td style="display:flex;gap:6px;">
-  <button onclick="editUser('${user.email}')">Edit</button>
-  <button onclick="deleteUser('${user.email}')" style="background:red;color:white;">Delete</button>
-</td>
-</tr>
-`;
-});
-
 document.getElementById("content").innerHTML = `
 <div class="card">
-<h2>Users</h2>
-<table>
-<tr><th>Email</th><th>Password</th><th>Action</th></tr>
-${rows}
-</table>
+<h2>👥 Users <span style="font-size:14px;color:#999;font-weight:normal;">(${data.length} total)</span></h2>
+<input id="userSearchInput" placeholder="🔍 Search by email or country..." oninput="filterUsers()"
+  style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:15px;font-size:14px;">
+<div id="usersTableWrap"></div>
 </div>
 `;
 
+window._allUsersData = data;
+renderUsersTable(data);
+
 });
+}
+
+function renderUsersTable(data){
+  var wrap = document.getElementById("usersTableWrap");
+  if(!wrap) return;
+
+  if(data.length === 0){
+    wrap.innerHTML = "<p style='color:#999;text-align:center;padding:20px;'>No users found</p>";
+    return;
+  }
+
+  var rows = data.map(function(user){
+    var deviceIcon = "🖥️";
+    var d = (user.registerDevice||"").toLowerCase();
+    if(d.includes("iphone"))         deviceIcon = "📱";
+    else if(d.includes("ipad"))      deviceIcon = "📱";
+    else if(d.includes("android"))   deviceIcon = "📱";
+    else if(d.includes("mac"))       deviceIcon = "💻";
+    else if(d.includes("windows"))   deviceIcon = "🖥️";
+
+    var countryFlag = "";
+    var country = user.registerCountry || "";
+    // خريطة بسيطة لأكثر الدول شيوعاً
+    var flagMap = {
+      "United States":"🇺🇸","Saudi Arabia":"🇸🇦","Egypt":"🇪🇬","United Arab Emirates":"🇦🇪",
+      "Kuwait":"🇰🇼","Qatar":"🇶🇦","Bahrain":"🇧🇭","Oman":"🇴🇲","Jordan":"🇯🇴","Iraq":"🇮🇶",
+      "Syria":"🇸🇾","Lebanon":"🇱🇧","Morocco":"🇲🇦","Tunisia":"🇹🇳","Algeria":"🇩🇿","Libya":"🇱🇾",
+      "Yemen":"🇾🇪","Sudan":"🇸🇩","Pakistan":"🇵🇰","India":"🇮🇳","Turkey":"🇹🇷","United Kingdom":"🇬🇧",
+      "Germany":"🇩🇪","France":"🇫🇷","Canada":"🇨🇦","Australia":"🇦🇺","China":"🇨🇳",
+      "Indonesia":"🇮🇩","Malaysia":"🇲🇾","Philippines":"🇵🇭","Nigeria":"🇳🇬","Kenya":"🇰🇪"
+    };
+    countryFlag = flagMap[country] || "🌍";
+
+    return `
+<div style="border:1px solid #e0e0e0;border-radius:12px;padding:14px 16px;margin-bottom:10px;background:#fafafa;">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+    <div style="flex:1;min-width:0;">
+      <div style="font-weight:bold;font-size:14px;color:#111;margin-bottom:6px;">📧 ${sanitize(user.email)}</div>
+      <div style="font-size:12px;color:#555;margin-bottom:4px;">
+        🔑 <b>Password:</b> ${sanitize(user.plainPassword || "—")}
+      </div>
+      <div style="font-size:12px;color:#555;margin-bottom:4px;">
+        💰 <b>Balance:</b> <span style="color:#1976d2;font-weight:bold;">$${parseFloat(user.balance||0).toFixed(2)}</span>
+      </div>
+      ${user.registeredAt ? `<div style="font-size:11px;color:#999;">📅 Registered: ${sanitize(user.registeredAt)}</div>` : ""}
+    </div>
+    <div style="flex-shrink:0;">
+      <div style="display:flex;gap:6px;">
+        <button onclick="editUser('${sanitize(user.email)}')" style="padding:6px 12px;background:#1976d2;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;">✏️ Edit</button>
+        <button onclick="deleteUser('${sanitize(user.email)}')" style="padding:6px 12px;background:#e53935;color:white;border:none;border-radius:8px;cursor:pointer;font-size:12px;">🗑️ Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- معلومات التسجيل -->
+  ${(user.registerIp || user.registerDevice || user.registerCountry) ? `
+  <div style="margin-top:10px;padding:10px 12px;background:white;border-radius:10px;border:1px solid #eee;display:flex;flex-wrap:wrap;gap:12px;">
+    ${user.registerIp ? `
+    <div style="display:flex;align-items:center;gap:5px;font-size:12px;">
+      <span style="background:#e3f2fd;color:#1565c0;padding:3px 8px;border-radius:6px;font-weight:600;">🌐 IP</span>
+      <span style="font-family:monospace;color:#333;font-weight:bold;">${sanitize(user.registerIp)}</span>
+    </div>` : ""}
+    ${user.registerCountry ? `
+    <div style="display:flex;align-items:center;gap:5px;font-size:12px;">
+      <span style="background:#f3e5f5;color:#6a1b9a;padding:3px 8px;border-radius:6px;font-weight:600;">${countryFlag} Country</span>
+      <span style="color:#333;">${sanitize(user.registerCountry)}${user.registerCity ? ", "+sanitize(user.registerCity) : ""}</span>
+    </div>` : ""}
+    ${user.registerDevice ? `
+    <div style="display:flex;align-items:center;gap:5px;font-size:12px;">
+      <span style="background:#e8f5e9;color:#2e7d32;padding:3px 8px;border-radius:6px;font-weight:600;">${deviceIcon} Device</span>
+      <span style="color:#333;">${sanitize(user.registerDevice)} · ${sanitize(user.registerOs||"")} · ${sanitize(user.registerBrowser||"")}</span>
+    </div>` : ""}
+  </div>
+  ` : `<div style="margin-top:8px;font-size:11px;color:#ccc;font-style:italic;">No registration info available (registered before this update)</div>`}
+</div>`;
+  }).join("");
+
+  wrap.innerHTML = rows;
+}
+
+function filterUsers(){
+  var q = (document.getElementById("userSearchInput")||{}).value||"";
+  q = q.toLowerCase();
+  if(!q){ renderUsersTable(window._allUsersData||[]); return; }
+  var filtered = (window._allUsersData||[]).filter(function(u){
+    return (u.email||"").toLowerCase().includes(q) ||
+           (u.registerCountry||"").toLowerCase().includes(q) ||
+           (u.registerCity||"").toLowerCase().includes(q) ||
+           (u.registerIp||"").includes(q) ||
+           (u.registerDevice||"").toLowerCase().includes(q);
+  });
+  renderUsersTable(filtered);
 }
 
 // STORES
