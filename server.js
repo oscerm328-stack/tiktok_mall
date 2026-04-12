@@ -7862,7 +7862,7 @@ res.send(`<!DOCTYPE html>
 body{font-family:Arial,sans-serif;background:#f5f5f5;min-height:100vh;}
 
 /* HEADER */
-.header{background:white;padding:15px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:10;}
+.header{background:white;padding:15px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;position:relative;}
 .back-btn{cursor:pointer;display:inline-flex;align-items:center;padding:4px;}
 .header b{font-size:17px;color:#222;}
 
