@@ -9766,39 +9766,35 @@ app.post("/create-store-order", authMiddleware, (req, res) => {
     const supplierPrice = parseFloat((price * (1 - commissionPct / 100)).toFixed(2));
     const profit = parseFloat((price - supplierPrice).toFixed(2));
 
-    // كل وحدة = طلب منفصل
+    // طلب واحد فقط بالكمية المطلوبة
     const qty = parseInt(quantity) || 1;
-    const createdOrders = [];
-    for(let i = 0; i < qty; i++){
-        const order = {
-            id: String(Date.now() + i).slice(-11).padStart(11,'0'),
-            buyerEmail,
-            sellerEmail,
-            product: {
-                id: product.id,
-                title: product.title,
-                price: price,
-                image: product.images ? product.images[0] : "",
-                folder: product.folder || "",
-                category_id: product.category_id || 0
-            },
-            quantity: 1,
-            total: price,
-            supplierPrice,
-            profit,
-            status: "waiting_shipping",
-            createdAt: new Date().toISOString(),
-            shippedAt: null,
-            deliveryStart: null,
-            completedAt: null,
-            shippingCountdown: 48 * 60 * 60 * 1000,
-            trackingPath: generateTrackingPath()
-        };
-        storeOrders.push(order);
-        createdOrders.push(order);
-    }
+    const order = {
+        id: String(Date.now()).slice(-11).padStart(11,'0'),
+        buyerEmail,
+        sellerEmail,
+        product: {
+            id: product.id,
+            title: product.title,
+            price: price,
+            image: product.images ? product.images[0] : "",
+            folder: product.folder || "",
+            category_id: product.category_id || 0
+        },
+        quantity: qty,
+        total: parseFloat((price * qty).toFixed(2)),
+        supplierPrice: parseFloat((supplierPrice * qty).toFixed(2)),
+        profit: parseFloat((profit * qty).toFixed(2)),
+        status: "waiting_shipping",
+        createdAt: new Date().toISOString(),
+        shippedAt: null,
+        deliveryStart: null,
+        completedAt: null,
+        shippingCountdown: 48 * 60 * 60 * 1000,
+        trackingPath: generateTrackingPath()
+    };
+    storeOrders.push(order);
     saveStoreOrders();
-    res.json({ success: true, order: createdOrders[0], orders: createdOrders });
+    res.json({ success: true, order: order, orders: [order] });
 });
 
 function generateTrackingPath(){
