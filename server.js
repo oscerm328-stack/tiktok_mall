@@ -745,7 +745,7 @@ app.get("/support-page", (req, res) => {
 });
 
 // ================= REGISTER API =================
-app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
+app.post("/register", rateLimit(3, 10*60*1000), async (req, res) => {
     const { email, password, code } = req.body;
 
     // تحقق من البيانات
@@ -764,6 +764,54 @@ app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
         return res.send("User already exists");
     }
 
+    // ===== جمع بيانات الجهاز والموقع =====
+    // جلب الـ IP الحقيقي (Render / Cloudflare / nginx)
+    const rawIp = req.headers["cf-connecting-ip"]
+               || req.headers["x-real-ip"]
+               || (req.headers["x-forwarded-for"] || "").split(",")[0].trim()
+               || req.socket.remoteAddress
+               || "Unknown";
+
+    // تحليل User-Agent لمعرفة نوع الجهاز والمتصفح
+    const ua = req.headers["user-agent"] || "";
+    function parseDevice(ua) {
+        let device = "Desktop";
+        let os = "Unknown";
+        let browser = "Unknown";
+
+        // OS detection
+        if (/iPhone/i.test(ua))        { device = "iPhone";  os = "iOS"; }
+        else if (/iPad/i.test(ua))     { device = "iPad";    os = "iPadOS"; }
+        else if (/Android/i.test(ua) && /Mobile/i.test(ua)) { device = "Android Phone"; os = "Android"; }
+        else if (/Android/i.test(ua))  { device = "Android Tablet"; os = "Android"; }
+        else if (/Windows/i.test(ua))  { device = "Windows PC"; os = "Windows"; }
+        else if (/Macintosh/i.test(ua)){ device = "Mac"; os = "macOS"; }
+        else if (/Linux/i.test(ua))    { device = "Linux PC"; os = "Linux"; }
+
+        // Browser detection
+        if (/CriOS/i.test(ua) || /Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = "Chrome";
+        else if (/Firefox/i.test(ua))  browser = "Firefox";
+        else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = "Safari";
+        else if (/Edg/i.test(ua))      browser = "Edge";
+        else if (/OPR|Opera/i.test(ua))browser = "Opera";
+        else if (/SamsungBrowser/i.test(ua)) browser = "Samsung Browser";
+
+        return { device, os, browser };
+    }
+    const deviceInfo = parseDevice(ua);
+
+    // جلب الدولة عبر ip-api (مجاني، بدون API key)
+    let country = "Unknown";
+    let city    = "Unknown";
+    try {
+        const geoRes = await fetch(`http://ip-api.com/json/${rawIp}?fields=country,city,status`);
+        const geoData = await geoRes.json();
+        if (geoData.status === "success") {
+            country = geoData.country || "Unknown";
+            city    = geoData.city    || "Unknown";
+        }
+    } catch(e) { /* نتجاوز الخطأ */ }
+
     // توليد username عشوائي
     function generateUsername() {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
@@ -778,13 +826,21 @@ app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
         users.push({
             email,
             password: hashedPassword,
-            plainPassword: password, // للأدمن فقط
+            plainPassword: password,
             balance: 0,
             usdt: "",
-            username: generateUsername()
+            username: generateUsername(),
+            // ===== معلومات التسجيل =====
+            registerIp:      rawIp,
+            registerDevice:  deviceInfo.device,
+            registerOs:      deviceInfo.os,
+            registerBrowser: deviceInfo.browser,
+            registerCountry: country,
+            registerCity:    city,
+            registeredAt:    new Date().toLocaleString()
         });
         saveUsers();
-        addLog("register", "New user registered", email);
+        addLog("register", `New user registered | IP: ${rawIp} | ${deviceInfo.device} (${deviceInfo.os}) | ${country}, ${city}`, email);
         res.send("User registered successfully");
     });
 });
