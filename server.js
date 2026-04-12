@@ -1210,10 +1210,16 @@ app.get("/approve/:id", adminMiddleware, (req, res) => {
     // العمليات
     if (r.type === "recharge") {
         user.balance = parseFloat(((parseFloat(user.balance) || 0) + amount).toFixed(2));
+        // زيادة رأس المال التشغيلي عند الإيداع
+        if(!user.totalCapital) user.totalCapital = 0;
+        user.totalCapital = parseFloat(((parseFloat(user.totalCapital) || 0) + amount).toFixed(2));
     }
 
     if (r.type === "withdraw") {
         user.balance = parseFloat(((parseFloat(user.balance) || 0) - amount).toFixed(2));
+        // خصم من رأس المال التشغيلي عند السحب
+        if(!user.totalCapital) user.totalCapital = 0;
+        user.totalCapital = parseFloat(Math.max(0, ((parseFloat(user.totalCapital) || 0) - amount)).toFixed(2));
     }
 
     // ✅ حفظ البيانات
