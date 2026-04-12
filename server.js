@@ -2122,7 +2122,7 @@ body{margin:0;font-family:Arial;background:#f5f5f5;min-height:100vh;}
 <div onclick="openMenuPage()" style="cursor:pointer;">☰ Shop</div>
 <div class="icons">
 <span onclick="toggleSearch()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-<span onclick="toggleMessages()" style="cursor:pointer;display:inline-flex;align-items:center;position:relative;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span id="msgBadge" style="display:none;position:absolute;top:-5px;right:-5px;background:#ff3b30;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid #1976d2;"></span></span>
+<span onclick="toggleMessages()" style="cursor:pointer;display:inline-flex;align-items:center;position:relative;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span id="msgBadge" style="display:none;position:absolute;top:-5px;right:-5px;background:#ff3b30;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid #1976d2;"></span></span>
 <span onclick="toggleAccount()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
 <span onclick="toggleLang()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
 </div>
@@ -8977,9 +8977,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   <div class="bar-icon" onclick="window.location.href='/live-chat'">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
   </div>
-  <div class="bar-icon" onclick="window.location.href='/cart'" style="position:relative;">
+  <div class="bar-icon" onclick="openSheet('cart')">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    <span id="cartBadge" style="display:none;position:absolute;top:-4px;right:-5px;background:#ff3b30;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;align-items:center;justify-content:center;"></span>
   </div>
   <button class="cart-btn" onclick="openSheet('cart')">Add to Cart</button>
   <button class="buy-btn" onclick="openSheet('buy')">Buy Now</button>
@@ -9134,28 +9133,10 @@ function updateTotalPrice(){
 
 async function doCart(){
     var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    // Check if same product already in cart, update qty instead
-    var found = false;
-    for(var i=0;i<cart.length;i++){
-        if(cart[i].product && cart[i].product.id === p.id && cart[i].sellerEmail === sEmail){
-            cart[i].qty = (cart[i].qty||1) + qty;
-            found = true; break;
-        }
-    }
-    if(!found) cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
+    cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
     localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartBadge();
     closeSheet();
     showToast("🛒 Added to cart (×"+qty+")");
-}
-
-function updateCartBadge(){
-    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    var total = cart.reduce(function(s,i){ return s+(i.qty||1); },0);
-    var badge = document.getElementById("cartBadge");
-    if(!badge) return;
-    if(total>0){ badge.style.display="flex"; badge.innerText=total>99?"99+":total; }
-    else { badge.style.display="none"; }
 }
 
 async function doBuy(){
@@ -9185,7 +9166,6 @@ function showToast(msg){
     t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},3000);
 }
 
-updateCartBadge();
 init();
 </script>
 </body>
@@ -10265,8 +10245,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .toast.show{display:block;animation:fadeInUp 0.3s ease;}
 @keyframes fadeInUp{from{opacity:0;transform:translate(-50%,20px);}to{opacity:1;transform:translate(-50%,0);}}
 
-/* LOAD MORE */
-.scroll-sentinel{grid-column:1/-1;height:1px;}
+/* INFINITE SCROLL */
+.load-more{display:none;}
 </style>
 </head>
 <body>
@@ -10285,7 +10265,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     </span>
     <span class="h-icon" onclick="window.location.href='/dashboard?messages=1'" style="position:relative;">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      <span style="position:absolute;top:-4px;right:-5px;background:#ff3b30;color:white;font-size:9px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;">2</span>
     </span>
     <span class="h-icon" onclick="window.location.href='/dashboard?account=1'">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -10322,15 +10301,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 </div>
 
 <!-- ITEMS COUNT -->
-<div class="items-count" id="itemsCount"></div>
+<div class="items-count" id="itemsCount">Loading...</div>
 
 <!-- PRODUCT GRID -->
-<div class="grid" id="productGrid">
-  <div class="loading-wrap">
-    <div class="loading-spinner"></div>
-    <p style="color:#aaa;font-size:13px;">Loading products...</p>
-  </div>
-</div>
+<div class="grid" id="productGrid"></div>
 
 <!-- FILTER OVERLAY & PANEL -->
 <div class="filter-overlay" id="filterOverlay" onclick="closeFilter()"></div>
@@ -10418,25 +10392,15 @@ var CATEGORIES = [17,19,20,21,22,27,28,31,32,34,35,36];
 var loadedCount = 0;
 
 async function loadAllProducts(){
-    ALL_PRODUCTS = [];
-    var firstLoaded = false;
     var promises = CATEGORIES.map(function(catId){
         return fetch("/products-by-cat/" + catId)
             .then(function(r){ return r.json(); })
-            .then(function(data){
-                var prods = data.products || [];
-                ALL_PRODUCTS = ALL_PRODUCTS.concat(prods);
-                // عرض المنتجات فوراً عند وصول أول category
-                if(!firstLoaded && ALL_PRODUCTS.length > 0){
-                    firstLoaded = true;
-                    applyFiltersAndRender(true);
-                }
-                return prods;
-            })
+            .then(function(data){ return data.products || []; })
             .catch(function(){ return []; });
     });
-    await Promise.all(promises);
-    // تحديث نهائي بعد تحميل كل الـ categories
+    var results = await Promise.all(promises);
+    ALL_PRODUCTS = [];
+    results.forEach(function(prods){ ALL_PRODUCTS = ALL_PRODUCTS.concat(prods); });
     applyFiltersAndRender(true);
 }
 
@@ -10496,11 +10460,11 @@ function renderPage(reset){
         fragment.appendChild(card);
     }
 
-    // Scroll sentinel
+    // Infinite scroll sentinel
     if(end < FILTERED.length){
         var sentinel = document.createElement("div");
-        sentinel.className = "scroll-sentinel";
-        sentinel.id = "scrollSentinel";
+        sentinel.id = "infiniteSentinel";
+        sentinel.style.cssText = "height:1px;grid-column:1/-1;";
         fragment.appendChild(sentinel);
     }
 
@@ -10508,8 +10472,19 @@ function renderPage(reset){
     currentPage++;
 
     // Observe sentinel for infinite scroll
-    var s = document.getElementById("scrollSentinel");
-    if(s && window._scrollObserver) window._scrollObserver.observe(s);
+    var newSentinel = document.getElementById("infiniteSentinel");
+    if(newSentinel){
+        if(window.__infiniteObserver) window.__infiniteObserver.disconnect();
+        window.__infiniteObserver = new IntersectionObserver(function(entries){
+            if(entries[0].isIntersecting){
+                window.__infiniteObserver.disconnect();
+                var s = document.getElementById("infiniteSentinel");
+                if(s) s.remove();
+                renderPage(false);
+            }
+        }, { rootMargin: "200px" });
+        window.__infiniteObserver.observe(newSentinel);
+    }
 }
 
 
@@ -10709,16 +10684,6 @@ document.addEventListener("click", function(e){
         document.getElementById("sortArrow").style.transform = "";
     }
 });
-
-// ====== INFINITE SCROLL ======
-window._scrollObserver = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-        if(entry.isIntersecting){
-            window._scrollObserver.unobserve(entry.target);
-            renderPage(false);
-        }
-    });
-}, { rootMargin: '200px' });
 
 // ====== INIT ======
 (async function(){
@@ -12166,244 +12131,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 </html>`);
 });
 
-
-
-// ================= CART PAGE =================
-app.get("/cart", (req, res) => {
-res.send(`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta charset="UTF-8">
-<title>Cart - TikTok Mall</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#f5f5f5;padding-bottom:90px;}
-.header{background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;}
-.header-left{display:flex;align-items:center;gap:10px;}
-.header h2{font-size:17px;font-weight:700;}
-.header-count{font-size:13px;color:rgba(255,255,255,0.8);}
-.empty-state{text-align:center;padding:80px 20px;color:#aaa;}
-.empty-state svg{margin-bottom:16px;opacity:0.3;}
-.empty-state p{font-size:15px;margin-bottom:20px;}
-.empty-state button{padding:12px 32px;background:#1976d2;color:white;border:none;border-radius:25px;font-size:14px;font-weight:700;cursor:pointer;}
-.select-all-bar{background:white;padding:12px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;margin-bottom:8px;}
-.select-all-bar label{font-size:14px;color:#333;font-weight:600;flex:1;}
-.select-all-bar .del-btn{font-size:13px;color:#e53935;cursor:pointer;padding:4px 10px;}
-.cart-item{background:white;margin:0 0 8px;padding:14px 15px;display:flex;align-items:flex-start;gap:12px;}
-.cart-item .cb{width:20px;height:20px;accent-color:#1976d2;flex-shrink:0;margin-top:2px;cursor:pointer;}
-.item-img{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1px solid #eee;flex-shrink:0;cursor:pointer;}
-.item-info{flex:1;min-width:0;}
-.item-name{font-size:13px;color:#333;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;}
-.item-price{color:#e53935;font-size:15px;font-weight:700;margin-bottom:8px;}
-.item-bottom{display:flex;align-items:center;justify-content:space-between;}
-.qty-ctrl{display:flex;align-items:center;gap:0;border:1.5px solid #e0e0e0;border-radius:6px;overflow:hidden;}
-.qty-btn{width:30px;height:30px;background:white;border:none;font-size:18px;cursor:pointer;color:#333;font-weight:300;display:flex;align-items:center;justify-content:center;}
-.qty-num{width:36px;text-align:center;font-size:14px;font-weight:700;color:#333;border-left:1px solid #e0e0e0;border-right:1px solid #e0e0e0;padding:4px 0;}
-.item-del{color:#bbb;cursor:pointer;padding:4px 8px;font-size:18px;}
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 15px 16px;border-top:1px solid #eee;display:flex;align-items:center;gap:12px;box-shadow:0 -2px 12px rgba(0,0,0,0.07);}
-.total-wrap{flex:1;}
-.total-label{font-size:11px;color:#999;}
-.total-price{font-size:18px;font-weight:800;color:#e53935;}
-.checkout-btn{padding:14px 28px;background:#1976d2;color:white;border:none;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;}
-.checkout-btn:disabled{opacity:0.5;}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:10px 24px;border-radius:20px;font-size:13px;z-index:999;display:none;white-space:nowrap;}
-.toast.show{display:block;}
-</style>
-</head>
-<body>
-
-<div class="header">
-  <div class="header-left">
-    <span onclick="history.back()" style="cursor:pointer;display:flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </span>
-    <h2>Cart</h2>
-  </div>
-  <span class="header-count" id="headerCount"></span>
-</div>
-
-<div id="cartContent"></div>
-
-<div class="bottom-bar" id="bottomBar" style="display:none;">
-  <div class="total-wrap">
-    <div class="total-label">Total selected</div>
-    <div class="total-price" id="totalPrice">US$0.00</div>
-  </div>
-  <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">Checkout</button>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-var selected = {};
-
-function render(){
-    var el = document.getElementById("cartContent");
-    if(cart.length === 0){
-        el.innerHTML = '<div class="empty-state"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><p>Your cart is empty</p><button onclick="history.back()">Continue Shopping</button></div>';
-        document.getElementById("bottomBar").style.display = "none";
-        document.getElementById("headerCount").innerText = "";
-        return;
-    }
-
-    // Init selection
-    cart.forEach(function(item,i){ if(selected[i]===undefined) selected[i]=true; });
-
-    var allChecked = cart.every(function(_,i){ return selected[i]; });
-    var html = '<div class="select-all-bar">';
-    html += '<input type="checkbox" id="cbAll" '+( allChecked?"checked":"" )+' onchange="toggleAll(this.checked)" style="width:20px;height:20px;accent-color:#1976d2;cursor:pointer;">';
-    html += '<label for="cbAll">Select All ('+cart.length+')</label>';
-    html += '<span class="del-btn" onclick="deleteSelected()">Delete Selected</span>';
-    html += '</div>';
-
-    cart.forEach(function(item, i){
-        var p = item.product || {};
-        var price = parseFloat(p.p || p.price || 0);
-        var qty = item.qty || 1;
-        var img = getImg(p);
-        var name = p.t || p.title || "Product";
-        html += '<div class="cart-item" id="item_'+i+'">';
-        html += '<input type="checkbox" class="cb" '+(selected[i]?"checked":"")+' onchange="toggleItem('+i+',this.checked)">';
-        html += '<img class="item-img" src="'+img+'" onerror="this.src='https://via.placeholder.com/80x80?text=?'">';
-        html += '<div class="item-info">';
-        html += '<div class="item-name">'+escHtml(name)+'</div>';
-        html += '<div class="item-price">US$'+price.toFixed(2)+'</div>';
-        html += '<div class="item-bottom">';
-        html += '<div class="qty-ctrl">';
-        html += '<button class="qty-btn" onclick="changeQty('+i+',-1)">−</button>';
-        html += '<div class="qty-num" id="qty_'+i+'">'+qty+'</div>';
-        html += '<button class="qty-btn" onclick="changeQty('+i+',1)">+</button>';
-        html += '</div>';
-        html += '<span class="item-del" onclick="removeItem('+i+')">🗑</span>';
-        html += '</div></div></div>';
-    });
-
-    el.innerHTML = html;
-    document.getElementById("headerCount").innerText = cart.length + " items";
-    document.getElementById("bottomBar").style.display = "flex";
-    updateTotal();
-}
-
-var CLOUD = "https://res.cloudinary.com/doabtbdsh/image/upload/products";
-var CAT_MAP = {17:"17_Clothing_and_Accessories",19:"19_Medical_Bags_and_Sunglasses",20:"20_Shoes",21:"21_Watches",22:"22_Jewelry",27:"27_Electronics",28:"28_Smart_Home",31:"31_Luxury_Brands",32:"32_Beauty_and_Personal_Care",34:"34_Mens_Fashion",35:"35_Health_and_Household",36:"36_Home_and_Kitchen"};
-
-function getImg(p){
-    if(p.img) return p.img;
-    var catF = CAT_MAP[p.category_id]||"27_Electronics";
-    return CLOUD+"/"+catF+"/"+(p.folder||"")+"/1.jpg";
-}
-
-function escHtml(s){ var d=document.createElement("div");d.innerText=s;return d.innerHTML; }
-
-function toggleAll(v){
-    cart.forEach(function(_,i){ selected[i]=v; });
-    render();
-}
-
-function toggleItem(i,v){
-    selected[i]=v;
-    updateTotal();
-    // Update select-all checkbox
-    var allChecked = cart.every(function(_,idx){ return selected[idx]; });
-    var cbAll = document.getElementById("cbAll");
-    if(cbAll) cbAll.checked = allChecked;
-}
-
-function changeQty(i, d){
-    cart[i].qty = Math.max(1, (cart[i].qty||1)+d);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    document.getElementById("qty_"+i).innerText = cart[i].qty;
-    updateTotal();
-}
-
-function removeItem(i){
-    cart.splice(i,1);
-    delete selected[i];
-    // Re-index selected
-    var newSel = {};
-    cart.forEach(function(_,idx){ newSel[idx] = selected[idx] !== undefined ? selected[idx] : true; });
-    selected = newSel;
-    localStorage.setItem("cart", JSON.stringify(cart));
-    render();
-}
-
-function deleteSelected(){
-    var newCart = [];
-    var newSel = {};
-    cart.forEach(function(item,i){
-        if(!selected[i]){ newCart.push(item); }
-    });
-    newCart.forEach(function(_,i){ newSel[i]=true; });
-    cart = newCart; selected = newSel;
-    localStorage.setItem("cart", JSON.stringify(cart));
-    render();
-}
-
-function updateTotal(){
-    var total = 0;
-    cart.forEach(function(item,i){
-        if(selected[i]){
-            var price = parseFloat(item.product && (item.product.p||item.product.price) || 0);
-            total += price * (item.qty||1);
-        }
-    });
-    document.getElementById("totalPrice").innerText = "US$"+total.toFixed(2);
-    var selCount = cart.filter(function(_,i){ return selected[i]; }).length;
-    var btn = document.getElementById("checkoutBtn");
-    btn.disabled = selCount === 0;
-    btn.innerText = selCount > 0 ? "Checkout ("+selCount+")" : "Checkout";
-}
-
-async function checkout(){
-    var token = localStorage.getItem("token")||"";
-    if(!token){ showToast("⚠️ Please login first"); return; }
-    var items = cart.filter(function(_,i){ return selected[i]; });
-    if(items.length === 0){ showToast("⚠️ No items selected"); return; }
-
-    var btn = document.getElementById("checkoutBtn");
-    btn.disabled = true;
-    btn.innerText = "Processing...";
-
-    var errors = 0;
-    for(var i=0;i<items.length;i++){
-        try {
-            var r = await fetch("/create-store-order",{
-                method:"POST",
-                headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
-                body: JSON.stringify({ product: items[i].product, sellerEmail: items[i].sellerEmail, quantity: items[i].qty||1 })
-            });
-            var d = await r.json();
-            if(!d.success) errors++;
-        } catch(e){ errors++; }
-    }
-
-    // Remove checked items from cart
-    var remaining = cart.filter(function(_,i){ return !selected[i]; });
-    cart = remaining;
-    selected = {};
-    cart.forEach(function(_,i){ selected[i]=true; });
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    if(errors === 0){
-        showToast("✅ "+items.length+" order(s) placed successfully!");
-    } else {
-        showToast("⚠️ "+errors+" order(s) failed. Others placed.");
-    }
-    setTimeout(function(){ render(); }, 1500);
-}
-
-function showToast(msg){
-    var t=document.getElementById("toast"); t.innerText=msg;
-    t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},3000);
-}
-
-render();
-</script>
-</body>
-</html>`);
-});
 
 
 const PORT = process.env.PORT || 3000;
