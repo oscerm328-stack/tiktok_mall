@@ -7859,8 +7859,8 @@ body{font-family:Arial,sans-serif;background:#f5f5f5;min-height:100vh;}
 .addr-card .actions button{background:rgba(255,255,255,0.2);border:none;color:white;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;}
 .addr-card .actions button:hover{background:rgba(255,255,255,0.35);}
 /* OVERLAY */
-.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:100;justify-content:flex-end;flex-direction:column;}
-.overlay.open{display:flex;}
+.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;justify-content:flex-end;flex-direction:column;}
+.overlay.open{display:flex !important;}
 .sheet{background:white;border-radius:20px 20px 0 0;padding:20px 18px 30px;max-height:90vh;overflow-y:auto;}
 .sheet-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
 .sheet-back{background:none;border:none;cursor:pointer;display:flex;align-items:center;}
@@ -8030,11 +8030,15 @@ function openSheet(id){
       if(a.isDefault) document.getElementById("defaultToggle").classList.add("on");
     }
   }
-  document.getElementById("overlay").classList.add("open");
+  var ov = document.getElementById("overlay");
+  ov.classList.add("open");
+  ov.style.display = "flex";
 }
 
 function closeSheet(){
-  document.getElementById("overlay").classList.remove("open");
+  var ov = document.getElementById("overlay");
+  ov.classList.remove("open");
+  ov.style.display = "none";
 }
 
 function handleOverlayClick(e){
