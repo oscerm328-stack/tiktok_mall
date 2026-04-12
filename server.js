@@ -11420,21 +11420,41 @@ function imgUrl(o){
 function buildCard(o){
     var card = document.createElement("div");
     card.className = "ocard";
-    var labels = {waiting_shipping:"Waiting to Ship",in_delivery:"In Delivery",waiting_refund:"قيد التسليم",completed:"تم التسليم"};
+    var labels = {waiting_shipping:"Waiting to Ship",in_delivery:"In Delivery",waiting_refund:"Pending Confirmation",completed:"Delivered"};
     var cls = {waiting_shipping:"ship",in_delivery:"del",waiting_refund:"ref",completed:"done"};
     var num = orderNum(o.id);
     var img = imgUrl(o);
-    var profit = parseFloat(o.profit||0)*parseInt(o.quantity||1);
+    var qty = parseInt(o.quantity||1);
+    var retailPrice = parseFloat(o.total||0);
+    var supplierPrice = parseFloat(o.supplierPrice||0)*qty;
+    var profit = parseFloat(o.profit||0)*qty;
+    var createdDate = o.createdAt ? new Date(o.createdAt).toLocaleString() : "-";
+    var shippedDate = o.shippedAt ? new Date(o.shippedAt).toLocaleString() : "-";
+    var deliveredDate = o.deliveredAt ? new Date(o.deliveredAt).toLocaleString() : "-";
 
+    // --- TOP ROW: order number + status badge (no colored border) ---
     var html = '<div class="ocard-top">' +
         '<span class="order-id">#'+num+'</span>' +
-        '<span class="sbadge '+cls[o.status]+'">'+labels[o.status]+'</span>' +
-        '</div>' +
-        '<div class="ocard-mid">' +
+        '<span class="sbadge '+cls[o.status]+'" style="background:transparent;border:none;color:'+(o.status==="waiting_shipping"?"#1976d2":o.status==="in_delivery"?"#1976d2":o.status==="waiting_refund"?"#e65100":"#2e7d32")+';font-weight:700;">'+labels[o.status]+'</span>' +
+        '</div>';
+
+    // --- PRODUCT ROW ---
+    html += '<div class="ocard-mid">' +
         '<img class="ocard-img" src="'+img+'" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
-        '<div><div class="ocard-title">'+(o.product?o.product.title:"Product")+'</div>' +
-        '<div class="ocard-price">US$'+parseFloat(o.total||0).toFixed(2)+'</div>' +
-        '<div class="ocard-profit">+US$'+profit.toFixed(2)+' profit</div></div>' +
+        '<div style="flex:1;">' +
+        '<div class="ocard-title">'+(o.product?o.product.title:"Product")+'</div>' +
+        '<div style="font-size:12px;color:#555;margin-top:2px;">Qty: '+qty+'</div>' +
+        '<div class="ocard-price">US$'+retailPrice.toFixed(2)+'</div>' +
+        '</div></div>';
+
+    // --- ORDER DETAILS ---
+    html += '<div style="margin:8px 0;padding:8px 10px;background:#f9f9f9;border-radius:8px;font-size:12px;color:#555;line-height:1.9;">' +
+        '<div style="display:flex;justify-content:space-between;"><span>Supplier Cost</span><span style="color:#e65100;font-weight:600;">US$'+supplierPrice.toFixed(2)+'</span></div>' +
+        '<div style="display:flex;justify-content:space-between;"><span>Retail Price</span><span style="color:#1976d2;font-weight:600;">US$'+retailPrice.toFixed(2)+'</span></div>' +
+        '<div style="display:flex;justify-content:space-between;"><span>Profit</span><span style="color:#2e7d32;font-weight:700;">+US$'+profit.toFixed(2)+'</span></div>' +
+        '<div style="display:flex;justify-content:space-between;border-top:1px solid #eee;margin-top:4px;padding-top:4px;"><span>Order Date</span><span>'+createdDate+'</span></div>' +
+        (o.status==="in_delivery"||o.status==="waiting_refund"||o.status==="completed" ? '<div style="display:flex;justify-content:space-between;"><span>Shipped Date</span><span>'+shippedDate+'</span></div>' : '') +
+        (o.status==="waiting_refund"||o.status==="completed" ? '<div style="display:flex;justify-content:space-between;"><span>Delivered Date</span><span>'+deliveredDate+'</span></div>' : '') +
         '</div>';
 
     if(o.status === "waiting_shipping"){
@@ -11443,7 +11463,7 @@ function buildCard(o){
         var isTO = remaining === 0;
         html += '<div class="countdown" id="cd-'+o.id+'" style="'+(isTO?"background:#fce4ec;color:#c62828;":"")+'">' +
             '⏱ '+(isTO?'<b>⏰ TIME OUT</b>':'Ship within: <b id="cdt-'+o.id+'">'+fmtTime(remaining)+'</b>')+'</div>';
-        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">🚚 Ship Now</button>';
+        html += '<button class="ship-btn" onclick="event.stopPropagation();openShipPopup(\\''+ o.id +'\\')">Ship Now</button>';
     }
 
     if(o.status === "in_delivery"){
@@ -11451,11 +11471,12 @@ function buildCard(o){
     }
 
     if(o.status === "waiting_refund"){
-        html += '<div style="background:#fff3e0;border-radius:10px;padding:12px;font-size:13px;color:#e65100;font-weight:600;text-align:center;">⏳ قيد التسليم — Pending Confirmation</div>';
+        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-ref-'+o.id+'"></canvas><span class="map-label">📍 Arrived Now</span></div>';
+        html += '<div style="background:white;border-radius:10px;padding:10px;font-size:13px;color:#e65100;font-weight:600;text-align:center;border:1px solid #eee;">⏳ Pending Confirmation</div>';
     }
 
     if(o.status === "completed"){
-        html += '<div style="background:#e8f5e9;border-radius:10px;padding:12px;font-size:13px;color:#2e7d32;font-weight:600;text-align:center;">✅ تم التسليم — Profit added to wallet</div>';
+        html += '<div style="background:white;border-radius:10px;padding:10px;font-size:13px;color:#2e7d32;font-weight:600;text-align:center;border:1px solid #eee;">✅ Profit added to wallet</div>';
     }
 
     card.innerHTML = html;
@@ -11470,9 +11491,10 @@ function buildCard(o){
     }
     if(o.status === "waiting_refund"){
         card.onclick = function(){ showToast("⏳ Order is pending delivery confirmation"); };
+        setTimeout(function(){ drawMap("map-ref-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
     }
     if(o.status === "completed"){
-        card.onclick = function(){ showToast("✅ تم التسليم — Profit has been credited"); };
+        card.onclick = function(){ showToast("✅ Profit has been credited to your wallet"); };
     }
     return card;
 }
