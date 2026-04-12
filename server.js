@@ -7966,8 +7966,8 @@ input:checked+.slider:before{transform:translateX(20px);}
 
   <div class="form-group">
     <label>Mobile</label>
-    <div class="phone-row">
-      <select id="f_code" class="phone-code">
+    <div style="display:flex;gap:8px;">
+      <select id="f_code" style="width:90px;min-width:90px;max-width:90px;padding:12px 4px;border:1px solid #e0e0e0;border-radius:10px;font-size:13px;outline:none;background:white;">
         <option value="+1">🇺🇸 +1</option>
         <option value="+44">🇬🇧 +44</option>
         <option value="+91">🇮🇳 +91</option>
@@ -8005,7 +8005,7 @@ input:checked+.slider:before{transform:translateX(20px);}
         <option value="+92">🇵🇰 +92</option>
         <option value="+880">🇧🇩 +880</option>
       </select>
-      <input id="f_mobile" placeholder="Please add receiver mobile" style="flex:1;">
+      <input id="f_mobile" placeholder="Please add receiver mobile" style="flex:1;min-width:0;padding:12px;border:1px solid #e0e0e0;border-radius:10px;font-size:14px;outline:none;">
     </div>
   </div>
 
