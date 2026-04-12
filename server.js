@@ -11454,7 +11454,7 @@ function buildCard(o){
         '<span class="sbadge '+cls[o.status]+'">'+labels[o.status]+'</span>' +
         '</div>' +
         '<div class="ocard-mid">' +
-        '<img class="ocard-img" src="'+img+'" onerror="this.src=\'https://via.placeholder.com/65x65\'">' +
+        '<img class="ocard-img" src="'+img+'" onerror="this.src=\\'https://via.placeholder.com/65x65\\'">' +
         '<div><div class="ocard-title">'+(o.product?o.product.title:"Product")+'</div>' +
         '<div class="ocard-price">US$'+totalPrice.toFixed(2)+(qty>1?' <span style="font-size:11px;color:#999;">(x'+qty+')</span>':'')+'</div>' +
         '<div class="ocard-profit">+US$'+totalProfit.toFixed(2)+' profit</div>' +
