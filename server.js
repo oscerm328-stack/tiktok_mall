@@ -12044,7 +12044,7 @@ function buildCard(o){
     }
 
     if(o.status === "waiting_refund"){
-        html += '<div class="map-wrap" id="map-ref-'+o.id+'"></div>';
+        html += '<div class="map-wrap" style="position:relative;" id="map-ref-'+o.id+'"><span class="map-label" style="z-index:999;">📍 Arrived Now</span></div>';
         html += '<div style="background:white;border-radius:10px;padding:10px;font-size:13px;color:#e65100;font-weight:600;text-align:center;border:1px solid #eee;">⏳ Pending Confirmation</div>';
     }
 
@@ -12064,7 +12064,7 @@ function buildCard(o){
     }
     if(o.status === "waiting_refund"){
         card.onclick = function(){ showToast("⏳ Order is pending delivery confirmation"); };
-        setTimeout(function(){ drawMap("map-ref-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
+        setTimeout(function(){ drawMap("map-ref-"+o.id, o.trackingPath, o.deliveryStart, true); }, 100);
     }
     if(o.status === "completed"){
         card.onclick = function(){ showToast("✅ Profit has been credited to your wallet"); };
@@ -12264,7 +12264,7 @@ function ensureLeaflet(cb){
 
 var _activeMaps = {}; // mapId -> L.map instance
 
-function drawMap(canvasId, tp, ds){
+function drawMap(canvasId, tp, ds, forceArrived){
     var el = document.getElementById(canvasId);
     if(!el) return;
     // If it's a canvas, replace with div
@@ -12280,7 +12280,7 @@ function drawMap(canvasId, tp, ds){
     el.style.height = "100%";
     el.style.borderRadius = "12px";
     el.style.overflow = "hidden";
-    drawLeafletMap(canvasId, tp, ds, false);
+    drawLeafletMap(canvasId, tp, ds, false, forceArrived);
 }
 
 function drawMap2(c, tp, ds){
@@ -12297,7 +12297,7 @@ function drawMap2(c, tp, ds){
     drawLeafletMap(pid, tp, ds, true);
 }
 
-function drawLeafletMap(divId, tp, ds, isModal){
+function drawLeafletMap(divId, tp, ds, isModal, forceArrived){
     if(!tp) return;
     ensureLeaflet(function(){
         var el = document.getElementById(divId);
@@ -12328,9 +12328,9 @@ function drawLeafletMap(divId, tp, ds, isModal){
             opacity:0.9
         }).addTo(map);
 
-        // Calculate progress
+        // Calculate progress — forceArrived means package already delivered
         var elapsed = ds ? Date.now()-ds : 0;
-        var prog = Math.min(1, elapsed/(72*60*60*1000));
+        var prog = forceArrived ? 1 : Math.min(1, elapsed/(72*60*60*1000));
 
         // Bezier midpoint
         var mLat=tp.midpoint.lat, mLng=tp.midpoint.lng;
@@ -12346,14 +12346,15 @@ function drawLeafletMap(divId, tp, ds, isModal){
         // Full dashed grey line
         L.polyline(pathPts, {color:'#9e9e9e', weight:3, dashArray:'6,6', opacity:0.5}).addTo(map);
 
-        // Traveled part — purple/blue solid line
+        // Traveled part — green if arrived, purple if in transit
+        var lineColor = forceArrived ? '#2e7d32' : '#5c35c7';
         var traveledPts=[];
         var travelCount = Math.floor(prog * pathPts.length);
         for(var i=0;i<=travelCount;i++) traveledPts.push(pathPts[i]);
-        if(traveledPts.length>1) L.polyline(traveledPts, {color:'#5c35c7', weight:4, opacity:1}).addTo(map);
+        if(traveledPts.length>1) L.polyline(traveledPts, {color:lineColor, weight:4, opacity:1}).addTo(map);
 
-        // Current position of plane
-        var pi = Math.min(travelCount, pathPts.length-1);
+        // Current position of plane — at destination if arrived
+        var pi = forceArrived ? pathPts.length-1 : Math.min(travelCount, pathPts.length-1);
         var planeLat = pathPts[pi] ? pathPts[pi][0] : dLat;
         var planeLng = pathPts[pi] ? pathPts[pi][1] : dLng;
 
@@ -12364,32 +12365,32 @@ function drawLeafletMap(divId, tp, ds, isModal){
         });
         L.marker([oLat,oLng],{icon:shopIcon}).bindTooltip(tp.origin.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
 
-        // Destination marker — user icon
-        var userIcon = L.divIcon({
-            html:'<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">👤</div><div style="background:#e53935;width:10px;height:10px;border-radius:50%;border:2px solid white;margin:-4px auto 0;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
-            iconAnchor:[18,22], className:''
-        });
+        // Destination marker — user icon with green checkmark if arrived
+        var userHtml = forceArrived
+            ? '<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #2e7d32;">👤</div><div style="background:#2e7d32;width:10px;height:10px;border-radius:50%;border:2px solid white;margin:-4px auto 0;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>'
+            : '<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">👤</div><div style="background:#e53935;width:10px;height:10px;border-radius:50%;border:2px solid white;margin:-4px auto 0;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>';
+        var userIcon = L.divIcon({ html:userHtml, iconAnchor:[18,22], className:'' });
         L.marker([dLat,dLng],{icon:userIcon}).bindTooltip(tp.destination.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
 
-        // Plane icon at current position
-        var planeIcon = L.divIcon({
-            html:'<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transform:rotate(-10deg);">✈️</div>',
-            iconAnchor:[11,11], className:''
-        });
+        // Plane/check icon — show ✅ at destination if arrived, else ✈️ moving
+        var planeHtml = forceArrived
+            ? '<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));">✅</div>'
+            : '<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transform:rotate(-10deg);">✈️</div>';
+        var planeIcon = L.divIcon({ html:planeHtml, iconAnchor:[11,11], className:'' });
         L.marker([planeLat,planeLng],{icon:planeIcon, zIndexOffset:1000}).addTo(map);
 
-        // Status bar at bottom
+        // Status badge bottom-right
         var statusBar = L.control({position:'bottomright'});
         statusBar.onAdd = function(){
             var d = L.DomUtil.create('div');
-            var pct = Math.round(prog*100);
-            var label = prog>=1 ? '📍 Arrived' : '✈ On The Way';
-            d.innerHTML='<div style="background:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;margin:8px;">'+label+'</div>';
+            var label = forceArrived ? '✅ Arrived' : (prog>=1 ? '📍 Arrived' : '✈ On The Way');
+            var bgColor = forceArrived ? '#2e7d32' : '#5c35c7';
+            d.innerHTML='<div style="background:'+bgColor+';color:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.25);display:flex;align-items:center;gap:6px;margin:8px;">'+label+'</div>';
             return d;
         };
         statusBar.addTo(map);
 
-        // Animate map fit to bounds
+        // Fit map to bounds
         setTimeout(function(){
             try{ map.fitBounds([[oLat,oLng],[dLat,dLng]], {padding:[20,20]}); }catch(e){}
         },200);
