@@ -12063,7 +12063,7 @@ function buildCard(o){
         setTimeout(function(){ drawMap("map-"+o.id, o.trackingPath, o.deliveryStart); }, 100);
     }
     if(o.status === "waiting_refund"){
-        card.onclick = function(){ showToast("⏳ Order is pending delivery confirmation"); };
+        card.onclick = function(){ openTrackModal(o, true); };
         setTimeout(function(){ drawMap("map-ref-"+o.id, o.trackingPath, o.deliveryStart, true); }, 100);
     }
     if(o.status === "completed"){
@@ -12215,19 +12215,23 @@ function updateSlider(){
 }
 
 // ===== TRACKING MODAL =====
-function openTrackModal(o){
+function openTrackModal(o, forceArrived){
     document.getElementById("track-num").innerText = "#"+orderNum(o.id);
     document.getElementById("track-title").innerText = o.product ? o.product.title : "";
     var tp = o.trackingPath;
     if(tp){
+        var routeColor = forceArrived ? '#2e7d32' : '#5c35c7';
+        var routeLabel = forceArrived ? '\u2705 Package has arrived' : '\u2708 Package is on the way';
         document.getElementById("track-route").innerHTML =
             "<b>📍 Route:</b> "+(tp.origin?tp.origin.name:"?")+" \u2192 "+(tp.destination?tp.destination.name:"?")+
-            "<br><span style='color:#5c35c7;font-weight:600;'>\u2708 Package is on the way</span>";
+            "<br><span style='color:"+routeColor+";font-weight:600;'>"+routeLabel+"</span>";
     }
-    // Update status bar steps based on delivery progress
-    var elapsed = o.deliveryStart ? Date.now()-o.deliveryStart : 0;
-    var prog = Math.min(1, elapsed/(72*60*60*1000));
-    var step = prog < 0.15 ? 1 : prog < 0.5 ? 2 : 3;
+    // Status bar — all steps active if arrived
+    var step = forceArrived ? 3 : (function(){
+        var elapsed = o.deliveryStart ? Date.now()-o.deliveryStart : 0;
+        var prog = Math.min(1, elapsed/(72*60*60*1000));
+        return prog < 0.15 ? 1 : prog < 0.5 ? 2 : 3;
+    })();
     [1,2,3].forEach(function(i){
         var si = document.getElementById("tstat-"+i);
         if(si) si.classList.toggle("active", i<=step);
@@ -12236,6 +12240,11 @@ function openTrackModal(o){
         var ln = document.getElementById("tline-"+i);
         if(ln) ln.classList.toggle("active", i<step);
     });
+    // Update On The Way label to Arrived if needed
+    var tstat3label = document.querySelector("#tstat-3 .tstat-label");
+    if(tstat3label) tstat3label.innerText = forceArrived ? "Arrived" : "On The Way";
+    var tstat3icon = document.querySelector("#tstat-3 .tstat-icon");
+    if(tstat3icon) tstat3icon.innerText = forceArrived ? "📍" : "✈️";
     document.getElementById("trackModal").classList.add("open");
     var pid = "track-canvas";
     if(_activeMaps[pid]){ try{ _activeMaps[pid].remove(); }catch(e){} delete _activeMaps[pid]; }
@@ -12243,7 +12252,7 @@ function openTrackModal(o){
     if(el) el.innerHTML = "";
     setTimeout(function(){
         if(!el) return;
-        drawLeafletMap(pid, o.trackingPath, o.deliveryStart, true);
+        drawLeafletMap(pid, o.trackingPath, o.deliveryStart, true, forceArrived);
     }, 150);
 }
 function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); }
