@@ -57,6 +57,54 @@ async function syncFromDB() {
             storeOrders = storeOrdersData.map(o => { delete o._id; return o; });
         }
 
+        // ===== MIGRATION: replace Middle East destinations in old trackingPaths =====
+        const middleEastNames = ["Dubai","Riyadh","Cairo","Doha","Kuwait","Muscat","Amman","Beirut","Baghdad","Abu Dhabi","Jeddah","New York","Toronto","Sydney","Los Angeles","Chicago","Houston","Dallas"];
+        const safeDestinations = [
+            { name: "London", lat: 51.5074, lng: -0.1278 },
+            { name: "Paris", lat: 48.8566, lng: 2.3522 },
+            { name: "Berlin", lat: 52.5200, lng: 13.4050 },
+            { name: "Amsterdam", lat: 52.3676, lng: 4.9041 },
+            { name: "Rome", lat: 41.9028, lng: 12.4964 },
+            { name: "Madrid", lat: 40.4168, lng: -3.7038 },
+            { name: "Vienna", lat: 48.2082, lng: 16.3738 },
+            { name: "Stockholm", lat: 59.3293, lng: 18.0686 },
+            { name: "Istanbul", lat: 41.0082, lng: 28.9784 },
+            { name: "Warsaw", lat: 52.2297, lng: 21.0122 },
+            { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
+            { name: "Seoul", lat: 37.5665, lng: 126.9780 },
+            { name: "Singapore", lat: 1.3521, lng: 103.8198 },
+            { name: "Bangkok", lat: 13.7563, lng: 100.5018 },
+            { name: "Kuala Lumpur", lat: 3.1390, lng: 101.6869 },
+            { name: "Osaka", lat: 34.6937, lng: 135.5023 },
+            { name: "Taipei", lat: 25.0330, lng: 121.5654 },
+            { name: "Mumbai", lat: 19.0760, lng: 72.8777 }
+        ];
+        let migrationCount = 0;
+        storeOrders.forEach(order => {
+            if(order.trackingPath && order.trackingPath.destination) {
+                const destName = order.trackingPath.destination.name;
+                if(middleEastNames.includes(destName)){
+                    const newDest = safeDestinations[Math.floor(Math.random() * safeDestinations.length)];
+                    const oLat = order.trackingPath.origin.lat, oLng = order.trackingPath.origin.lng;
+                    order.trackingPath.destination = newDest;
+                    order.trackingPath.midpoint = {
+                        lat: (oLat + newDest.lat) / 2 + (Math.random() - 0.5) * 20,
+                        lng: (oLng + newDest.lng) / 2 + (Math.random() - 0.5) * 30
+                    };
+                    migrationCount++;
+                    // save to DB
+                    if(db){
+                        db.collection("storeOrders").updateOne(
+                            { id: order.id },
+                            { $set: { trackingPath: order.trackingPath } }
+                        ).catch(err => console.error("Migration update error:", err.message));
+                    }
+                }
+            }
+        });
+        if(migrationCount > 0) console.log("✅ Migrated "+migrationCount+" orders with Middle East destinations");
+        // ===== END MIGRATION =====
+
         const inviteData = await db.collection("settings").findOne({ key: "inviteCode" });
         if(inviteData) inviteCode = inviteData.value;
 
