@@ -12226,29 +12226,27 @@ function openTrackModal(o, forceArrived){
             "<b>📍 Route:</b> "+(tp.origin?tp.origin.name:"?")+" \u2192 "+(tp.destination?tp.destination.name:"?")+
             "<br><span style='color:"+routeColor+";font-weight:600;'>"+routeLabel+"</span>";
     }
-    // Progress bars — each line fills over 24h
-    // line-1: from deliveryStart to +24h
-    // line-2: from +24h to +48h
-    var elapsed = o.deliveryStart ? Date.now() - o.deliveryStart : 0;
-    var fill1, fill2;
-    if(forceArrived){
-        fill1 = 100; fill2 = 100;
-    } else {
-        var h24 = 12*60*60*1000;
-        fill1 = Math.min(100, Math.max(0, (elapsed / h24) * 100));
-        fill2 = Math.min(100, Math.max(0, ((elapsed - h24) / h24) * 100));
+    // Progress bars — live update every second, each line fills over 12h
+    if(window._trackBarInterval) clearInterval(window._trackBarInterval);
+    function updateTrackBars(){
+        var elapsed2 = o.deliveryStart ? Date.now() - o.deliveryStart : 0;
+        var h12 = 6*60*60*1000;
+        var fill1 = forceArrived ? 100 : Math.min(100, Math.max(0, (elapsed2 / h12) * 100));
+        var fill2 = forceArrived ? 100 : Math.min(100, Math.max(0, ((elapsed2 - h12) / h12) * 100));
+        var f1 = document.getElementById("tline-fill-1");
+        var f2 = document.getElementById("tline-fill-2");
+        if(f1) f1.style.width = fill1.toFixed(2) + "%";
+        if(f2) f2.style.width = fill2.toFixed(2) + "%";
+        [1,2,3].forEach(function(i){
+            var si = document.getElementById("tstat-"+i);
+            if(!si) return;
+            var isActive = forceArrived ? true : (i===1 ? fill1>0 : i===2 ? fill1>=100 : fill2>=100);
+            si.classList.toggle("active", isActive);
+        });
     }
-    var f1 = document.getElementById("tline-fill-1");
-    var f2 = document.getElementById("tline-fill-2");
-    if(f1) f1.style.width = fill1.toFixed(1) + "%";
-    if(f2) f2.style.width = fill2.toFixed(1) + "%";
-    // Active labels based on fill
-    [1,2,3].forEach(function(i){
-        var si = document.getElementById("tstat-"+i);
-        if(!si) return;
-        var isActive = forceArrived ? true : (i === 1 ? fill1 > 0 : i === 2 ? fill1 >= 100 : fill2 >= 100);
-        si.classList.toggle("active", isActive);
-    });
+    updateTrackBars();
+    window._trackBarInterval = setInterval(updateTrackBars, 1000);
+    // Update On The Way label to Arrived if needed
     // Update On The Way label to Arrived if needed
     var tstat3label = document.querySelector("#tstat-3 .tstat-label");
     if(tstat3label) tstat3label.innerText = forceArrived ? "Arrived" : "On The Way";
@@ -12264,7 +12262,7 @@ function openTrackModal(o, forceArrived){
         drawLeafletMap(pid, o.trackingPath, o.deliveryStart, true, forceArrived);
     }, 150);
 }
-function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); }
+function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); if(window._trackBarInterval){ clearInterval(window._trackBarInterval); window._trackBarInterval=null; } }
 
 // ===== LEAFLET MAP SYSTEM =====
 var _leafletLoaded = false;
@@ -12388,23 +12386,17 @@ function drawLeafletMap(divId, tp, ds, isModal, forceArrived){
             L.marker([planeLat,planeLng],{icon:planeIcon, zIndexOffset:1000}).addTo(map);
         }
 
-        // When arrived — zoom in on destination only
-        if(forceArrived){
-            setTimeout(function(){
-                try{ map.setView([dLat, dLng], 12); }catch(e){}
-            },200);
+        // Origin marker — only show when in transit
+        if(!forceArrived){
+            var shopIcon = L.divIcon({
+                html:'<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">🏪</div>',
+                iconAnchor:[18,18], className:''
+            });
+            L.marker([oLat,oLng],{icon:shopIcon}).bindTooltip(tp.origin.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
         }
 
-        // Origin marker — shop icon
-        var shopIcon = L.divIcon({
-            html:'<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">🏪</div>',
-            iconAnchor:[18,18], className:''
-        });
-        L.marker([oLat,oLng],{icon:shopIcon}).bindTooltip(tp.origin.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
-
-        // Destination marker — pulsing pin with house if arrived, user icon if in transit
+        // Destination marker — pulsing house pin if arrived, user icon if in transit
         if(forceArrived){
-            // Pulsing ring animation injected once
             if(!document.getElementById('pulse-style')){
                 var ps = document.createElement('style');
                 ps.id = 'pulse-style';
@@ -12413,12 +12405,9 @@ function drawLeafletMap(divId, tp, ds, isModal, forceArrived){
             }
             var arrivedHtml =
                 '<div style="position:relative;width:44px;height:56px;">' +
-                  // pulsing rings
                   '<div style="position:absolute;top:2px;left:2px;width:40px;height:40px;border-radius:50%;background:rgba(229,57,53,0.25);animation:pulse-ring 1.4s ease-out infinite;"></div>' +
                   '<div style="position:absolute;top:2px;left:2px;width:40px;height:40px;border-radius:50%;background:rgba(229,57,53,0.15);animation:pulse-ring 1.4s ease-out 0.5s infinite;"></div>' +
-                  // house icon card
                   '<div style="position:absolute;top:2px;left:6px;background:white;border-radius:10px;padding:4px 6px;font-size:20px;box-shadow:0 3px 10px rgba(0,0,0,0.3);border:2px solid #e53935;z-index:2;">🏠</div>' +
-                  // red pin below
                   '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:4px;height:14px;background:#e53935;border-radius:2px;z-index:1;"></div>' +
                   '<div style="position:absolute;bottom:11px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#e53935;border-radius:50%;z-index:1;"></div>' +
                 '</div>';
@@ -12434,13 +12423,6 @@ function drawLeafletMap(divId, tp, ds, isModal, forceArrived){
              .addTo(map);
         }
 
-        // Plane/check icon — show ✅ at destination if arrived, else ✈️ moving
-        var planeHtml = forceArrived
-            ? '<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));">✅</div>'
-            : '<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transform:rotate(-10deg);">✈️</div>';
-        var planeIcon = L.divIcon({ html:planeHtml, iconAnchor:[11,11], className:'' });
-        L.marker([planeLat,planeLng],{icon:planeIcon, zIndexOffset:1000}).addTo(map);
-
         // Status badge bottom-right
         var statusBar = L.control({position:'bottomright'});
         statusBar.onAdd = function(){
@@ -12452,12 +12434,16 @@ function drawLeafletMap(divId, tp, ds, isModal, forceArrived){
         };
         statusBar.addTo(map);
 
-        // Fit map to bounds — in transit only
-        if(!forceArrived){
-            setTimeout(function(){
-                try{ map.fitBounds([[oLat,oLng],[dLat,dLng]], {padding:[20,20]}); }catch(e){}
-            },200);
-        }
+        // Zoom: arrived → focus on destination city, in transit → show full route
+        setTimeout(function(){
+            try{
+                if(forceArrived){
+                    map.setView([dLat, dLng], 11);
+                } else {
+                    map.fitBounds([[oLat,oLng],[dLat,dLng]], {padding:[20,20]});
+                }
+            }catch(e){}
+        },200);
     });
 }
 
