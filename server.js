@@ -10292,16 +10292,26 @@ function generateTrackingPath(){
         { name: "Hong Kong", lat: 22.3193, lng: 114.1694 }
     ];
     const destinations = [
-        { name: "New York", lat: 40.7128, lng: -74.0060 },
         { name: "London", lat: 51.5074, lng: -0.1278 },
-        { name: "Dubai", lat: 25.2048, lng: 55.2708 },
         { name: "Paris", lat: 48.8566, lng: 2.3522 },
-        { name: "Sydney", lat: -33.8688, lng: 151.2093 },
-        { name: "Toronto", lat: 43.6532, lng: -79.3832 },
+        { name: "Berlin", lat: 52.5200, lng: 13.4050 },
+        { name: "Amsterdam", lat: 52.3676, lng: 4.9041 },
+        { name: "Rome", lat: 41.9028, lng: 12.4964 },
+        { name: "Madrid", lat: 40.4168, lng: -3.7038 },
+        { name: "Vienna", lat: 48.2082, lng: 16.3738 },
+        { name: "Stockholm", lat: 59.3293, lng: 18.0686 },
+        { name: "Istanbul", lat: 41.0082, lng: 28.9784 },
+        { name: "Warsaw", lat: 52.2297, lng: 21.0122 },
+        { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
+        { name: "Seoul", lat: 37.5665, lng: 126.9780 },
         { name: "Singapore", lat: 1.3521, lng: 103.8198 },
-        { name: "Cairo", lat: 30.0444, lng: 31.2357 },
-        { name: "Riyadh", lat: 24.7136, lng: 46.6753 },
-        { name: "Istanbul", lat: 41.0082, lng: 28.9784 }
+        { name: "Bangkok", lat: 13.7563, lng: 100.5018 },
+        { name: "Kuala Lumpur", lat: 3.1390, lng: 101.6869 },
+        { name: "Jakarta", lat: -6.2088, lng: 106.8456 },
+        { name: "Manila", lat: 14.5995, lng: 120.9842 },
+        { name: "Osaka", lat: 34.6937, lng: 135.5023 },
+        { name: "Taipei", lat: 25.0330, lng: 121.5654 },
+        { name: "Mumbai", lat: 19.0760, lng: 72.8777 }
     ];
     const origin = origins[Math.floor(Math.random() * origins.length)];
     const dest   = destinations[Math.floor(Math.random() * destinations.length)];
@@ -11693,8 +11703,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .countdown{display:flex;align-items:center;gap:6px;background:#fff8e1;border-radius:8px;padding:7px 10px;margin-bottom:10px;font-size:12px;color:#e65100;font-weight:600;}
 .ship-btn{width:100%;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#1976d2,#1565c0);color:white;font-size:14px;font-weight:700;cursor:pointer;}
 .map-wrap{border-radius:12px;overflow:hidden;height:160px;background:#e8f4fd;margin-bottom:10px;position:relative;}
-.map-canvas{width:100%;height:100%;}
-.map-label{position:absolute;bottom:6px;right:8px;font-size:10px;color:#1976d2;background:rgba(255,255,255,0.9);padding:2px 7px;border-radius:8px;}
+.map-canvas{width:100%;height:100%;display:none;}
+.map-label{position:absolute;bottom:6px;right:8px;font-size:10px;color:#1976d2;background:rgba(255,255,255,0.9);padding:2px 7px;border-radius:8px;z-index:500;}
+.map-tooltip{background:white;border:1px solid #ddd;border-radius:8px;font-size:11px;font-weight:700;color:#333;padding:2px 7px;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+.map-tooltip::before{display:none;}
 .empty{text-align:center;padding:60px 20px;color:#aaa;}
 .empty-icon{font-size:48px;margin-bottom:12px;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2e7d32;color:white;padding:11px 22px;border-radius:25px;font-size:13px;font-weight:600;z-index:1000;display:none;}
@@ -11721,6 +11733,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
 .track-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;align-items:flex-end;justify-content:center;}
 .track-overlay.open{display:flex;}
 .track-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease;}
+.tstat-item{display:flex;flex-direction:column;align-items:center;gap:3px;flex:0 0 auto;}
+.tstat-icon{font-size:18px;}
+.tstat-label{font-size:10px;font-weight:600;color:#888;text-align:center;}
+.tstat-item.active .tstat-label{color:#5c35c7;}
+.tstat-line{flex:1;height:3px;background:#e0e0e0;border-radius:3px;margin:0 4px;margin-top:-12px;}
+.tstat-line.active{background:linear-gradient(90deg,#5c35c7,#9575cd);}
 
 /* PRODUCT MODAL */
 .prod-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;align-items:flex-end;justify-content:center;}
@@ -11821,9 +11839,25 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
     <div id="track-num" style="padding:0 16px 6px;font-size:12px;color:#888;font-family:monospace;"></div>
     <div id="track-title" style="padding:0 16px 10px;font-size:13px;font-weight:600;color:#222;"></div>
     <div style="margin:0 16px 10px;border-radius:12px;overflow:hidden;height:200px;position:relative;background:#e8f4fd;">
-      <canvas id="track-canvas" style="width:100%;height:100%;"></canvas>
+      <div id="track-canvas" style="width:100%;height:200px;"></div>
     </div>
-    <div id="track-route" style="padding:0 16px 20px;font-size:13px;color:#555;line-height:1.7;"></div>
+    <div id="track-route" style="padding:0 16px 8px;font-size:13px;color:#555;line-height:1.7;"></div>
+    <div id="track-status-bar" style="margin:0 16px 18px;display:flex;align-items:center;justify-content:space-between;">
+      <div class="tstat-item" id="tstat-1">
+        <div class="tstat-icon">✅</div>
+        <div class="tstat-label">Order Confirmed</div>
+      </div>
+      <div class="tstat-line" id="tline-1"></div>
+      <div class="tstat-item" id="tstat-2">
+        <div class="tstat-icon">📦</div>
+        <div class="tstat-label">Preparing</div>
+      </div>
+      <div class="tstat-line" id="tline-2"></div>
+      <div class="tstat-item" id="tstat-3">
+        <div class="tstat-icon">✈️</div>
+        <div class="tstat-label">On The Way</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -12006,11 +12040,11 @@ function buildCard(o){
     }
 
     if(o.status === "in_delivery"){
-        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-'+o.id+'"></canvas><span class="map-label">📍 In transit</span></div>';
+        html += '<div class="map-wrap" id="map-'+o.id+'"></div>';
     }
 
     if(o.status === "waiting_refund"){
-        html += '<div class="map-wrap"><canvas class="map-canvas" id="map-ref-'+o.id+'"></canvas><span class="map-label">📍 Arrived Now</span></div>';
+        html += '<div class="map-wrap" id="map-ref-'+o.id+'"></div>';
         html += '<div style="background:white;border-radius:10px;padding:10px;font-size:13px;color:#e65100;font-weight:600;text-align:center;border:1px solid #eee;">⏳ Pending Confirmation</div>';
     }
 
@@ -12187,51 +12221,179 @@ function openTrackModal(o){
     var tp = o.trackingPath;
     if(tp){
         document.getElementById("track-route").innerHTML =
-            "<b>📍 Route:</b> "+(tp.origin?tp.origin.name:"?")+" → "+(tp.destination?tp.destination.name:"?")+
-            "<br><span style='color:#1976d2;font-weight:600;'>✈ Package is on the way</span>";
+            "<b>📍 Route:</b> "+(tp.origin?tp.origin.name:"?")+" \u2192 "+(tp.destination?tp.destination.name:"?")+
+            "<br><span style='color:#5c35c7;font-weight:600;'>\u2708 Package is on the way</span>";
     }
+    // Update status bar steps based on delivery progress
+    var elapsed = o.deliveryStart ? Date.now()-o.deliveryStart : 0;
+    var prog = Math.min(1, elapsed/(72*60*60*1000));
+    var step = prog < 0.15 ? 1 : prog < 0.5 ? 2 : 3;
+    [1,2,3].forEach(function(i){
+        var si = document.getElementById("tstat-"+i);
+        if(si) si.classList.toggle("active", i<=step);
+    });
+    [1,2].forEach(function(i){
+        var ln = document.getElementById("tline-"+i);
+        if(ln) ln.classList.toggle("active", i<step);
+    });
     document.getElementById("trackModal").classList.add("open");
+    var pid = "track-canvas";
+    if(_activeMaps[pid]){ try{ _activeMaps[pid].remove(); }catch(e){} delete _activeMaps[pid]; }
+    var el = document.getElementById(pid);
+    if(el) el.innerHTML = "";
     setTimeout(function(){
-        var c = document.getElementById("track-canvas");
-        if(!c) return;
-        c.width = c.offsetWidth||400; c.height = c.offsetHeight||200;
-        drawMap2(c, o.trackingPath, o.deliveryStart);
-    }, 100);
+        if(!el) return;
+        drawLeafletMap(pid, o.trackingPath, o.deliveryStart, true);
+    }, 150);
 }
 function closeTrackModal(){ document.getElementById("trackModal").classList.remove("open"); }
 
-function drawMap(canvasId, tp, ds){
-    var c = document.getElementById(canvasId);
-    if(!c) return;
-    c.width=c.offsetWidth; c.height=c.offsetHeight;
-    drawMap2(c, tp, ds);
+// ===== LEAFLET MAP SYSTEM =====
+var _leafletLoaded = false;
+var _leafletCbs = [];
+function ensureLeaflet(cb){
+    if(window.L){ cb(); return; }
+    if(_leafletCbs.length===0){
+        var lCss=document.createElement("link"); lCss.rel="stylesheet"; lCss.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(lCss);
+        var lJs=document.createElement("script"); lJs.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+        lJs.onload=function(){ _leafletLoaded=true; _leafletCbs.forEach(function(f){f();}); _leafletCbs=[]; };
+        document.head.appendChild(lJs);
+    }
+    _leafletCbs.push(cb);
 }
+
+var _activeMaps = {}; // mapId -> L.map instance
+
+function drawMap(canvasId, tp, ds){
+    var el = document.getElementById(canvasId);
+    if(!el) return;
+    // If it's a canvas, replace with div
+    if(el.tagName === "CANVAS"){
+        var div = document.createElement("div");
+        div.id = canvasId;
+        div.style.cssText = el.style.cssText || "";
+        div.className = el.className;
+        el.parentNode.replaceChild(div, el);
+        el = div;
+    }
+    el.style.width = "100%";
+    el.style.height = "100%";
+    el.style.borderRadius = "12px";
+    el.style.overflow = "hidden";
+    drawLeafletMap(canvasId, tp, ds, false);
+}
+
 function drawMap2(c, tp, ds){
-    if(!tp||!c) return;
-    var ctx=c.getContext("2d"), W=c.width, H=c.height;
-    var g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#e3f2fd"); g.addColorStop(1,"#bbdefb");
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle="rgba(25,118,210,0.08)";
-    [[0.15,0.35,60],[0.5,0.4,80],[0.75,0.55,55],[0.85,0.45,45]].forEach(function(c2){
-        ctx.beginPath(); ctx.arc(c2[0]*W,c2[1]*H,c2[2],0,Math.PI*2); ctx.fill();
+    // c is a canvas element used in modal — we create a sibling div
+    if(!c||!tp) return;
+    var pid = "leaflet-modal-map";
+    var existing = document.getElementById(pid);
+    if(existing) existing.remove();
+    var div = document.createElement("div");
+    div.id = pid;
+    div.style.cssText = "width:100%;height:"+(c.offsetHeight||200)+"px;border-radius:14px;overflow:hidden;";
+    c.parentNode.insertBefore(div, c);
+    c.style.display = "none";
+    drawLeafletMap(pid, tp, ds, true);
+}
+
+function drawLeafletMap(divId, tp, ds, isModal){
+    if(!tp) return;
+    ensureLeaflet(function(){
+        var el = document.getElementById(divId);
+        if(!el) return;
+        // destroy old instance if any
+        if(_activeMaps[divId]){ try{ _activeMaps[divId].remove(); }catch(e){} delete _activeMaps[divId]; }
+
+        var oLat=tp.origin.lat, oLng=tp.origin.lng, dLat=tp.destination.lat, dLng=tp.destination.lng;
+        var cLat=(oLat+dLat)/2, cLng=(oLng+dLng)/2;
+
+        // calculate zoom based on distance
+        var dist = Math.sqrt(Math.pow(dLat-oLat,2)+Math.pow(dLng-oLng,2));
+        var zoom = dist > 100 ? 3 : dist > 50 ? 4 : 5;
+
+        var map = L.map(divId, {
+            zoomControl: false,
+            dragging: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            touchZoom: false,
+            attributionControl: false
+        }).setView([cLat, cLng], zoom);
+        _activeMaps[divId] = map;
+
+        // OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+            maxZoom:19,
+            opacity:0.9
+        }).addTo(map);
+
+        // Calculate progress
+        var elapsed = ds ? Date.now()-ds : 0;
+        var prog = Math.min(1, elapsed/(72*60*60*1000));
+
+        // Bezier midpoint
+        var mLat=tp.midpoint.lat, mLng=tp.midpoint.lng;
+
+        // Build bezier path points
+        var pathPts=[];
+        for(var t=0;t<=1;t+=0.02){
+            var lat=(1-t)*(1-t)*oLat+2*(1-t)*t*mLat+t*t*dLat;
+            var lng=(1-t)*(1-t)*oLng+2*(1-t)*t*mLng+t*t*dLng;
+            pathPts.push([lat,lng]);
+        }
+
+        // Full dashed grey line
+        L.polyline(pathPts, {color:'#9e9e9e', weight:3, dashArray:'6,6', opacity:0.5}).addTo(map);
+
+        // Traveled part — purple/blue solid line
+        var traveledPts=[];
+        var travelCount = Math.floor(prog * pathPts.length);
+        for(var i=0;i<=travelCount;i++) traveledPts.push(pathPts[i]);
+        if(traveledPts.length>1) L.polyline(traveledPts, {color:'#5c35c7', weight:4, opacity:1}).addTo(map);
+
+        // Current position of plane
+        var pi = Math.min(travelCount, pathPts.length-1);
+        var planeLat = pathPts[pi] ? pathPts[pi][0] : dLat;
+        var planeLng = pathPts[pi] ? pathPts[pi][1] : dLng;
+
+        // Origin marker — shop icon
+        var shopIcon = L.divIcon({
+            html:'<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">🏪</div>',
+            iconAnchor:[18,18], className:''
+        });
+        L.marker([oLat,oLng],{icon:shopIcon}).bindTooltip(tp.origin.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
+
+        // Destination marker — user icon
+        var userIcon = L.divIcon({
+            html:'<div style="background:white;border-radius:8px;padding:3px 5px;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:2px solid #e0e0e0;">👤</div><div style="background:#e53935;width:10px;height:10px;border-radius:50%;border:2px solid white;margin:-4px auto 0;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>',
+            iconAnchor:[18,22], className:''
+        });
+        L.marker([dLat,dLng],{icon:userIcon}).bindTooltip(tp.destination.name,{permanent:true,direction:'top',className:'map-tooltip'}).addTo(map);
+
+        // Plane icon at current position
+        var planeIcon = L.divIcon({
+            html:'<div style="font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transform:rotate(-10deg);">✈️</div>',
+            iconAnchor:[11,11], className:''
+        });
+        L.marker([planeLat,planeLng],{icon:planeIcon, zIndexOffset:1000}).addTo(map);
+
+        // Status bar at bottom
+        var statusBar = L.control({position:'bottomright'});
+        statusBar.onAdd = function(){
+            var d = L.DomUtil.create('div');
+            var pct = Math.round(prog*100);
+            var label = prog>=1 ? '📍 Arrived' : '✈ On The Way';
+            d.innerHTML='<div style="background:white;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;align-items:center;gap:6px;margin:8px;">'+label+'</div>';
+            return d;
+        };
+        statusBar.addTo(map);
+
+        // Animate map fit to bounds
+        setTimeout(function(){
+            try{ map.fitBounds([[oLat,oLng],[dLat,dLng]], {padding:[20,20]}); }catch(e){}
+        },200);
     });
-    function tc(lat,lng){ return {x:((lng+180)/360)*W, y:((90-lat)/180)*H}; }
-    var p0=tc(tp.origin.lat,tp.origin.lng), p1=tc(tp.midpoint.lat,tp.midpoint.lng), p2=tc(tp.destination.lat,tp.destination.lng);
-    var elapsed=ds?Date.now()-ds:0, prog=Math.min(1,elapsed/(72*60*60*1000));
-    ctx.setLineDash([5,4]); ctx.strokeStyle="rgba(25,118,210,0.3)"; ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(p0.x,p0.y); ctx.quadraticCurveTo(p1.x,p1.y,p2.x,p2.y); ctx.stroke();
-    ctx.setLineDash([]); ctx.strokeStyle="#1976d2"; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(p0.x,p0.y);
-    for(var t=0;t<=prog;t+=1/60){ var bx=(1-t)*(1-t)*p0.x+2*(1-t)*t*p1.x+t*t*p2.x, by=(1-t)*(1-t)*p0.y+2*(1-t)*t*p1.y+t*t*p2.y; ctx.lineTo(bx,by); }
-    ctx.stroke();
-    var pt=prog, px=(1-pt)*(1-pt)*p0.x+2*(1-pt)*pt*p1.x+pt*pt*p2.x, py=(1-pt)*(1-pt)*p0.y+2*(1-pt)*pt*p1.y+pt*pt*p2.y;
-    ctx.fillStyle="#1976d2"; ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle="white"; ctx.font="10px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText("✈",px,py);
-    [[p0,"🏭"],[p2,"📍"]].forEach(function(item){
-        ctx.fillStyle="#ff6b35"; ctx.beginPath(); ctx.arc(item[0].x,item[0].y,5,0,Math.PI*2); ctx.fill();
-        ctx.fillStyle="#333"; ctx.font="11px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(item[1],item[0].x,item[0].y-12);
-    });
-    ctx.fillStyle="#1976d2"; ctx.font="bold 9px Arial"; ctx.textAlign="left"; ctx.fillText(tp.origin.name,Math.max(2,p0.x-20),p0.y+14);
-    ctx.textAlign="right"; ctx.fillText(tp.destination.name,Math.min(W-2,p2.x+20),p2.y+14);
 }
 
 function showToast(msg){ var t=document.getElementById("toast"); t.innerText=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },2500); }
