@@ -4809,11 +4809,12 @@ selectedNet = net;
 document.querySelectorAll(".network button").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
 
-// مستقبلاً نغير العنوان من السيرفر
-if(net === "TRC20"){
-document.getElementById("address").innerText = "tt";
-}else{
-document.getElementById("address").innerText = "tt";
+// تحديث العنوان والـ QR عند تغيير الشبكة
+let currentAddress = document.getElementById("address").dataset.value || "";
+if(currentAddress && currentAddress !== "No address"){
+    document.getElementById("address").innerText = currentAddress;
+    document.getElementById("qr").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + currentAddress;
 }
 }
 
@@ -4878,9 +4879,12 @@ async function loadAddress(){
         return;
     }
 
-    let user = users[0]; // مؤقت
+    let user = users[0];
 
     let address = user.usdt || "No address";
+
+    // حفظ العنوان في data-value ليُستخدم عند تغيير الشبكة
+    document.getElementById("address").dataset.value = address;
 
     // تحديث النص
     document.getElementById("address").innerText = address;
