@@ -9967,10 +9967,11 @@ var sid          = hashId(seedStr);
 var sName        = storeNames[sid % storeNames.length];
 var sAvatar      = storeAvatars[sid % storeAvatars.length];
 var sProducts    = 20 + (sid % 480);
+var sFollowers   = (sid * 7) % 9800;
 document.getElementById("storeName").innerText     = sName;
 document.getElementById("storeLogo").src           = sAvatar;
 document.getElementById("storeProducts").innerText   = "Products " + sProducts;
-document.getElementById("storeFollowers").innerText  = "Followers 0";
+document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers.toLocaleString();
 
 // جلب VIP الحقيقي من السيرفر إذا كان المتجر معروفاً
 (function(){
@@ -9982,7 +9983,7 @@ document.getElementById("storeFollowers").innerText  = "Followers 0";
         document.getElementById("storeVip").innerHTML = "&#10004; VIP " + (d.vipLevel || 0);
       })
       .catch(function(){ document.getElementById("storeVip").innerHTML = "&#10004; VIP 0"; });
-    // جلب الـ followers الحقيقي
+    // جلب الـ followers الحقيقي للمتجر الفعلي فقط
     fetch("/followers/" + encodeURIComponent(storeEmail))
       .then(function(r){ return r.json(); })
       .then(function(d){
