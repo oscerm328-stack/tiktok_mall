@@ -7575,7 +7575,7 @@ body{
 
 /* CONTENT — يبدأ بعد الـ sticky */
 .content{
-  padding-top: 110px; /* ارتفاع header+banner تقريباً */
+  padding-top: 0;
 }
 
 /* SECTION TITLE */
@@ -7613,6 +7613,10 @@ body{
 .vip-badge.vip5-b{
   background:linear-gradient(135deg,#1976d2,#1565c0);
   color:white;
+}
+.vip-badge.vip-badge-done{
+  background:#e0e0e0;
+  color:#888;
 }
 .best-badge{
   background:#fff3e0;
@@ -7676,10 +7680,10 @@ body{
 .upgraded-btn{
   width:100%;
   padding:14px;
-  border:1.5px solid #a5d6a7;
+  border:none;
   border-radius:28px;
-  background:#e8f5e9;
-  color:#2e7d32;
+  background:transparent;
+  color:#8B6914;
   font-size:15px;
   font-weight:600;
   cursor:default;
@@ -7785,7 +7789,7 @@ function renderCards(){
     if(plan.level === 5) cls += " vip5";
     card.className = cls;
 
-    let badgeCls = plan.level === 5 ? "vip-badge vip5-b" : "vip-badge";
+    let badgeCls = isUpgraded ? "vip-badge vip-badge-done" : (plan.level === 5 ? "vip-badge vip5-b" : "vip-badge");
     let capitalTxt = plan.capital === 0 ? "Free" : "$" + fmt(plan.capital);
     let crownHtml  = plan.level === 5 ? "👑 " : "";
     let topRightHtml = "";
@@ -7799,7 +7803,7 @@ function renderCards(){
     if(isCurrent){
       btnHtml = '<div class="current-btn">Current Plan</div>';
     } else if(isUpgraded){
-      btnHtml = '<div class="upgraded-btn">✅ Upgraded</div>';
+      btnHtml = '<div class="upgraded-btn">Upgraded</div>';
     } else if(canUpgrade){
       btnHtml = '<div class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">Upgrade Now</div>';
     } else {
