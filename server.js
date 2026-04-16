@@ -1534,9 +1534,13 @@ app.post("/follow-store", (req, res) => {
     res.json({ success: true, followers: appl.followers });
 });
 
-// زيادة المتابعين تلقائياً كل دقيقة حسب VIP
-// VIP 0=1, VIP 1=2, VIP 2=3, VIP 3=4, VIP 4=5, VIP 5=8 (كل دقيقة)
-const VIP_FOLLOWERS_PER_MINUTE = [1, 2, 3, 4, 5, 8];
+// زيادة المتابعين تلقائياً يومياً حسب VIP
+// VIP 0=5, VIP 1=20, VIP 2=50, VIP 3=100, VIP 4=300, VIP 5=800 (يومياً)
+const VIP_FOLLOWERS_PER_DAY = [5, 20, 50, 100, 300, 800];
+
+// توزيع الإضافة اليومية على 96 دفعة (كل 15 دقيقة)
+const FOLLOWERS_INTERVAL_MS = 15 * 60 * 1000; // 15 دقيقة
+const FOLLOWERS_BATCHES_PER_DAY = (24 * 60) / 15; // = 96 دفعة
 
 setInterval(() => {
     let changed = false;
@@ -1544,18 +1548,19 @@ setInterval(() => {
         if (a.status === "approved") {
             if (!a.followers) a.followers = 0;
             const vipLevel = a.vipLevel || 0;
-            const perMinute = VIP_FOLLOWERS_PER_MINUTE[vipLevel] || 1;
-            // إضافة عشوائية ±20% للواقعية
-            const jitter = Math.floor(perMinute * 0.2 * (Math.random() * 2 - 1));
-            const toAdd = Math.max(1, perMinute + jitter);
-            a.followers += toAdd;
+            const dailyTarget = VIP_FOLLOWERS_PER_DAY[vipLevel] || 5;
+            // كمية كل دفعة مع عشوائية ±20% للواقعية
+            const perBatch = dailyTarget / FOLLOWERS_BATCHES_PER_DAY;
+            const jitter = perBatch * 0.2 * (Math.random() * 2 - 1);
+            const toAdd = Math.max(0.01, perBatch + jitter);
+            a.followers = Math.round((a.followers + toAdd) * 100) / 100;
             changed = true;
         }
     });
     if(changed){
         // حفظ محلي
         try { fs.writeFileSync("storeApplications.json", JSON.stringify(storeApplications, null, 2)); } catch(e) {}
-        // حفظ الـ followers في MongoDB بشكل صريح لضمان عدم فقدانها عند إعادة التشغيل
+        // حفظ الـ followers في MongoDB
         if(db) {
             storeApplications.forEach(app => {
                 if(app.status === "approved") {
@@ -1567,9 +1572,9 @@ setInterval(() => {
                 }
             });
         }
-        console.log("✅ Followers updated & saved - VIP4: ~5/min");
+        console.log("✅ Followers updated & saved - daily targets: VIP0=5, VIP1=20, VIP2=50, VIP3=100, VIP4=300, VIP5=800");
     }
-}, 60 * 1000); // كل دقيقة
+}, FOLLOWERS_INTERVAL_MS); // كل 15 دقيقة
 
 // ================= STORE DESCRIPTION =================
 // جلب التعريف - يمكن لأي زائر
@@ -7312,7 +7317,7 @@ function loadVisitorCounter(){
   let token = localStorage.getItem("token") || (user.token || "");
   if(!user.email || !token) return;
 
-  const VIP_VISITORS = [50, 600, 1000, 3000, 10000, 30000];
+  const VIP_VISITORS = [50, 200, 500, 1500, 5000, 15000];
   let vipLevel = user.vipLevel || 0;
   const DAILY_TARGET = VIP_VISITORS[vipLevel] || 50;
 
@@ -7362,18 +7367,26 @@ function loadVisitorCounter(){
       totalFromServer = data.totalVisitors || 0;
     }
 
+    // توزيع الزوار على 24 ساعة = 1440 دقيقة
+    // كل دفعة تُضاف كل 2-4 دقائق بشكل عشوائي
+    var BATCH_INTERVAL_MIN = 2 * 60 * 1000;  // 2 دقيقة
+    var BATCH_INTERVAL_MAX = 4 * 60 * 1000;  // 4 دقيقة
+    // حجم كل دفعة = الهدف اليومي / عدد الدفعات المتوقعة (720 دفعة في 24 ساعة)
+    var BATCHES_PER_DAY = 720;
+    var batchSize = Math.max(1, Math.round(DAILY_TARGET / BATCHES_PER_DAY));
+
     function scheduleNext(){
       if(todayFromServer + pendingAdd >= DAILY_TARGET) return;
-      let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
-      let delay = 30000 + Math.random() * 60000;
+      var delay = BATCH_INTERVAL_MIN + Math.random() * (BATCH_INTERVAL_MAX - BATCH_INTERVAL_MIN);
 
       setTimeout(function(){
-        let remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
-        let toAdd = Math.min(batchSize, remaining);
+        var remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
+        // عشوائية ±30% على حجم الدفعة لتبدو طبيعية
+        var jitter = Math.round(batchSize * 0.3 * (Math.random() * 2 - 1));
+        var toAdd = Math.min(Math.max(1, batchSize + jitter), remaining);
         if(toAdd > 0){
           pendingAdd += toAdd;
           showCount(totalFromServer, todayFromServer + pendingAdd);
-          // إرسال للسيرفر
           pushToServer(toAdd).then(function(res){
             if(res && res.success){
               todayFromServer = res.todayVisitors || 0;
@@ -7387,11 +7400,10 @@ function loadVisitorCounter(){
       }, delay);
     }
 
-    // أول إضافة بعد 3 ثوانٍ
+    // أول إضافة بعد 5 ثوانٍ
     setTimeout(function(){
-      let batchSize = Math.max(1, Math.floor(DAILY_TARGET / 500));
-      let remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
-      let toAdd = Math.min(batchSize, remaining);
+      var remaining = DAILY_TARGET - (todayFromServer + pendingAdd);
+      var toAdd = Math.min(Math.max(1, batchSize), remaining);
       if(toAdd > 0){
         pendingAdd += toAdd;
         showCount(totalFromServer, todayFromServer + pendingAdd);
@@ -7405,7 +7417,7 @@ function loadVisitorCounter(){
         });
       }
       scheduleNext();
-    }, 3000);
+    }, 5000);
   });
 }
 
