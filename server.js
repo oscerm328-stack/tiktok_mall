@@ -1529,7 +1529,7 @@ app.post("/update-store-logo", authMiddleware, (req, res) => {
 // جلب عدد المتابعين
 app.get("/followers/:email", (req, res) => {
     const appl = storeApplications.find(a => a.email === req.params.email);
-    const followers = appl ? (appl.followers || 0) : 0;
+    const followers = Math.floor(appl ? (appl.followers || 0) : 0);
     res.json({ followers });
 });
 
@@ -3187,7 +3187,7 @@ try {
                 <div style="display:flex;align-items:center;gap:7px;margin-top:10px;flex-wrap:wrap;">
                     <span style="background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;">&#10004; VIP \${vipLevel}</span>
                     <span style="background:rgba(255,255,255,0.18);color:white;font-size:11px;padding:3px 10px;border-radius:20px;">Products \${productsCount}</span>
-                    <span style="background:rgba(255,255,255,0.18);color:white;font-size:11px;padding:3px 10px;border-radius:20px;">Followers \${followers}</span>
+                    <span style="background:rgba(255,255,255,0.18);color:white;font-size:11px;padding:3px 10px;border-radius:20px;">Followers \${Math.floor(followers)}</span>
                 </div>
             \`;
             card.onclick = () => {
@@ -9234,7 +9234,7 @@ function toggleDescEdit(){
 }
 
 function renderFollowers(){
-  var count = isLiked ? baseFollowers + 1 : baseFollowers;
+  var count = Math.floor(isLiked ? baseFollowers + 1 : baseFollowers);
   document.getElementById("followerCount").innerText = count;
 }
 
