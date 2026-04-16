@@ -7590,84 +7590,83 @@ body{
   margin:0 14px 14px;
   border-radius:16px;
   overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,0.07);
-  border:2px solid transparent;
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+  border:1.5px solid #e8e8e8;
 }
-.vip-card.current{ border-color:#1976d2; }
-.vip-card.vip5{ border-color:#ffd700; background:linear-gradient(135deg,#fffdf0,white); }
+.vip-card.current{ border:1.5px solid #d0d0d0; }
+.vip-card.vip5{ border:2px solid #1976d2; background:white; }
 
-/* CARD TOP HALF — VIP badge */
+/* CARD TOP HALF — VIP badge + label */
 .card-top{
-  padding:14px 18px 10px;
-  display:flex;align-items:center;gap:8px;
+  padding:16px 18px 10px;
+  display:flex;align-items:center;justify-content:space-between;
 }
 .vip-badge{
   background:linear-gradient(135deg,#f5a623,#e8791d);
   color:white;
   padding:5px 16px;
   border-radius:20px;
-  font-size:15px;
+  font-size:14px;
   font-weight:700;
   display:inline-block;
 }
 .vip-badge.vip5-b{
-  background:linear-gradient(135deg,#ffd700,#ffb300);
-  color:#5d3a00;
+  background:linear-gradient(135deg,#1976d2,#1565c0);
+  color:white;
 }
 .best-badge{
-  background:linear-gradient(135deg,#ff6b00,#ff9800);
-  color:white;
+  background:#fff3e0;
+  color:#e65100;
+  border:1.5px solid #ffb74d;
   font-size:11px;font-weight:700;
   padding:3px 10px;border-radius:20px;
   display:inline-block;
 }
+.current-plan-label{
+  font-size:12px;
+  color:#999;
+  font-weight:500;
+}
 
-/* CARD INFO — قائمة البنود */
+/* CARD INFO — صفوف البيانات */
 .card-info{
-  padding:0 18px 14px;
-  border-bottom:1px solid #f0f0f0;
+  padding:4px 18px 14px;
 }
 .info-row{
-  display:flex;align-items:center;
-  padding:7px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 0;
   font-size:14px;
-  color:#444;
-  border-bottom:1px solid #f7f7f7;
+  border-bottom:1px solid #f5f5f5;
 }
 .info-row:last-child{ border-bottom:none; }
-.info-row .dot{
-  width:7px;height:7px;border-radius:50%;
-  background:#1976d2;margin-right:10px;flex-shrink:0;
-}
-.info-row .ikey{ color:#888;min-width:180px; }
-.info-row .ival{ font-weight:700;color:#1a1a2e;margin-left:auto; }
-.info-row .ival.comm{ color:#1976d2; }
+.info-row .ikey{ color:#555;font-weight:400; }
+.info-row .ival{ font-weight:700;color:#111; }
+.info-row .ival.comm{ color:#2e7d32; }
 
 /* CARD BOTTOM — زر */
 .card-btn{
-  padding:12px 18px;
-  display:flex;justify-content:center;
+  padding:4px 18px 18px;
 }
 .upgrade-btn{
-  width:60%;
-  padding:12px;
+  width:100%;
+  padding:14px;
   border:none;
-  border-radius:24px;
+  border-radius:28px;
   background:linear-gradient(135deg,#1976d2,#1565c0);
   color:white;
   font-size:15px;
-  font-weight:600;
+  font-weight:700;
   cursor:pointer;
   transition:all 0.2s;
   text-align:center;
 }
-.upgrade-btn:active{ transform:scale(0.97); }
+.upgrade-btn:active{ transform:scale(0.98); opacity:0.9; }
 .current-btn{
-  width:60%;
-  padding:12px;
-  border:2px solid #ccc;
-  border-radius:24px;
-  background:#f0f0f0;
+  width:100%;
+  padding:14px;
+  border:1.5px solid #e0e0e0;
+  border-radius:28px;
+  background:#f8f8f8;
   color:#aaa;
   font-size:15px;
   font-weight:600;
@@ -7675,10 +7674,10 @@ body{
   text-align:center;
 }
 .upgraded-btn{
-  width:60%;
-  padding:12px;
-  border:2px solid #a5d6a7;
-  border-radius:24px;
+  width:100%;
+  padding:14px;
+  border:1.5px solid #a5d6a7;
+  border-radius:28px;
   background:#e8f5e9;
   color:#2e7d32;
   font-size:15px;
@@ -7687,10 +7686,10 @@ body{
   text-align:center;
 }
 .locked-btn{
-  width:60%;
-  padding:12px;
-  border:2px solid #e0e0e0;
-  border-radius:24px;
+  width:100%;
+  padding:14px;
+  border:1.5px solid #e0e0e0;
+  border-radius:28px;
   background:#f5f5f5;
   color:#bbb;
   font-size:15px;
@@ -7698,7 +7697,6 @@ body{
   cursor:default;
   text-align:center;
 }
-
 /* TOAST */
 .toast{
   position:fixed;bottom:30px;left:50%;
@@ -7790,15 +7788,20 @@ function renderCards(){
     let badgeCls = plan.level === 5 ? "vip-badge vip5-b" : "vip-badge";
     let capitalTxt = plan.capital === 0 ? "Free" : "$" + fmt(plan.capital);
     let crownHtml  = plan.level === 5 ? "👑 " : "";
-    let bestHtml   = plan.best ? ' <span class="best-badge">⭐ Best Value</span>' : "";
+    let topRightHtml = "";
+    if(isCurrent){
+      topRightHtml = '<span class="current-plan-label">Current Plan</span>';
+    } else if(plan.best){
+      topRightHtml = '<span class="best-badge">Best Value</span>';
+    }
 
     let btnHtml = "";
     if(isCurrent){
-      btnHtml = '<div class="current-btn">🔘 Current Plan</div>';
+      btnHtml = '<div class="current-btn">Current Plan</div>';
     } else if(isUpgraded){
       btnHtml = '<div class="upgraded-btn">✅ Upgraded</div>';
     } else if(canUpgrade){
-      btnHtml = '<div class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">🔘 Upgrade</div>';
+      btnHtml = '<div class="upgrade-btn" onclick="doUpgrade(' + plan.level + ')">Upgrade Now</div>';
     } else {
       btnHtml = '<div class="locked-btn">🔒 Locked</div>';
     }
@@ -7806,13 +7809,13 @@ function renderCards(){
     card.innerHTML =
       '<div class="card-top">' +
         '<span class="' + badgeCls + '">' + crownHtml + plan.label + '</span>' +
-        bestHtml +
+        topRightHtml +
       '</div>' +
       '<div class="card-info">' +
-        '<div class="info-row"><span class="dot"></span><span class="ikey">Capital</span><span class="ival">' + capitalTxt + '</span></div>' +
-        '<div class="info-row"><span class="dot"></span><span class="ikey">Daily Traffic Provided</span><span class="ival">' + fmt(plan.visitors) + ' Visitors</span></div>' +
-        '<div class="info-row"><span class="dot"></span><span class="ikey">Product Limit</span><span class="ival">' + fmt(plan.products) + ' Products</span></div>' +
-        '<div class="info-row"><span class="dot"></span><span class="ikey">Sales Commission</span><span class="ival comm">' + plan.commission + '%</span></div>' +
+        '<div class="info-row"><span class="ikey">Capital</span><span class="ival">' + capitalTxt + '</span></div>' +
+        '<div class="info-row"><span class="ikey">Daily Traffic Boost</span><span class="ival">' + fmt(plan.visitors) + ' Visits</span></div>' +
+        '<div class="info-row"><span class="ikey">Product Limit</span><span class="ival">' + fmt(plan.products) + ' Products</span></div>' +
+        '<div class="info-row"><span class="ikey">Sales Commission</span><span class="ival comm">' + plan.commission + '%</span></div>' +
       '</div>' +
       '<div class="card-btn">' + btnHtml + '</div>';
 
@@ -9823,8 +9826,8 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
-  <span class="icon-btn" onclick="window.location.href='/live-chat'"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
-  <span class="icon-btn" onclick="window.location.href='/wallet'"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
+  <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
+  <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
   <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
   <div class="buy-btn" onclick="buyNow()">Buy now</div>
 </div>
