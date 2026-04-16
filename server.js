@@ -11258,6 +11258,9 @@ function applyPriceFilter(){
     applyFiltersAndRender(true);
 }
 
+// ====== FORMAT AMOUNT ======
+function fmtAmt(n){ return parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
 // ====== SELL NOW POPUP ======
 function openSellPopup(productOrJson){
     var p = (typeof productOrJson === 'string') ? JSON.parse(productOrJson) : productOrJson;
