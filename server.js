@@ -7480,11 +7480,11 @@ setInterval(loadMerchantBalance, 5000);
 // ================= VIP UPGRADE API =================
 const VIP_PLANS = [
     { level: 0, capital: 0,       visitors: 50,    products: 20,  commission: 15 },
-    { level: 1, capital: 500,     visitors: 600,   products: 35,  commission: 17 },
-    { level: 2, capital: 5000,    visitors: 1000,  products: 80,  commission: 20 },
-    { level: 3, capital: 20000,   visitors: 3000,  products: 120, commission: 22 },
-    { level: 4, capital: 50000,   visitors: 10000, products: 300, commission: 25 },
-    { level: 5, capital: 200000,  visitors: 30000, products: 1000,commission: 40 }
+    { level: 1, capital: 500,     visitors: 200,   products: 35,  commission: 17 },
+    { level: 2, capital: 5000,    visitors: 500,   products: 80,  commission: 20 },
+    { level: 3, capital: 20000,   visitors: 1500,  products: 120, commission: 22 },
+    { level: 4, capital: 50000,   visitors: 5000,  products: 300, commission: 25 },
+    { level: 5, capital: 200000,  visitors: 15000, products: 1000,commission: 40 }
 ];
 
 app.post("/upgrade-vip", authMiddleware, (req, res) => {
@@ -7759,11 +7759,11 @@ body{
 <script>
 const PLANS = [
   { level:0, capital:0,      visitors:50,    products:20,  commission:15, label:"VIP 0" },
-  { level:1, capital:500,    visitors:600,   products:35,  commission:17, label:"VIP 1" },
-  { level:2, capital:5000,   visitors:1000,  products:80,  commission:20, label:"VIP 2" },
-  { level:3, capital:20000,  visitors:3000,  products:120, commission:22, label:"VIP 3" },
-  { level:4, capital:50000,  visitors:10000, products:300, commission:25, label:"VIP 4" },
-  { level:5, capital:200000, visitors:30000, products:1000,commission:40, label:"VIP 5", best:true }
+  { level:1, capital:500,    visitors:200,   products:35,  commission:17, label:"VIP 1" },
+  { level:2, capital:5000,   visitors:500,   products:80,  commission:20, label:"VIP 2" },
+  { level:3, capital:20000,  visitors:1500,  products:120, commission:22, label:"VIP 3" },
+  { level:4, capital:50000,  visitors:5000,  products:300, commission:25, label:"VIP 4" },
+  { level:5, capital:200000, visitors:15000, products:1000,commission:40, label:"VIP 5", best:true }
 ];
 
 let currentVip = 0;
@@ -12857,11 +12857,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6fb;min-height:100vh
   <p style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">Your VIP level determines how many products you can list and how large your supplier discount is. Upgrade by maintaining a sufficient working capital balance.</p>
   <div class="vip-grid">
     <div class="vip-card"><div class="vip-name">VIP 0</div><div class="vip-pcts">Up to 20 products<br>50 daily visitors<br><span class="vip-disc">15% supplier discount</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 1</div><div class="vip-pcts">Up to 35 products<br>600 daily visitors<br><span class="vip-disc">17% supplier discount</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 2</div><div class="vip-pcts">Up to 80 products<br>1,000 daily visitors<br><span class="vip-disc">20% supplier discount</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 3</div><div class="vip-pcts">Up to 120 products<br>3,000 daily visitors<br><span class="vip-disc">22% supplier discount</span></div></div>
-    <div class="vip-card"><div class="vip-name">VIP 4</div><div class="vip-pcts">Up to 300 products<br>10,000 daily visitors<br><span class="vip-disc">25% supplier discount</span></div></div>
-    <div class="vip-card top"><div class="vip-name">VIP 5 ⭐</div><div class="vip-pcts">Up to 1,000 products<br>30,000 daily visitors<br><span class="vip-disc">40% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 1</div><div class="vip-pcts">Up to 35 products<br>200 daily visitors<br><span class="vip-disc">17% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 2</div><div class="vip-pcts">Up to 80 products<br>500 daily visitors<br><span class="vip-disc">20% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 3</div><div class="vip-pcts">Up to 120 products<br>1,500 daily visitors<br><span class="vip-disc">22% supplier discount</span></div></div>
+    <div class="vip-card"><div class="vip-name">VIP 4</div><div class="vip-pcts">Up to 300 products<br>5,000 daily visitors<br><span class="vip-disc">25% supplier discount</span></div></div>
+    <div class="vip-card top"><div class="vip-name">VIP 5 ⭐</div><div class="vip-pcts">Up to 1,000 products<br>15,000 daily visitors<br><span class="vip-disc">40% supplier discount</span></div></div>
   </div>
 </div>
 
