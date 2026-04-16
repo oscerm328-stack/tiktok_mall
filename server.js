@@ -11626,6 +11626,8 @@ function goTo(idx){
     document.querySelectorAll(".dot").forEach(function(d,i){d.classList.toggle("active",i===idx);});
 }
 
+function fmtAmt(n){ return parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
 function openSheet(){
     var price=parseFloat(p.price);
     var commPct=VIP_COMMISSION[myVipLevel]||15;
