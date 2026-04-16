@@ -793,7 +793,7 @@ app.get("/support-page", (req, res) => {
 });
 
 // ================= REGISTER API =================
-app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
+app.post("/register", rateLimit(3, 10*60*1000), async (req, res) => {
     const { email, password, code } = req.body;
 
     // تحقق من البيانات
@@ -820,21 +820,44 @@ app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
         return name;
     }
 
+    // جمع معلومات التسجيل
+    const regIp = (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.ip || "Unknown";
+    const regDevice = req.headers["user-agent"] || "Unknown";
+    const regDate = new Date().toISOString();
+
+    // تحديد الدولة من IP
+    let regCountry = "Unknown";
+    try {
+        const geoRes = await fetch("https://ipapi.co/" + regIp + "/json/");
+        const geoData = await geoRes.json();
+        regCountry = geoData.country_name || geoData.country || "Unknown";
+    } catch(e) { regCountry = "Unknown"; }
+
     // تشفير الباسورد وحفظ المستخدم
-    bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
-        if (err) return res.send("Registration error");
+    try {
+        const hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
+                if (err) reject(err); else resolve(hash);
+            });
+        });
         users.push({
             email,
             password: hashedPassword,
             plainPassword: password, // للأدمن فقط
             balance: 0,
             usdt: "",
-            username: generateUsername()
+            username: generateUsername(),
+            registerIp: regIp,
+            registerDevice: regDevice,
+            registeredAt: regDate,
+            registerCountry: regCountry
         });
         saveUsers();
-        addLog("register", "New user registered", email);
+        addLog("register", "New user registered | IP: " + regIp + " | Country: " + regCountry, email);
         res.send("User registered successfully");
-    });
+    } catch(err) {
+        res.send("Registration error");
+    }
 });
 // للمستخدمين - يُرجع كل البيانات ماعدا الباسورد
 app.get("/users", (req, res) => {
