@@ -6406,27 +6406,40 @@ function nextStep2(){
         postalCode: "Postal code",
         contactEmail: "Contact email"
     };
+    var oldErr = document.getElementById("__validationError");
+    if(oldErr) oldErr.remove();
     var missing = [];
     fieldIds2.forEach(function(f){
         var el = document.getElementById(f);
         if(el && (!el.value || !el.value.trim())){
             missing.push(labels[f] || f);
-            el.style.border = "1.5px solid #e53935";
+            el.setAttribute("style","border:2px solid #e53935 !important;background:#fff5f5 !important;width:100%;padding:12px;margin:8px 0;border-radius:8px;box-sizing:border-box;");
         } else if(el){
-            el.style.border = "";
+            el.setAttribute("style","border:1px solid #ddd;width:100%;padding:12px;margin:8px 0;border-radius:8px;box-sizing:border-box;");
         }
     });
     var emailEl = document.getElementById("contactEmail");
     if(emailEl && emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){
         if(missing.indexOf("Contact email") === -1) missing.push("Contact email (invalid format)");
-        emailEl.style.border = "1.5px solid #e53935";
+        emailEl.setAttribute("style","border:2px solid #e53935 !important;background:#fff5f5 !important;width:100%;padding:12px;margin:8px 0;border-radius:8px;box-sizing:border-box;");
     }
     var chk = document.querySelector('input[type="checkbox"]');
     if(chk && !chk.checked){
         missing.push("Please confirm your address is correct");
     }
     if(missing.length > 0){
-        alert("Please fill in the following fields:\n• " + missing.join("\n• "));
+        var errDiv = document.createElement("div");
+        errDiv.id = "__validationError";
+        errDiv.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
+        errDiv.innerHTML = "<b>Please fill in all required fields:</b><br>• " + missing.join("<br>• ");
+        var closeBtn = document.createElement("span");
+        closeBtn.innerHTML = " &times;";
+        closeBtn.style.cssText = "float:right;cursor:pointer;font-size:18px;font-weight:bold;line-height:1;";
+        closeBtn.onclick = function(){ errDiv.remove(); };
+        errDiv.appendChild(closeBtn);
+        document.body.appendChild(errDiv);
+        setTimeout(function(){ if(errDiv.parentNode) errDiv.remove(); }, 5000);
+        window.scrollTo({top:0, behavior:"smooth"});
         return;
     }
     fieldIds2.forEach(function(f){
@@ -6638,12 +6651,23 @@ backPreview.src = savedBack;
 function nextStep3(){
 var front = localStorage.getItem("idFront");
 var back = localStorage.getItem("idBack");
-if(!front || front === ""){
-    alert("Please upload the ID front page.");
-    return;
-}
-if(!back || back === ""){
-    alert("Please upload the ID back page.");
+var oldErr = document.getElementById("__validationError");
+if(oldErr) oldErr.remove();
+var missing = [];
+if(!front || front === "") missing.push("ID front page");
+if(!back || back === "") missing.push("ID back page");
+if(missing.length > 0){
+    var errDiv = document.createElement("div");
+    errDiv.id = "__validationError";
+    errDiv.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
+    errDiv.innerHTML = "<b>Please upload the following:</b><br>• " + missing.join("<br>• ");
+    var closeBtn = document.createElement("span");
+    closeBtn.innerHTML = " &times;";
+    closeBtn.style.cssText = "float:right;cursor:pointer;font-size:18px;font-weight:bold;line-height:1;";
+    closeBtn.onclick = function(){ errDiv.remove(); };
+    errDiv.appendChild(closeBtn);
+    document.body.appendChild(errDiv);
+    setTimeout(function(){ if(errDiv.parentNode) errDiv.remove(); }, 5000);
     return;
 }
 window.location.href = "/apply-step4";
@@ -6974,15 +6998,23 @@ async function submitStore(){
     let name = document.getElementById("storeName").value;
 
     if(!name || !name.trim()){
-        alert("Please enter store name");
-        document.getElementById("storeName").style.border = "1.5px solid #e53935";
+        document.getElementById("storeName").setAttribute("style","border:2px solid #e53935 !important;background:#fff5f5 !important;width:100%;padding:12px;border-radius:10px;box-sizing:border-box;");
+        var e1 = document.createElement("div");
+        e1.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
+        e1.innerHTML = "<b>Please enter the store name.</b> <span onclick='this.parentNode.remove()' style='float:right;cursor:pointer;font-size:18px;'>&times;</span>";
+        document.body.appendChild(e1);
+        setTimeout(function(){ if(e1.parentNode) e1.remove(); }, 4000);
         return;
     }
-    document.getElementById("storeName").style.border = "";
+    document.getElementById("storeName").setAttribute("style","border:1px solid #ccc;width:100%;padding:12px;border-radius:10px;box-sizing:border-box;");
 
     let savedLogo2 = localStorage.getItem("storeLogo");
     if(!savedLogo2){
-        alert("Please upload a store logo.");
+        var e2 = document.createElement("div");
+        e2.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
+        e2.innerHTML = "<b>Please upload a store logo.</b> <span onclick='this.parentNode.remove()' style='float:right;cursor:pointer;font-size:18px;'>&times;</span>";
+        document.body.appendChild(e2);
+        setTimeout(function(){ if(e2.parentNode) e2.remove(); }, 4000);
         return;
     }
 
