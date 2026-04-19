@@ -3336,8 +3336,7 @@ async function loadConversations(){
       let otherEmail = m.fromEmail === me.email ? m.toEmail : m.fromEmail;
       let otherUser = allUsers.find(u => u.email === otherEmail) || {};
       let name = otherUser.username || otherEmail.split("@")[0];
-      let avatarKey = "avatar_" + otherEmail;
-      let avatarSrc = localStorage.getItem(avatarKey);
+      let avatarSrc = otherUser.avatar || localStorage.getItem("avatar_" + otherEmail);
       let avatarHtml = avatarSrc
         ? \`<img src="\${avatarSrc}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">\`
         : \`<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;">\${name.charAt(0).toUpperCase()}</div>\`;
@@ -3394,8 +3393,7 @@ async function searchUsers(){
     resultsDiv.innerHTML = "";
     found.forEach(u => {
       let name = u.username || u.email.split("@")[0];
-      let avatarKey = "avatar_" + u.email;
-      let avatarSrc = localStorage.getItem(avatarKey);
+      let avatarSrc = u.avatar || localStorage.getItem("avatar_" + u.email);
       let avatarHtml = avatarSrc
         ? \`<img src="\${avatarSrc}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;">\`
         : \`<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:bold;flex-shrink:0;">\${name.charAt(0).toUpperCase()}</div>\`;
