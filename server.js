@@ -2358,62 +2358,62 @@ Get up to 30% off!
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Clothing & Accessories')">
 <span>Clothing & Accessories</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/clothing.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/clothing.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Medical Bags and Sunglasses')">
 <span>Medical Bags and Sunglasses</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/medical.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/medical.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Shoes')">
 <span>Shoes</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/shoes.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/shoes.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Watches')">
 <span>Watches</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/watches.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/watches.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Jewelry')">
 <span>Jewelry</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/jewelry.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/jewelry.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Electronics')">
 <span>Electronics</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/electronics.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/electronics.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Smart Home')">
 <span>Smart Home</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/smarthome.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/smarthome.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Luxury Brands')">
 <span>Luxury Brands</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/luxury.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/luxury.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Beauty and Personal Care')">
 <span>Beauty and Personal Care</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/beauty.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/beauty.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Mens Fashion')">
 <span>Men's Fashion</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/mensfashion.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/mensfashion.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Health and Household')">
 <span>Health and Household</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/health.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/health.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 <div style="background:#ddd;margin:10px;padding:20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openCategory('Home and Kitchen')">
 <span>Home and Kitchen</span>
-<img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/kitchen.png" width="70" style="height:70px;object-fit:cover;">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/kitchen.png" width="70" style="height:70px;object-fit:cover;">
 </div>
 
 
@@ -2648,62 +2648,62 @@ Hi, <span id="username"></span>
 <div class="cat-grid">
 
   <div class="cat-item" onclick="openCategory('Clothing & Accessories')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/clothing.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/clothing.png">
     <div class="cat-label">Clothing &amp; Accessories</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Medical Bags and Sunglasses')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/medical.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/medical.png">
     <div class="cat-label">Medical Bags and Sunglasses</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Shoes')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/shoes.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/shoes.png">
     <div class="cat-label">Shoes</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Watches')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/watches.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/watches.png">
     <div class="cat-label">Watches</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Jewelry')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/jewelry.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/jewelry.png">
     <div class="cat-label">Jewelry</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Electronics')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/electronics.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/electronics.png">
     <div class="cat-label">Electronics</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Smart Home')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/smarthome.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/smarthome.png">
     <div class="cat-label">Smart Home</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Luxury Brands')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/luxury.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/luxury.png">
     <div class="cat-label">Luxury Brands</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Beauty and Personal Care')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/beauty.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/beauty.png">
     <div class="cat-label">Beauty and Personal Care</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Mens Fashion')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/mensfashion.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/mensfashion.png">
     <div class="cat-label">Men's Fashion</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Health and Household')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/health.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/health.png">
     <div class="cat-label">Health and Household</div>
   </div>
 
   <div class="cat-item" onclick="openCategory('Home and Kitchen')">
-    <img src="https://raw.githubusercontent.com/oscerm328-stack/tiktok_mall/main/kitchen.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/kitchen.png">
     <div class="cat-label">Home and Kitchen</div>
   </div>
 
@@ -6417,6 +6417,7 @@ function nextStep2(){
         }
     });
     var emailEl = document.getElementById("contactEmail");
+
     var chk = document.querySelector('input[type="checkbox"]');
     if(chk && !chk.checked){
         missing.push("Please confirm your address is correct");
@@ -6971,8 +6972,8 @@ if(savedLogo){
 logoPreview.src = savedLogo;
 }
 
-async function submitStore(){
-    let name = document.getElementById("storeName").value;
+function submitStore(){
+    var name = document.getElementById("storeName").value;
 
     if(!name || !name.trim()){
         document.getElementById("storeName").setAttribute("style","border:2px solid #e53935 !important;background:#fff5f5 !important;width:100%;padding:12px;border-radius:10px;box-sizing:border-box;");
@@ -6985,22 +6986,15 @@ async function submitStore(){
     }
     document.getElementById("storeName").setAttribute("style","border:1px solid #ccc;width:100%;padding:12px;border-radius:10px;box-sizing:border-box;");
 
-    let savedLogo2 = localStorage.getItem("storeLogo");
-    if(!savedLogo2){
-        var e2 = document.createElement("div");
-        e2.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
-        e2.innerHTML = "<b>Please upload a store logo.</b> <span onclick='this.parentNode.remove()' style='float:right;cursor:pointer;font-size:18px;'>&times;</span>";
-        document.body.appendChild(e2);
-        setTimeout(function(){ if(e2.parentNode) e2.remove(); }, 4000);
-        return;
-    }
-
     localStorage.setItem("storeName", name);
 
-    let user = JSON.parse(localStorage.getItem("user"));
+    var userRaw = localStorage.getItem("user");
+    var user = null;
+    try { user = JSON.parse(userRaw); } catch(e) {}
+    var userEmail = (user && user.email) ? user.email : "";
 
-    let payload = {
-        email: user.email,
+    var payload = {
+        email: userEmail,
         storeType: localStorage.getItem("apply_storeType") || "",
         nationality: localStorage.getItem("apply_nationality") || "",
         personalId: localStorage.getItem("apply_personalId") || "",
@@ -7014,29 +7008,28 @@ async function submitStore(){
         city: localStorage.getItem("apply_city") || "",
         street: localStorage.getItem("apply_street") || "",
         postalCode: localStorage.getItem("apply_postalCode") || "",
-        contactEmail: localStorage.getItem("apply_contactEmail") || user.email,
+        contactEmail: localStorage.getItem("apply_contactEmail") || userEmail,
         idFront: localStorage.getItem("idFront") || "",
         idBack: localStorage.getItem("idBack") || "",
         storeLogo: localStorage.getItem("storeLogo") || "",
         storeName: name
     };
 
-    try {
-        let res = await fetch("/submit-store", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(payload)
-        });
-        let data = await res.json();
+    fetch("/submit-store", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    }).then(function(res){
+        return res.json();
+    }).then(function(data){
         if(data.success){
             window.location.href = "/store-pending";
         } else {
-            alert("Error submitting. Try again.");
+            window.location.href = "/store-pending";
         }
-    } catch(e) {
-        console.error(e);
+    }).catch(function(e){
         window.location.href = "/store-pending";
-    }
+    });
 }
 </script>
 
