@@ -5920,32 +5920,32 @@ res.send(`
   ">
 
     <div>
-      <img src="https://img.icons8.com/color/48/shopping-cart--v1.png" style="width:40px;"><br>
+      <span style="font-size:36px;">🛒</span><br>
       <span style="font-size:13px;">Listings</span>
     </div>
 
     <div>
-      <img src="https://img.icons8.com/color/48/task.png" style="width:40px;"><br>
+      <span style="font-size:36px;">📦</span><br>
       <span style="font-size:13px;">Manage product</span>
     </div>
 
     <div>
-      <img src="https://img.icons8.com/ios-filled/50/shopping-cart.png" style="width:40px;"><br>
+      <span style="font-size:36px;">📋</span><br>
       <span style="font-size:13px;">Manage Order</span>
     </div>
 
     <div>
-      <img src="https://img.icons8.com/ios/50/settings--v1.png" style="width:40px;"><br>
+      <span style="font-size:36px;">⚙️</span><br>
       <span style="font-size:13px;">Store setting</span>
     </div>
 
     <div>
-      <img src="https://img.icons8.com/color/48/document.png" style="width:40px;"><br>
+      <span style="font-size:36px;">💰</span><br>
       <span style="font-size:13px;">Store Operating fund</span>
     </div>
 
     <div>
-      <img src="https://img.icons8.com/color/48/plus--v1.png" style="width:40px;"><br>
+      <span style="font-size:36px;">📖</span><br>
       <span style="font-size:13px;">Instructions for operation</span>
     </div>
 
