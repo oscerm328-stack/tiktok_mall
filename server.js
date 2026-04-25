@@ -6985,15 +6985,7 @@ async function submitStore(){
     }
     document.getElementById("storeName").setAttribute("style","border:1px solid #ccc;width:100%;padding:12px;border-radius:10px;box-sizing:border-box;");
 
-    let savedLogo2 = localStorage.getItem("storeLogo");
-    if(!savedLogo2){
-        var e2 = document.createElement("div");
-        e2.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#e53935;color:white;padding:14px 16px;font-size:13px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.3);";
-        e2.innerHTML = "<b>Please upload a store logo.</b> <span onclick='this.parentNode.remove()' style='float:right;cursor:pointer;font-size:18px;'>&times;</span>";
-        document.body.appendChild(e2);
-        setTimeout(function(){ if(e2.parentNode) e2.remove(); }, 4000);
-        return;
-    }
+    let savedLogo2 = localStorage.getItem("storeLogo") || "";
 
     localStorage.setItem("storeName", name);
 
