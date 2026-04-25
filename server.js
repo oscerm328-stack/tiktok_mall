@@ -7259,32 +7259,32 @@ margin-bottom:5px;
 
 <div class="tools">
 <div class="tool" onclick="window.location.href='/listings'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_listings.svg" style="width:40px;">
 <p>Listings</p>
 </div>
 
 <div class="tool" onclick="window.location.href='/manage-product'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_manage_product.svg" style="width:40px;">
 <p>Manage product</p>
 </div>
 
 <div class="tool" onclick="window.location.href='/manage-orders'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_manage_order.svg" style="width:40px;">
 <p>Manage Order</p>
 </div>
 
 <div class="tool" onclick="window.location.href='/store-setting'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_store_setting.svg" style="width:40px;">
 <p>Store setting</p>
 </div>
 
 <div class="tool" onclick="window.location.href='/vip-upgrade'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/2331/2331949.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_operating_fund.svg" style="width:40px;">
 <p>Store Operating fund</p>
 </div>
 
 <div class="tool" onclick="window.location.href='/instructions'" style="cursor:pointer;">
-<img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png">
+<img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_instructions.svg" style="width:40px;">
 <p>Instructions for operation</p>
 </div>
 </div>
