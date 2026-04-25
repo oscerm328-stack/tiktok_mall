@@ -4527,10 +4527,11 @@ async function loadTransactions(){
         let isRecharge  = tx.type === "recharge";
         let isProfit    = tx.type === "profit";
         let isDeduction = tx.type === "delivery_deduction";
-        let typeLabel   = isRecharge ? "Recharge" : isProfit ? "Profit" : isDeduction ? "Delivery deduction" : "Withdrawal";
-        let icon        = isRecharge ? "💰" : isProfit ? "📦" : isDeduction ? "🚚" : "📤";
-        let amountSign  = (isRecharge || isProfit) ? "+" : "-";
-        let amountClass = (isRecharge || isProfit) ? "recharge" : "withdraw";
+        let isRefund    = tx.type === "refund";
+        let typeLabel   = isRecharge ? "Recharge" : isProfit ? "Profit" : isDeduction ? "Delivery deduction" : isRefund ? "Refund" : "Withdrawal";
+        let icon        = isRecharge ? "💰" : isProfit ? "📦" : isDeduction ? "🚚" : isRefund ? "🔄" : "📤";
+        let amountSign  = (isRecharge || isProfit || isRefund) ? "+" : "-";
+        let amountClass = (isRecharge || isProfit || isRefund) ? "recharge" : "withdraw";
 
         // تنسيق التاريخ
         let dateStr = "";
@@ -10612,13 +10613,15 @@ app.post("/confirm-store-delivery", adminMiddleware, (req, res) => {
     order.completedAt = new Date().toISOString();
     saveStoreOrders();
 
-    // إضافة عملية الربح فقط في قائمة المعاملات للبائع
+    // إضافة عملية واحدة تجمع المبلغ المسترد + الربح
     if(seller){
+        const supplierTotal = parseFloat((order.supplierPrice * order.quantity).toFixed(2));
         const profitTotal = parseFloat(order.profit);
+        const totalReturn = parseFloat((supplierTotal + profitTotal).toFixed(2));
         requests.push({
             id: Date.now() + 1,
             email: order.sellerEmail,
-            amount: profitTotal,
+            amount: totalReturn,
             type: "profit",
             status: "approved",
             orderRef: order.id,
