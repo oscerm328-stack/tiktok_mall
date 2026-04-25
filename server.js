@@ -6417,10 +6417,6 @@ function nextStep2(){
         }
     });
     var emailEl = document.getElementById("contactEmail");
-    if(emailEl && emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){
-        if(missing.indexOf("Contact email") === -1) missing.push("Contact email (invalid format)");
-        emailEl.setAttribute("style","border:2px solid #e53935 !important;background:#fff5f5 !important;width:100%;padding:12px;margin:8px 0;border-radius:8px;box-sizing:border-box;");
-    }
     var chk = document.querySelector('input[type="checkbox"]');
     if(chk && !chk.checked){
         missing.push("Please confirm your address is correct");
