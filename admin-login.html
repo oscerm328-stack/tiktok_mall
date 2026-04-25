@@ -597,7 +597,19 @@ function renderUsersTable(data){
     return;
   }
 
-  var rows = data.map(function(user){
+  var now = Date.now();
+  var twoDays = 2 * 24 * 60 * 60 * 1000;
+
+  var newUsers = data.filter(function(u){
+    if(!u.registeredAt) return false;
+    return (now - new Date(u.registeredAt).getTime()) < twoDays;
+  });
+  var oldUsers = data.filter(function(u){
+    if(!u.registeredAt) return true;
+    return (now - new Date(u.registeredAt).getTime()) >= twoDays;
+  });
+
+  function renderRow(user){
     var deviceIcon = "🖥️";
     var d = (user.registerDevice||"").toLowerCase();
     if(d.includes("iphone"))         deviceIcon = "📱";
@@ -608,7 +620,6 @@ function renderUsersTable(data){
 
     var countryFlag = "";
     var country = user.registerCountry || "";
-    // خريطة بسيطة لأكثر الدول شيوعاً
     var flagMap = {
       "United States":"🇺🇸","Saudi Arabia":"🇸🇦","Egypt":"🇪🇬","United Arab Emirates":"🇦🇪",
       "Kuwait":"🇰🇼","Qatar":"🇶🇦","Bahrain":"🇧🇭","Oman":"🇴🇲","Jordan":"🇯🇴","Iraq":"🇮🇶",
@@ -639,8 +650,6 @@ function renderUsersTable(data){
       </div>
     </div>
   </div>
-
-  <!-- معلومات التسجيل -->
   ${(user.registerIp || user.registerDevice || user.registerCountry) ? `
   <div style="margin-top:10px;padding:10px 12px;background:white;border-radius:10px;border:1px solid #eee;display:flex;flex-wrap:wrap;gap:12px;">
     ${user.registerIp ? `
@@ -661,9 +670,42 @@ function renderUsersTable(data){
   </div>
   ` : `<div style="margin-top:8px;font-size:11px;color:#ccc;font-style:italic;">No registration info available (registered before this update)</div>`}
 </div>`;
-  }).join("");
+  }
 
-  wrap.innerHTML = rows;
+  var html = "";
+
+  // المستخدمون الجدد (أقل من يومين)
+  if(newUsers.length > 0){
+    html += newUsers.map(renderRow).join("");
+  } else {
+    html += "<p style='color:#999;font-size:13px;'>No new users in the last 2 days.</p>";
+  }
+
+  // المستخدمون القدامى - مخفيون في قسم منطوي
+  if(oldUsers.length > 0){
+    html += `<div onclick="toggleOldUsers()" id="oldUsersToggle" style="cursor:pointer;padding:12px 16px;background:#e3f2fd;border-radius:10px;margin:10px 0;font-weight:bold;color:#1565c0;display:flex;justify-content:space-between;align-items:center;">
+      <span>📁 Previous Users (${oldUsers.length})</span>
+      <span id="oldUsersArrow">▼ Show</span>
+    </div>
+    <div id="oldUsersContainer" style="display:none;">
+      ${oldUsers.map(renderRow).join("")}
+    </div>`;
+  }
+
+  wrap.innerHTML = html;
+}
+
+function toggleOldUsers(){
+  var c = document.getElementById("oldUsersContainer");
+  var a = document.getElementById("oldUsersArrow");
+  if(!c || !a) return;
+  if(c.style.display === "none"){
+    c.style.display = "block";
+    a.innerText = "▲ Hide";
+  } else {
+    c.style.display = "none";
+    a.innerText = "▼ Show";
+  }
 }
 
 function filterUsers(){
@@ -1081,7 +1123,11 @@ async function loadWalletUsers(){
     let container = document.getElementById("walletUsers");
     container.innerHTML = "";
 
-    walletData.forEach(user => {
+    // فصل المستخدمين: من لديهم طلبات ومن ليس لديهم
+    let usersWithRequests = walletData.filter(u => pendingMap[u.email] > 0);
+    let usersWithoutRequests = walletData.filter(u => !pendingMap[u.email]);
+
+    function renderUserRow(user){
         let div = document.createElement("div");
         div.style.padding = "10px";
         div.style.margin = "5px 0";
@@ -1098,11 +1144,45 @@ async function loadWalletUsers(){
             : "";
 
         div.innerHTML = `<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${user.email}</span>${badgeHtml}`;
-
         div.onclick = () => openWallet(user.email);
+        return div;
+    }
 
-        container.appendChild(div);
-    });
+    // عرض المستخدمين الذين لديهم طلبات أولاً
+    if(usersWithRequests.length > 0){
+        usersWithRequests.forEach(u => container.appendChild(renderUserRow(u)));
+    } else {
+        let noReq = document.createElement("p");
+        noReq.style.color = "#999";
+        noReq.style.fontSize = "13px";
+        noReq.innerText = "No pending requests.";
+        container.appendChild(noReq);
+    }
+
+    // باقي المستخدمين في قسم مخفي
+    if(usersWithoutRequests.length > 0){
+        let toggle = document.createElement("div");
+        toggle.style.cssText = "cursor:pointer;padding:10px 14px;background:#e3f2fd;border-radius:8px;margin-top:10px;font-weight:bold;color:#1565c0;display:flex;justify-content:space-between;align-items:center;font-size:13px;";
+        toggle.innerHTML = `<span>📁 All Users (${usersWithoutRequests.length})</span><span id="walletOldArrow">▼ Show</span>`;
+
+        let oldContainer = document.createElement("div");
+        oldContainer.id = "walletOldContainer";
+        oldContainer.style.display = "none";
+        usersWithoutRequests.forEach(u => oldContainer.appendChild(renderUserRow(u)));
+
+        toggle.onclick = function(){
+            if(oldContainer.style.display === "none"){
+                oldContainer.style.display = "block";
+                document.getElementById("walletOldArrow").innerText = "▲ Hide";
+            } else {
+                oldContainer.style.display = "none";
+                document.getElementById("walletOldArrow").innerText = "▼ Show";
+            }
+        };
+
+        container.appendChild(toggle);
+        container.appendChild(oldContainer);
+    }
 }
 
 // فتح لوحة المستخدم
@@ -1357,7 +1437,10 @@ async function loadStoreApplications(){
 
     container.innerHTML = "";
 
-    apps.forEach(function(app){
+    let pendingApps  = apps.filter(function(a){ return a.status === "pending"; });
+    let approvedApps = apps.filter(function(a){ return a.status !== "pending"; });
+
+    function renderApp(app){
         let statusColor = app.status === "approved" ? "green" : app.status === "rejected" ? "red" : "orange";
         let statusLabel = app.status === "approved" ? "✅ Approved" : app.status === "rejected" ? "❌ Rejected" : "⏳ Pending";
 
@@ -1412,9 +1495,44 @@ async function loadStoreApplications(){
         </div>
         `;
 
-        container.appendChild(div);
-    });
-}
+        return div;
+    }
+
+    // عرض المتاجر المعلقة أولاً
+    if(pendingApps.length > 0){
+        pendingApps.forEach(function(app){ container.appendChild(renderApp(app)); });
+    } else {
+        let noP = document.createElement("p");
+        noP.style.color = "#999";
+        noP.innerText = "No pending applications.";
+        container.appendChild(noP);
+    }
+
+    // قسم المتاجر الموافق عليها / المرفوضة - مخفي بشكل افتراضي
+    if(approvedApps.length > 0){
+        let toggle = document.createElement("div");
+        toggle.style.cssText = "cursor:pointer;padding:12px 16px;background:#e8f5e9;border-radius:10px;margin-bottom:15px;font-weight:bold;color:#2e7d32;display:flex;justify-content:space-between;align-items:center;";
+        toggle.innerHTML = "📁 Processed Applications (" + approvedApps.length + ") <span id='toggleArrow'>▼ Show</span>";
+
+        let approvedContainer = document.createElement("div");
+        approvedContainer.id = "approvedContainer";
+        approvedContainer.style.display = "none";
+
+        approvedApps.forEach(function(app){ approvedContainer.appendChild(renderApp(app)); });
+
+        toggle.onclick = function(){
+            if(approvedContainer.style.display === "none"){
+                approvedContainer.style.display = "block";
+                document.getElementById("toggleArrow").innerText = "▲ Hide";
+            } else {
+                approvedContainer.style.display = "none";
+                document.getElementById("toggleArrow").innerText = "▼ Show";
+            }
+        };
+
+        container.appendChild(toggle);
+        container.appendChild(approvedContainer);
+    }
 
 async function approveStore(email){
     if(!confirm("Approve this store?")) return;
@@ -1588,8 +1706,8 @@ async function loadAllOrders(){
     if(emailF)  orders = orders.filter(function(o){ return (o.sellerEmail||'').toLowerCase().includes(emailF.toLowerCase()) || (o.buyerEmail||'').toLowerCase().includes(emailF.toLowerCase()); });
     if(statusF) orders = orders.filter(function(o){ return o.status === statusF; });
 
-    // إخفاء الطلبات التي ضغط عليها الأدمن X
-    orders = orders.filter(function(o){ return !_hiddenOrders.has(o.id); });
+    // إخفاء الطلبات المكتملة تلقائياً + الطلبات التي ضغط عليها الأدمن X
+    orders = orders.filter(function(o){ return o.status !== 'completed' && !_hiddenOrders.has(o.id); });
 
     if(orders.length === 0){
       container.innerHTML = '<p style="color:#999;text-align:center;padding:30px;">No orders found.</p>';
