@@ -3052,7 +3052,7 @@ fetch("/products-by-cat/17")
     data.slice(0,20).forEach(function(product){
         var repoMap = {17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};
         var repo = repoMap[product.category_id]||"products_27";
-        var imgSrc = "https://cdn.jsdelivr.net/gh/oscerm328-stack/"+repo+"/main/"+(product.folder||"")+"/1.jpg";
+        var imgSrc = "https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(product.folder||"")+"/1.jpg";
         var div = document.createElement("div");
         div.className = "card";
         div.innerHTML =
@@ -4269,7 +4269,7 @@ if(id && id.startsWith("local_")) {
     if(p){
       var repoMap = {17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};
       var repo = repoMap[p.category_id]||"products_27";
-      var base = "https://cdn.jsdelivr.net/gh/oscerm328-stack/"+repo+"/main/"+(p.folder||"")+"/";
+      var base = "https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(p.folder||"")+"/";
       var imgs = (p.images&&p.images.length>0)?p.images.map(function(i){return base+i;}): [base+"1.jpg"];
       document.getElementById("productTitle").innerText = p.title;
       document.getElementById("productPrice").innerText = "\$" + p.price;
@@ -12449,7 +12449,7 @@ async function doShip(){
 function openProdModal(o){
     var cat = catMap[(o.product&&o.product.category_id)] || "27_Electronics";
     var folder = o.product&&o.product.folder ? o.product.folder : "";
-    var base = "https://cdn.jsdelivr.net/gh/oscerm328-stack/"+cat+"/main/";
+    var base = "https://raw.githubusercontent.com/oscerm328-stack/"+cat+"/main/";
     slideImgs = folder ? [1,2,3,4,5,6,7,8].map(function(i){ return base+folder+"/"+i+".jpg"; }) : ["https://via.placeholder.com/400x260?text=No+Image"];
     slideIdx = 0;
 
