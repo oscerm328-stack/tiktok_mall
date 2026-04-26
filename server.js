@@ -9400,7 +9400,7 @@ var CAT_MAP_SP = {17:"products_17",19:"products_19",20:"products_20",21:"product
 function getStoreImg(p){
   var cat = CAT_MAP_SP[p.category_id]||"27_Electronics";
   var img = (p.images&&p.images.length>0)?p.images[0]:"1.jpg";
-  return CLOUD_SP+"/"+cat+"/"+p.folder+"/"+img;
+  return CLOUD_SP+"/"+cat+"/main/"+p.folder+"/"+img;
 }
 
 function loadStoreProducts(){
@@ -9676,8 +9676,8 @@ async function init(){
     // Build images from Cloudinary
     var catF = CAT_MAP[p.category_id]||"27_Electronics";
     imgs = (p.images&&p.images.length>0)
-        ? p.images.map(function(i){ return CLOUD+"/"+catF+"/"+p.folder+"/"+i; })
-        : [CLOUD+"/"+catF+"/"+(p.folder||"")+"/1.jpg"];
+        ? p.images.map(function(i){ return CLOUD+"/"+catF+"/main/"+p.folder+"/"+i; })
+        : [CLOUD+"/"+catF+"/main/"+(p.folder||"")+"/1.jpg"];
 
     buildSlider();
 
@@ -11289,7 +11289,7 @@ var CLOUDINARY_CAT = {17:'products_17',19:'products_19',20:'products_20',21:'pro
 function getCloudImg(p, imgName) {
     imgName = imgName || '1.jpg';
     var catFolder = CLOUDINARY_CAT[p.category_id] || '27_Electronics';
-    return CLOUD_BASE + '/' + catFolder + '/' + (p.folder||'') + '/' + imgName;
+    return CLOUD_BASE + '/' + catFolder + '/main/' + (p.folder||'') + '/' + imgName;
 }
 
 function getProductImg(p){
@@ -11736,8 +11736,8 @@ async function init(){
     // Build Cloudinary images
     var catFolder = CAT_MAP_D[p.category_id] || "27_Electronics";
     imgs = (p.images && p.images.length > 0)
-        ? p.images.map(function(img){ return CLOUD_D+"/"+catFolder+"/"+p.folder+"/"+img; })
-        : [CLOUD_D+"/"+catFolder+"/"+(p.folder||"")+"/1.jpg"];
+        ? p.images.map(function(img){ return CLOUD_D+"/"+catFolder+"/main/"+p.folder+"/"+img; })
+        : [CLOUD_D+"/"+catFolder+"/main/"+(p.folder||"")+"/1.jpg"];
 
     buildSlider();
 
