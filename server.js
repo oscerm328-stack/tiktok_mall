@@ -12276,7 +12276,7 @@ function imgUrl(o){
     var cat = catMap[(o.product&&o.product.category_id)] || "27_Electronics";
     var folder = o.product&&o.product.folder ? o.product.folder : "";
     if(!folder) return "https://via.placeholder.com/65x65?text=No+Image";
-    return "https://cdn.jsdelivr.net/gh/oscerm328-stack/"+cat+"/main/"+folder+"/1.jpg";
+    return "https://raw.githubusercontent.com/oscerm328-stack/"+cat+"/main/"+folder+"/1.jpg";
 }
 
 function fmtAmt(n){ return parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
