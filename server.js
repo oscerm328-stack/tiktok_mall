@@ -2607,7 +2607,7 @@ Hi, <span id="username"></span>
 </div>
 
 <!-- ====== CHAT WINDOW (واتساب) ====== -->
-<div id="chatWindow" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#f0f0f0;flex-direction:column;z-index:10000;max-width:390px;left:50%;transform:translateX(-50%);">
+<div id="chatWindow" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:#f0f0f0;flex-direction:column;">
 
   <!-- CHAT HEADER -->
   <div id="chatHeader" style="background:#1976d2;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;flex-shrink:0;">
@@ -2622,10 +2622,10 @@ Hi, <span id="username"></span>
   </div>
 
   <!-- MESSAGES AREA -->
-  <div id="chatMessages" style="flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:8px;"></div>
+  <div id="chatMessages" style="position:absolute;top:64px;bottom:70px;left:0;right:0;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:8px;"></div>
 
   <!-- INPUT BAR -->
-  <div style="background:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-top:1px solid #ddd;flex-shrink:0;">
+  <div style="position:absolute;bottom:0;left:0;right:0;background:white;padding:10px 12px;display:flex;align-items:center;gap:8px;border-top:1px solid #ddd;">
     <!-- زر الصورة -->
     <label for="chatImgInput" style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:#f0f0f0;flex-shrink:0;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
