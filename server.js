@@ -880,7 +880,7 @@ app.get("/support-page", (req, res) => {
 });
 
 // ================= REGISTER API =================
-app.post("/register", rateLimit(3, 10*60*1000), (req, res) => {
+app.post("/register", rateLimit(10, 10*60*1000), (req, res) => {
     const { email, password, code } = req.body;
 
     // تحقق من البيانات
