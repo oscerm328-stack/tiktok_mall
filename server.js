@@ -7700,9 +7700,9 @@ margin-bottom:5px;
   </div>
   <div id="storeStatusBadge" style="color:orange;font-size:13px;">Please wait! The store is under review</div>
   <!-- VIP Badge + Countdown -->
-  <div style="margin-top:5px;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;">
-    <span id="vipBadge" style="background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:3px 10px;border-radius:10px;display:inline-block;flex-shrink:0;">VIP 0</span>
-    <div id="trafficCountdownBox" style="display:none;line-height:1.4;">
+  <div style="margin-top:5px;">
+    <span id="vipBadge" style="background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:3px 10px;border-radius:10px;display:inline-block;">VIP 0</span>
+    <div id="trafficCountdownBox" style="display:none;margin-top:5px;line-height:1.4;">
       <div style="font-size:11px;color:#222;font-weight:bold;">Limited Free Traffic & Promotion Period</div>
       <div id="trafficCountdownTimer" style="font-size:13px;font-weight:bold;color:#e53935;">1,000,000:00:00</div>
     </div>
