@@ -7702,8 +7702,8 @@ margin-bottom:5px;
   <!-- VIP Badge + Countdown -->
   <div style="margin-top:5px;">
     <span id="vipBadge" style="background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:3px 10px;border-radius:10px;display:inline-block;">VIP 0</span>
-    <div id="trafficCountdownBox" style="display:none;margin-top:5px;line-height:1.4;">
-      <div style="font-size:11px;color:#222;font-weight:bold;">Limited Free Traffic & Promotion Period</div>
+    <div id="trafficCountdownBox" style="display:none;margin-top:4px;line-height:1.5;padding-left:0;">
+      <div style="font-size:11px;color:#e53935;font-weight:bold;">Free Usage Period</div>
       <div id="trafficCountdownTimer" style="font-size:13px;font-weight:bold;color:#e53935;">1,000,000:00:00</div>
     </div>
   </div>
