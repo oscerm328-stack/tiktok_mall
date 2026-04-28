@@ -5,6 +5,15 @@
 
 module.exports = function(app) {
 
+// منع النوم - ping كل 10 دقائق
+if(process.env.RENDER_EXTERNAL_URL){
+    setInterval(() => {
+        fetch(process.env.RENDER_EXTERNAL_URL)
+            .then(() => console.log("✅ Home keep-alive ping sent"))
+            .catch(() => {});
+    }, 10 * 60 * 1000);
+}
+
 app.get("/home", (req, res) => {
 res.send(`
 <html>
@@ -13,6 +22,7 @@ res.send(`
 <title>TikTok Mall</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <style>
+#msgBadge, .globalMsgBadge { display:none !important; }
 body{margin:0;font-family:Arial;background:#f5f5f5;min-height:100vh;}
 .header{background:#1976d2;color:white;padding:12px;display:flex;justify-content:space-between;align-items:center;position:relative;}
 .header .icons span{margin-left:10px;font-size:18px;cursor:pointer;}
@@ -454,7 +464,7 @@ Hi, <span id="username"></span>
 <div class="cat-grid">
 
   <div class="cat-item"  onclick="goLogin()">
-    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/clothing.png">
+    <img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/bags.png">
     <div class="cat-label">Clothing &amp; Accessories</div>
   </div>
 
