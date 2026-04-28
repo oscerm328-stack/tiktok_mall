@@ -7709,6 +7709,12 @@ margin-bottom:5px;
 
 </div>
 
+<!-- LIMITED FREE TRAFFIC COUNTDOWN BOX -->
+<div id="trafficCountdownBox" style="display:none;background:linear-gradient(135deg,#e3f2fd,#bbdefb);margin:0 10px 10px;border-radius:12px;padding:12px 15px;border:1px solid #90caf9;">
+  <div style="font-size:12px;color:#1565c0;font-weight:bold;margin-bottom:6px;">Limited Free Traffic & Promotion Period</div>
+  <div id="trafficCountdownTimer" style="font-size:18px;font-weight:bold;color:#1976d2;letter-spacing:1px;">1,000,000:00:00</div>
+</div>
+
 <!-- STATS -->
 <div class="card">
 <div class="grid">
@@ -7919,8 +7925,10 @@ function editStoreName(){
 // ======= عداد تنازلي 1,000,000 ساعة بعد الموافقة =======
 function startStoreCountdown(approvedAt){
   let cdEl = document.getElementById("storeCountdown");
-  if(!cdEl) return;
-  cdEl.style.display = "inline-block";
+  let box  = document.getElementById("trafficCountdownBox");
+  let timerEl = document.getElementById("trafficCountdownTimer");
+  if(!timerEl) return;
+  if(box) box.style.display = "block";
 
   let user = JSON.parse(localStorage.getItem("user") || "{}");
   let key = "storeCountdownStart_" + (user.email || "");
@@ -7936,20 +7944,24 @@ function startStoreCountdown(approvedAt){
   function tick(){
     let elapsed = Date.now() - startTime;
     let remaining = TOTAL_MS - elapsed;
-    if(remaining <= 0){ cdEl.innerText = "00d 00:00:00"; return; }
+    if(remaining <= 0){
+      timerEl.innerText = "0:00:00";
+      if(cdEl) cdEl.innerText = "0:00:00";
+      return;
+    }
 
     let totalSecs = Math.floor(remaining / 1000);
-    let days  = Math.floor(totalSecs / 86400);
-    let hours = Math.floor((totalSecs % 86400) / 3600);
-    let mins  = Math.floor((totalSecs % 3600) / 60);
-    let secs  = totalSecs % 60;
+    let totalHours = Math.floor(totalSecs / 3600);
+    let mins = Math.floor((totalSecs % 3600) / 60);
+    let secs = totalSecs % 60;
 
-    let dStr = String(days).padStart(2,"0");
-    let hStr = String(hours).padStart(2,"0");
+    let hStr = totalHours.toLocaleString(); // يضيف الفواصل: 1,000,000
     let mStr = String(mins).padStart(2,"0");
     let sStr = String(secs).padStart(2,"0");
+    let display = hStr + ":" + mStr + ":" + sStr;
 
-    cdEl.innerText = dStr + "d " + hStr + ":" + mStr + ":" + sStr;
+    timerEl.innerText = display;
+    if(cdEl) cdEl.innerText = display;
   }
   tick();
   setInterval(tick, 1000);
