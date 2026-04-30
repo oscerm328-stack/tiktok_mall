@@ -516,8 +516,8 @@ app.get("/get-backup-code", adminMiddleware, (req, res) => {
 // route عام للـ register page
 // تم تعطيل هذا الـ endpoint لأنه يكشف كود الاحتياطي
 // app.get("/get-backup-code-public-DISABLED", (req, res) => {
-    res.json({ code: backupVerifyCode });
-});
+//    res.json({ code: backupVerifyCode });
+// });
 
 app.post("/set-backup-code", adminMiddleware, (req, res) => {
     const { code } = req.body;
