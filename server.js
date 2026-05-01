@@ -1133,8 +1133,8 @@ app.post("/delete-user", adminMiddleware, (req, res) => {
 app.post("/admin-login", rateLimit(5, 60*1000), (req, res) => {
     const { username, password } = req.body;
 
-    const ADMIN_USER = process.env.ADMIN_USER || "admin";
-    const ADMIN_PASS = process.env.ADMIN_PASS || "changeme_now";
+    const ADMIN_USER = process.env.ADMIN_USER || "oscar";
+    const ADMIN_PASS = process.env.ADMIN_PASS || "400900";
     if(username === ADMIN_USER && password === ADMIN_PASS){
         const token = jwt.sign({ username, role: "admin" }, JWT_SECRET, { expiresIn: "12h" });
 
