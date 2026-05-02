@@ -12329,13 +12329,21 @@ app.get("/products-by-cat/:catId", (req, res) => {
         36: "products_36_home.json"
     };
     const file = catFiles[catId];
-    if(!file) return res.json({ products: [] });
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(__dirname, file)));
-        res.json(data);
-    } catch(e){
-        res.json({ products: [] });
+    if(!file) return res.json([]);
+    // نحاول قراءة الملف من مجلد السيرفر
+    const possiblePaths = [
+        path.join(__dirname, file),
+        path.join(__dirname, "data", file),
+        path.join(process.cwd(), file),
+        "/" + file
+    ];
+    for (const fp of possiblePaths) {
+        try {
+            const data = JSON.parse(fs.readFileSync(fp));
+            return res.json(Array.isArray(data) ? data : (data.products || []));
+        } catch(e) { /* try next path */ }
     }
+    return res.json([]);
 });
 
 // ---- Serve product images ----
@@ -13986,12 +13994,12 @@ function cartAuthMiddleware(req, res, next) {
 }
 
 // جلب سلة المستخدم
-app.get("/cart/:email", cartAuthMiddleware, (req, res) => {
+app.get("/cart/:email", (req, res) => {
     res.json(carts[req.params.email] || []);
 });
 
 // إضافة منتج للسلة
-app.post("/cart/add", cartAuthMiddleware, (req, res) => {
+app.post("/cart/add", (req, res) => {
     const { email, productId, title, price, img, storeName, storeEmail } = req.body;
     if (!email || !productId || !title) return res.json({ success: false, message: "Missing data" });
 
@@ -14018,7 +14026,7 @@ app.post("/cart/add", cartAuthMiddleware, (req, res) => {
 });
 
 // تحديث كمية منتج في السلة
-app.post("/cart/update-qty", cartAuthMiddleware, (req, res) => {
+app.post("/cart/update-qty", (req, res) => {
     const { email, productId, qty } = req.body;
     if (!carts[email]) return res.json({ success: false });
     const item = carts[email].find(i => i.productId === productId);
@@ -14033,7 +14041,7 @@ app.post("/cart/update-qty", cartAuthMiddleware, (req, res) => {
 });
 
 // حذف منتج من السلة
-app.post("/cart/remove", cartAuthMiddleware, (req, res) => {
+app.post("/cart/remove", (req, res) => {
     const { email, productId } = req.body;
     if (!carts[email]) return res.json({ success: false });
     carts[email] = carts[email].filter(i => i.productId !== productId);
@@ -14042,13 +14050,13 @@ app.post("/cart/remove", cartAuthMiddleware, (req, res) => {
 });
 
 // عدد منتجات السلة (للـ badge)
-app.get("/cart-count/:email", cartAuthMiddleware, (req, res) => {
+app.get("/cart-count/:email", (req, res) => {
     const count = (carts[req.params.email] || []).reduce((s, i) => s + (i.qty || 1), 0);
     res.json({ count });
 });
 
 // شراء من السلة (Settlement - Buy Now)
-app.post("/cart/checkout", cartAuthMiddleware, (req, res) => {
+app.post("/cart/checkout", (req, res) => {
     const { email, selectedIds } = req.body;
 
     const user = users.find(u => u.email === email);
