@@ -994,6 +994,13 @@ app.post("/update-balance", adminMiddleware, (req, res) => {
     res.send("Balance updated");
 });
 
+// ================= GET BALANCE =================
+app.get("/get-balance", authMiddleware, (req, res) => {
+    const user = users.find(u => u.email === req.userEmail);
+    if(!user) return res.status(404).json({ error: "User not found" });
+    res.json({ balance: parseFloat(user.balance) || 0 });
+});
+
 // ================= UPDATE USDT ADDRESS =================
 app.post("/update-usdt", authMiddleware, (req, res) => {
     const { email, usdt } = req.body;
@@ -4129,7 +4136,7 @@ res.send(pageHTML);
 });
 // ================= PRODUCT DETAIL PAGE =================
 app.get("/product-detail", (req, res) => {
-res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:relative;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_store_logo.svg"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;var catProduct = JSON.parse(localStorage.getItem("catProduct")||"null");if(catProduct){var repoMap={17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};var repo=repoMap[catProduct.category_id]||"products_27";var base="https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(catProduct.folder||"")+"/";var allImgs=(catProduct.images&&catProduct.images.length>0)?catProduct.images.map(function(i){return base+i;}):[base+"1.jpg"];document.getElementById("mainImg").src=allImgs[0];var thumbs=document.getElementById("thumbs");allImgs.forEach(function(src,idx){var img=document.createElement("img");img.src=src;if(idx===0)img.classList.add("active");img.onclick=function(){document.getElementById("mainImg").src=this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);});document.getElementById("productTitle").innerText=catProduct.title||"";document.getElementById("productPrice").innerText="$"+parseFloat(catProduct.price||0).toFixed(2);var desc=document.getElementById("descList");var points=catProduct.description?catProduct.description.split(".").filter(function(s){return s.trim();}):[catProduct.title];points.forEach(function(point){if(point&&point.trim()){var li=document.createElement("li");li.innerText=point.trim();desc.appendChild(li);}});}function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var cart=JSON.parse(localStorage.getItem("cart")||"[]");cart.push(productId);localStorage.setItem("cart",JSON.stringify(cart));showMsg("Added to cart ✅","success");}function buyNow(){window.location.href="/wallet";}<\/script></body></html>');
+res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:relative;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_store_logo.svg"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;var catProduct = JSON.parse(localStorage.getItem("catProduct")||"null");if(catProduct){var repoMap={17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};var repo=repoMap[catProduct.category_id]||"products_27";var base="https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(catProduct.folder||"")+"/";var allImgs=(catProduct.images&&catProduct.images.length>0)?catProduct.images.map(function(i){return base+i;}):[base+"1.jpg"];document.getElementById("mainImg").src=allImgs[0];var thumbs=document.getElementById("thumbs");allImgs.forEach(function(src,idx){var img=document.createElement("img");img.src=src;if(idx===0)img.classList.add("active");img.onclick=function(){document.getElementById("mainImg").src=this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);});document.getElementById("productTitle").innerText=catProduct.title||"";document.getElementById("productPrice").innerText="$"+parseFloat(catProduct.price||0).toFixed(2);var desc=document.getElementById("descList");var points=catProduct.description?catProduct.description.split(".").filter(function(s){return s.trim();}):[catProduct.title];points.forEach(function(point){if(point&&point.trim()){var li=document.createElement("li");li.innerText=point.trim();desc.appendChild(li);}});}function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");var pr={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdProduct=pr;window._pdQty=1;openPdAddressPage("addtocart");return;}var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");var cp2=JSON.parse(localStorage.getItem("catProduct")||"null");if(cp2){cart.push({id:Date.now(),title:cp2.title||"",price:parseFloat(cp2.price||0),img:cp2.img||"",qty:1,cat:""});}localStorage.setItem("cartItems",JSON.stringify(cart));showMsg("Added to cart ✅","success");}function buyNow(){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");window._pdProduct={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdQty=1;openPdFillOrderPage();}function openPdAddressPage(from){window._pdAddrFrom=from;alert("Please add an address first to continue.");window.location.href="/dashboard";}function openPdFillOrderPage(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){window._pdAddrFrom="fillorder";alert("Please add an address first.");window.location.href="/dashboard";return;}var pr=window._pdProduct||{};var token=localStorage.getItem("token")||"";;fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}}).then(function(r){return r.json();}).then(function(d){var bal=parseFloat(d.balance)||0;var total=(pr.price||0)*(window._pdQty||1);if(bal<total){showMsg("Insufficient balance. Please recharge your wallet.","error");return;}showMsg("Order placed successfully! ✅","success");}).catch(function(){showMsg("Connection error.","error");});}<\/script></body></html>');
 });
 
 // ================= PRODUCT PAGE =================
@@ -4269,9 +4276,208 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
-  <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
-  <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
-  <div class="buy-btn" onclick="buyNow()">Buy now</div>
+  <span class="icon-btn" onclick="openCartPage()" style="position:relative;">
+    &#128722;
+    <span id="cartBadgeProd" style="display:none;position:absolute;top:-6px;right:-6px;background:#ee1d52;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid white;"></span>
+  </span>
+  <div class="cart-btn" onclick="showAddToCartSheet()">Add to Cart</div>
+  <div class="buy-btn" onclick="showBuyNowSheet()">Buy now</div>
+</div>
+
+<!-- ===== BOTTOM SHEET (Add to Cart / Buy Now) ===== -->
+<div id="bsOverlay" onclick="closeBSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:900;"></div>
+<div id="bsSheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:901;padding:0 0 24px 0;max-height:70vh;overflow-y:auto;">
+  <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:10px auto 16px;"></div>
+  <div style="display:flex;gap:14px;padding:0 16px 16px;">
+    <img id="bsImg" src="" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #eee;flex-shrink:0;">
+    <div>
+      <div id="bsPrice" style="color:#ee1d52;font-size:22px;font-weight:bold;"></div>
+      <div id="bsTitle" style="font-size:13px;color:#333;margin-top:5px;line-height:1.5;"></div>
+      <div style="font-size:12px;color:#999;margin-top:4px;">In Stock</div>
+    </div>
+  </div>
+  <div style="border-top:1px solid #f0f0f0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:14px;color:#333;font-weight:bold;">Quantity</span>
+    <div style="display:flex;align-items:center;gap:0;">
+      <span id="bsTotalPrice" style="color:#ee1d52;font-size:14px;font-weight:bold;margin-right:12px;"></span>
+      <button onclick="bsQtyChange(-1)" style="width:34px;height:34px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+      <span id="bsQty" style="width:36px;text-align:center;font-size:16px;font-weight:bold;">1</span>
+      <button onclick="bsQtyChange(1)" style="width:34px;height:34px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;padding:14px 16px 0;">
+    <button id="bsAddBtn" onclick="bsAddToCart()" style="flex:1;padding:13px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;font-weight:bold;">Add to Cart</button>
+    <button id="bsBuyBtn" onclick="bsBuyNow()" style="flex:1.5;padding:13px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;font-weight:bold;">Buy Now</button>
+  </div>
+</div>
+
+<!-- ===== CART PAGE OVERLAY ===== -->
+<div id="cartPageOverlay" style="display:none;position:fixed;inset:0;background:white;z-index:1000;overflow-y:auto;flex-direction:column;">
+  <!-- Cart Header -->
+  <div style="background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
+    <span onclick="closeCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;">Cart</span>
+    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </span>
+  </div>
+  <!-- Edit / Done button -->
+  <div style="padding:12px 15px;">
+    <button id="cartEditBtn" onclick="toggleCartEdit()" style="width:100%;padding:13px;border:1.5px solid #2e7d32;border-radius:8px;background:white;font-size:16px;cursor:pointer;font-family:Arial;">Edit</button>
+  </div>
+  <!-- Total + Settlement -->
+  <div style="padding:0 15px 10px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="cartSelectAllCircle" onclick="toggleSelectAll()" style="width:22px;height:22px;border-radius:50%;border:2px solid #bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
+      <span style="font-size:14px;color:#333;">Total: <b id="cartTotal" style="color:#222;">US$ 0.00</b></span>
+    </div>
+    <div id="cartEditDeleteBtn" style="display:none;">
+      <button onclick="deleteSelectedCartItems()" style="background:#222;color:white;border:none;padding:12px 22px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;">Delete</button>
+    </div>
+    <div id="cartSettlementBtn">
+      <button onclick="openSettlementPage()" style="background:#1976d2;color:white;border:none;padding:12px 22px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Settlement</button>
+    </div>
+  </div>
+  <!-- Store + Cart Items -->
+  <div style="margin:0 15px 10px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+    <div style="padding:12px 15px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;cursor:pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;color:#222;" id="cartStoreName">Highline Giftshop</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div id="cartItemsList" style="padding:10px 15px;"></div>
+  </div>
+  <!-- Recommended -->
+  <div style="padding:15px;">
+    <h3 style="margin:0 0 12px;font-size:16px;text-align:center;color:#333;">Recommended</h3>
+    <div id="cartRecommended" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+    <div style="text-align:center;margin-top:15px;">
+      <button onclick="loadMoreRecommended()" style="border:1px solid #ccc;background:white;padding:10px 40px;border-radius:20px;font-size:14px;cursor:pointer;">See more</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTLEMENT PAGE ===== -->
+<div id="settlementPage" style="display:none;position:fixed;inset:0;background:white;z-index:1100;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeSettlementPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;">Settlement</span>
+  </div>
+  <div style="padding:15px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;" id="settlStoreName">Highline Giftshop</span>
+    </div>
+    <div id="settlItemsList" style="border-top:1px solid #f0f0f0;padding-top:12px;"></div>
+  </div>
+  <div style="padding:0 15px 15px;">
+    <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">Shipping address</div>
+    <div onclick="openAddressPage('settlement')" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 0;border-bottom:1px solid #f0f0f0;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="settlAddrLabel" style="font-size:14px;color:#999;">Mailing address</span>
+    </div>
+  </div>
+  <div style="padding:0 15px 80px;">
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;">
+      <span style="color:#555;">Balance</span>
+      <span id="settlBalance" style="color:#333;">US$0.00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;">
+      <span style="color:#555;">Delivery</span>
+      <span style="color:#333;">US$0</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px;font-weight:bold;">
+      <span>Total payment</span>
+      <span id="settlTotal" style="color:#333;">US$0.00</span>
+    </div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;">
+    <button onclick="doSettleBuy()" style="width:100%;padding:15px;background:#f5a623;border:none;border-radius:10px;font-size:16px;font-weight:bold;color:#333;cursor:pointer;">Buy now</button>
+    <p style="font-size:11px;color:#aaa;text-align:center;margin:8px 0 0;line-height:1.5;">By placing an order, you agree to our Terms and Conditions. Privacy You also agree that the app stores some of your data, which can be used to provide you with a better future shopping experience.</p>
+  </div>
+</div>
+
+<!-- ===== FILL ORDER PAGE (Buy Now direct) ===== -->
+<div id="fillOrderPage" style="display:none;position:fixed;inset:0;background:white;z-index:1200;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeFillOrderPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;">Fill Order</span>
+  </div>
+  <div onclick="openAddressPage('fillorder')" style="padding:14px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid #f0f0f0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+    <span id="foAddrLabel" style="font-size:14px;color:#999;flex:1;">Please select address</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div style="padding:15px;border-bottom:1px solid #f0f0f0;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span id="foStoreName" style="font-size:14px;font-weight:bold;"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="margin-left:4px;"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <img id="foImg" src="" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div>
+        <div id="foTitle" style="font-size:13px;color:#333;line-height:1.5;"></div>
+        <div style="font-size:12px;color:#999;margin-top:2px;" id="foCategory"></div>
+        <div style="margin-top:5px;display:flex;align-items:center;gap:10px;">
+          <span id="foPrice" style="color:#ee1d52;font-size:14px;font-weight:bold;"></span>
+          <span id="foQtyLabel" style="font-size:12px;color:#999;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:14px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;">
+    <span>Express shipping fee</span>
+    <span style="color:#333;">Free shipping US\$0</span>
+  </div>
+  <div style="padding:14px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;">
+    <span>Remark</span>
+    <span style="color:#ccc;">Remark</span>
+  </div>
+  <div style="height:100px;"></div>
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:15px;font-weight:bold;">Total: <span id="foTotal" style="color:#333;"></span></span>
+    <button onclick="submitFillOrder()" style="background:#1976d2;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;">Submit order</button>
+  </div>
+</div>
+
+<!-- ===== ADDRESS PAGE ===== -->
+<div id="addressPage" style="display:none;position:fixed;inset:0;background:white;z-index:1300;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeAddressPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:18px;">📍</span>
+    <span style="font-size:16px;font-weight:bold;">Address</span>
+  </div>
+  <div style="padding:15px;">
+    <button onclick="openAddAddressForm()" style="width:100%;padding:15px;border:1px solid #ddd;border-radius:12px;background:white;font-size:15px;cursor:pointer;text-align:left;color:#333;">+ Add a new address</button>
+    <div id="addressList" style="margin-top:15px;"></div>
+  </div>
+</div>
+
+<!-- ===== ADD ADDRESS FORM ===== -->
+<div id="addAddressForm" style="display:none;position:fixed;inset:0;background:white;z-index:1400;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeAddAddressForm()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span id="addAddrTitle" style="font-size:16px;font-weight:bold;">Add Address</span>
+  </div>
+  <div style="padding:20px 15px;">
+    <input id="addrName" placeholder="Full Name" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="addrPhone" placeholder="Phone Number" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;" type="tel">
+    <input id="addrStreet" placeholder="Street / Area" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="addrCity" placeholder="City" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="addrCountry" placeholder="Country" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:20px;box-sizing:border-box;">
+    <button onclick="saveAddress()" style="width:100%;padding:14px;background:#1976d2;color:white;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Save Address</button>
+  </div>
 </div>
 
 <script>
@@ -4279,6 +4485,520 @@ var id = localStorage.getItem("productId") || "1";
 var isFav = false;
 var currentSlide = 0;
 var images = [];
+
+// ===== CART SYSTEM VARIABLES =====
+var _bsMode = "cart"; // "cart" or "buynow"
+var _bsQty = 1;
+var _bsProduct = null;
+var _cartEditMode = false;
+var _cartSelected = {};
+var _addrCalledFrom = ""; // "settlement" or "fillorder"
+var _editingAddrIdx = -1;
+var _foQty = 1;
+var _cartRecommPage = 0;
+
+// ===== CART BADGE =====
+function updateCartBadge(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var badge = document.getElementById("cartBadgeProd");
+  if(!badge) return;
+  if(cart.length > 0){
+    badge.style.display = "flex";
+    badge.innerText = cart.length > 99 ? "99+" : cart.length;
+  } else {
+    badge.style.display = "none";
+  }
+}
+updateCartBadge();
+
+// ===== BOTTOM SHEET =====
+function showAddToCartSheet(){
+  _bsMode = "cart";
+  openBSheet();
+}
+function showBuyNowSheet(){
+  _bsMode = "buynow";
+  openBSheet();
+}
+function openBSheet(){
+  // جلب بيانات المنتج الحالي
+  var catProd = null;
+  try { catProd = JSON.parse(localStorage.getItem("catProduct") || "null"); } catch(e){}
+  var title = "", price = 0, imgSrc = "";
+  if(catProd){
+    title = catProd.t || catProd.title || "";
+    price = catProd.p || catProd.price || 0;
+    imgSrc = catProd.img || catProd.imgs && catProd.imgs[0] || "";
+  } else {
+    title = document.getElementById("productTitle") ? document.getElementById("productTitle").innerText : "";
+    price = parseFloat((document.getElementById("productPrice") ? document.getElementById("productPrice").innerText : "0").replace(/[^0-9.]/g,"")) || 0;
+    imgSrc = document.querySelector(".slider-imgs img") ? document.querySelector(".slider-imgs img").src : "";
+  }
+  _bsProduct = { title, price, img: imgSrc };
+  _bsQty = 1;
+  document.getElementById("bsImg").src = imgSrc;
+  document.getElementById("bsPrice").innerText = "US\$" + price.toFixed(2);
+  document.getElementById("bsTitle").innerText = title;
+  document.getElementById("bsQty").innerText = 1;
+  document.getElementById("bsTotalPrice").innerText = "US\$" + price.toFixed(2);
+  if(_bsMode === "cart"){
+    document.getElementById("bsAddBtn").style.display = "block";
+    document.getElementById("bsBuyBtn").innerText = "Buy Now";
+  } else {
+    document.getElementById("bsAddBtn").style.display = "none";
+    document.getElementById("bsBuyBtn").innerText = "Buy Now";
+  }
+  document.getElementById("bsOverlay").style.display = "block";
+  document.getElementById("bsSheet").style.display = "block";
+}
+function closeBSheet(){
+  document.getElementById("bsOverlay").style.display = "none";
+  document.getElementById("bsSheet").style.display = "none";
+}
+function bsQtyChange(d){
+  _bsQty = Math.max(1, _bsQty + d);
+  document.getElementById("bsQty").innerText = _bsQty;
+  if(_bsProduct){
+    document.getElementById("bsTotalPrice").innerText = "US\$" + (_bsProduct.price * _bsQty).toFixed(2);
+  }
+}
+function bsAddToCart(){
+  // أول مرة: تحقق من العنوان
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  closeBSheet();
+  if(addresses.length === 0){
+    _addrCalledFrom = "addtocart";
+    openAddressPage("addtocart");
+    return;
+  }
+  _doAddToCart();
+}
+function _doAddToCart(){
+  if(!_bsProduct) return;
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var catProd = null;
+  try { catProd = JSON.parse(localStorage.getItem("catProduct") || "null"); } catch(e){}
+  var item = {
+    id: Date.now(),
+    title: _bsProduct.title,
+    price: _bsProduct.price,
+    img: _bsProduct.img,
+    qty: _bsQty,
+    cat: catProd ? (catProd.cat || "") : ""
+  };
+  cart.push(item);
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  updateCartBadge();
+  showMsg("Added to cart ✅", "success");
+}
+function bsBuyNow(){
+  closeBSheet();
+  // فتح Fill Order
+  openFillOrderPage(_bsProduct, _bsQty);
+}
+
+// ===== CART PAGE =====
+function openCartPage(){
+  document.getElementById("cartPageOverlay").style.display = "flex";
+  renderCartItems();
+  loadCartRecommended();
+  _cartEditMode = false;
+  _cartSelected = {};
+  updateCartEditUI();
+  updateCartTotal();
+}
+function closeCartPage(){
+  document.getElementById("cartPageOverlay").style.display = "none";
+}
+function renderCartItems(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var list = document.getElementById("cartItemsList");
+  if(!list) return;
+  if(cart.length === 0){
+    list.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px 0;">Your cart is empty</p>';
+    return;
+  }
+  list.innerHTML = "";
+  cart.forEach(function(item, idx){
+    var checked = !!_cartSelected[item.id];
+    var div = document.createElement("div");
+    div.style.cssText = "display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0;";
+    div.innerHTML = \`
+      <div class="cartItemCheck" data-id="\${item.id}" onclick="toggleCartItem(\${item.id})" style="width:24px;height:24px;border-radius:50%;border:2px solid \${checked?'#222':'#bbb'};background:\${checked?'#222':'white'};display:\${_cartEditMode?'flex':'none'};align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+        \${checked?'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':''}
+      </div>
+      <img src="\${item.img}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:bold;color:#1976d2;">US\$\${item.price.toFixed(2)}</div>
+        <div style="font-size:12px;color:#333;line-height:1.4;margin-top:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">\${item.title}</div>
+        <div style="font-size:11px;color:#999;margin-top:2px;">\${item.cat||''}</div>
+        <div style="display:flex;align-items:center;gap:0;margin-top:8px;">
+          <button onclick="cartQtyChange(\${item.id},-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">−</button>
+          <span style="width:32px;text-align:center;font-size:14px;font-weight:bold;">\${item.qty}</span>
+          <button onclick="cartQtyChange(\${item.id},1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">+</button>
+        </div>
+      </div>
+      <div onclick="toggleCartItem(\${item.id})" style="width:24px;height:24px;border-radius:50%;border:2px solid \${checked?'#222':'#bbb'};background:\${checked?'#222':'white'};display:\${_cartEditMode?'none':'flex'};align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+        \${checked?'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':''}
+      </div>
+    \`;
+    list.appendChild(div);
+  });
+}
+function toggleCartItem(itemId){
+  if(_cartSelected[itemId]) delete _cartSelected[itemId];
+  else _cartSelected[itemId] = true;
+  renderCartItems();
+  updateCartTotal();
+  updateSelectAllCircle();
+}
+function toggleSelectAll(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var allSelected = cart.every(function(i){ return _cartSelected[i.id]; });
+  if(allSelected){
+    _cartSelected = {};
+  } else {
+    cart.forEach(function(i){ _cartSelected[i.id] = true; });
+  }
+  renderCartItems();
+  updateCartTotal();
+  updateSelectAllCircle();
+}
+function updateSelectAllCircle(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var el = document.getElementById("cartSelectAllCircle");
+  if(!el) return;
+  var allSelected = cart.length > 0 && cart.every(function(i){ return _cartSelected[i.id]; });
+  el.style.border = allSelected ? "2px solid #222" : "2px solid #bbb";
+  el.style.background = allSelected ? "#222" : "white";
+  el.innerHTML = allSelected ? '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : "";
+}
+function updateCartTotal(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var total = 0;
+  cart.forEach(function(item){
+    if(_cartSelected[item.id]) total += item.price * item.qty;
+  });
+  document.getElementById("cartTotal").innerText = "US\$ " + total.toFixed(2);
+}
+function cartQtyChange(itemId, d){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  cart = cart.map(function(i){
+    if(i.id === itemId){ i.qty = Math.max(1, i.qty + d); }
+    return i;
+  });
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  renderCartItems();
+  updateCartTotal();
+}
+function toggleCartEdit(){
+  _cartEditMode = !_cartEditMode;
+  if(!_cartEditMode) _cartSelected = {};
+  updateCartEditUI();
+  renderCartItems();
+  updateCartTotal();
+}
+function updateCartEditUI(){
+  var btn = document.getElementById("cartEditBtn");
+  var delBtn = document.getElementById("cartEditDeleteBtn");
+  var settlBtn = document.getElementById("cartSettlementBtn");
+  btn.innerText = _cartEditMode ? "Done" : "Edit";
+  delBtn.style.display = _cartEditMode ? "block" : "none";
+  settlBtn.style.display = _cartEditMode ? "none" : "block";
+}
+function deleteSelectedCartItems(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  cart = cart.filter(function(i){ return !_cartSelected[i.id]; });
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  _cartSelected = {};
+  updateCartBadge();
+  renderCartItems();
+  updateCartTotal();
+  updateSelectAllCircle();
+}
+
+// ===== RECOMMENDED =====
+var _recProds = [];
+function loadCartRecommended(){
+  var container = document.getElementById("cartRecommended");
+  if(!container) return;
+  // استخدام منتجات من catProducts المحلية
+  try {
+    var sample = [
+      {t:"Kepoičí Wall Mount Display Pegboard",p:18.90,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80"},
+      {t:"Onday Women's Warm Winter Down Cut Hooded Puffer Jacket",p:109.00,img:"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&q=80"},
+      {t:"Braun IPL Long-lasting Laser Hair Removal Device",p:269.94,img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80"},
+      {t:"SweatyRocks Women's Mock Neck Long Sleeve Mesh Insert Elegant Blouse",p:24.29,img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&q=80"},
+      {t:"PRETTYGARDEN Women's Summer Floral Maxi Sun Dress",p:36.00,img:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&q=80"},
+      {t:"Apple 2023 MacBook Air Laptop with M3 chip",p:810.00,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80"},
+      {t:"Smiley Face Slippers for Women and Men",p:20.90,img:"https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&q=80"},
+      {t:"Fashion One Shoulder Mini Club Women's Dress",p:498.00,img:"https://images.unsplash.com/photo-1551803091-e20673f15770?w=300&q=80"},
+      {t:"AMOTAOS IPL Hair Removal for Women with Cooling",p:98.99,img:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&q=80"},
+      {t:"Home Source Corner Bar Cart Unit",p:287.90,img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=80"}
+    ];
+    _recProds = sample;
+    _cartRecommPage = 0;
+    container.innerHTML = "";
+    renderRecommPage();
+  } catch(e){}
+}
+function renderRecommPage(){
+  var container = document.getElementById("cartRecommended");
+  var start = _cartRecommPage * 6;
+  var chunk = _recProds.slice(start, start + 6);
+  chunk.forEach(function(p){
+    var div = document.createElement("div");
+    div.style.cssText = "background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.08);cursor:pointer;";
+    div.innerHTML = \`
+      <div style="position:relative;">
+        <img src="\${p.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'">
+        <div onclick="event.stopPropagation();" style="position:absolute;top:6px;right:6px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15);">🤍</div>
+      </div>
+      <div style="padding:8px;">
+        <div style="font-size:12px;color:#333;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;">\${p.t}</div>
+        <div style="color:#1976d2;font-size:13px;font-weight:bold;margin-top:5px;">US\$\${p.p.toFixed(2)}</div>
+      </div>
+    \`;
+    container.appendChild(div);
+  });
+  _cartRecommPage++;
+}
+function loadMoreRecommended(){
+  renderRecommPage();
+}
+
+// ===== SETTLEMENT PAGE =====
+function openSettlementPage(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var selected = cart.filter(function(i){ return _cartSelected[i.id]; });
+  if(selected.length === 0){ showMsg("Please select items first", "error"); return; }
+  // ملء بيانات Settlement
+  var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
+  document.getElementById("settlTotal").innerText = "US\$" + total.toFixed(2);
+  // جلب الرصيد
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(user && user.email){
+    var token = localStorage.getItem("token") || "";
+    fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } })
+      .then(function(r){ return r.json(); })
+      .then(function(d){ document.getElementById("settlBalance").innerText = "US\$" + (d.balance || 0).toFixed(2); })
+      .catch(function(){});
+  }
+  // عرض المنتجات
+  var list = document.getElementById("settlItemsList");
+  list.innerHTML = "";
+  selected.forEach(function(item){
+    var div = document.createElement("div");
+    div.style.cssText = "display:flex;gap:12px;margin-bottom:12px;";
+    div.innerHTML = \`
+      <img src="\${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:#333;line-height:1.4;">\${item.title}</div>
+        <div style="font-size:11px;color:#999;margin-top:2px;">x\${item.qty}</div>
+      </div>
+      <div style="font-size:13px;font-weight:bold;color:#333;white-space:nowrap;">US\$\${(item.price*item.qty).toFixed(2)}</div>
+    \`;
+    list.appendChild(div);
+  });
+  // عنوان محفوظ
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+  if(defAddr){
+    document.getElementById("settlAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city;
+    document.getElementById("settlAddrLabel").style.color = "#333";
+  } else {
+    document.getElementById("settlAddrLabel").innerText = "Mailing address";
+    document.getElementById("settlAddrLabel").style.color = "#999";
+  }
+  document.getElementById("settlementPage").style.display = "block";
+}
+function closeSettlementPage(){
+  document.getElementById("settlementPage").style.display = "none";
+}
+function doSettleBuy(){
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(!user || !user.email){ showMsg("Please login first", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openAddressPage("settlement"); return; }
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var selected = cart.filter(function(i){ return _cartSelected[i.id]; });
+  var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
+  var token = localStorage.getItem("token") || "";
+  fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var balance = parseFloat(d.balance) || 0;
+      if(balance < total){ showMsg("Insufficient balance. Please recharge your wallet.", "error"); return; }
+      showMsg("Order placed successfully! ✅", "success");
+      // إزالة العناصر المحددة من السلة
+      var remaining = cart.filter(function(i){ return !_cartSelected[i.id]; });
+      localStorage.setItem("cartItems", JSON.stringify(remaining));
+      _cartSelected = {};
+      updateCartBadge();
+      closeSettlementPage();
+      closeCartPage();
+    }).catch(function(){ showMsg("Connection error. Try again.", "error"); });
+}
+
+// ===== FILL ORDER PAGE (Buy Now) =====
+function openFillOrderPage(product, qty){
+  if(!product) return;
+  _foQty = qty || 1;
+  document.getElementById("foImg").src = product.img || "";
+  document.getElementById("foTitle").innerText = product.title || "";
+  document.getElementById("foPrice").innerText = "US\$" + (product.price || 0).toFixed(2);
+  document.getElementById("foQtyLabel").innerText = "x" + _foQty;
+  document.getElementById("foTotal").innerText = "US\$" + ((product.price || 0) * _foQty).toFixed(2);
+  // اسم المتجر
+  var storeName = "";
+  try { storeName = JSON.parse(localStorage.getItem("catProduct") || "{}").storeName || localStorage.getItem("viewStoreName") || "TikTok Shop Store"; } catch(e){ storeName = "TikTok Shop Store"; }
+  document.getElementById("foStoreName").innerText = storeName;
+  document.getElementById("foCategory").innerText = (product.cat || "");
+  // عنوان محفوظ
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+  if(defAddr){
+    document.getElementById("foAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city;
+    document.getElementById("foAddrLabel").style.color = "#333";
+  } else {
+    document.getElementById("foAddrLabel").innerText = "Please select address";
+    document.getElementById("foAddrLabel").style.color = "#999";
+  }
+  document.getElementById("fillOrderPage").style.display = "block";
+  // حفظ product مؤقتاً
+  window._foProduct = product;
+}
+function closeFillOrderPage(){
+  document.getElementById("fillOrderPage").style.display = "none";
+}
+function submitFillOrder(){
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(!user || !user.email){ showMsg("Please login first", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openAddressPage("fillorder"); return; }
+  var product = window._foProduct;
+  if(!product) return;
+  var total = product.price * _foQty;
+  var token = localStorage.getItem("token") || "";
+  fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var balance = parseFloat(d.balance) || 0;
+      if(balance < total){ showMsg("Insufficient balance. Please recharge your wallet.", "error"); return; }
+      showMsg("Order placed successfully! ✅", "success");
+      closeFillOrderPage();
+    }).catch(function(){ showMsg("Connection error. Try again.", "error"); });
+}
+
+// ===== ADDRESS PAGE =====
+function openAddressPage(calledFrom){
+  _addrCalledFrom = calledFrom || "";
+  renderAddressList();
+  document.getElementById("addressPage").style.display = "block";
+}
+function closeAddressPage(){
+  document.getElementById("addressPage").style.display = "none";
+}
+function renderAddressList(){
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var list = document.getElementById("addressList");
+  list.innerHTML = "";
+  addresses.forEach(function(addr, idx){
+    var div = document.createElement("div");
+    div.style.cssText = "border:2px solid " + (addr.isDefault?"#1976d2":"#eee") + ";border-radius:14px;padding:16px;margin-bottom:12px;";
+    div.innerHTML = \`
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:15px;font-weight:bold;color:#222;">\${addr.name}</span>
+        \${addr.isDefault?'<span style="background:#1976d2;color:white;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:bold;">Default</span>':''}
+      </div>
+      <div style="font-size:13px;color:#555;">\${addr.phone}</div>
+      <div style="font-size:13px;color:#555;margin-top:3px;">\${addr.street}, \${addr.city}, \${addr.country}</div>
+      <div style="border-top:1px solid #eee;margin-top:12px;padding-top:10px;display:flex;gap:10px;">
+        <button onclick="editAddress(\${idx})" style="flex:1;padding:10px;border:1px solid #e3f0ff;background:#e3f0ff;color:#1976d2;border-radius:8px;font-size:14px;cursor:pointer;">✏️ Edit</button>
+        <button onclick="deleteAddress(\${idx})" style="flex:1;padding:10px;border:1px solid #ffebee;background:#ffebee;color:#e53935;border-radius:8px;font-size:14px;cursor:pointer;">🗑️ Delete</button>
+      </div>
+    \`;
+    list.appendChild(div);
+  });
+}
+function openAddAddressForm(){
+  _editingAddrIdx = -1;
+  document.getElementById("addAddrTitle").innerText = "Add Address";
+  document.getElementById("addrName").value = "";
+  document.getElementById("addrPhone").value = "";
+  document.getElementById("addrStreet").value = "";
+  document.getElementById("addrCity").value = "";
+  document.getElementById("addrCountry").value = "";
+  document.getElementById("addAddressForm").style.display = "block";
+}
+function closeAddAddressForm(){
+  document.getElementById("addAddressForm").style.display = "none";
+}
+function editAddress(idx){
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var addr = addresses[idx];
+  if(!addr) return;
+  _editingAddrIdx = idx;
+  document.getElementById("addAddrTitle").innerText = "Edit Address";
+  document.getElementById("addrName").value = addr.name || "";
+  document.getElementById("addrPhone").value = addr.phone || "";
+  document.getElementById("addrStreet").value = addr.street || "";
+  document.getElementById("addrCity").value = addr.city || "";
+  document.getElementById("addrCountry").value = addr.country || "";
+  document.getElementById("addAddressForm").style.display = "block";
+}
+function deleteAddress(idx){
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  addresses.splice(idx, 1);
+  if(addresses.length > 0 && !addresses.find(function(a){ return a.isDefault; })){
+    addresses[0].isDefault = true;
+  }
+  localStorage.setItem("userAddresses", JSON.stringify(addresses));
+  renderAddressList();
+}
+function saveAddress(){
+  var name = document.getElementById("addrName").value.trim();
+  var phone = document.getElementById("addrPhone").value.trim();
+  var street = document.getElementById("addrStreet").value.trim();
+  var city = document.getElementById("addrCity").value.trim();
+  var country = document.getElementById("addrCountry").value.trim();
+  if(!name || !phone || !street || !city || !country){ showMsg("Please fill all fields", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var addrObj = { name, phone, street, city, country, isDefault: addresses.length === 0 };
+  if(_editingAddrIdx >= 0){
+    addrObj.isDefault = addresses[_editingAddrIdx].isDefault;
+    addresses[_editingAddrIdx] = addrObj;
+  } else {
+    addresses.push(addrObj);
+  }
+  localStorage.setItem("userAddresses", JSON.stringify(addresses));
+  closeAddAddressForm();
+  renderAddressList();
+  // بعد حفظ العنوان في أول مرة: نكمل العملية
+  if(_addrCalledFrom === "addtocart"){
+    closeAddressPage();
+    _doAddToCart();
+  } else if(_addrCalledFrom === "fillorder"){
+    closeAddressPage();
+    // تحديث label العنوان في Fill Order
+    var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+    if(defAddr && document.getElementById("foAddrLabel")){
+      document.getElementById("foAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city;
+      document.getElementById("foAddrLabel").style.color = "#333";
+    }
+  } else if(_addrCalledFrom === "settlement"){
+    closeAddressPage();
+    var defAddr2 = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+    if(defAddr2 && document.getElementById("settlAddrLabel")){
+      document.getElementById("settlAddrLabel").innerText = defAddr2.name + " - " + defAddr2.street + ", " + defAddr2.city;
+      document.getElementById("settlAddrLabel").style.color = "#333";
+    }
+  }
+  showMsg("Address saved ✅", "success");
+}
 
 // منتجات محلية مخصصة
 var localProducts = {
@@ -4492,16 +5212,7 @@ function toggleHeart(){
   document.getElementById("heartBtn").innerHTML = isFav ? "&#10084;&#65039;" : "&#129293;";
 }
 
-function addToCart(){
-  var cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  cart.push(id);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  showMsg("Added to cart ✅", "success");
-}
 
-function buyNow(){
-  window.location.href = "/wallet";
-}
 </script>
 
 </body>
@@ -10393,9 +11104,20 @@ function updateTotalPrice(){
 }
 
 async function doCart(){
-    var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-    cart.push({ product:p, qty:qty, sellerEmail:sEmail, addedAt:new Date().toISOString() });
-    localStorage.setItem("cart", JSON.stringify(cart));
+    var addresses = JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var cartItems = JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var imgSrc = p ? (p.img || p.imgs && p.imgs[0] || "") : "";
+    var item = { id: Date.now(), title: p ? (p.t || p.title || "") : "", price: p ? (parseFloat(p.p || p.price) || 0) : 0, img: imgSrc, qty: qty, cat: p ? (p.cat || "") : "" };
+    if(addresses.length === 0){
+        // حفظ المنتج مؤقتاً ثم طلب العنوان
+        window._pendingCartItem = item;
+        closeSheet();
+        showToast("⚠️ Please add a delivery address first");
+        setTimeout(function(){ window.location.href = "/dashboard"; }, 1500);
+        return;
+    }
+    cartItems.push(item);
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
     closeSheet();
     showToast("🛒 Added to cart (×"+qty+")");
 }
@@ -10588,13 +11310,167 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 <!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <span class="icon-btn" onclick="window.location.href='/live-chat'">&#127911;</span>
-  <span class="icon-btn" onclick="window.location.href='/wallet'">&#128722;</span>
-  <div class="cart-btn" onclick="addToCart()">Add to Cart</div>
-  <div class="buy-btn" onclick="buyNow()">Buy now</div>
+  <span class="icon-btn" onclick="openCartPageCat()" style="position:relative;">
+    &#128722;
+    <span id="cartBadgeCat" style="display:none;position:absolute;top:-6px;right:-6px;background:#ee1d52;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid white;"></span>
+  </span>
+  <div class="cart-btn" onclick="showCatAddToCartSheet()">Add to Cart</div>
+  <div class="buy-btn" onclick="showCatBuyNowSheet()">Buy now</div>
 </div>
 
+<!-- ===== BOTTOM SHEET ===== -->
+<div id="catBsOverlay" onclick="closeCatBSheet()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:900;"></div>
+<div id="catBsSheet" style="display:none;position:fixed;bottom:0;left:0;right:0;background:white;border-radius:20px 20px 0 0;z-index:901;padding:0 0 24px 0;max-height:70vh;overflow-y:auto;">
+  <div style="width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:10px auto 16px;"></div>
+  <div style="display:flex;gap:14px;padding:0 16px 16px;">
+    <img id="catBsImg" src="" style="width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #eee;flex-shrink:0;">
+    <div>
+      <div id="catBsPrice" style="color:#ee1d52;font-size:22px;font-weight:bold;"></div>
+      <div id="catBsTitle" style="font-size:13px;color:#333;margin-top:5px;line-height:1.5;"></div>
+      <div style="font-size:12px;color:#999;margin-top:4px;">In Stock</div>
+    </div>
+  </div>
+  <div style="border-top:1px solid #f0f0f0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:14px;color:#333;font-weight:bold;">Quantity</span>
+    <div style="display:flex;align-items:center;gap:0;">
+      <span id="catBsTotalPrice" style="color:#ee1d52;font-size:14px;font-weight:bold;margin-right:12px;"></span>
+      <button onclick="catBsQtyChange(-1)" style="width:34px;height:34px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+      <span id="catBsQty" style="width:36px;text-align:center;font-size:16px;font-weight:bold;">1</span>
+      <button onclick="catBsQtyChange(1)" style="width:34px;height:34px;border-radius:50%;border:1px solid #ddd;background:white;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;padding:14px 16px 0;">
+    <button id="catBsAddBtn" onclick="catBsAddToCart()" style="flex:1;padding:13px;border:1.5px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;font-weight:bold;">Add to Cart</button>
+    <button onclick="catBsBuyNow()" style="flex:1.5;padding:13px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;font-weight:bold;">Buy Now</button>
+  </div>
+</div>
 
+<!-- ===== CART PAGE OVERLAY ===== -->
+<div id="catCartPageOverlay" style="display:none;position:fixed;inset:0;background:white;z-index:1000;overflow-y:auto;flex-direction:column;">
+  <div style="background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
+    <span onclick="closeCatCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span style="font-size:16px;font-weight:bold;">Cart</span>
+    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+  </div>
+  <div style="padding:12px 15px;"><button id="catCartEditBtn" onclick="toggleCatCartEdit()" style="width:100%;padding:13px;border:1.5px solid #2e7d32;border-radius:8px;background:white;font-size:16px;cursor:pointer;font-family:Arial;">Edit</button></div>
+  <div style="padding:0 15px 10px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="catCartSelectAllCircle" onclick="toggleCatSelectAll()" style="width:22px;height:22px;border-radius:50%;border:2px solid #bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
+      <span style="font-size:14px;color:#333;">Total: <b id="catCartTotal" style="color:#222;">US$ 0.00</b></span>
+    </div>
+    <div id="catCartEditDeleteBtn" style="display:none;"><button onclick="deleteCatSelectedItems()" style="background:#222;color:white;border:none;padding:12px 22px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;">Delete</button></div>
+    <div id="catCartSettlementBtn"><button onclick="openCatSettlementPage()" style="background:#1976d2;color:white;border:none;padding:12px 22px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Settlement</button></div>
+  </div>
+  <div style="margin:0 15px 10px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
+    <div style="padding:12px 15px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;color:#222;">Highline Giftshop</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div id="catCartItemsList" style="padding:10px 15px;"></div>
+  </div>
+  <div style="padding:15px;">
+    <h3 style="margin:0 0 12px;font-size:16px;text-align:center;color:#333;">Recommended</h3>
+    <div id="catCartRecommended" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+    <div style="text-align:center;margin-top:15px;"><button onclick="loadMoreCatRecommended()" style="border:1px solid #ccc;background:white;padding:10px 40px;border-radius:20px;font-size:14px;cursor:pointer;">See more</button></div>
+  </div>
+</div>
 
+<!-- ===== SETTLEMENT PAGE ===== -->
+<div id="catSettlementPage" style="display:none;position:fixed;inset:0;background:white;z-index:1100;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeCatSettlementPage()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span style="font-size:16px;font-weight:bold;">Settlement</span>
+  </div>
+  <div style="padding:15px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;">Highline Giftshop</span>
+    </div>
+    <div id="catSettlItemsList" style="border-top:1px solid #f0f0f0;padding-top:12px;"></div>
+  </div>
+  <div style="padding:0 15px 15px;">
+    <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">Shipping address</div>
+    <div onclick="openCatAddressPage('settlement')" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 0;border-bottom:1px solid #f0f0f0;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="catSettlAddrLabel" style="font-size:14px;color:#999;">Mailing address</span>
+    </div>
+  </div>
+  <div style="padding:0 15px 80px;">
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;"><span style="color:#555;">Balance</span><span id="catSettlBalance">US$0.00</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;"><span style="color:#555;">Delivery</span><span>US$0</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px;font-weight:bold;"><span>Total payment</span><span id="catSettlTotal">US$0.00</span></div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;">
+    <button onclick="doCatSettleBuy()" style="width:100%;padding:15px;background:#f5a623;border:none;border-radius:10px;font-size:16px;font-weight:bold;color:#333;cursor:pointer;">Buy now</button>
+    <p style="font-size:11px;color:#aaa;text-align:center;margin:8px 0 0;line-height:1.5;">By placing an order, you agree to our Terms and Conditions. Privacy You also agree that the app stores some of your data, which can be used to provide you with a better future shopping experience.</p>
+  </div>
+</div>
+
+<!-- ===== FILL ORDER PAGE ===== -->
+<div id="catFillOrderPage" style="display:none;position:fixed;inset:0;background:white;z-index:1200;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeCatFillOrderPage()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span style="font-size:16px;font-weight:bold;">Fill Order</span>
+  </div>
+  <div onclick="openCatAddressPage('fillorder')" style="padding:14px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid #f0f0f0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+    <span id="catFoAddrLabel" style="font-size:14px;color:#999;flex:1;">Please select address</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div style="padding:15px;border-bottom:1px solid #f0f0f0;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span id="catFoStoreName" style="font-size:14px;font-weight:bold;"></span>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <img id="catFoImg" src="" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div>
+        <div id="catFoTitle" style="font-size:13px;color:#333;line-height:1.5;"></div>
+        <div style="margin-top:5px;display:flex;align-items:center;gap:10px;">
+          <span id="catFoPrice" style="color:#ee1d52;font-size:14px;font-weight:bold;"></span>
+          <span id="catFoQtyLabel" style="font-size:12px;color:#999;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:14px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;"><span>Express shipping fee</span><span>Free shipping US\$0</span></div>
+  <div style="padding:14px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;"><span>Remark</span><span style="color:#ccc;">Remark</span></div>
+  <div style="height:100px;"></div>
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:15px;font-weight:bold;">Total: <span id="catFoTotal"></span></span>
+    <button onclick="submitCatFillOrder()" style="background:#1976d2;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;">Submit order</button>
+  </div>
+</div>
+
+<!-- ===== ADDRESS PAGE ===== -->
+<div id="catAddressPage" style="display:none;position:fixed;inset:0;background:white;z-index:1300;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeCatAddressPage()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span style="font-size:18px;">📍</span>
+    <span style="font-size:16px;font-weight:bold;">Address</span>
+  </div>
+  <div style="padding:15px;">
+    <button onclick="openCatAddAddressForm()" style="width:100%;padding:15px;border:1px solid #ddd;border-radius:12px;background:white;font-size:15px;cursor:pointer;text-align:left;color:#333;">+ Add a new address</button>
+    <div id="catAddressList" style="margin-top:15px;"></div>
+  </div>
+</div>
+
+<!-- ===== ADD ADDRESS FORM ===== -->
+<div id="catAddAddressForm" style="display:none;position:fixed;inset:0;background:white;z-index:1400;overflow-y:auto;">
+  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <span onclick="closeCatAddAddressForm()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
+    <span id="catAddAddrTitle" style="font-size:16px;font-weight:bold;">Add Address</span>
+  </div>
+  <div style="padding:20px 15px;">
+    <input id="catAddrName" placeholder="Full Name" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="catAddrPhone" placeholder="Phone Number" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;" type="tel">
+    <input id="catAddrStreet" placeholder="Street / Area" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="catAddrCity" placeholder="City" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">
+    <input id="catAddrCountry" placeholder="Country" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:14px;margin-bottom:20px;box-sizing:border-box;">
+    <button onclick="saveCatAddress()" style="width:100%;padding:14px;background:#1976d2;color:white;border:none;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Save Address</button>
+  </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -10607,6 +11483,297 @@ var currentSlide = 0;
 var images = [];
 var sheetMode = "cart";
 var autoTimer = null;
+
+// ===== CAT CART SYSTEM =====
+var _catBsQty = 1;
+var _catCartEditMode = false;
+var _catCartSelected = {};
+var _catAddrCalledFrom = "";
+var _catEditingAddrIdx = -1;
+var _catFoQty = 1;
+var _catRecommPage = 0;
+
+function updateCatCartBadge(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var badge = document.getElementById("cartBadgeCat");
+  if(!badge) return;
+  if(cart.length > 0){ badge.style.display = "flex"; badge.innerText = cart.length > 99 ? "99+" : cart.length; }
+  else { badge.style.display = "none"; }
+}
+updateCatCartBadge();
+
+// Bottom Sheet
+function showCatAddToCartSheet(){ _catBsMode = "cart"; openCatBSheet(); }
+function showCatBuyNowSheet(){ _catBsMode = "buynow"; openCatBSheet(); }
+var _catBsMode = "cart";
+function openCatBSheet(){
+  var title = p.t || p.title || "";
+  var price = p.p || p.price || 0;
+  var imgSrc = (p.imgs && p.imgs.length > 0) ? p.imgs[0] : p.img || "";
+  _catBsQty = 1;
+  document.getElementById("catBsImg").src = imgSrc;
+  document.getElementById("catBsPrice").innerText = "US\$" + parseFloat(price).toFixed(2);
+  document.getElementById("catBsTitle").innerText = title;
+  document.getElementById("catBsQty").innerText = 1;
+  document.getElementById("catBsTotalPrice").innerText = "US\$" + parseFloat(price).toFixed(2);
+  document.getElementById("catBsAddBtn").style.display = _catBsMode === "cart" ? "block" : "none";
+  document.getElementById("catBsOverlay").style.display = "block";
+  document.getElementById("catBsSheet").style.display = "block";
+}
+function closeCatBSheet(){
+  document.getElementById("catBsOverlay").style.display = "none";
+  document.getElementById("catBsSheet").style.display = "none";
+}
+function catBsQtyChange(d){
+  _catBsQty = Math.max(1, _catBsQty + d);
+  document.getElementById("catBsQty").innerText = _catBsQty;
+  var price = p.p || p.price || 0;
+  document.getElementById("catBsTotalPrice").innerText = "US\$" + (parseFloat(price) * _catBsQty).toFixed(2);
+}
+function catBsAddToCart(){
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  closeCatBSheet();
+  if(addresses.length === 0){ _catAddrCalledFrom = "addtocart"; openCatAddressPage("addtocart"); return; }
+  _doCatAddToCart();
+}
+function _doCatAddToCart(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var imgSrc = (p.imgs && p.imgs.length > 0) ? p.imgs[0] : p.img || "";
+  cart.push({ id: Date.now(), title: p.t || p.title || "", price: parseFloat(p.p || p.price || 0), img: imgSrc, qty: _catBsQty, cat: p.cat || "" });
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  updateCatCartBadge();
+  showMsg("Added to cart ✅", "success");
+}
+function catBsBuyNow(){
+  closeCatBSheet();
+  var imgSrc = (p.imgs && p.imgs.length > 0) ? p.imgs[0] : p.img || "";
+  openCatFillOrderPage({ title: p.t || p.title || "", price: parseFloat(p.p || p.price || 0), img: imgSrc, cat: p.cat || "" }, _catBsQty);
+}
+
+// Cart Page
+function openCartPageCat(){
+  document.getElementById("catCartPageOverlay").style.display = "flex";
+  renderCatCartItems();
+  loadCatRecommended();
+  _catCartEditMode = false; _catCartSelected = {};
+  updateCatCartEditUI(); updateCatCartTotal();
+}
+function closeCatCartPage(){ document.getElementById("catCartPageOverlay").style.display = "none"; }
+function renderCatCartItems(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var list = document.getElementById("catCartItemsList");
+  if(!list) return;
+  if(cart.length === 0){ list.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px 0;">Your cart is empty</p>'; return; }
+  list.innerHTML = "";
+  cart.forEach(function(item){
+    var checked = !!_catCartSelected[item.id];
+    var div = document.createElement("div");
+    div.style.cssText = "display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0;";
+    div.innerHTML = \`
+      <img src="\${item.img}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:bold;color:#1976d2;">US\$\${item.price.toFixed(2)}</div>
+        <div style="font-size:12px;color:#333;line-height:1.4;margin-top:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">\${item.title}</div>
+        <div style="display:flex;align-items:center;gap:0;margin-top:8px;">
+          <button onclick="catCartQtyChange(\${item.id},-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">−</button>
+          <span style="width:32px;text-align:center;font-size:14px;font-weight:bold;">\${item.qty}</span>
+          <button onclick="catCartQtyChange(\${item.id},1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">+</button>
+        </div>
+      </div>
+      <div onclick="toggleCatCartItem(\${item.id})" style="width:24px;height:24px;border-radius:50%;border:2px solid \${checked?'#222':'#bbb'};background:\${checked?'#222':'white'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+        \${checked?'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':''}
+      </div>
+    \`;
+    list.appendChild(div);
+  });
+}
+function toggleCatCartItem(itemId){
+  if(_catCartSelected[itemId]) delete _catCartSelected[itemId]; else _catCartSelected[itemId] = true;
+  renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
+}
+function toggleCatSelectAll(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var allSelected = cart.every(function(i){ return _catCartSelected[i.id]; });
+  if(allSelected){ _catCartSelected = {}; } else { cart.forEach(function(i){ _catCartSelected[i.id] = true; }); }
+  renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
+}
+function updateCatSelectAllCircle(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var el = document.getElementById("catCartSelectAllCircle");
+  if(!el) return;
+  var all = cart.length > 0 && cart.every(function(i){ return _catCartSelected[i.id]; });
+  el.style.border = all ? "2px solid #222" : "2px solid #bbb";
+  el.style.background = all ? "#222" : "white";
+  el.innerHTML = all ? '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : "";
+}
+function updateCatCartTotal(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var total = 0;
+  cart.forEach(function(item){ if(_catCartSelected[item.id]) total += item.price * item.qty; });
+  document.getElementById("catCartTotal").innerText = "US\$ " + total.toFixed(2);
+}
+function catCartQtyChange(itemId, d){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  cart = cart.map(function(i){ if(i.id === itemId){ i.qty = Math.max(1, i.qty + d); } return i; });
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  renderCatCartItems(); updateCatCartTotal();
+}
+function toggleCatCartEdit(){
+  _catCartEditMode = !_catCartEditMode;
+  if(!_catCartEditMode) _catCartSelected = {};
+  updateCatCartEditUI(); renderCatCartItems(); updateCatCartTotal();
+}
+function updateCatCartEditUI(){
+  document.getElementById("catCartEditBtn").innerText = _catCartEditMode ? "Done" : "Edit";
+  document.getElementById("catCartEditDeleteBtn").style.display = _catCartEditMode ? "block" : "none";
+  document.getElementById("catCartSettlementBtn").style.display = _catCartEditMode ? "none" : "block";
+}
+function deleteCatSelectedItems(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  cart = cart.filter(function(i){ return !_catCartSelected[i.id]; });
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+  _catCartSelected = {}; updateCatCartBadge(); renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
+}
+
+// Recommended
+function loadCatRecommended(){
+  var container = document.getElementById("catCartRecommended");
+  if(!container) return;
+  var sample = [
+    {t:"Kepoičí Wall Mount Display Pegboard",p:18.90,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80"},
+    {t:"Onday Women's Warm Winter Down Hooded Puffer Jacket",p:109.00,img:"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&q=80"},
+    {t:"Braun IPL Long-lasting Laser Hair Removal Device",p:269.94,img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80"},
+    {t:"SweatyRocks Women's Mock Neck Blouse",p:24.29,img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&q=80"},
+    {t:"PRETTYGARDEN Women's Summer Floral Maxi Dress",p:36.00,img:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&q=80"},
+    {t:"Apple MacBook Air Laptop with M3 chip",p:810.00,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80"},
+    {t:"Smiley Face Slippers for Women and Men",p:20.90,img:"https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&q=80"},
+    {t:"Fashion One Shoulder Mini Club Women's Dress",p:498.00,img:"https://images.unsplash.com/photo-1551803091-e20673f15770?w=300&q=80"}
+  ];
+  _catRecommPage = 0;
+  container.innerHTML = "";
+  window._catRecProds = sample;
+  renderCatRecommPage();
+}
+function renderCatRecommPage(){
+  var container = document.getElementById("catCartRecommended");
+  var start = _catRecommPage * 6;
+  var chunk = (window._catRecProds || []).slice(start, start + 6);
+  chunk.forEach(function(p2){
+    var div = document.createElement("div");
+    div.style.cssText = "background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.08);cursor:pointer;";
+    div.innerHTML = \`<div style="position:relative;"><img src="\${p2.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'"><div style="position:absolute;top:6px;right:6px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15);">🤍</div></div><div style="padding:8px;"><div style="font-size:12px;color:#333;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;">\${p2.t}</div><div style="color:#1976d2;font-size:13px;font-weight:bold;margin-top:5px;">US\$\${p2.p.toFixed(2)}</div></div>\`;
+    container.appendChild(div);
+  });
+  _catRecommPage++;
+}
+function loadMoreCatRecommended(){ renderCatRecommPage(); }
+
+// Settlement
+function openCatSettlementPage(){
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var selected = cart.filter(function(i){ return _catCartSelected[i.id]; });
+  if(selected.length === 0){ showMsg("Please select items first", "error"); return; }
+  var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
+  document.getElementById("catSettlTotal").innerText = "US\$" + total.toFixed(2);
+  var user = null; try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(user && user.email){
+    var token = localStorage.getItem("token") || "";
+    fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } }).then(function(r){ return r.json(); }).then(function(d){ document.getElementById("catSettlBalance").innerText = "US\$" + (d.balance || 0).toFixed(2); }).catch(function(){});
+  }
+  var list = document.getElementById("catSettlItemsList"); list.innerHTML = "";
+  selected.forEach(function(item){
+    var div = document.createElement("div"); div.style.cssText = "display:flex;gap:12px;margin-bottom:12px;";
+    div.innerHTML = \`<img src="\${item.img}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;"><div style="flex:1;"><div style="font-size:12px;color:#333;line-height:1.4;">\${item.title}</div><div style="font-size:11px;color:#999;margin-top:2px;">x\${item.qty}</div></div><div style="font-size:13px;font-weight:bold;color:#333;white-space:nowrap;">US\$\${(item.price*item.qty).toFixed(2)}</div>\`;
+    list.appendChild(div);
+  });
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+  if(defAddr){ document.getElementById("catSettlAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city; document.getElementById("catSettlAddrLabel").style.color = "#333"; }
+  document.getElementById("catSettlementPage").style.display = "block";
+}
+function closeCatSettlementPage(){ document.getElementById("catSettlementPage").style.display = "none"; }
+function doCatSettleBuy(){
+  var user = null; try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(!user || !user.email){ showMsg("Please login first", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openCatAddressPage("settlement"); return; }
+  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var selected = cart.filter(function(i){ return _catCartSelected[i.id]; });
+  var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
+  var token = localStorage.getItem("token") || "";
+  fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } }).then(function(r){ return r.json(); }).then(function(d){
+    var balance = parseFloat(d.balance) || 0;
+    if(balance < total){ showMsg("Insufficient balance. Please recharge your wallet.", "error"); return; }
+    showMsg("Order placed successfully! ✅", "success");
+    var remaining = cart.filter(function(i){ return !_catCartSelected[i.id]; });
+    localStorage.setItem("cartItems", JSON.stringify(remaining));
+    _catCartSelected = {}; updateCatCartBadge(); closeCatSettlementPage(); closeCatCartPage();
+  }).catch(function(){ showMsg("Connection error. Try again.", "error"); });
+}
+
+// Fill Order
+function openCatFillOrderPage(product, qty){
+  _catFoQty = qty || 1;
+  document.getElementById("catFoImg").src = product.img || "";
+  document.getElementById("catFoTitle").innerText = product.title || "";
+  document.getElementById("catFoPrice").innerText = "US\$" + (product.price || 0).toFixed(2);
+  document.getElementById("catFoQtyLabel").innerText = "x" + _catFoQty;
+  document.getElementById("catFoTotal").innerText = "US\$" + ((product.price || 0) * _catFoQty).toFixed(2);
+  var storeName = ""; try { storeName = localStorage.getItem("viewStoreName") || "TikTok Shop Store"; } catch(e){ storeName = "TikTok Shop Store"; }
+  document.getElementById("catFoStoreName").innerText = storeName;
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+  if(defAddr){ document.getElementById("catFoAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city; document.getElementById("catFoAddrLabel").style.color = "#333"; }
+  document.getElementById("catFillOrderPage").style.display = "block";
+  window._catFoProduct = product;
+}
+function closeCatFillOrderPage(){ document.getElementById("catFillOrderPage").style.display = "none"; }
+function submitCatFillOrder(){
+  var user = null; try { user = JSON.parse(localStorage.getItem("user") || "null"); } catch(e){}
+  if(!user || !user.email){ showMsg("Please login first", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openCatAddressPage("fillorder"); return; }
+  var product = window._catFoProduct; if(!product) return;
+  var total = product.price * _catFoQty;
+  var token = localStorage.getItem("token") || "";
+  fetch("/get-balance", { headers: { "Authorization": "Bearer " + token } }).then(function(r){ return r.json(); }).then(function(d){
+    var balance = parseFloat(d.balance) || 0;
+    if(balance < total){ showMsg("Insufficient balance. Please recharge your wallet.", "error"); return; }
+    showMsg("Order placed successfully! ✅", "success");
+    closeCatFillOrderPage();
+  }).catch(function(){ showMsg("Connection error. Try again.", "error"); });
+}
+
+// Address
+function openCatAddressPage(calledFrom){ _catAddrCalledFrom = calledFrom || ""; renderCatAddressList(); document.getElementById("catAddressPage").style.display = "block"; }
+function closeCatAddressPage(){ document.getElementById("catAddressPage").style.display = "none"; }
+function renderCatAddressList(){
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var list = document.getElementById("catAddressList"); list.innerHTML = "";
+  addresses.forEach(function(addr, idx){
+    var div = document.createElement("div"); div.style.cssText = "border:2px solid " + (addr.isDefault?"#1976d2":"#eee") + ";border-radius:14px;padding:16px;margin-bottom:12px;";
+    div.innerHTML = \`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:15px;font-weight:bold;color:#222;">\${addr.name}</span>\${addr.isDefault?'<span style="background:#1976d2;color:white;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:bold;">Default</span>':''}</div><div style="font-size:13px;color:#555;">\${addr.phone}</div><div style="font-size:13px;color:#555;margin-top:3px;">\${addr.street}, \${addr.city}, \${addr.country}</div><div style="border-top:1px solid #eee;margin-top:12px;padding-top:10px;display:flex;gap:10px;"><button onclick="editCatAddress(\${idx})" style="flex:1;padding:10px;border:1px solid #e3f0ff;background:#e3f0ff;color:#1976d2;border-radius:8px;font-size:14px;cursor:pointer;">✏️ Edit</button><button onclick="deleteCatAddress(\${idx})" style="flex:1;padding:10px;border:1px solid #ffebee;background:#ffebee;color:#e53935;border-radius:8px;font-size:14px;cursor:pointer;">🗑️ Delete</button></div>\`;
+    list.appendChild(div);
+  });
+}
+function openCatAddAddressForm(){ _catEditingAddrIdx = -1; document.getElementById("catAddAddrTitle").innerText = "Add Address"; document.getElementById("catAddrName").value = ""; document.getElementById("catAddrPhone").value = ""; document.getElementById("catAddrStreet").value = ""; document.getElementById("catAddrCity").value = ""; document.getElementById("catAddrCountry").value = ""; document.getElementById("catAddAddressForm").style.display = "block"; }
+function closeCatAddAddressForm(){ document.getElementById("catAddAddressForm").style.display = "none"; }
+function editCatAddress(idx){ var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]"); var addr = addresses[idx]; if(!addr) return; _catEditingAddrIdx = idx; document.getElementById("catAddAddrTitle").innerText = "Edit Address"; document.getElementById("catAddrName").value = addr.name || ""; document.getElementById("catAddrPhone").value = addr.phone || ""; document.getElementById("catAddrStreet").value = addr.street || ""; document.getElementById("catAddrCity").value = addr.city || ""; document.getElementById("catAddrCountry").value = addr.country || ""; document.getElementById("catAddAddressForm").style.display = "block"; }
+function deleteCatAddress(idx){ var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]"); addresses.splice(idx, 1); if(addresses.length > 0 && !addresses.find(function(a){ return a.isDefault; })){ addresses[0].isDefault = true; } localStorage.setItem("userAddresses", JSON.stringify(addresses)); renderCatAddressList(); }
+function saveCatAddress(){
+  var name = document.getElementById("catAddrName").value.trim(), phone = document.getElementById("catAddrPhone").value.trim(), street = document.getElementById("catAddrStreet").value.trim(), city = document.getElementById("catAddrCity").value.trim(), country = document.getElementById("catAddrCountry").value.trim();
+  if(!name || !phone || !street || !city || !country){ showMsg("Please fill all fields", "error"); return; }
+  var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
+  var addrObj = { name, phone, street, city, country, isDefault: addresses.length === 0 };
+  if(_catEditingAddrIdx >= 0){ addrObj.isDefault = addresses[_catEditingAddrIdx].isDefault; addresses[_catEditingAddrIdx] = addrObj; } else { addresses.push(addrObj); }
+  localStorage.setItem("userAddresses", JSON.stringify(addresses));
+  closeCatAddAddressForm(); renderCatAddressList();
+  var defAddr = addresses.find(function(a){ return a.isDefault; }) || addresses[0];
+  if(_catAddrCalledFrom === "addtocart"){ closeCatAddressPage(); _doCatAddToCart(); }
+  else if(_catAddrCalledFrom === "fillorder"){ closeCatAddressPage(); if(defAddr && document.getElementById("catFoAddrLabel")){ document.getElementById("catFoAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city; document.getElementById("catFoAddrLabel").style.color = "#333"; } }
+  else if(_catAddrCalledFrom === "settlement"){ closeCatAddressPage(); if(defAddr && document.getElementById("catSettlAddrLabel")){ document.getElementById("catSettlAddrLabel").innerText = defAddr.name + " - " + defAddr.street + ", " + defAddr.city; document.getElementById("catSettlAddrLabel").style.color = "#333"; } }
+  showMsg("Address saved ✅", "success");
+}
 
 // ===== خريطة ألوان/مقاسات كل قسم =====
 var CAT_OPTIONS = {
@@ -10753,16 +11920,7 @@ document.getElementById("storeFollowers").innerText  = "Followers " + sFollowers
 })();
 // ===== نهاية بيانات المتجر =====
 
-function addToCart(){
-  var cart = JSON.parse(localStorage.getItem("cart")||"[]");
-  cart.push({ id: p.id, title: p.t, price: p.p, qty: 1, img: p.img });
-  localStorage.setItem("cart", JSON.stringify(cart));
-  showToast("&#10003; Added to cart");
-}
 
-function buyNow(){
-  window.location.href = "/wallet";
-}
 <\/script>
 </body>
 </html>`);
