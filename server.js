@@ -4719,61 +4719,39 @@ function deleteSelectedCartItems(){
 
 // ===== RECOMMENDED =====
 var _recProds = [];
-var CLOUD_REC = "https://raw.githubusercontent.com/oscerm328-stack";
-
-// 20 منتج حقيقي من أقسام: Electronics(27), Clothing(17), Mens Fashion(34)
-var _cartFixedProds = [
-  // ===== Electronics / Computers & Phones (cat 27) =====
-  {id:164001,t:"Apple iPhone 15 Pro Max 256GB Natural Titanium",p:1199.00,img:CLOUD_REC+"/products_27/main/164001_Apple_iPhone_15_Pro_Max/1.jpg",folder:"164001_Apple_iPhone_15_Pro_Max",cat:"Electronics",category_id:27},
-  {id:164002,t:"Samsung Galaxy S24 Ultra 512GB Titanium Black",p:1099.00,img:CLOUD_REC+"/products_27/main/164002_Samsung_Galaxy_S24_Ultra/1.jpg",folder:"164002_Samsung_Galaxy_S24_Ultra",cat:"Electronics",category_id:27},
-  {id:164003,t:"Apple MacBook Pro 14-inch M3 Pro Chip Space Black",p:1999.00,img:CLOUD_REC+"/products_27/main/164003_Apple_MacBook_Pro_14/1.jpg",folder:"164003_Apple_MacBook_Pro_14",cat:"Electronics",category_id:27},
-  {id:164004,t:"Dell XPS 15 Laptop Intel Core i7 OLED Touch",p:1549.00,img:CLOUD_REC+"/products_27/main/164004_Dell_XPS_15/1.jpg",folder:"164004_Dell_XPS_15",cat:"Electronics",category_id:27},
-  {id:164005,t:"iPad Pro 12.9-inch M2 Wi-Fi 256GB Silver",p:999.00,img:CLOUD_REC+"/products_27/main/164005_iPad_Pro_129/1.jpg",folder:"164005_iPad_Pro_129",cat:"Electronics",category_id:27},
-  {id:164006,t:"Sony WH-1000XM5 Wireless Noise Canceling Headphones",p:348.00,img:CLOUD_REC+"/products_27/main/164006_Sony_WH1000XM5/1.jpg",folder:"164006_Sony_WH1000XM5",cat:"Electronics",category_id:27},
-  {id:164007,t:"Google Pixel 8 Pro 256GB Bay Blue",p:899.00,img:CLOUD_REC+"/products_27/main/164007_Google_Pixel_8_Pro/1.jpg",folder:"164007_Google_Pixel_8_Pro",cat:"Electronics",category_id:27},
-  {id:164008,t:"ASUS ROG Strix G16 Gaming Laptop RTX 4070",p:1499.00,img:CLOUD_REC+"/products_27/main/164008_ASUS_ROG_Strix_G16/1.jpg",folder:"164008_ASUS_ROG_Strix_G16",cat:"Electronics",category_id:27},
-  // ===== Clothing & Accessories (cat 17) =====
-  {id:164920,t:"Free People Womens Carter Pullover",p:48.00,img:CLOUD_REC+"/products_17/main/164920_Free People Womens Carter Pullover/1.jpg",folder:"164920_Free People Womens Carter Pullover",cat:"Clothing & Accessories",category_id:17},
-  {id:165100,t:"Levi's Women's Classic Straight Jeans",p:59.50,img:CLOUD_REC+"/products_17/main/165100_Levis_Womens_Classic_Straight_Jeans/1.jpg",folder:"165100_Levis_Womens_Classic_Straight_Jeans",cat:"Clothing & Accessories",category_id:17},
-  {id:165200,t:"PRETTYGARDEN Women's Summer Floral Maxi Dress",p:36.00,img:CLOUD_REC+"/products_17/main/165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress/1.jpg",folder:"165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress",cat:"Clothing & Accessories",category_id:17},
-  {id:165300,t:"Amazon Essentials Women's Classic-Fit Long Sleeve",p:22.90,img:CLOUD_REC+"/products_17/main/165300_Amazon_Essentials_Womens_Classic_Fit/1.jpg",folder:"165300_Amazon_Essentials_Womens_Classic_Fit",cat:"Clothing & Accessories",category_id:17},
-  {id:165400,t:"Columbia Women's Benton Springs Full Zip Fleece",p:45.00,img:CLOUD_REC+"/products_17/main/165400_Columbia_Womens_Benton_Springs_Fleece/1.jpg",folder:"165400_Columbia_Womens_Benton_Springs_Fleece",cat:"Clothing & Accessories",category_id:17},
-  {id:165500,t:"Hanes Women's EcoSmart Hoodie Sweatshirt",p:18.00,img:CLOUD_REC+"/products_17/main/165500_Hanes_Womens_EcoSmart_Hoodie/1.jpg",folder:"165500_Hanes_Womens_EcoSmart_Hoodie",cat:"Clothing & Accessories",category_id:17},
-  // ===== Mens Fashion (cat 34) =====
-  {id:166100,t:"Levi's Men's 501 Original Fit Jeans",p:54.00,img:CLOUD_REC+"/products_34/main/166100_Levis_Mens_501_Original_Fit_Jeans/1.jpg",folder:"166100_Levis_Mens_501_Original_Fit_Jeans",cat:"Mens Fashion",category_id:34},
-  {id:166200,t:"Under Armour Men's Tech 2.0 Short Sleeve T-Shirt",p:24.99,img:CLOUD_REC+"/products_34/main/166200_Under_Armour_Mens_Tech_Short_Sleeve/1.jpg",folder:"166200_Under_Armour_Mens_Tech_Short_Sleeve",cat:"Mens Fashion",category_id:34},
-  {id:166300,t:"Tommy Hilfiger Men's Classic Polo Shirt",p:39.00,img:CLOUD_REC+"/products_34/main/166300_Tommy_Hilfiger_Mens_Classic_Polo/1.jpg",folder:"166300_Tommy_Hilfiger_Mens_Classic_Polo",cat:"Mens Fashion",category_id:34},
-  {id:166400,t:"Nike Men's Sportswear Club Fleece Joggers",p:55.00,img:CLOUD_REC+"/products_34/main/166400_Nike_Mens_Sportswear_Club_Fleece_Joggers/1.jpg",folder:"166400_Nike_Mens_Sportswear_Club_Fleece_Joggers",cat:"Mens Fashion",category_id:34},
-  {id:166500,t:"Amazon Essentials Men's Slim-Fit Dress Shirt",p:26.00,img:CLOUD_REC+"/products_34/main/166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt/1.jpg",folder:"166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt",cat:"Mens Fashion",category_id:34},
-  {id:166600,t:"Carhartt Men's Loose Fit Heavyweight Crewneck Sweatshirt",p:44.99,img:CLOUD_REC+"/products_34/main/166600_Carhartt_Mens_Crewneck_Sweatshirt/1.jpg",folder:"166600_Carhartt_Mens_Crewneck_Sweatshirt",cat:"Mens Fashion",category_id:34}
+var _CLOUD_REC = "https://raw.githubusercontent.com/oscerm328-stack";
+var _fixedRecProds = [
+  {id:164001,t:"Apple iPhone 15 Pro Max 256GB Natural Titanium",p:1199.00,img:_CLOUD_REC+"/products_27/main/164001_Apple_iPhone_15_Pro_Max/1.jpg",folder:"164001_Apple_iPhone_15_Pro_Max",cat:"Electronics",category_id:27},
+  {id:164002,t:"Samsung Galaxy S24 Ultra 512GB Titanium Black",p:1099.00,img:_CLOUD_REC+"/products_27/main/164002_Samsung_Galaxy_S24_Ultra/1.jpg",folder:"164002_Samsung_Galaxy_S24_Ultra",cat:"Electronics",category_id:27},
+  {id:164003,t:"Apple MacBook Pro 14-inch M3 Pro Space Black",p:1999.00,img:_CLOUD_REC+"/products_27/main/164003_Apple_MacBook_Pro_14/1.jpg",folder:"164003_Apple_MacBook_Pro_14",cat:"Electronics",category_id:27},
+  {id:164004,t:"Dell XPS 15 Laptop Intel Core i7 OLED Touch",p:1549.00,img:_CLOUD_REC+"/products_27/main/164004_Dell_XPS_15/1.jpg",folder:"164004_Dell_XPS_15",cat:"Electronics",category_id:27},
+  {id:164005,t:"iPad Pro 12.9-inch M2 Wi-Fi 256GB Silver",p:999.00,img:_CLOUD_REC+"/products_27/main/164005_iPad_Pro_129/1.jpg",folder:"164005_iPad_Pro_129",cat:"Electronics",category_id:27},
+  {id:164006,t:"Sony WH-1000XM5 Wireless Noise Canceling Headphones",p:348.00,img:_CLOUD_REC+"/products_27/main/164006_Sony_WH1000XM5/1.jpg",folder:"164006_Sony_WH1000XM5",cat:"Electronics",category_id:27},
+  {id:164007,t:"Google Pixel 8 Pro 256GB Bay Blue",p:899.00,img:_CLOUD_REC+"/products_27/main/164007_Google_Pixel_8_Pro/1.jpg",folder:"164007_Google_Pixel_8_Pro",cat:"Electronics",category_id:27},
+  {id:164008,t:"ASUS ROG Strix G16 Gaming Laptop RTX 4070",p:1499.00,img:_CLOUD_REC+"/products_27/main/164008_ASUS_ROG_Strix_G16/1.jpg",folder:"164008_ASUS_ROG_Strix_G16",cat:"Electronics",category_id:27},
+  {id:164920,t:"Free People Womens Carter Pullover",p:48.00,img:_CLOUD_REC+"/products_17/main/164920_Free People Womens Carter Pullover/1.jpg",folder:"164920_Free People Womens Carter Pullover",cat:"Clothing & Accessories",category_id:17},
+  {id:165100,t:"Levi's Women's Classic Straight Jeans",p:59.50,img:_CLOUD_REC+"/products_17/main/165100_Levis_Womens_Classic_Straight_Jeans/1.jpg",folder:"165100_Levis_Womens_Classic_Straight_Jeans",cat:"Clothing & Accessories",category_id:17},
+  {id:165200,t:"PRETTYGARDEN Women's Summer Floral Maxi Dress",p:36.00,img:_CLOUD_REC+"/products_17/main/165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress/1.jpg",folder:"165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress",cat:"Clothing & Accessories",category_id:17},
+  {id:165300,t:"Amazon Essentials Women's Classic-Fit Long Sleeve",p:22.90,img:_CLOUD_REC+"/products_17/main/165300_Amazon_Essentials_Womens_Classic_Fit/1.jpg",folder:"165300_Amazon_Essentials_Womens_Classic_Fit",cat:"Clothing & Accessories",category_id:17},
+  {id:165400,t:"Columbia Women's Benton Springs Full Zip Fleece",p:45.00,img:_CLOUD_REC+"/products_17/main/165400_Columbia_Womens_Benton_Springs_Fleece/1.jpg",folder:"165400_Columbia_Womens_Benton_Springs_Fleece",cat:"Clothing & Accessories",category_id:17},
+  {id:165500,t:"Hanes Women's EcoSmart Hoodie Sweatshirt",p:18.00,img:_CLOUD_REC+"/products_17/main/165500_Hanes_Womens_EcoSmart_Hoodie/1.jpg",folder:"165500_Hanes_Womens_EcoSmart_Hoodie",cat:"Clothing & Accessories",category_id:17},
+  {id:166100,t:"Levi's Men's 501 Original Fit Jeans",p:54.00,img:_CLOUD_REC+"/products_34/main/166100_Levis_Mens_501_Original_Fit_Jeans/1.jpg",folder:"166100_Levis_Mens_501_Original_Fit_Jeans",cat:"Mens Fashion",category_id:34},
+  {id:166200,t:"Under Armour Men's Tech 2.0 Short Sleeve T-Shirt",p:24.99,img:_CLOUD_REC+"/products_34/main/166200_Under_Armour_Mens_Tech_Short_Sleeve/1.jpg",folder:"166200_Under_Armour_Mens_Tech_Short_Sleeve",cat:"Mens Fashion",category_id:34},
+  {id:166300,t:"Tommy Hilfiger Men's Classic Polo Shirt",p:39.00,img:_CLOUD_REC+"/products_34/main/166300_Tommy_Hilfiger_Mens_Classic_Polo/1.jpg",folder:"166300_Tommy_Hilfiger_Mens_Classic_Polo",cat:"Mens Fashion",category_id:34},
+  {id:166400,t:"Nike Men's Sportswear Club Fleece Joggers",p:55.00,img:_CLOUD_REC+"/products_34/main/166400_Nike_Mens_Sportswear_Club_Fleece_Joggers/1.jpg",folder:"166400_Nike_Mens_Sportswear_Club_Fleece_Joggers",cat:"Mens Fashion",category_id:34},
+  {id:166500,t:"Amazon Essentials Men's Slim-Fit Dress Shirt",p:26.00,img:_CLOUD_REC+"/products_34/main/166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt/1.jpg",folder:"166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt",cat:"Mens Fashion",category_id:34},
+  {id:166600,t:"Carhartt Men's Heavyweight Crewneck Sweatshirt",p:44.99,img:_CLOUD_REC+"/products_34/main/166600_Carhartt_Mens_Crewneck_Sweatshirt/1.jpg",folder:"166600_Carhartt_Mens_Crewneck_Sweatshirt",cat:"Mens Fashion",category_id:34}
 ];
-
-function openCartRecommProduct(prod){
-  // نحفظ المنتج في localStorage ونفتح صفحة التفاصيل المناسبة
-  var catProductData = {
-    id: prod.id,
-    t: prod.t,
-    p: prod.p,
-    price: prod.p,
-    title: prod.t,
-    img: prod.img,
-    imgs: [prod.img],
-    folder: prod.folder || "",
-    category_id: prod.category_id || 27,
-    cat: prod.cat || "Electronics",
-    description: "",
-    rating: 5.0,
-    sales: 0
-  };
-  localStorage.setItem("catProduct", JSON.stringify(catProductData));
+function _openRecProduct(prod){
+  var data = {id:prod.id,t:prod.t,p:prod.p,price:prod.p,title:prod.t,img:prod.img,imgs:[prod.img],folder:prod.folder||"",category_id:prod.category_id||27,cat:prod.cat||"Electronics",description:"",rating:5.0,sales:0};
+  localStorage.setItem("catProduct", JSON.stringify(data));
   localStorage.setItem("viewStoreName", "TikTok Shop Store");
   window.location.href = "/cat-product-detail";
 }
-
 function loadCartRecommended(){
   var container = document.getElementById("cartRecommended");
   if(!container) return;
-  _recProds = _cartFixedProds;
+  _recProds = _fixedRecProds;
   _cartRecommPage = 0;
   container.innerHTML = "";
   renderRecommPage();
@@ -4785,7 +4763,7 @@ function renderRecommPage(){
   chunk.forEach(function(p){
     var div = document.createElement("div");
     div.style.cssText = "background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.08);cursor:pointer;";
-    div.onclick = function(){ openCartRecommProduct(p); };
+    div.onclick = function(){ _openRecProduct(p); };
     div.innerHTML = \`
       <div style="position:relative;">
         <img src="\${p.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'">
@@ -11676,19 +11654,9 @@ function deleteCatSelectedItems(){
 function loadCatRecommended(){
   var container = document.getElementById("catCartRecommended");
   if(!container) return;
-  var sample = [
-    {t:"Kepoičí Wall Mount Display Pegboard",p:18.90,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80"},
-    {t:"Onday Women's Warm Winter Down Hooded Puffer Jacket",p:109.00,img:"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&q=80"},
-    {t:"Braun IPL Long-lasting Laser Hair Removal Device",p:269.94,img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80"},
-    {t:"SweatyRocks Women's Mock Neck Blouse",p:24.29,img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&q=80"},
-    {t:"PRETTYGARDEN Women's Summer Floral Maxi Dress",p:36.00,img:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&q=80"},
-    {t:"Apple MacBook Air Laptop with M3 chip",p:810.00,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80"},
-    {t:"Smiley Face Slippers for Women and Men",p:20.90,img:"https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&q=80"},
-    {t:"Fashion One Shoulder Mini Club Women's Dress",p:498.00,img:"https://images.unsplash.com/photo-1551803091-e20673f15770?w=300&q=80"}
-  ];
   _catRecommPage = 0;
   container.innerHTML = "";
-  window._catRecProds = sample;
+  window._catRecProds = _fixedRecProds;
   renderCatRecommPage();
 }
 function renderCatRecommPage(){
@@ -11698,12 +11666,13 @@ function renderCatRecommPage(){
   chunk.forEach(function(p2){
     var div = document.createElement("div");
     div.style.cssText = "background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.08);cursor:pointer;";
-    div.innerHTML = \`<div style="position:relative;"><img src="\${p2.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'"><div style="position:absolute;top:6px;right:6px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15);">🤍</div></div><div style="padding:8px;"><div style="font-size:12px;color:#333;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;">\${p2.t}</div><div style="color:#1976d2;font-size:13px;font-weight:bold;margin-top:5px;">US\$\${p2.p.toFixed(2)}</div></div>\`;
+    div.onclick = function(){ _openRecProduct(p2); };
+    div.innerHTML = \`<div style="position:relative;"><img src="\${p2.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'"><div onclick="event.stopPropagation();" style="position:absolute;top:6px;right:6px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15);">🤍</div></div><div style="padding:8px;"><div style="font-size:12px;color:#333;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;">\${p2.t}</div><div style="color:#1976d2;font-size:13px;font-weight:bold;margin-top:5px;">US\$\${p2.p.toFixed(2)}</div></div>\`;
     container.appendChild(div);
   });
   _catRecommPage++;
 }
-function loadMoreCatRecommended(){ renderCatRecommPage(); }
+function loadMoreCatRecommended(){ if(_catRecommPage * 6 < (window._catRecProds||[]).length) renderCatRecommPage(); }
 
 // Settlement
 function openCatSettlementPage(){
