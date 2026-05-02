@@ -11654,9 +11654,32 @@ function deleteCatSelectedItems(){
 function loadCatRecommended(){
   var container = document.getElementById("catCartRecommended");
   if(!container) return;
+  var _CR = "https://raw.githubusercontent.com/oscerm328-stack";
+  var _catFixedProds = [
+    {id:164001,t:"Apple iPhone 15 Pro Max 256GB Natural Titanium",p:1199.00,img:_CR+"/products_27/main/164001_Apple_iPhone_15_Pro_Max/1.jpg",folder:"164001_Apple_iPhone_15_Pro_Max",cat:"Electronics",category_id:27},
+    {id:164002,t:"Samsung Galaxy S24 Ultra 512GB Titanium Black",p:1099.00,img:_CR+"/products_27/main/164002_Samsung_Galaxy_S24_Ultra/1.jpg",folder:"164002_Samsung_Galaxy_S24_Ultra",cat:"Electronics",category_id:27},
+    {id:164003,t:"Apple MacBook Pro 14-inch M3 Pro Space Black",p:1999.00,img:_CR+"/products_27/main/164003_Apple_MacBook_Pro_14/1.jpg",folder:"164003_Apple_MacBook_Pro_14",cat:"Electronics",category_id:27},
+    {id:164004,t:"Dell XPS 15 Laptop Intel Core i7 OLED Touch",p:1549.00,img:_CR+"/products_27/main/164004_Dell_XPS_15/1.jpg",folder:"164004_Dell_XPS_15",cat:"Electronics",category_id:27},
+    {id:164005,t:"iPad Pro 12.9-inch M2 Wi-Fi 256GB Silver",p:999.00,img:_CR+"/products_27/main/164005_iPad_Pro_129/1.jpg",folder:"164005_iPad_Pro_129",cat:"Electronics",category_id:27},
+    {id:164006,t:"Sony WH-1000XM5 Wireless Noise Canceling Headphones",p:348.00,img:_CR+"/products_27/main/164006_Sony_WH1000XM5/1.jpg",folder:"164006_Sony_WH1000XM5",cat:"Electronics",category_id:27},
+    {id:164007,t:"Google Pixel 8 Pro 256GB Bay Blue",p:899.00,img:_CR+"/products_27/main/164007_Google_Pixel_8_Pro/1.jpg",folder:"164007_Google_Pixel_8_Pro",cat:"Electronics",category_id:27},
+    {id:164008,t:"ASUS ROG Strix G16 Gaming Laptop RTX 4070",p:1499.00,img:_CR+"/products_27/main/164008_ASUS_ROG_Strix_G16/1.jpg",folder:"164008_ASUS_ROG_Strix_G16",cat:"Electronics",category_id:27},
+    {id:164920,t:"Free People Womens Carter Pullover",p:48.00,img:_CR+"/products_17/main/164920_Free People Womens Carter Pullover/1.jpg",folder:"164920_Free People Womens Carter Pullover",cat:"Clothing & Accessories",category_id:17},
+    {id:165100,t:"Levi's Women's Classic Straight Jeans",p:59.50,img:_CR+"/products_17/main/165100_Levis_Womens_Classic_Straight_Jeans/1.jpg",folder:"165100_Levis_Womens_Classic_Straight_Jeans",cat:"Clothing & Accessories",category_id:17},
+    {id:165200,t:"PRETTYGARDEN Women's Summer Floral Maxi Dress",p:36.00,img:_CR+"/products_17/main/165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress/1.jpg",folder:"165200_PRETTYGARDEN_Womens_Summer_Floral_Maxi_Dress",cat:"Clothing & Accessories",category_id:17},
+    {id:165300,t:"Amazon Essentials Women's Classic-Fit Long Sleeve",p:22.90,img:_CR+"/products_17/main/165300_Amazon_Essentials_Womens_Classic_Fit/1.jpg",folder:"165300_Amazon_Essentials_Womens_Classic_Fit",cat:"Clothing & Accessories",category_id:17},
+    {id:165400,t:"Columbia Women's Benton Springs Full Zip Fleece",p:45.00,img:_CR+"/products_17/main/165400_Columbia_Womens_Benton_Springs_Fleece/1.jpg",folder:"165400_Columbia_Womens_Benton_Springs_Fleece",cat:"Clothing & Accessories",category_id:17},
+    {id:165500,t:"Hanes Women's EcoSmart Hoodie Sweatshirt",p:18.00,img:_CR+"/products_17/main/165500_Hanes_Womens_EcoSmart_Hoodie/1.jpg",folder:"165500_Hanes_Womens_EcoSmart_Hoodie",cat:"Clothing & Accessories",category_id:17},
+    {id:166100,t:"Levi's Men's 501 Original Fit Jeans",p:54.00,img:_CR+"/products_34/main/166100_Levis_Mens_501_Original_Fit_Jeans/1.jpg",folder:"166100_Levis_Mens_501_Original_Fit_Jeans",cat:"Mens Fashion",category_id:34},
+    {id:166200,t:"Under Armour Men's Tech 2.0 Short Sleeve T-Shirt",p:24.99,img:_CR+"/products_34/main/166200_Under_Armour_Mens_Tech_Short_Sleeve/1.jpg",folder:"166200_Under_Armour_Mens_Tech_Short_Sleeve",cat:"Mens Fashion",category_id:34},
+    {id:166300,t:"Tommy Hilfiger Men's Classic Polo Shirt",p:39.00,img:_CR+"/products_34/main/166300_Tommy_Hilfiger_Mens_Classic_Polo/1.jpg",folder:"166300_Tommy_Hilfiger_Mens_Classic_Polo",cat:"Mens Fashion",category_id:34},
+    {id:166400,t:"Nike Men's Sportswear Club Fleece Joggers",p:55.00,img:_CR+"/products_34/main/166400_Nike_Mens_Sportswear_Club_Fleece_Joggers/1.jpg",folder:"166400_Nike_Mens_Sportswear_Club_Fleece_Joggers",cat:"Mens Fashion",category_id:34},
+    {id:166500,t:"Amazon Essentials Men's Slim-Fit Dress Shirt",p:26.00,img:_CR+"/products_34/main/166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt/1.jpg",folder:"166500_Amazon_Essentials_Mens_Slim_Fit_Dress_Shirt",cat:"Mens Fashion",category_id:34},
+    {id:166600,t:"Carhartt Men's Heavyweight Crewneck Sweatshirt",p:44.99,img:_CR+"/products_34/main/166600_Carhartt_Mens_Crewneck_Sweatshirt/1.jpg",folder:"166600_Carhartt_Mens_Crewneck_Sweatshirt",cat:"Mens Fashion",category_id:34}
+  ];
   _catRecommPage = 0;
   container.innerHTML = "";
-  window._catRecProds = _fixedRecProds;
+  window._catRecProds = _catFixedProds;
   renderCatRecommPage();
 }
 function renderCatRecommPage(){
