@@ -10948,8 +10948,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   <div class="bar-icon" onclick="window.location.href='/live-chat'">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
   </div>
-  <div class="bar-icon" onclick="openSheet('cart')">
+  <div class="bar-icon" style="position:relative;" onclick="openCartPage()">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span id="cartBadge" style="display:none;position:absolute;top:-6px;right:-6px;background:#ee1d52;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid white;"></span>
   </div>
   <button class="cart-btn" onclick="openSheet('cart')">Add to Cart</button>
   <button class="buy-btn" onclick="openSheet('buy')">Buy Now</button>
@@ -10970,7 +10971,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   <div class="qty-row">
     <span class="qty-label">Quantity</span>
     <div style="display:flex;align-items:center;gap:12px;">
-      <span class="sheet-total-price" id="sheetTotalPrice" style="color:#e65100;font-size:15px;font-weight:700;"></span>
+      <span id="sheetTotalPrice" style="color:#e65100;font-size:15px;font-weight:700;"></span>
       <div class="qty-controls">
         <button class="qty-btn" onclick="changeQty(-1)">−</button>
         <div class="qty-num" id="qtyNum">1</div>
@@ -10980,7 +10981,139 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   </div>
   <div class="sheet-btns">
     <button class="sheet-cart" id="sheetCartBtn" onclick="doCart()">Add to Cart</button>
-    <button class="sheet-buy" id="sheetBuyBtn" onclick="doBuy()">Buy Now</button>
+    <button class="sheet-buy" id="sheetBuyBtn" onclick="doBuyNow()">Buy Now</button>
+  </div>
+</div>
+
+<!-- ===== CART PAGE ===== -->
+<div id="cartPage" style="display:none;position:fixed;inset:0;background:white;z-index:1000;overflow-y:auto;flex-direction:column;">
+  <div style="background:#1976d2;padding:12px 15px;display:flex;align-items:center;gap:12px;">
+    <span onclick="closeCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;color:white;flex:1;">Cart</span>
+  </div>
+  <div style="padding:10px 15px;">
+    <button id="cartEditBtn" onclick="toggleCartEdit()" style="width:100%;padding:13px;border:1.5px solid #2e7d32;border-radius:8px;background:white;font-size:16px;cursor:pointer;font-family:Arial;">Edit</button>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 15px 10px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="cartSelectAllCircle" onclick="toggleSelectAll()" style="width:22px;height:22px;border-radius:50%;border:2px solid #bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
+      <span style="font-size:14px;color:#333;">Total: <b id="cartTotal" style="color:#222;">US$ 0.00</b></span>
+    </div>
+    <div id="cartEditDeleteBtn" style="display:none;">
+      <button onclick="deleteSelectedCartItems()" style="background:#222;color:white;border:none;padding:12px 22px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;">Delete</button>
+    </div>
+    <div id="cartSettlementBtn">
+      <button onclick="openSettlementPage()" style="background:#1976d2;color:white;border:none;padding:12px 22px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Settlement</button>
+    </div>
+  </div>
+  <div style="background:white;margin:0 0 8px;padding:12px 15px 4px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;color:#222;" id="cartStoreName">Store</span>
+    </div>
+    <div id="cartItemsList" style="padding:4px 0;"></div>
+  </div>
+</div>
+
+<!-- ===== SETTLEMENT PAGE ===== -->
+<div id="settlementPage" style="display:none;position:fixed;inset:0;background:white;z-index:1100;overflow-y:auto;">
+  <div style="background:#1976d2;padding:12px 15px;display:flex;align-items:center;gap:12px;">
+    <span onclick="closeSettlementPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;color:white;">Settlement</span>
+  </div>
+  <div style="padding:14px 15px;border-bottom:1px solid #f0f0f0;">
+    <div style="font-size:12px;color:#999;margin-bottom:6px;font-weight:600;">Store</div>
+    <div style="font-size:14px;font-weight:bold;color:#222;" id="settlStoreName"></div>
+    <div id="settlItemsList" style="margin-top:10px;"></div>
+  </div>
+  <div style="padding:14px 15px;border-bottom:1px solid #f0f0f0;">
+    <div style="font-size:12px;color:#999;margin-bottom:6px;font-weight:600;">Shipping address</div>
+    <div onclick="openAddressPage('settlement')" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span id="settlAddrLabel" style="font-size:13px;color:#999;flex:1;">Mailing address</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+  <div style="padding:14px 15px;border-bottom:1px solid #f0f0f0;">
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#555;margin-bottom:8px;"><span>Balance</span><span id="settlBalance">US$0.00</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#555;margin-bottom:8px;"><span>Delivery</span><span>US$0</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:bold;color:#222;"><span>Total payment</span><span id="settlTotal">US$0.00</span></div>
+  </div>
+  <div style="padding:20px 15px;">
+    <button onclick="doSettleBuy()" style="width:100%;padding:16px;background:#f5a623;color:white;border:none;border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;">Buy now</button>
+    <div style="font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.5;">By placing an order, you agree to our Terms and Conditions.</div>
+  </div>
+</div>
+
+<!-- ===== FILL ORDER PAGE ===== -->
+<div id="fillOrderPage" style="display:none;position:fixed;inset:0;background:white;z-index:1100;overflow-y:auto;">
+  <div style="background:#1976d2;padding:12px 15px;display:flex;align-items:center;gap:12px;">
+    <span onclick="closeFillOrderPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;color:white;">Fill Order</span>
+  </div>
+  <div onclick="openAddressPage('fillorder')" style="padding:14px 15px;display:flex;align-items:center;gap:10px;cursor:pointer;border-bottom:1px solid #f0f0f0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <span id="foAddrLabel" style="font-size:13px;color:#999;flex:1;">Please select address</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
+  <div style="padding:14px 15px;border-bottom:1px solid #f0f0f0;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span style="font-size:14px;font-weight:bold;color:#222;" id="foStoreName"></span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <img id="foImg" src="" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:#333;line-height:1.4;" id="foTitle"></div>
+        <div style="font-size:13px;font-weight:bold;color:#e53935;margin-top:4px;" id="foPrice"></div>
+        <div style="font-size:11px;color:#999;margin-top:2px;" id="foQtyLabel"></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#555;margin-top:12px;"><span>Express shipping fee</span><span>Free shipping US$0</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#999;margin-top:8px;align-items:center;"><span>Remark</span><input id="foRemark" placeholder="Remark" style="border:none;outline:none;font-size:13px;color:#555;text-align:right;flex:1;margin-left:8px;"></div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 15px;border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:14px;font-weight:bold;">Total: <span id="foTotal" style="color:#e53935;"></span></span>
+    <button onclick="submitFillOrder()" style="background:#1976d2;color:white;border:none;padding:13px 28px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:bold;">Submit order</button>
+  </div>
+  <div style="height:70px;"></div>
+</div>
+
+<!-- ===== ADDRESS PAGE ===== -->
+<div id="addressPage" style="display:none;position:fixed;inset:0;background:white;z-index:1200;overflow-y:auto;">
+  <div style="background:#1976d2;padding:12px 15px;display:flex;align-items:center;gap:12px;">
+    <span onclick="closeAddressPage()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span style="font-size:16px;font-weight:bold;color:white;">📍 Address</span>
+  </div>
+  <div style="padding:15px;">
+    <div onclick="openAddAddressForm()" style="padding:15px;border:1.5px dashed #bbb;border-radius:10px;text-align:center;font-size:14px;color:#555;cursor:pointer;margin-bottom:14px;">+ Add a new address</div>
+    <div id="addressList"></div>
+  </div>
+</div>
+
+<!-- ===== ADD ADDRESS FORM ===== -->
+<div id="addAddressForm" style="display:none;position:fixed;inset:0;background:white;z-index:1300;overflow-y:auto;">
+  <div style="background:#1976d2;padding:12px 15px;display:flex;align-items:center;gap:12px;">
+    <span onclick="closeAddAddressForm()" style="cursor:pointer;display:inline-flex;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </span>
+    <span id="addAddrTitle" style="font-size:16px;font-weight:bold;color:white;">Add Address</span>
+  </div>
+  <div style="padding:15px;display:flex;flex-direction:column;gap:12px;">
+    <input id="addrName" placeholder="Full Name" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;">
+    <input id="addrPhone" placeholder="Phone Number" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;">
+    <input id="addrStreet" placeholder="Street Address" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;">
+    <input id="addrCity" placeholder="City" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;">
+    <input id="addrCountry" placeholder="Country" style="padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;width:100%;">
+    <button onclick="saveAddress()" style="padding:14px;background:#1976d2;color:white;border:none;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;margin-top:4px;">Save Address</button>
   </div>
 </div>
 
@@ -10994,26 +11127,24 @@ var currentSlide = 0, imgs = [], qty = 1, sheetMode = "buy";
 var CLOUD = "https://raw.githubusercontent.com/oscerm328-stack";
 var CAT_MAP = {17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};
 
+var _cartEditMode = false;
+var _cartSelected = {};
+var _addrCalledFrom = "";
+var _editingAddrIdx = -1;
+var _foQty = 1;
+
 async function init(){
     if(!p){ document.getElementById("productTitle").innerText="Product not found"; return; }
-
-    // Build images from Cloudinary
-    var catF = CAT_MAP[p.category_id]||"27_Electronics";
+    var catF = CAT_MAP[p.category_id]||"products_27";
     imgs = (p.images&&p.images.length>0)
         ? p.images.map(function(i){ return CLOUD+"/"+catF+"/main/"+p.folder+"/"+i; })
         : [CLOUD+"/"+catF+"/main/"+(p.folder||"")+"/1.jpg"];
-
     buildSlider();
-
     document.getElementById("productTitle").innerText = p.title||"";
     document.getElementById("productPrice").innerText = "US$"+parseFloat(p.price).toFixed(2);
     document.getElementById("specSales").innerText = p.sales||0;
-
-    // Store info
     document.getElementById("storeName").innerText = sName||"Store";
     document.getElementById("storeMeta").innerText = (p.category_name||"")+" · Official Store";
-
-    // Load store logo & VIP
     try {
         var apps = await fetch("/all-store-applications").then(function(r){return r.json();});
         var store = null;
@@ -11023,26 +11154,20 @@ async function init(){
             if(store.storeLogo&&store.storeLogo.length>10) document.getElementById("storeLogo").src = store.storeLogo;
         }
     }catch(e){}
-
     try {
         var vd = await fetch("/store-vip/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         document.getElementById("storeVip").innerText = "✓ VIP "+(vd.vipLevel||0);
         var prods = await fetch("/store-products/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         var prodCount = (prods.products||[]).length;
         var fd = await fetch("/followers/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
-        var followers = fd.followers || 0;
+        var followers = fd.followers||0;
         var tagsEl = document.getElementById("storeTags");
-        if(tagsEl){
-            tagsEl.innerHTML = '<span class="store-tag">Products '+prodCount+'</span><span class="store-tag">Followers '+followers.toLocaleString()+'</span>';
-        }
+        if(tagsEl){ tagsEl.innerHTML='<span class="store-tag">Products '+prodCount+'</span><span class="store-tag">Followers '+followers.toLocaleString()+'</span>'; }
     }catch(e){}
-
-    // Sheet info
-
     document.getElementById("sheetImg").src = imgs[0];
     document.getElementById("sheetPrice").innerText = "US$"+parseFloat(p.price).toFixed(2);
     document.getElementById("sheetTitle").innerText = p.title||"";
-
+    updateCartBadge();
     setInterval(function(){ slide(1); }, 3500);
 }
 
@@ -11062,15 +11187,8 @@ function buildSlider(){
 }
 
 var isFav = false;
-function toggleHeart(){
-    isFav = !isFav;
-    document.getElementById("heartBtn").innerText = isFav ? "❤️" : "🤍";
-}
-function shareProduct(){
-    var url = window.location.href;
-    if(navigator.clipboard){ navigator.clipboard.writeText(url).catch(function(){}); }
-    showToast("✓ Link copied successfully");
-}
+function toggleHeart(){ isFav=!isFav; document.getElementById("heartBtn").innerText=isFav?"❤️":"🤍"; }
+function shareProduct(){ var url=window.location.href; if(navigator.clipboard){navigator.clipboard.writeText(url).catch(function(){});} showToast("✓ Link copied successfully"); }
 function slide(dir){ goTo((currentSlide+dir+imgs.length)%imgs.length); }
 function goTo(idx){
     currentSlide=idx;
@@ -11079,11 +11197,12 @@ function goTo(idx){
     document.querySelectorAll(".dot").forEach(function(d,i){d.classList.toggle("active",i===idx);});
 }
 
+// ===== BOTTOM SHEET =====
 function openSheet(mode){
-    sheetMode = mode;
-    qty = 1; document.getElementById("qtyNum").innerText = 1;
+    sheetMode=mode; qty=1;
+    document.getElementById("qtyNum").innerText=1;
     updateTotalPrice();
-    document.getElementById("sheetImg").src = imgs[currentSlide]||imgs[0];
+    document.getElementById("sheetImg").src=imgs[currentSlide]||imgs[0];
     document.getElementById("buySheet").classList.add("open");
     document.getElementById("sheetOverlay").classList.add("open");
 }
@@ -11091,57 +11210,324 @@ function closeSheet(){
     document.getElementById("buySheet").classList.remove("open");
     document.getElementById("sheetOverlay").classList.remove("open");
 }
-function changeQty(d){ 
-    qty = Math.max(1, qty+d); 
-    document.getElementById("qtyNum").innerText = qty;
-    updateTotalPrice();
-}
+function changeQty(d){ qty=Math.max(1,qty+d); document.getElementById("qtyNum").innerText=qty; updateTotalPrice(); }
 function updateTotalPrice(){
-    var price = p ? (parseFloat(p.p) || parseFloat(p.price) || 0) : 0;
-    var total = (price * qty).toFixed(2);
-    var el = document.getElementById("sheetTotalPrice");
-    if(el) el.innerText = "US$" + total;
+    var price=p?(parseFloat(p.price)||parseFloat(p.p)||0):0;
+    document.getElementById("sheetTotalPrice").innerText="US$"+(price*qty).toFixed(2);
 }
 
-async function doCart(){
-    var addresses = JSON.parse(localStorage.getItem("userAddresses")||"[]");
-    var cartItems = JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var imgSrc = p ? (p.img || p.imgs && p.imgs[0] || "") : "";
-    var item = { id: Date.now(), title: p ? (p.t || p.title || "") : "", price: p ? (parseFloat(p.p || p.price) || 0) : 0, img: imgSrc, qty: qty, cat: p ? (p.cat || "") : "" };
-    if(addresses.length === 0){
-        // حفظ المنتج مؤقتاً ثم طلب العنوان
-        window._pendingCartItem = item;
+// ===== CART BADGE =====
+function updateCartBadge(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var badge=document.getElementById("cartBadge");
+    if(!badge) return;
+    if(cart.length>0){badge.style.display="flex";badge.innerText=cart.length>99?"99+":cart.length;}
+    else{badge.style.display="none";}
+}
+
+// ===== ADD TO CART =====
+function doCart(){
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var imgSrc=imgs[currentSlide]||imgs[0]||"";
+    var item={id:Date.now(),title:p?(p.title||p.t||""):"",price:p?(parseFloat(p.price||p.p)||0):0,img:imgSrc,qty:qty,cat:p?(p.category_name||p.cat||""):"",storeEmail:sEmail,storeName:sName};
+    if(addresses.length===0){
+        window._pendingCartItem=item;
         closeSheet();
-        showToast("⚠️ Please add a delivery address first");
-        setTimeout(function(){ window.location.href = "/dashboard"; }, 1500);
+        _addrCalledFrom="addtocart";
+        openAddressPage("addtocart");
         return;
     }
+    var cartItems=JSON.parse(localStorage.getItem("cartItems")||"[]");
     cartItems.push(item);
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    localStorage.setItem("cartItems",JSON.stringify(cartItems));
+    updateCartBadge();
     closeSheet();
     showToast("🛒 Added to cart (×"+qty+")");
 }
 
-async function doBuy(){
+// ===== BUY NOW → Fill Order =====
+function doBuyNow(){
     closeSheet();
-    var token = localStorage.getItem("token")||"";
-    if(!token){ showToast("⚠️ Please login first"); return; }
-    var btn = document.getElementById("sheetBuyBtn");
-    btn.disabled = true;
-    try {
-        var r = await fetch("/create-store-order",{
-            method:"POST",
-            headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
-            body: JSON.stringify({ product:p, sellerEmail:sEmail, quantity:qty })
-        });
-        var d = await r.json();
-        if(d.success){
-            showToast("✅ Order placed! (×"+qty+")");
-        } else {
-            showToast("⚠️ "+(d.message||"Failed"));
+    var token=localStorage.getItem("token")||"";
+    if(!token){showToast("⚠️ Please login first");return;}
+    var imgSrc=imgs[currentSlide]||imgs[0]||"";
+    var product={title:p?(p.title||p.t||""):"",price:p?(parseFloat(p.price||p.p)||0):0,img:imgSrc,storeEmail:sEmail,storeName:sName};
+    openFillOrderPage(product,qty);
+}
+
+// ===== CART PAGE =====
+function openCartPage(){
+    document.getElementById("cartPage").style.display="flex";
+    document.getElementById("cartStoreName").innerText=sName||"Store";
+    _cartEditMode=false; _cartSelected={};
+    updateCartEditUI(); renderCartItems(); updateCartTotal();
+}
+function closeCartPage(){ document.getElementById("cartPage").style.display="none"; }
+function renderCartItems(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var list=document.getElementById("cartItemsList");
+    if(!list) return;
+    if(cart.length===0){list.innerHTML='<p style="text-align:center;color:#aaa;padding:20px 0;">Your cart is empty</p>';return;}
+    list.innerHTML="";
+    cart.forEach(function(item){
+        var checked=!!_cartSelected[item.id];
+        var div=document.createElement("div");
+        div.style.cssText="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f0f0f0;";
+        div.innerHTML='<div onclick="toggleCartItem('+item.id+')" style="width:24px;height:24px;border-radius:50%;border:2px solid '+(checked?'#222':'#bbb')+';background:'+(checked?'#222':'white')+';display:'+(_cartEditMode?'flex':'none')+';align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">'+(checked?'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div>'
+            +'<img src="'+item.img+'" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;" onerror="this.src=\'https://via.placeholder.com/80\'">'
+            +'<div style="flex:1;min-width:0;">'
+            +'<div style="font-size:13px;font-weight:bold;color:#1976d2;">US$'+item.price.toFixed(2)+'</div>'
+            +'<div style="font-size:12px;color:#333;line-height:1.4;margin-top:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+item.title+'</div>'
+            +'<div style="display:flex;align-items:center;gap:0;margin-top:8px;">'
+            +'<button onclick="cartQtyChange('+item.id+',-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">−</button>'
+            +'<span style="width:32px;text-align:center;font-size:14px;font-weight:bold;">'+item.qty+'</span>'
+            +'<button onclick="cartQtyChange('+item.id+',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;">+</button>'
+            +'</div></div>'
+            +'<div onclick="toggleCartItem('+item.id+')" style="width:24px;height:24px;border-radius:50%;border:2px solid '+(checked?'#222':'#bbb')+';background:'+(checked?'#222':'white')+';display:'+(_cartEditMode?'none':'flex')+';align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">'+(checked?'<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':'')+'</div>';
+        list.appendChild(div);
+    });
+}
+function toggleCartItem(itemId){
+    if(_cartSelected[itemId]) delete _cartSelected[itemId]; else _cartSelected[itemId]=true;
+    renderCartItems(); updateCartTotal(); updateSelectAllCircle();
+}
+function toggleSelectAll(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var allSelected=cart.every(function(i){return _cartSelected[i.id];});
+    if(allSelected){_cartSelected={};}else{cart.forEach(function(i){_cartSelected[i.id]=true;});}
+    renderCartItems(); updateCartTotal(); updateSelectAllCircle();
+}
+function updateSelectAllCircle(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var el=document.getElementById("cartSelectAllCircle"); if(!el) return;
+    var allSelected=cart.length>0&&cart.every(function(i){return _cartSelected[i.id];});
+    el.style.border=allSelected?"2px solid #222":"2px solid #bbb";
+    el.style.background=allSelected?"#222":"white";
+    el.innerHTML=allSelected?'<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>':"";
+}
+function updateCartTotal(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var total=0; cart.forEach(function(i){if(_cartSelected[i.id]) total+=i.price*i.qty;});
+    document.getElementById("cartTotal").innerText="US$ "+total.toFixed(2);
+}
+function cartQtyChange(itemId,d){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    cart=cart.map(function(i){if(i.id===itemId){i.qty=Math.max(1,i.qty+d);}return i;});
+    localStorage.setItem("cartItems",JSON.stringify(cart));
+    renderCartItems(); updateCartTotal();
+}
+function toggleCartEdit(){
+    _cartEditMode=!_cartEditMode;
+    if(!_cartEditMode) _cartSelected={};
+    updateCartEditUI(); renderCartItems(); updateCartTotal();
+}
+function updateCartEditUI(){
+    var btn=document.getElementById("cartEditBtn");
+    var delBtn=document.getElementById("cartEditDeleteBtn");
+    var settlBtn=document.getElementById("cartSettlementBtn");
+    btn.innerText=_cartEditMode?"Done":"Edit";
+    delBtn.style.display=_cartEditMode?"block":"none";
+    settlBtn.style.display=_cartEditMode?"none":"block";
+}
+function deleteSelectedCartItems(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    cart=cart.filter(function(i){return !_cartSelected[i.id];});
+    localStorage.setItem("cartItems",JSON.stringify(cart));
+    _cartSelected={}; updateCartBadge(); renderCartItems(); updateCartTotal(); updateSelectAllCircle();
+}
+
+// ===== SETTLEMENT PAGE =====
+function openSettlementPage(){
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var selected=cart.filter(function(i){return _cartSelected[i.id];});
+    if(selected.length===0){showToast("⚠️ Please select items first");return;}
+    var total=selected.reduce(function(s,i){return s+i.price*i.qty;},0);
+    document.getElementById("settlTotal").innerText="US$"+total.toFixed(2);
+    document.getElementById("settlStoreName").innerText=sName||"Store";
+    var token=localStorage.getItem("token")||"";
+    fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}})
+        .then(function(r){return r.json();})
+        .then(function(d){document.getElementById("settlBalance").innerText="US$"+(parseFloat(d.balance)||0).toFixed(2);})
+        .catch(function(){});
+    var list=document.getElementById("settlItemsList"); list.innerHTML="";
+    selected.forEach(function(item){
+        var div=document.createElement("div"); div.style.cssText="display:flex;gap:12px;margin-bottom:12px;";
+        div.innerHTML='<img src="'+item.img+'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;" onerror="this.src=\'https://via.placeholder.com/60\'">'
+            +'<div style="flex:1;"><div style="font-size:12px;color:#333;line-height:1.4;">'+item.title+'</div>'
+            +'<div style="font-size:13px;font-weight:bold;color:#e53935;margin-top:3px;">US$'+item.price.toFixed(2)+'</div>'
+            +'<div style="font-size:11px;color:#999;">x'+item.qty+'</div></div>'
+            +'<div style="font-size:13px;font-weight:bold;color:#333;white-space:nowrap;">US$'+(item.price*item.qty).toFixed(2)+'</div>';
+        list.appendChild(div);
+    });
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var defAddr=addresses.find(function(a){return a.isDefault;})||addresses[0];
+    if(defAddr){document.getElementById("settlAddrLabel").innerText=defAddr.name+" - "+defAddr.street+", "+defAddr.city;document.getElementById("settlAddrLabel").style.color="#333";}
+    else{document.getElementById("settlAddrLabel").innerText="Mailing address";document.getElementById("settlAddrLabel").style.color="#999";}
+    document.getElementById("settlementPage").style.display="block";
+}
+function closeSettlementPage(){ document.getElementById("settlementPage").style.display="none"; }
+function doSettleBuy(){
+    var user=null; try{user=JSON.parse(localStorage.getItem("user")||"null");}catch(e){}
+    if(!user||!user.email){showToast("⚠️ Please login first");return;}
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    if(addresses.length===0){showToast("⚠️ Please add a delivery address");openAddressPage("settlement");return;}
+    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var selected=cart.filter(function(i){return _cartSelected[i.id];});
+    var total=selected.reduce(function(s,i){return s+i.price*i.qty;},0);
+    var token=localStorage.getItem("token")||"";
+    fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}})
+        .then(function(r){return r.json();})
+        .then(function(d){
+            var balance=parseFloat(d.balance)||0;
+            if(balance<total){showToast("⚠️ Insufficient balance. Please recharge.");return;}
+            var promises=selected.map(function(item){
+                return fetch("/create-store-order",{
+                    method:"POST",
+                    headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+                    body:JSON.stringify({product:item,sellerEmail:item.storeEmail||sEmail,quantity:item.qty})
+                }).then(function(r){return r.json();});
+            });
+            Promise.all(promises).then(function(){
+                var remaining=cart.filter(function(i){return !_cartSelected[i.id];});
+                localStorage.setItem("cartItems",JSON.stringify(remaining));
+                _cartSelected={}; updateCartBadge(); closeSettlementPage(); closeCartPage();
+                showToast("✅ Order placed successfully!");
+            }).catch(function(){showToast("⚠️ Network error. Try again.");});
+        }).catch(function(){showToast("⚠️ Connection error.");});
+}
+
+// ===== FILL ORDER PAGE =====
+function openFillOrderPage(product,q){
+    if(!product) return;
+    _foQty=q||1; window._foProduct=product;
+    document.getElementById("foImg").src=product.img||"";
+    document.getElementById("foTitle").innerText=product.title||"";
+    document.getElementById("foPrice").innerText="US$"+(product.price||0).toFixed(2);
+    document.getElementById("foQtyLabel").innerText="x"+_foQty;
+    document.getElementById("foTotal").innerText="US$"+((product.price||0)*_foQty).toFixed(2);
+    document.getElementById("foStoreName").innerText=product.storeName||sName||"Store";
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var defAddr=addresses.find(function(a){return a.isDefault;})||addresses[0];
+    if(defAddr){document.getElementById("foAddrLabel").innerText=defAddr.name+" - "+defAddr.street+", "+defAddr.city;document.getElementById("foAddrLabel").style.color="#333";}
+    else{document.getElementById("foAddrLabel").innerText="Please select address";document.getElementById("foAddrLabel").style.color="#999";}
+    document.getElementById("fillOrderPage").style.display="block";
+}
+function closeFillOrderPage(){ document.getElementById("fillOrderPage").style.display="none"; }
+function submitFillOrder(){
+    var user=null; try{user=JSON.parse(localStorage.getItem("user")||"null");}catch(e){}
+    if(!user||!user.email){showToast("⚠️ Please login first");return;}
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    if(addresses.length===0){showToast("⚠️ Please add a delivery address");openAddressPage("fillorder");return;}
+    var product=window._foProduct; if(!product) return;
+    var total=(product.price||0)*_foQty;
+    var token=localStorage.getItem("token")||"";
+    fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}})
+        .then(function(r){return r.json();})
+        .then(function(d){
+            var balance=parseFloat(d.balance)||0;
+            if(balance<total){showToast("⚠️ Insufficient balance. Please recharge.");return;}
+            fetch("/create-store-order",{
+                method:"POST",
+                headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+                body:JSON.stringify({product:product,sellerEmail:product.storeEmail||sEmail,quantity:_foQty})
+            }).then(function(r){return r.json();}).then(function(d){
+                if(d.success){showToast("✅ Order placed successfully!");closeFillOrderPage();}
+                else{showToast("⚠️ "+(d.message||"Failed"));}
+            }).catch(function(){showToast("⚠️ Network error.");});
+        }).catch(function(){showToast("⚠️ Connection error.");});
+}
+
+// ===== ADDRESS PAGE =====
+function openAddressPage(calledFrom){
+    _addrCalledFrom=calledFrom||"";
+    renderAddressList();
+    document.getElementById("addressPage").style.display="block";
+}
+function closeAddressPage(){ document.getElementById("addressPage").style.display="none"; }
+function renderAddressList(){
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var list=document.getElementById("addressList"); list.innerHTML="";
+    addresses.forEach(function(addr,idx){
+        var div=document.createElement("div");
+        div.style.cssText="border:2px solid "+(addr.isDefault?"#1976d2":"#eee")+";border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;";
+        div.onclick=(function(i){return function(){selectAddress(i);};})(idx);
+        div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:15px;font-weight:bold;color:#222;">'+addr.name+'</span>'+(addr.isDefault?'<span style="background:#1976d2;color:white;font-size:11px;padding:2px 10px;border-radius:10px;font-weight:bold;">Default</span>':'')+'</div>'
+            +'<div style="font-size:13px;color:#555;">'+addr.phone+'</div>'
+            +'<div style="font-size:13px;color:#555;margin-top:3px;">'+addr.street+', '+addr.city+', '+addr.country+'</div>'
+            +'<div style="border-top:1px solid #eee;margin-top:12px;padding-top:10px;display:flex;gap:10px;">'
+            +'<button onclick="event.stopPropagation();editAddress('+idx+')" style="flex:1;padding:10px;border:1px solid #e3f0ff;background:#e3f0ff;color:#1976d2;border-radius:8px;font-size:14px;cursor:pointer;">✏️ Edit</button>'
+            +'<button onclick="event.stopPropagation();deleteAddress('+idx+')" style="flex:1;padding:10px;border:1px solid #ffebee;background:#ffebee;color:#e53935;border-radius:8px;font-size:14px;cursor:pointer;">🗑️ Delete</button></div>';
+        list.appendChild(div);
+    });
+}
+function selectAddress(idx){
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    addresses.forEach(function(a,i){a.isDefault=(i===idx);});
+    localStorage.setItem("userAddresses",JSON.stringify(addresses));
+    var addr=addresses[idx];
+    var label=addr.name+" - "+addr.street+", "+addr.city;
+    if(_addrCalledFrom==="fillorder"&&document.getElementById("foAddrLabel")){document.getElementById("foAddrLabel").innerText=label;document.getElementById("foAddrLabel").style.color="#333";}
+    else if(_addrCalledFrom==="settlement"&&document.getElementById("settlAddrLabel")){document.getElementById("settlAddrLabel").innerText=label;document.getElementById("settlAddrLabel").style.color="#333";}
+    closeAddressPage();
+}
+function openAddAddressForm(){
+    _editingAddrIdx=-1;
+    document.getElementById("addAddrTitle").innerText="Add Address";
+    document.getElementById("addrName").value=""; document.getElementById("addrPhone").value="";
+    document.getElementById("addrStreet").value=""; document.getElementById("addrCity").value="";
+    document.getElementById("addrCountry").value="";
+    document.getElementById("addAddressForm").style.display="block";
+}
+function closeAddAddressForm(){ document.getElementById("addAddressForm").style.display="none"; }
+function editAddress(idx){
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var addr=addresses[idx]; if(!addr) return;
+    _editingAddrIdx=idx;
+    document.getElementById("addAddrTitle").innerText="Edit Address";
+    document.getElementById("addrName").value=addr.name||""; document.getElementById("addrPhone").value=addr.phone||"";
+    document.getElementById("addrStreet").value=addr.street||""; document.getElementById("addrCity").value=addr.city||"";
+    document.getElementById("addrCountry").value=addr.country||"";
+    document.getElementById("addAddressForm").style.display="block";
+}
+function deleteAddress(idx){
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    addresses.splice(idx,1);
+    if(addresses.length>0&&!addresses.find(function(a){return a.isDefault;})){addresses[0].isDefault=true;}
+    localStorage.setItem("userAddresses",JSON.stringify(addresses));
+    renderAddressList();
+}
+function saveAddress(){
+    var name=document.getElementById("addrName").value.trim();
+    var phone=document.getElementById("addrPhone").value.trim();
+    var street=document.getElementById("addrStreet").value.trim();
+    var city=document.getElementById("addrCity").value.trim();
+    var country=document.getElementById("addrCountry").value.trim();
+    if(!name||!phone||!street||!city||!country){showToast("⚠️ Please fill all fields");return;}
+    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var addrObj={name:name,phone:phone,street:street,city:city,country:country,isDefault:addresses.length===0};
+    if(_editingAddrIdx>=0){addrObj.isDefault=addresses[_editingAddrIdx].isDefault;addresses[_editingAddrIdx]=addrObj;}
+    else{addresses.push(addrObj);}
+    localStorage.setItem("userAddresses",JSON.stringify(addresses));
+    closeAddAddressForm(); renderAddressList();
+    showToast("✅ Address saved");
+    if(_addrCalledFrom==="addtocart"){
+        closeAddressPage();
+        if(window._pendingCartItem){
+            var cartItems=JSON.parse(localStorage.getItem("cartItems")||"[]");
+            cartItems.push(window._pendingCartItem);
+            localStorage.setItem("cartItems",JSON.stringify(cartItems));
+            updateCartBadge(); window._pendingCartItem=null;
+            showToast("🛒 Added to cart");
         }
-    }catch(e){ showToast("⚠️ Network error"); }
-    btn.disabled = false;
+    } else if(_addrCalledFrom==="fillorder"){
+        closeAddressPage();
+        var defAddr=addresses.find(function(a){return a.isDefault;})||addresses[0];
+        if(defAddr&&document.getElementById("foAddrLabel")){document.getElementById("foAddrLabel").innerText=defAddr.name+" - "+defAddr.street+", "+defAddr.city;document.getElementById("foAddrLabel").style.color="#333";}
+    } else if(_addrCalledFrom==="settlement"){
+        closeAddressPage();
+        var defAddr2=addresses.find(function(a){return a.isDefault;})||addresses[0];
+        if(defAddr2&&document.getElementById("settlAddrLabel")){document.getElementById("settlAddrLabel").innerText=defAddr2.name+" - "+defAddr2.street+", "+defAddr2.city;document.getElementById("settlAddrLabel").style.color="#333";}
+    }
 }
 
 function showToast(msg){
@@ -11153,6 +11539,7 @@ init();
 </script>
 </body>
 </html>`);
+
 });
 
 // ================= CAT PRODUCT DETAIL =================
