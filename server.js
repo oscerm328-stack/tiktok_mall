@@ -11376,11 +11376,6 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
     </div>
     <div id="catCartItemsList" style="padding:10px 15px;"></div>
   </div>
-  <div style="padding:15px;">
-    <h3 style="margin:0 0 12px;font-size:16px;text-align:center;color:#333;">Recommended</h3>
-    <div id="catCartRecommended" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
-    <div style="text-align:center;margin-top:15px;"><button onclick="loadMoreCatRecommended()" style="border:1px solid #ccc;background:white;padding:10px 40px;border-radius:20px;font-size:14px;cursor:pointer;">See more</button></div>
-  </div>
 </div>
 
 <!-- ===== SETTLEMENT PAGE ===== -->
