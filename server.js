@@ -4136,7 +4136,7 @@ res.send(pageHTML);
 });
 // ================= PRODUCT DETAIL PAGE =================
 app.get("/product-detail", (req, res) => {
-res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:relative;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_store_logo.svg"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;var catProduct = JSON.parse(localStorage.getItem("catProduct")||"null");if(catProduct){var repoMap={17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};var repo=repoMap[catProduct.category_id]||"products_27";var base="https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(catProduct.folder||"")+"/";var allImgs=(catProduct.images&&catProduct.images.length>0)?catProduct.images.map(function(i){return base+i;}):[base+"1.jpg"];document.getElementById("mainImg").src=allImgs[0];var thumbs=document.getElementById("thumbs");allImgs.forEach(function(src,idx){var img=document.createElement("img");img.src=src;if(idx===0)img.classList.add("active");img.onclick=function(){document.getElementById("mainImg").src=this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);});document.getElementById("productTitle").innerText=catProduct.title||"";document.getElementById("productPrice").innerText="$"+parseFloat(catProduct.price||0).toFixed(2);var desc=document.getElementById("descList");var points=catProduct.description?catProduct.description.split(".").filter(function(s){return s.trim();}):[catProduct.title];points.forEach(function(point){if(point&&point.trim()){var li=document.createElement("li");li.innerText=point.trim();desc.appendChild(li);}});}function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");var pr={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdProduct=pr;window._pdQty=1;openPdAddressPage("addtocart");return;}var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");var cp2=JSON.parse(localStorage.getItem("catProduct")||"null");if(cp2){cart.push({id:Date.now(),title:cp2.title||"",price:parseFloat(cp2.price||0),img:cp2.img||"",qty:1,cat:""});}localStorage.setItem("cartItems",JSON.stringify(cart));showMsg("Added to cart ✅","success");}function buyNow(){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");window._pdProduct={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdQty=1;openPdFillOrderPage();}function openPdAddressPage(from){window._pdAddrFrom=from;alert("Please add an address first to continue.");window.location.href="/dashboard";}function openPdFillOrderPage(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){window._pdAddrFrom="fillorder";alert("Please add an address first.");window.location.href="/dashboard";return;}var pr=window._pdProduct||{};var token=localStorage.getItem("token")||"";;fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}}).then(function(r){return r.json();}).then(function(d){var bal=parseFloat(d.balance)||0;var total=(pr.price||0)*(window._pdQty||1);if(bal<total){showMsg("Insufficient balance. Please recharge your wallet.","error");return;}showMsg("Order placed successfully! ✅","success");}).catch(function(){showMsg("Connection error.","error");});}<\/script></body></html>');
+res.send('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>*{box-sizing:border-box;}body{margin:0;font-family:Arial;background:#f5f5f5;padding-bottom:70px;min-height:100vh;}.header{background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:relative;}.header .icons span{margin-left:15px;font-size:18px;cursor:pointer;}.main-img{background:white;text-align:center;padding:15px;position:relative;}.main-img img{width:100%;max-height:350px;object-fit:contain;}.main-img .heart{position:absolute;top:15px;left:15px;font-size:22px;cursor:pointer;}.main-img .share{position:absolute;top:15px;right:15px;font-size:22px;cursor:pointer;}.thumbs{display:flex;gap:8px;padding:10px 15px;background:white;overflow-x:auto;}.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #eee;cursor:pointer;flex-shrink:0;}.thumbs img.active{border-color:#1976d2;}.info{background:white;margin-top:8px;padding:15px;}.info h2{font-size:16px;margin:0 0 10px;color:#222;}.rating-row{display:flex;justify-content:space-between;align-items:center;}.rating-row .stars{color:#1976d2;font-size:14px;}.rating-row .price{color:#1976d2;font-size:24px;font-weight:bold;}.specs{background:white;margin-top:8px;}.spec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:14px;color:#555;}.store{background:white;margin-top:8px;padding:15px;display:flex;align-items:center;gap:10px;}.store img{width:50px;height:50px;border-radius:10px;}.store-info{flex:1;}.store-name{font-weight:bold;font-size:15px;}.vip{background:linear-gradient(90deg,#f5a623,#e8791d);color:white;font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px;}.store-tags{display:flex;gap:8px;margin-top:5px;}.store-tags span{background:#eee;font-size:11px;padding:3px 10px;border-radius:10px;}.review{background:white;margin-top:8px;padding:15px;}.review-title{display:flex;justify-content:space-between;font-size:14px;color:#333;}.review-stars{color:#f5a623;font-size:18px;margin-top:5px;}.desc{background:white;margin-top:8px;padding:15px;font-size:13px;color:#444;line-height:1.8;}.desc ul{padding-left:18px;margin:0;}.desc li{margin-bottom:8px;}.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;align-items:center;padding:10px 15px;border-top:1px solid #eee;gap:10px;}.bottom-bar .icon-btn{font-size:22px;cursor:pointer;}.bottom-bar .cart-btn{flex:1;padding:12px;border:1px solid #1976d2;border-radius:25px;background:white;color:#1976d2;font-size:14px;cursor:pointer;text-align:center;}.bottom-bar .buy-btn{flex:1;padding:12px;border:none;border-radius:25px;background:#1976d2;color:white;font-size:14px;cursor:pointer;text-align:center;}</style></head><body><div class="header"><div><span onclick="history.back()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span><span onclick="window.location.href=\'\/dashboard\'" style="cursor:pointer;display:inline-flex;align-items:center;margin-left:8px;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span></div><div class="icons"><span onclick="window.location.href=\'\/dashboard?search=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><span onclick="window.location.href=\'\/dashboard?messages=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span><span onclick="window.location.href=\'\/dashboard?account=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span onclick="window.location.href=\'\/dashboard?lang=1\'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span></div></div><div class="main-img"><span class="heart" id="heartBtn" onclick="toggleHeart()">&#129293;</span><img id="mainImg" src=""><span class="share">&#128279;</span></div><div class="thumbs" id="thumbs"></div><div class="info"><h2 id="productTitle"></h2><div class="rating-row"><div class="stars">&#11088; <span style="color:#1976d2;font-weight:bold;">5.0</span> <span style="color:#999;font-size:12px;">(0 Sales)</span></div><div class="price" id="productPrice"></div></div></div><div class="specs"><div class="spec-row"><span>Select</span><span>Brand, specification &#8250;</span></div><div class="spec-row"><span>Shipping fees</span><span>Free shipping</span></div><div class="spec-row"><span>Guarantee</span><span>Free return</span></div></div><div class="store"><img src="https://cdn.jsdelivr.net/gh/oscerm328-stack/tiktok_mall@main/icon_store_logo.svg"><div class="store-info"><div class="store-name">S&amp;R Store</div><div class="vip">&#10004; VIP 0</div><div class="store-tags"><span>Products 20</span><span>Followers 0</span></div></div><span>&#8250;</span></div><div class="review"><div class="review-title"><span>Consumer review</span><span style="color:#1976d2;">0 Unit Global Rating &#8250;</span></div><div class="review-stars">&#11088;&#11088;&#11088;&#11088;&#11088; <span style="font-size:13px;color:#555;">5 Stars</span></div></div><div class="desc"><ul id="descList"></ul></div><div class="bottom-bar"><span class="icon-btn" onclick="window.location.href=\'/live-chat\'">&#127911;</span><span class="icon-btn" onclick="window.location.href=\'/wallet\'">&#128722;</span><div class="cart-btn" onclick="addToCart()">Add to Cart</div><div class="buy-btn" onclick="buyNow()">Buy now</div></div><script>var productId = localStorage.getItem("productId");var isFav = false;var catProduct = JSON.parse(localStorage.getItem("catProduct")||"null");if(catProduct){var repoMap={17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};var repo=repoMap[catProduct.category_id]||"products_27";var base="https://raw.githubusercontent.com/oscerm328-stack/"+repo+"/main/"+(catProduct.folder||"")+"/";var allImgs=(catProduct.images&&catProduct.images.length>0)?catProduct.images.map(function(i){return base+i;}):[base+"1.jpg"];document.getElementById("mainImg").src=allImgs[0];var thumbs=document.getElementById("thumbs");allImgs.forEach(function(src,idx){var img=document.createElement("img");img.src=src;if(idx===0)img.classList.add("active");img.onclick=function(){document.getElementById("mainImg").src=this.src;document.querySelectorAll(".thumbs img").forEach(function(t){t.classList.remove("active");});this.classList.add("active");};thumbs.appendChild(img);});document.getElementById("productTitle").innerText=catProduct.title||"";document.getElementById("productPrice").innerText="$"+parseFloat(catProduct.price||0).toFixed(2);var desc=document.getElementById("descList");var points=catProduct.description?catProduct.description.split(".").filter(function(s){return s.trim();}):[catProduct.title];points.forEach(function(point){if(point&&point.trim()){var li=document.createElement("li");li.innerText=point.trim();desc.appendChild(li);}});}function toggleHeart(){isFav=!isFav;document.getElementById("heartBtn").innerHTML=isFav?"&#10084;&#65039;":"&#129293;";}function addToCart(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");var pr={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdProduct=pr;window._pdQty=1;openPdAddressPage("addtocart");return;}var cart=JSON.parse(localStorage.getItem(getCartKey())||"[]");var cp2=JSON.parse(localStorage.getItem("catProduct")||"null");if(cp2){cart.push({id:Date.now(),title:cp2.title||"",price:parseFloat(cp2.price||0),img:cp2.img||"",qty:1,cat:""});}localStorage.setItem(getCartKey(),JSON.stringify(cart));showMsg("Added to cart ✅","success");}function buyNow(){var cp=JSON.parse(localStorage.getItem("catProduct")||"null");window._pdProduct={title:cp?cp.title||"",price:cp?parseFloat(cp.price||0):0,img:cp?cp.img||"":""};window._pdQty=1;openPdFillOrderPage();}function openPdAddressPage(from){window._pdAddrFrom=from;alert("Please add an address first to continue.");window.location.href="/dashboard";}function openPdFillOrderPage(){var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");if(addresses.length===0){window._pdAddrFrom="fillorder";alert("Please add an address first.");window.location.href="/dashboard";return;}var pr=window._pdProduct||{};var token=localStorage.getItem("token")||"";;fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}}).then(function(r){return r.json();}).then(function(d){var bal=parseFloat(d.balance)||0;var total=(pr.price||0)*(window._pdQty||1);if(bal<total){showMsg("Insufficient balance. Please recharge your wallet.","error");return;}showMsg("Order placed successfully! ✅","success");}).catch(function(){showMsg("Connection error.","error");});}<\/script></body></html>');
 });
 
 // ================= PRODUCT PAGE =================
@@ -4315,13 +4315,30 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
 <div id="cartPageOverlay" style="display:none;position:fixed;inset:0;background:white;z-index:1000;overflow-y:auto;flex-direction:column;">
   <!-- Cart Header -->
   <div style="background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
-    <span onclick="closeCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </span>
-    <span style="font-size:16px;font-weight:bold;">Cart</span>
-    <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </span>
+    <!-- Left: Back + Home -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span onclick="closeCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </span>
+      <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+    </div>
+    <!-- Right: Search + Message + Profile + Language -->
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </span>
+      <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </span>
+      <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+    </div>
   </div>
   <!-- Edit / Done button -->
   <div style="padding:12px 15px;">
@@ -4349,14 +4366,7 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:80px;min-height:100vh;}
     </div>
     <div id="cartItemsList" style="padding:10px 15px;"></div>
   </div>
-  <!-- Recommended -->
-  <div style="padding:15px;">
-    <h3 style="margin:0 0 12px;font-size:16px;text-align:center;color:#333;">Recommended</h3>
-    <div id="cartRecommended" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
-    <div style="text-align:center;margin-top:15px;">
-      <button onclick="loadMoreRecommended()" style="border:1px solid #ccc;background:white;padding:10px 40px;border-radius:20px;font-size:14px;cursor:pointer;">See more</button>
-    </div>
-  </div>
+
 </div>
 
 <!-- ===== SETTLEMENT PAGE ===== -->
@@ -4495,11 +4505,20 @@ var _cartSelected = {};
 var _addrCalledFrom = ""; // "settlement" or "fillorder"
 var _editingAddrIdx = -1;
 var _foQty = 1;
-var _cartRecommPage = 0;
+
+
+// ===== CART KEY PER USER =====
+function getCartKey(){
+  try {
+    var u = JSON.parse(localStorage.getItem("user") || "null");
+    if(u && u.email) return "cartItems_" + u.email;
+  } catch(e){}
+  return "cartItems_guest";
+}
 
 // ===== CART BADGE =====
 function updateCartBadge(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var badge = document.getElementById("cartBadgeProd");
   if(!badge) return;
   if(cart.length > 0){
@@ -4575,7 +4594,7 @@ function bsAddToCart(){
 }
 function _doAddToCart(){
   if(!_bsProduct) return;
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var catProd = null;
   try { catProd = JSON.parse(localStorage.getItem("catProduct") || "null"); } catch(e){}
   var item = {
@@ -4587,7 +4606,7 @@ function _doAddToCart(){
     cat: catProd ? (catProd.cat || "") : ""
   };
   cart.push(item);
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   updateCartBadge();
   showMsg("Added to cart ✅", "success");
 }
@@ -4601,7 +4620,6 @@ function bsBuyNow(){
 function openCartPage(){
   document.getElementById("cartPageOverlay").style.display = "flex";
   renderCartItems();
-  loadCartRecommended();
   _cartEditMode = false;
   _cartSelected = {};
   updateCartEditUI();
@@ -4611,7 +4629,7 @@ function closeCartPage(){
   document.getElementById("cartPageOverlay").style.display = "none";
 }
 function renderCartItems(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var list = document.getElementById("cartItemsList");
   if(!list) return;
   if(cart.length === 0){
@@ -4653,7 +4671,7 @@ function toggleCartItem(itemId){
   updateSelectAllCircle();
 }
 function toggleSelectAll(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var allSelected = cart.every(function(i){ return _cartSelected[i.id]; });
   if(allSelected){
     _cartSelected = {};
@@ -4665,7 +4683,7 @@ function toggleSelectAll(){
   updateSelectAllCircle();
 }
 function updateSelectAllCircle(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var el = document.getElementById("cartSelectAllCircle");
   if(!el) return;
   var allSelected = cart.length > 0 && cart.every(function(i){ return _cartSelected[i.id]; });
@@ -4674,7 +4692,7 @@ function updateSelectAllCircle(){
   el.innerHTML = allSelected ? '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : "";
 }
 function updateCartTotal(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var total = 0;
   cart.forEach(function(item){
     if(_cartSelected[item.id]) total += item.price * item.qty;
@@ -4682,12 +4700,12 @@ function updateCartTotal(){
   document.getElementById("cartTotal").innerText = "US\$ " + total.toFixed(2);
 }
 function cartQtyChange(itemId, d){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   cart = cart.map(function(i){
     if(i.id === itemId){ i.qty = Math.max(1, i.qty + d); }
     return i;
   });
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   renderCartItems();
   updateCartTotal();
 }
@@ -4707,9 +4725,9 @@ function updateCartEditUI(){
   settlBtn.style.display = _cartEditMode ? "none" : "block";
 }
 function deleteSelectedCartItems(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   cart = cart.filter(function(i){ return !_cartSelected[i.id]; });
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   _cartSelected = {};
   updateCartBadge();
   renderCartItems();
@@ -4717,59 +4735,9 @@ function deleteSelectedCartItems(){
   updateSelectAllCircle();
 }
 
-// ===== RECOMMENDED =====
-var _recProds = [];
-function loadCartRecommended(){
-  var container = document.getElementById("cartRecommended");
-  if(!container) return;
-  // استخدام منتجات من catProducts المحلية
-  try {
-    var sample = [
-      {t:"Kepoičí Wall Mount Display Pegboard",p:18.90,img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80"},
-      {t:"Onday Women's Warm Winter Down Cut Hooded Puffer Jacket",p:109.00,img:"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&q=80"},
-      {t:"Braun IPL Long-lasting Laser Hair Removal Device",p:269.94,img:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80"},
-      {t:"SweatyRocks Women's Mock Neck Long Sleeve Mesh Insert Elegant Blouse",p:24.29,img:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&q=80"},
-      {t:"PRETTYGARDEN Women's Summer Floral Maxi Sun Dress",p:36.00,img:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=300&q=80"},
-      {t:"Apple 2023 MacBook Air Laptop with M3 chip",p:810.00,img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80"},
-      {t:"Smiley Face Slippers for Women and Men",p:20.90,img:"https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&q=80"},
-      {t:"Fashion One Shoulder Mini Club Women's Dress",p:498.00,img:"https://images.unsplash.com/photo-1551803091-e20673f15770?w=300&q=80"},
-      {t:"AMOTAOS IPL Hair Removal for Women with Cooling",p:98.99,img:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&q=80"},
-      {t:"Home Source Corner Bar Cart Unit",p:287.90,img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=80"}
-    ];
-    _recProds = sample;
-    _cartRecommPage = 0;
-    container.innerHTML = "";
-    renderRecommPage();
-  } catch(e){}
-}
-function renderRecommPage(){
-  var container = document.getElementById("cartRecommended");
-  var start = _cartRecommPage * 6;
-  var chunk = _recProds.slice(start, start + 6);
-  chunk.forEach(function(p){
-    var div = document.createElement("div");
-    div.style.cssText = "background:white;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,0.08);cursor:pointer;";
-    div.innerHTML = \`
-      <div style="position:relative;">
-        <img src="\${p.img}" style="width:100%;height:140px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/300x140?text=No+Image'">
-        <div onclick="event.stopPropagation();" style="position:absolute;top:6px;right:6px;width:26px;height:26px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.15);">🤍</div>
-      </div>
-      <div style="padding:8px;">
-        <div style="font-size:12px;color:#333;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.4;">\${p.t}</div>
-        <div style="color:#1976d2;font-size:13px;font-weight:bold;margin-top:5px;">US\$\${p.p.toFixed(2)}</div>
-      </div>
-    \`;
-    container.appendChild(div);
-  });
-  _cartRecommPage++;
-}
-function loadMoreRecommended(){
-  renderRecommPage();
-}
-
 // ===== SETTLEMENT PAGE =====
 function openSettlementPage(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var selected = cart.filter(function(i){ return _cartSelected[i.id]; });
   if(selected.length === 0){ showMsg("Please select items first", "error"); return; }
   // ملء بيانات Settlement
@@ -4822,7 +4790,7 @@ function doSettleBuy(){
   if(!user || !user.email){ showMsg("Please login first", "error"); return; }
   var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
   if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openAddressPage("settlement"); return; }
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var selected = cart.filter(function(i){ return _cartSelected[i.id]; });
   var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
   var token = localStorage.getItem("token") || "";
@@ -4834,7 +4802,7 @@ function doSettleBuy(){
       showMsg("Order placed successfully! ✅", "success");
       // إزالة العناصر المحددة من السلة
       var remaining = cart.filter(function(i){ return !_cartSelected[i.id]; });
-      localStorage.setItem("cartItems", JSON.stringify(remaining));
+      localStorage.setItem(getCartKey(), JSON.stringify(remaining));
       _cartSelected = {};
       updateCartBadge();
       closeSettlementPage();
@@ -11105,7 +11073,7 @@ function updateTotalPrice(){
 
 async function doCart(){
     var addresses = JSON.parse(localStorage.getItem("userAddresses")||"[]");
-    var cartItems = JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var cartItems = JSON.parse(localStorage.getItem(getCartKey())||"[]");
     var imgSrc = p ? (p.img || p.imgs && p.imgs[0] || "") : "";
     var item = { id: Date.now(), title: p ? (p.t || p.title || "") : "", price: p ? (parseFloat(p.p || p.price) || 0) : 0, img: imgSrc, qty: qty, cat: p ? (p.cat || "") : "" };
     if(addresses.length === 0){
@@ -11117,7 +11085,7 @@ async function doCart(){
         return;
     }
     cartItems.push(item);
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    localStorage.setItem(getCartKey(), JSON.stringify(cartItems));
     closeSheet();
     showToast("🛒 Added to cart (×"+qty+")");
 }
@@ -11494,7 +11462,7 @@ var _catFoQty = 1;
 var _catRecommPage = 0;
 
 function updateCatCartBadge(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var badge = document.getElementById("cartBadgeCat");
   if(!badge) return;
   if(cart.length > 0){ badge.style.display = "flex"; badge.innerText = cart.length > 99 ? "99+" : cart.length; }
@@ -11537,10 +11505,10 @@ function catBsAddToCart(){
   _doCatAddToCart();
 }
 function _doCatAddToCart(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var imgSrc = (p.imgs && p.imgs.length > 0) ? p.imgs[0] : p.img || "";
   cart.push({ id: Date.now(), title: p.t || p.title || "", price: parseFloat(p.p || p.price || 0), img: imgSrc, qty: _catBsQty, cat: p.cat || "" });
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   updateCatCartBadge();
   showMsg("Added to cart ✅", "success");
 }
@@ -11560,7 +11528,7 @@ function openCartPageCat(){
 }
 function closeCatCartPage(){ document.getElementById("catCartPageOverlay").style.display = "none"; }
 function renderCatCartItems(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var list = document.getElementById("catCartItemsList");
   if(!list) return;
   if(cart.length === 0){ list.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px 0;">Your cart is empty</p>'; return; }
@@ -11592,13 +11560,13 @@ function toggleCatCartItem(itemId){
   renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
 }
 function toggleCatSelectAll(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var allSelected = cart.every(function(i){ return _catCartSelected[i.id]; });
   if(allSelected){ _catCartSelected = {}; } else { cart.forEach(function(i){ _catCartSelected[i.id] = true; }); }
   renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
 }
 function updateCatSelectAllCircle(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var el = document.getElementById("catCartSelectAllCircle");
   if(!el) return;
   var all = cart.length > 0 && cart.every(function(i){ return _catCartSelected[i.id]; });
@@ -11607,15 +11575,15 @@ function updateCatSelectAllCircle(){
   el.innerHTML = all ? '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : "";
 }
 function updateCatCartTotal(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var total = 0;
   cart.forEach(function(item){ if(_catCartSelected[item.id]) total += item.price * item.qty; });
   document.getElementById("catCartTotal").innerText = "US\$ " + total.toFixed(2);
 }
 function catCartQtyChange(itemId, d){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   cart = cart.map(function(i){ if(i.id === itemId){ i.qty = Math.max(1, i.qty + d); } return i; });
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   renderCatCartItems(); updateCatCartTotal();
 }
 function toggleCatCartEdit(){
@@ -11629,9 +11597,9 @@ function updateCatCartEditUI(){
   document.getElementById("catCartSettlementBtn").style.display = _catCartEditMode ? "none" : "block";
 }
 function deleteCatSelectedItems(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   cart = cart.filter(function(i){ return !_catCartSelected[i.id]; });
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+  localStorage.setItem(getCartKey(), JSON.stringify(cart));
   _catCartSelected = {}; updateCatCartBadge(); renderCatCartItems(); updateCatCartTotal(); updateCatSelectAllCircle();
 }
 
@@ -11670,7 +11638,7 @@ function loadMoreCatRecommended(){ renderCatRecommPage(); }
 
 // Settlement
 function openCatSettlementPage(){
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var selected = cart.filter(function(i){ return _catCartSelected[i.id]; });
   if(selected.length === 0){ showMsg("Please select items first", "error"); return; }
   var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
@@ -11697,7 +11665,7 @@ function doCatSettleBuy(){
   if(!user || !user.email){ showMsg("Please login first", "error"); return; }
   var addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
   if(addresses.length === 0){ showMsg("Please add a delivery address", "error"); openCatAddressPage("settlement"); return; }
-  var cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
+  var cart = JSON.parse(localStorage.getItem(getCartKey()) || "[]");
   var selected = cart.filter(function(i){ return _catCartSelected[i.id]; });
   var total = selected.reduce(function(s,i){ return s + i.price * i.qty; }, 0);
   var token = localStorage.getItem("token") || "";
@@ -11706,7 +11674,7 @@ function doCatSettleBuy(){
     if(balance < total){ showMsg("Insufficient balance. Please recharge your wallet.", "error"); return; }
     showMsg("Order placed successfully! ✅", "success");
     var remaining = cart.filter(function(i){ return !_catCartSelected[i.id]; });
-    localStorage.setItem("cartItems", JSON.stringify(remaining));
+    localStorage.setItem(getCartKey(), JSON.stringify(remaining));
     _catCartSelected = {}; updateCatCartBadge(); closeCatSettlementPage(); closeCatCartPage();
   }).catch(function(){ showMsg("Connection error. Try again.", "error"); });
 }
