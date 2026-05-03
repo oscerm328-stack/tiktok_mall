@@ -10948,9 +10948,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   <div class="bar-icon" onclick="window.location.href='/live-chat'">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
   </div>
-  <div class="bar-icon" onclick="openSPCartPage()" style="position:relative;">
+  <div class="bar-icon" onclick="openSheet('cart')">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    <span id="spCartBadge" style="display:none;position:absolute;top:-6px;right:-6px;background:#ee1d52;color:white;font-size:10px;font-weight:bold;min-width:16px;height:16px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px;line-height:1;border:1.5px solid white;"></span>
   </div>
   <button class="cart-btn" onclick="openSheet('cart')">Add to Cart</button>
   <button class="buy-btn" onclick="openSheet('buy')">Buy Now</button>
@@ -10971,7 +10970,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   <div class="qty-row">
     <span class="qty-label">Quantity</span>
     <div style="display:flex;align-items:center;gap:12px;">
-      <span id="sheetTotalPrice" style="color:#e65100;font-size:15px;font-weight:700;"></span>
+      <span class="sheet-total-price" id="sheetTotalPrice" style="color:#e65100;font-size:15px;font-weight:700;"></span>
       <div class="qty-controls">
         <button class="qty-btn" onclick="changeQty(-1)">−</button>
         <div class="qty-num" id="qtyNum">1</div>
@@ -10985,113 +10984,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;padding-bottom:9
   </div>
 </div>
 
-<!-- ===== CART PAGE ===== -->
-<div id="spCartPage" style="display:none;position:fixed;inset:0;background:white;z-index:1000;overflow-y:auto;flex-direction:column;">
-  <div style="background:#1976d2;color:white;padding:12px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <span onclick="closeSPCartPage()" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-      <span onclick="window.location.href='/dashboard'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-    </div>
-    <div style="display:flex;align-items:center;gap:15px;">
-      <span onclick="window.location.href='/dashboard?search=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-      <span onclick="window.location.href='/dashboard?messages=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-      <span onclick="window.location.href='/dashboard?account=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-      <span onclick="window.location.href='/dashboard?lang=1'" style="cursor:pointer;display:inline-flex;align-items:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-    </div>
-  </div>
-  <div style="padding:12px 15px;">
-    <button id="spCartEditBtn" onclick="toggleSPCartEdit()" style="width:100%;padding:13px;border:1.5px solid #2e7d32;border-radius:8px;background:white;font-size:16px;cursor:pointer;font-family:Arial;">Edit</button>
-  </div>
-  <div style="padding:0 15px 10px;display:flex;justify-content:space-between;align-items:center;">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div id="spSelectAllCircle" onclick="toggleSPSelectAll()" style="width:22px;height:22px;border-radius:50%;border:2px solid #bbb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
-      <span style="font-size:14px;color:#333;">Total: <b id="spCartTotal" style="color:#222;">US$ 0.00</b></span>
-    </div>
-    <div id="spCartDeleteBtn" style="display:none;">
-      <button onclick="deleteSPSelected()" style="background:#222;color:white;border:none;padding:12px 22px;border-radius:25px;font-size:15px;cursor:pointer;font-weight:bold;">Delete</button>
-    </div>
-    <div id="spCartSettleBtn">
-      <button onclick="openSPSettlement()" style="background:#1976d2;color:white;border:none;padding:12px 22px;border-radius:10px;font-size:15px;cursor:pointer;font-weight:bold;">Settlement</button>
-    </div>
-  </div>
-  <div style="margin:0 15px 10px;border:1px solid #eee;border-radius:10px;overflow:hidden;">
-    <div style="padding:12px 15px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-      <span id="spCartStoreName" style="font-size:14px;font-weight:bold;color:#222;">Store</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" style="margin-left:auto;"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div id="spCartItemsList" style="padding:10px 15px;"></div>
-  </div>
-</div>
-
-<!-- ===== SETTLEMENT PAGE ===== -->
-<div id="spSettlePage" style="display:none;position:fixed;inset:0;background:white;z-index:1100;overflow-y:auto;">
-  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
-    <span onclick="closeSPSettlement()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-    <span style="font-size:16px;font-weight:bold;">Settlement</span>
-  </div>
-  <div style="padding:15px;">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-      <span id="spSettleStoreName" style="font-size:14px;font-weight:bold;">Store</span>
-    </div>
-    <div id="spSettleItemsList" style="border-top:1px solid #f0f0f0;padding-top:12px;"></div>
-  </div>
-  <div style="padding:0 15px 15px;">
-    <div style="font-size:15px;font-weight:bold;margin-bottom:10px;">Shipping address</div>
-    <div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #f0f0f0;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span id="spSettleAddr" style="font-size:14px;color:#999;">Mailing address</span>
-    </div>
-  </div>
-  <div style="padding:0 15px 100px;">
-    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;"><span style="color:#555;">Balance</span><span id="spSettleBalance">US$0.00</span></div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;"><span style="color:#555;">Delivery</span><span>US$0</span></div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:14px;font-weight:bold;"><span>Total payment</span><span id="spSettleTotal">US$0.00</span></div>
-  </div>
-  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;">
-    <button onclick="doSPSettleBuy()" style="width:100%;padding:15px;background:#f5a623;border:none;border-radius:10px;font-size:16px;font-weight:bold;color:#333;cursor:pointer;">Buy now</button>
-    <p style="font-size:11px;color:#aaa;text-align:center;margin:8px 0 0;line-height:1.5;">By placing an order, you agree to our Terms and Conditions. Privacy You also agree that the app stores some of your data, which can be used to provide you with a better future shopping experience.</p>
-  </div>
-</div>
-
-<!-- ===== FILL ORDER PAGE ===== -->
-<div id="spFillOrderPage" style="display:none;position:fixed;inset:0;background:white;z-index:1200;overflow-y:auto;">
-  <div style="padding:14px 15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
-    <span onclick="closeSPFillOrder()" style="cursor:pointer;display:inline-flex;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></span>
-    <span style="font-size:16px;font-weight:bold;">Fill Order</span>
-  </div>
-  <div style="padding:14px 15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-    <span id="spFoAddr" style="font-size:14px;color:#999;flex:1;">Please select address</span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-  </div>
-  <div style="padding:15px;">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-      <span id="spFoStoreName" style="font-size:14px;font-weight:bold;">Store</span>
-    </div>
-    <div style="display:flex;gap:12px;margin-bottom:12px;">
-      <img id="spFoImg" src="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">
-      <div>
-        <div id="spFoTitle" style="font-size:13px;color:#333;line-height:1.4;"></div>
-        <div id="spFoPrice" style="font-size:13px;color:#ee1d52;font-weight:bold;margin-top:4px;"></div>
-        <div id="spFoQty" style="font-size:12px;color:#999;margin-top:2px;"></div>
-      </div>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #f0f0f0;font-size:13px;color:#555;">
-      <span>Express shipping fee</span><span>Free shipping US$0</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #f0f0f0;font-size:13px;color:#555;">
-      <span>Remark</span><span style="color:#bbb;">Remark</span>
-    </div>
-  </div>
-  <div style="position:fixed;bottom:0;left:0;right:0;padding:15px;background:white;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;">
-    <span style="font-size:15px;font-weight:bold;">Total: <span id="spFoTotal">US$0.00</span></span>
-    <button onclick="doSPSubmitOrder()" style="background:#1976d2;color:white;border:none;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;">Submit order</button>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -11101,20 +10993,27 @@ var sName  = localStorage.getItem("storeOwnerName")||"Store";
 var currentSlide = 0, imgs = [], qty = 1, sheetMode = "buy";
 var CLOUD = "https://raw.githubusercontent.com/oscerm328-stack";
 var CAT_MAP = {17:"products_17",19:"products_19",20:"products_20",21:"products_21",22:"products_22",27:"products_27",28:"products_28",31:"products_31",32:"products_32",34:"products_34",35:"products_35",36:"products_36"};
-var _spEditMode = false, _spSelected = {};
 
 async function init(){
     if(!p){ document.getElementById("productTitle").innerText="Product not found"; return; }
+
+    // Build images from Cloudinary
     var catF = CAT_MAP[p.category_id]||"27_Electronics";
     imgs = (p.images&&p.images.length>0)
         ? p.images.map(function(i){ return CLOUD+"/"+catF+"/main/"+p.folder+"/"+i; })
         : [CLOUD+"/"+catF+"/main/"+(p.folder||"")+"/1.jpg"];
+
     buildSlider();
+
     document.getElementById("productTitle").innerText = p.title||"";
     document.getElementById("productPrice").innerText = "US$"+parseFloat(p.price).toFixed(2);
     document.getElementById("specSales").innerText = p.sales||0;
+
+    // Store info
     document.getElementById("storeName").innerText = sName||"Store";
     document.getElementById("storeMeta").innerText = (p.category_name||"")+" · Official Store";
+
+    // Load store logo & VIP
     try {
         var apps = await fetch("/all-store-applications").then(function(r){return r.json();});
         var store = null;
@@ -11124,20 +11023,26 @@ async function init(){
             if(store.storeLogo&&store.storeLogo.length>10) document.getElementById("storeLogo").src = store.storeLogo;
         }
     }catch(e){}
+
     try {
         var vd = await fetch("/store-vip/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         document.getElementById("storeVip").innerText = "✓ VIP "+(vd.vipLevel||0);
         var prods = await fetch("/store-products/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
         var prodCount = (prods.products||[]).length;
         var fd = await fetch("/followers/"+encodeURIComponent(sEmail)).then(function(r){return r.json();});
-        var followers = fd.followers||0;
+        var followers = fd.followers || 0;
         var tagsEl = document.getElementById("storeTags");
-        if(tagsEl){ tagsEl.innerHTML='<span class="store-tag">Products '+prodCount+'</span><span class="store-tag">Followers '+followers.toLocaleString()+'</span>'; }
+        if(tagsEl){
+            tagsEl.innerHTML = '<span class="store-tag">Products '+prodCount+'</span><span class="store-tag">Followers '+followers.toLocaleString()+'</span>';
+        }
     }catch(e){}
+
+    // Sheet info
+
     document.getElementById("sheetImg").src = imgs[0];
     document.getElementById("sheetPrice").innerText = "US$"+parseFloat(p.price).toFixed(2);
     document.getElementById("sheetTitle").innerText = p.title||"";
-    updateSPBadge();
+
     setInterval(function(){ slide(1); }, 3500);
 }
 
@@ -11155,9 +11060,17 @@ function buildSlider(){
         d.onclick=(function(idx){return function(){goTo(idx);};})(i); dt.appendChild(d);
     });
 }
-var isFav=false;
-function toggleHeart(){ isFav=!isFav; document.getElementById("heartBtn").innerText=isFav?"❤️":"🤍"; }
-function shareProduct(){ if(navigator.clipboard){navigator.clipboard.writeText(window.location.href).catch(function(){});} showToast("✓ Link copied successfully"); }
+
+var isFav = false;
+function toggleHeart(){
+    isFav = !isFav;
+    document.getElementById("heartBtn").innerText = isFav ? "❤️" : "🤍";
+}
+function shareProduct(){
+    var url = window.location.href;
+    if(navigator.clipboard){ navigator.clipboard.writeText(url).catch(function(){}); }
+    showToast("✓ Link copied successfully");
+}
 function slide(dir){ goTo((currentSlide+dir+imgs.length)%imgs.length); }
 function goTo(idx){
     currentSlide=idx;
@@ -11166,12 +11079,11 @@ function goTo(idx){
     document.querySelectorAll(".dot").forEach(function(d,i){d.classList.toggle("active",i===idx);});
 }
 
-// ===== SHEET =====
 function openSheet(mode){
-    sheetMode=mode;
-    qty=1; document.getElementById("qtyNum").innerText=1;
+    sheetMode = mode;
+    qty = 1; document.getElementById("qtyNum").innerText = 1;
     updateTotalPrice();
-    document.getElementById("sheetImg").src=imgs[currentSlide]||imgs[0];
+    document.getElementById("sheetImg").src = imgs[currentSlide]||imgs[0];
     document.getElementById("buySheet").classList.add("open");
     document.getElementById("sheetOverlay").classList.add("open");
 }
@@ -11179,181 +11091,57 @@ function closeSheet(){
     document.getElementById("buySheet").classList.remove("open");
     document.getElementById("sheetOverlay").classList.remove("open");
 }
-function changeQty(d){ qty=Math.max(1,qty+d); document.getElementById("qtyNum").innerText=qty; updateTotalPrice(); }
+function changeQty(d){ 
+    qty = Math.max(1, qty+d); 
+    document.getElementById("qtyNum").innerText = qty;
+    updateTotalPrice();
+}
 function updateTotalPrice(){
-    var price=p?(parseFloat(p.p)||parseFloat(p.price)||0):0;
-    var el=document.getElementById("sheetTotalPrice");
-    if(el) el.innerText="US$"+(price*qty).toFixed(2);
+    var price = p ? (parseFloat(p.p) || parseFloat(p.price) || 0) : 0;
+    var total = (price * qty).toFixed(2);
+    var el = document.getElementById("sheetTotalPrice");
+    if(el) el.innerText = "US$" + total;
 }
 
-// ===== ADD TO CART =====
-function doCart(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var item={id:Date.now(),title:p?(p.title||p.t||""):"",price:p?(parseFloat(p.price||p.p)||0):0,img:imgs[0]||"",qty:qty,sellerEmail:sEmail,sellerName:sName};
-    cart.push(item);
-    localStorage.setItem("cartItems",JSON.stringify(cart));
-    updateSPBadge();
+async function doCart(){
+    var addresses = JSON.parse(localStorage.getItem("userAddresses")||"[]");
+    var cartItems = JSON.parse(localStorage.getItem("cartItems")||"[]");
+    var imgSrc = p ? (p.img || p.imgs && p.imgs[0] || "") : "";
+    var item = { id: Date.now(), title: p ? (p.t || p.title || "") : "", price: p ? (parseFloat(p.p || p.price) || 0) : 0, img: imgSrc, qty: qty, cat: p ? (p.cat || "") : "" };
+    if(addresses.length === 0){
+        // حفظ المنتج مؤقتاً ثم طلب العنوان
+        window._pendingCartItem = item;
+        closeSheet();
+        showToast("⚠️ Please add a delivery address first");
+        setTimeout(function(){ window.location.href = "/dashboard"; }, 1500);
+        return;
+    }
+    cartItems.push(item);
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
     closeSheet();
     showToast("🛒 Added to cart (×"+qty+")");
 }
 
-// ===== BUY NOW → FILL ORDER =====
-function doBuy(){
+async function doBuy(){
     closeSheet();
-    var price=p?(parseFloat(p.price||p.p)||0):0;
-    document.getElementById("spFoStoreName").innerText=sName||"Store";
-    document.getElementById("spFoImg").src=imgs[currentSlide]||imgs[0]||"";
-    document.getElementById("spFoTitle").innerText=p?(p.title||p.t||""):"";
-    document.getElementById("spFoPrice").innerText="US$"+price.toFixed(2);
-    document.getElementById("spFoQty").innerText="x"+qty;
-    document.getElementById("spFoTotal").innerText="US$"+(price*qty).toFixed(2);
-    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
-    document.getElementById("spFoAddr").innerText=addresses.length>0?(addresses[0].name+" - "+addresses[0].address):"Please select address";
-    document.getElementById("spFillOrderPage").style.display="flex";
-    document.getElementById("spFillOrderPage").style.flexDirection="column";
-}
-function closeSPFillOrder(){ document.getElementById("spFillOrderPage").style.display="none"; }
-
-async function doSPSubmitOrder(){
-    var token=localStorage.getItem("token")||"";
+    var token = localStorage.getItem("token")||"";
     if(!token){ showToast("⚠️ Please login first"); return; }
-    var btn=document.querySelector("#spFillOrderPage button[onclick='doSPSubmitOrder()']");
-    if(btn) btn.disabled=true;
+    var btn = document.getElementById("sheetBuyBtn");
+    btn.disabled = true;
     try {
-        var r=await fetch("/create-store-order",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({product:p,sellerEmail:sEmail,quantity:qty})});
-        var d=await r.json();
-        if(d.success){ closeSPFillOrder(); showToast("✅ Order placed successfully!"); }
-        else { showToast("⚠️ "+(d.message||"Failed")); }
+        var r = await fetch("/create-store-order",{
+            method:"POST",
+            headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},
+            body: JSON.stringify({ product:p, sellerEmail:sEmail, quantity:qty })
+        });
+        var d = await r.json();
+        if(d.success){
+            showToast("✅ Order placed! (×"+qty+")");
+        } else {
+            showToast("⚠️ "+(d.message||"Failed"));
+        }
     }catch(e){ showToast("⚠️ Network error"); }
-    if(btn) btn.disabled=false;
-}
-
-// ===== CART PAGE =====
-function updateSPBadge(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var b=document.getElementById("spCartBadge");
-    if(!b) return;
-    if(cart.length>0){ b.style.display="flex"; b.innerText=cart.length>99?"99+":cart.length; }
-    else { b.style.display="none"; }
-}
-function openSPCartPage(){
-    document.getElementById("spCartStoreName").innerText=sName||"Store";
-    document.getElementById("spCartPage").style.display="flex";
-    document.getElementById("spCartPage").style.flexDirection="column";
-    _spEditMode=false; _spSelected={};
-    renderSPCart(); updateSPTotal(); updateSPEditUI();
-}
-function closeSPCartPage(){ document.getElementById("spCartPage").style.display="none"; }
-function renderSPCart(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var list=document.getElementById("spCartItemsList");
-    if(cart.length===0){ list.innerHTML='<p style="text-align:center;color:#aaa;padding:20px 0;">Your cart is empty</p>'; return; }
-    list.innerHTML="";
-    cart.forEach(function(item,idx){
-        var checked=_spSelected[item.id];
-        var div=document.createElement("div");
-        div.style.cssText="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5;align-items:center;";
-        div.innerHTML=
-          '<div onclick="toggleSPItem(\''+item.id+'\')" style="width:22px;height:22px;border-radius:50%;border:2px solid '+(checked?"#1976d2":"#bbb")+';cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+(checked?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':"")+'</div>'+
-          '<img src="'+item.img+'" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;" onerror="this.src=\'https://via.placeholder.com/64x64\'">'+
-          '<div style="flex:1;min-width:0;">'+
-            '<div style="font-size:13px;color:#1976d2;font-weight:bold;">US$'+parseFloat(item.price).toFixed(2)+'</div>'+
-            '<div style="font-size:12px;color:#333;margin-top:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">'+item.title+'</div>'+
-            '<div style="display:flex;align-items:center;gap:0;margin-top:6px;">'+
-              '<button onclick="changeSPItemQty('+idx+',-1)" style="width:26px;height:26px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>'+
-              '<span style="width:30px;text-align:center;font-size:14px;font-weight:bold;">'+item.qty+'</span>'+
-              '<button onclick="changeSPItemQty('+idx+',1)" style="width:26px;height:26px;border-radius:50%;border:1px solid #ddd;background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>'+
-            '</div>'+
-          '</div>';
-        list.appendChild(div);
-    });
-}
-function toggleSPItem(id){ if(_spSelected[id]) delete _spSelected[id]; else _spSelected[id]=true; renderSPCart(); updateSPTotal(); updateSPSelectAll(); }
-function toggleSPSelectAll(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var all=cart.every(function(i){return _spSelected[i.id];});
-    if(all){ _spSelected={}; } else { cart.forEach(function(i){_spSelected[i.id]=true;}); }
-    renderSPCart(); updateSPTotal(); updateSPSelectAll();
-}
-function updateSPSelectAll(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var all=cart.length>0&&cart.every(function(i){return _spSelected[i.id];});
-    var el=document.getElementById("spSelectAllCircle");
-    el.style.border="2px solid "+(all?"#1976d2":"#bbb");
-    el.innerHTML=all?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':"";
-}
-function updateSPTotal(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var total=cart.filter(function(i){return _spSelected[i.id];}).reduce(function(s,i){return s+i.price*i.qty;},0);
-    document.getElementById("spCartTotal").innerText="US$ "+total.toFixed(2);
-}
-function changeSPItemQty(idx,d){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    if(!cart[idx]) return;
-    cart[idx].qty=Math.max(1,cart[idx].qty+d);
-    localStorage.setItem("cartItems",JSON.stringify(cart));
-    renderSPCart(); updateSPTotal();
-}
-function toggleSPCartEdit(){ _spEditMode=!_spEditMode; updateSPEditUI(); }
-function updateSPEditUI(){
-    document.getElementById("spCartEditBtn").innerText=_spEditMode?"Done":"Edit";
-    document.getElementById("spCartDeleteBtn").style.display=_spEditMode?"block":"none";
-    document.getElementById("spCartSettleBtn").style.display=_spEditMode?"none":"block";
-}
-function deleteSPSelected(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    cart=cart.filter(function(i){return !_spSelected[i.id];});
-    localStorage.setItem("cartItems",JSON.stringify(cart));
-    _spSelected={}; updateSPBadge(); renderSPCart(); updateSPTotal(); updateSPSelectAll();
-}
-
-// ===== SETTLEMENT =====
-function openSPSettlement(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var selected=cart.filter(function(i){return _spSelected[i.id];});
-    if(selected.length===0){ showToast("Please select items first"); return; }
-    var total=selected.reduce(function(s,i){return s+i.price*i.qty;},0);
-    document.getElementById("spSettleTotal").innerText="US$"+total.toFixed(2);
-    document.getElementById("spSettleStoreName").innerText=sName||"Store";
-    var list=document.getElementById("spSettleItemsList"); list.innerHTML="";
-    selected.forEach(function(item){
-        var div=document.createElement("div"); div.style.cssText="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;";
-        div.innerHTML='<img src="'+item.img+'" style="width:50px;height:50px;object-fit:cover;border-radius:8px;border:1px solid #eee;flex-shrink:0;">'+
-          '<div style="flex:1;"><div style="font-size:12px;color:#333;">'+item.title+'</div><div style="font-size:12px;color:#ee1d52;font-weight:bold;margin-top:2px;">US$'+parseFloat(item.price).toFixed(2)+'</div></div>'+
-          '<div style="font-size:13px;font-weight:bold;white-space:nowrap;">US$'+(item.price*item.qty).toFixed(2)+'<br><span style="font-size:11px;color:#999;font-weight:normal;">x'+item.qty+'</span></div>';
-        list.appendChild(div);
-    });
-    var addresses=JSON.parse(localStorage.getItem("userAddresses")||"[]");
-    document.getElementById("spSettleAddr").innerText=addresses.length>0?(addresses[0].name+" - "+addresses[0].address):"Mailing address";
-    var token=localStorage.getItem("token")||"";
-    if(token){ fetch("/get-balance",{headers:{"Authorization":"Bearer "+token}}).then(function(r){return r.json();}).then(function(d){document.getElementById("spSettleBalance").innerText="US$"+(d.balance||0).toFixed(2);}).catch(function(){}); }
-    document.getElementById("spSettlePage").style.display="block";
-}
-function closeSPSettlement(){ document.getElementById("spSettlePage").style.display="none"; }
-
-async function doSPSettleBuy(){
-    var cart=JSON.parse(localStorage.getItem("cartItems")||"[]");
-    var selected=cart.filter(function(i){return _spSelected[i.id];});
-    if(selected.length===0){ showToast("Please select items first"); return; }
-    var token=localStorage.getItem("token")||"";
-    if(!token){ showToast("⚠️ Please login first"); return; }
-    var btn=document.querySelector("#spSettlePage button[onclick='doSPSettleBuy()']");
-    if(btn) btn.disabled=true;
-    var allOk=true;
-    for(var i=0;i<selected.length;i++){
-        try {
-            var r=await fetch("/create-store-order",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:JSON.stringify({product:selected[i],sellerEmail:selected[i].sellerEmail||sEmail,quantity:selected[i].qty})});
-            var d=await r.json();
-            if(!d.success){ allOk=false; showToast("⚠️ "+(d.message||"Failed")); }
-        }catch(e){ allOk=false; }
-    }
-    if(allOk){
-        var remaining=cart.filter(function(i){return !_spSelected[i.id];});
-        localStorage.setItem("cartItems",JSON.stringify(remaining));
-        _spSelected={}; updateSPBadge(); closeSPSettlement(); closeSPCartPage();
-        showToast("✅ Orders placed successfully!");
-    }
-    if(btn) btn.disabled=false;
+    btn.disabled = false;
 }
 
 function showToast(msg){
