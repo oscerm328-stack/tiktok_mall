@@ -11105,7 +11105,7 @@ var _spEditMode = false, _spSelected = {};
 
 async function init(){
     if(!p){ document.getElementById("productTitle").innerText="Product not found"; return; }
-    var catF = CAT_MAP[p.category_id]||"products_27";
+    var catF = CAT_MAP[p.category_id]||"27_Electronics";
     imgs = (p.images&&p.images.length>0)
         ? p.images.map(function(i){ return CLOUD+"/"+catF+"/main/"+p.folder+"/"+i; })
         : [CLOUD+"/"+catF+"/main/"+(p.folder||"")+"/1.jpg"];
