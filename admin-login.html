@@ -1016,7 +1016,6 @@ function saveBackupCode(){
 }
 
 let currentChat = "";
-let _chatPollInterval = null;
 
 // فتح محادثة
 function openChat(email){
@@ -1026,12 +1025,6 @@ function openChat(email){
     document.getElementById("chatUser").innerText = email;
 
     loadMessages();
-
-    // إلغاء أي polling سابق وبدء جديد كل 3 ثوانٍ
-    if(_chatPollInterval) clearInterval(_chatPollInterval);
-    _chatPollInterval = setInterval(function(){
-        if(currentChat) loadMessages();
-    }, 3000);
 }
 
 // تحميل الرسائل
@@ -1298,7 +1291,7 @@ function updateUSDT(){
 
     if(!currentWalletUser) return;
 
-    adminFetch("/update-usdt", {
+    adminFetch("/admin-update-usdt", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
