@@ -892,10 +892,14 @@ function searchUser(){
 
 
 // تحميل المحادثات - يُستدعى من داخل صفحة Support
+let _allChatsData = {};
+let _chatPollInterval = null;
+
 function loadSupportChats(){
     adminFetch("/all-chats")
     .then(res => res.json())
     .then(data => {
+        _allChatsData = data;
         let list = document.getElementById("chatList");
         if(!list) return;
         list.innerHTML = "";
@@ -909,6 +913,7 @@ function loadSupportChats(){
             div.onclick = () => openChat(email);
             list.appendChild(div);
         }
+        if(currentChat) renderMessages(_allChatsData[currentChat] || []);
     }).catch(()=>{});
 }
 // ORDERS
@@ -1020,19 +1025,24 @@ let currentChat = "";
 // فتح محادثة
 function openChat(email){
     currentChat = email;
-
     document.getElementById("chatBox").style.display = "block";
     document.getElementById("chatUser").innerText = email;
-
-    loadMessages();
+    renderMessages(_allChatsData[email] || []);
+    if(_chatPollInterval) clearInterval(_chatPollInterval);
+    _chatPollInterval = setInterval(loadMessages, 3000);
 }
 
 // تحميل الرسائل
 function loadMessages(){
-    adminFetch("/get-messages/" + currentChat)
+    adminFetch("/all-chats")
     .then(res => res.json())
-    .then(data => {
+    .then(chats => {
+        _allChatsData = chats;
+        renderMessages(chats[currentChat] || []);
+    });
+}
 
+function renderMessages(data){
         let box = document.getElementById("messages");
         if(!box) return;
         box.innerHTML = "";
@@ -1070,7 +1080,6 @@ function loadMessages(){
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ email: currentChat })
         }).catch(()=>{});
-    });
 }
 
 function sendReply(){
@@ -1291,7 +1300,7 @@ function updateUSDT(){
 
     if(!currentWalletUser) return;
 
-    adminFetch("/admin-update-usdt", {
+    adminFetch("/update-usdt", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
