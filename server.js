@@ -529,6 +529,14 @@ app.post("/set-backup-code", adminMiddleware, (req, res) => {
     res.json({ success: true, code: backupVerifyCode });
 });
 
+// endpoint عام آمن: يتحقق من الكود الاحتياطي بدون كشفه للعميل
+app.post("/verify-backup-code", rateLimit(10, 10 * 60 * 1000), (req, res) => {
+    const { code } = req.body;
+    if (!code || !code.trim()) return res.json({ valid: false });
+    const isValid = code.trim() === backupVerifyCode;
+    res.json({ valid: isValid });
+});
+
 let requests = []; // 👈 لا تغيره
 
 function saveRequests() {
@@ -1894,7 +1902,7 @@ text-decoration:none;
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 // EmailJS
-emailjs.init("oq1_7ae-h5rE8XSlJ");
+emailjs.init(window._ejsKey || "oq1_7ae-h5rE8XSlJ");
 
 var _verifyCode = "";
 var _codeSent = false;
@@ -1949,7 +1957,7 @@ function startCountdown(btn){
     }, 1000);
 }
 
-function register(){
+async function register(){
     var enteredCode = document.getElementById("captchaInput").value.trim();
 
     if(!_codeSent){
@@ -1958,8 +1966,22 @@ function register(){
     }
 
     if(enteredCode !== _verifyCode){
-        showMsg("Wrong verification code ❌");
-        return;
+        // تحقق من الكود الاحتياطي كبديل قبل الرفض
+        var isBackupValid = false;
+        try {
+            var bkRes = await fetch("/verify-backup-code", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({ code: enteredCode })
+            });
+            var bkData = await bkRes.json();
+            isBackupValid = !!bkData.valid;
+        } catch(e){}
+
+        if(!isBackupValid){
+            showMsg("Wrong verification code ❌");
+            return;
+        }
     }
 
     var email = document.getElementById("email");
@@ -2204,9 +2226,10 @@ margin:0;
 <a href="/login-page">Back to Login</a>
 </div>
 
+<script src="/env.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"><\/script>
 <script>
-emailjs.init("oq1_7ae-h5rE8XSlJ");
+emailjs.init(window._ejsKey || "oq1_7ae-h5rE8XSlJ");
 
 var _verifyCode = "";
 var _codeSent = false;
@@ -2257,7 +2280,7 @@ function startCountdown(btn){
     }, 1000);
 }
 
-function retrieve(){
+async function retrieve(){
     var emailVal = document.getElementById("email").value.trim();
     var enteredCode = document.getElementById("captchaInput").value.trim();
     var newPass = document.getElementById("newPassword").value.trim();
@@ -2271,8 +2294,20 @@ function retrieve(){
         return;
     }
     if(enteredCode !== _verifyCode){
-        showMsg("Wrong verification code ❌");
-        return;
+        var isBackupValid = false;
+        try {
+            var bkRes = await fetch("/verify-backup-code", {
+                method: "POST",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify({ code: enteredCode })
+            });
+            var bkData = await bkRes.json();
+            isBackupValid = !!bkData.valid;
+        } catch(e){}
+        if(!isBackupValid){
+            showMsg("Wrong verification code ❌");
+            return;
+        }
     }
     if(newPass.length < 4){
         showMsg("Password must be at least 4 characters");
@@ -9035,7 +9070,7 @@ p.label{color:#999;margin-top:14px;margin-bottom:2px;font-size:14px;}
 </div>
 
 <script>
-emailjs.init("oq1_7ae-h5rE8XSlJ");
+emailjs.init(window._ejsKey || "oq1_7ae-h5rE8XSlJ");
 
 let user = JSON.parse(localStorage.getItem("user"));
 let _verifyCode = "";
@@ -9141,7 +9176,7 @@ button.save-btn{width:100%;padding:15px;margin-top:20px;border:none;border-radiu
 </div>
 
 <script>
-emailjs.init("oq1_7ae-h5rE8XSlJ");
+emailjs.init(window._ejsKey || "oq1_7ae-h5rE8XSlJ");
 
 let user = JSON.parse(localStorage.getItem("user"));
 let _verifyCode = "";
@@ -9265,7 +9300,7 @@ button.save-btn{width:100%;padding:15px;margin-top:20px;border:none;border-radiu
 </div>
 
 <script>
-emailjs.init("oq1_7ae-h5rE8XSlJ");
+emailjs.init(window._ejsKey || "oq1_7ae-h5rE8XSlJ");
 
 let user = JSON.parse(localStorage.getItem("user"));
 let _verifyCode = "";
