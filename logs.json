@@ -16,14 +16,14 @@
   {
     "id": 1775314693562,
     "type": "register",
-    "email": "mostafa@gmail.com",
+    "email": "no@gmail.com",
     "details": "New user registered",
     "time": "4/4/2026, 9:58:13 PM"
   },
   {
     "id": 1775314698030,
     "type": "login",
-    "email": "mostafa@gmail.com",
+    "email": "no@gmail.com",
     "details": "User logged in",
     "time": "4/4/2026, 9:58:18 PM"
   }
